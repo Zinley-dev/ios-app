@@ -100,8 +100,8 @@ class VideoNode: ASCellNode, ASVideoNodeDelegate {
                 addSideButtons(isOwned: false)
             }
         }
-       
-    }
+    
+     }
     
     override func layout() {
         super.layout()
@@ -137,13 +137,9 @@ class VideoNode: ASCellNode, ASVideoNodeDelegate {
     }
     
     override func didExitVisibleState() {
-        videoNode.delegate = nil
         videoNode.pause()
     }
-    
-    override func didEnterHierarchy() {
-        videoNode.delegate = self
-    }
+
     
     private func addSideButtons(isOwned: Bool) {
         sideButtonsView = ButtonSideList()
@@ -209,7 +205,7 @@ class VideoNode: ASCellNode, ASVideoNodeDelegate {
         videoNode.shouldAutoplay = false
         videoNode.shouldAutorepeat = true
         videoNode.gravity = AVLayerVideoGravity.resizeAspectFill.rawValue
-
+        videoNode.delegate = self
         DispatchQueue.main.async { [weak self] in
             guard let self = self else { return }
             self.videoNode.asset = AVAsset(url: self.getVideoURL(post: post)!)
@@ -302,8 +298,6 @@ class VideoNode: ASCellNode, ASVideoNodeDelegate {
         
     }
     
-  
-    
     
     private func createButtonsInsetSpec(constrainedSize: ASSizeRange) -> ASInsetLayoutSpec {
         buttonNode.style.preferredSize = CGSize(width: constrainedSize.max.width, height: 45)
@@ -311,6 +305,7 @@ class VideoNode: ASCellNode, ASVideoNodeDelegate {
         return ASInsetLayoutSpec(insets: buttonsInset, child: buttonNode)
     }
     
+
  
 }
 
@@ -338,6 +333,7 @@ extension VideoNode {
                     playProcess()
                 } else if !parentVC.stitchViewController.selectPostCollectionView.isHidden {
                     parentVC.stitchViewController.selectPostCollectionView.isHidden = true
+                    showAllInfo()
                 } else {
                     playProcess()
                 }
@@ -347,6 +343,21 @@ extension VideoNode {
         }
     }
 
+    func hideAllInfo() {
+        headerNode.isHidden = true
+        contentNode.isHidden = true
+        sideButtonsView.isHidden = true
+        buttonNode.isHidden = true
+        label.isHidden = true
+    }
+    
+    func showAllInfo() {
+        headerNode.isHidden = false
+        contentNode.isHidden = false
+        sideButtonsView.isHidden = false
+        buttonNode.isHidden = false
+        label.isHidden = false
+    }
 
 
     func videoNode(_ videoNode: ASVideoNode, didPlayToTimeInterval timeInterval: TimeInterval) {
@@ -600,6 +611,7 @@ extension VideoNode: UIGestureRecognizerDelegate {
             if vc is ParentViewController {
                 if let update1 = vc as? ParentViewController {
                     if !update1.isFeed {
+                        hideAllInfo()
                         update1.stitchViewController.selectPostCollectionView.isHidden = false
                       
                     }
@@ -654,6 +666,9 @@ extension VideoNode: UIGestureRecognizerDelegate {
         self.label.handleURLTap { [weak self] string in
             self?.handleURLTap(url: string.absoluteString)
         }
+        
+        setupDefaultContent()
+        
     }
     
     func setupViews() {
@@ -666,18 +681,8 @@ extension VideoNode: UIGestureRecognizerDelegate {
             hideStitchViews()
         } else if _AppCoreData.userDataSource.value?.userID == self.post.owner?.id {
             hideStitchViews()
-        } else {
-            showStitchViews()
         }
 
-        if _AppCoreData.userDataSource.value?.userID == self.post.owner?.id {
-            self.headerView.followBtn.isHidden = true
-        } else {
-            DispatchQueue.global(qos: .userInitiated).async { [weak self] in
-                //self?.checkIfFollow()
-                //self?.checkIfFollowedMe()
-            }
-        }
 
         self.headerView.usernameLbl.text = "@\(post.owner?.username ?? "")"
 
@@ -690,6 +695,20 @@ extension VideoNode: UIGestureRecognizerDelegate {
 
         // Gesture Recognizers
         setupGestureRecognizers()
+        fillStats()
+        loadReaction()
+    }
+    
+    func fillStats() {
+        
+        likeCount = post.totalLikes
+        saveCount = post.totalSave
+        
+        self.buttonsView.likeCountLbl.text = "\(formatPoints(num: Double(post.totalLikes)))"
+        self.buttonsView.saveCountLbl.text = "\(formatPoints(num: Double(post.totalShares)))"
+        self.buttonsView.commentCountLbl.text = "\(formatPoints(num: Double(post.totalComments)))"
+        self.buttonsView.shareCountLbl.text = "\(formatPoints(num: Double(post.totalShares)))"
+        
     }
 
     func addConstraints(to childView: UIView, within parentView: UIView, constant: CGFloat = 0) {
@@ -701,37 +720,58 @@ extension VideoNode: UIGestureRecognizerDelegate {
     }
 
     func hideStitchViews() {
-        self.headerView.createStitchView.isHidden = true
-        self.headerView.createStitchStack.isHidden = true
-        self.headerView.stichBtn.isHidden = true
+        
+        Dispatch.main.async { [weak self] in
+            guard let self = self else { return }
+            self.headerView.createStitchView.isHidden = true
+            self.headerView.createStitchStack.isHidden = true
+            self.headerView.stichBtn.isHidden = true
+        }
+        
+       
     }
 
     func showStitchViews() {
-        self.headerView.createStitchView.isHidden = false
-        self.headerView.stichBtn.isHidden = false
-        self.headerView.createStitchStack.isHidden = false
+        
+        Dispatch.main.async { [weak self] in
+            guard let self = self else { return }
+            self.headerView.createStitchView.isHidden = false
+            self.headerView.stichBtn.isHidden = false
+            self.headerView.createStitchStack.isHidden = false
+        }
+    
     }
 
     func setupGestureRecognizers() {
-        let avatarTap = createTapGestureRecognizer(target: self, action: #selector(VideoNode.userTapped))
+     
         let usernameTap = createTapGestureRecognizer(target: self, action: #selector(VideoNode.userTapped))
-        let username2Tap = createTapGestureRecognizer(target: self, action: #selector(VideoNode.userTapped))
+        self.headerView.usernameLbl.addGestureRecognizer(usernameTap)
         let shareTap = createTapGestureRecognizer(target: self, action: #selector(VideoNode.shareTapped))
+        self.buttonsView.shareBtn.addGestureRecognizer(shareTap)
+
         let likeTap = createTapGestureRecognizer(target: self, action: #selector(VideoNode.likeTapped))
+        self.buttonsView.likeBtn.addGestureRecognizer(likeTap)
+
         let stitchTap = createTapGestureRecognizer(target: self, action: #selector(VideoNode.stitchTapped))
+        self.headerView.stichBtn.addGestureRecognizer(stitchTap)
+
         let saveTap = createTapGestureRecognizer(target: self, action: #selector(VideoNode.onClickSave))
+        self.buttonsView.saveBtn.addGestureRecognizer(saveTap)
+
         let commentTap = createTapGestureRecognizer(target: self, action: #selector(VideoNode.commentTapped))
+        self.buttonsView.commentBtn.addGestureRecognizer(commentTap)
+
         let doubleTap = createTapGestureRecognizer(target: self, action: #selector(VideoNode.likeHandle), taps: 2)
         doubleTap.delaysTouchesBegan = true
         self.view.addGestureRecognizer(doubleTap)
-        
+
         let longPress = UILongPressGestureRecognizer(target: self, action: #selector(VideoNode.settingTapped))
         longPress.minimumPressDuration = 0.65
         longPress.delaysTouchesBegan = true
         self.view.addGestureRecognizer(longPress)
         
-        // Add gesture recognizers to the appropriate views
     }
+
 
     func createTapGestureRecognizer(target: Any, action: Selector, taps: Int = 1) -> UITapGestureRecognizer {
         let tap = UITapGestureRecognizer(target: target, action: action)
@@ -1240,6 +1280,7 @@ extension VideoNode {
     }
 
     private func animateImageView(_ imgView: UIImageView) {
+        
         UIView.animate(withDuration: 0.5) {
             imgView.alpha = 0
         }
@@ -1300,48 +1341,67 @@ extension VideoNode {
     }
     
     func likeAnimation() {
-        let scaleTransform = CGAffineTransform(scaleX: 0.9, y: 0.9)
         
-        UIView.animate(withDuration: 0.1, animations: {
-            self.buttonsView.likeBtn.transform = scaleTransform
-            self.buttonsView.likeBtn.setImage(likeImage!, for: .normal)
-        }, completion: { _ in
+        Dispatch.main.async { [weak self] in
+            guard let self = self else { return }
+            
+            let scaleTransform = CGAffineTransform(scaleX: 0.9, y: 0.9)
+            
             UIView.animate(withDuration: 0.1, animations: {
-                self.buttonsView.likeBtn.transform = CGAffineTransform.identity
+                self.buttonsView.likeBtn.transform = scaleTransform
+                self.buttonsView.likeBtn.setImage(likeImage!, for: .normal)
+            }, completion: { _ in
+                UIView.animate(withDuration: 0.1, animations: {
+                    self.buttonsView.likeBtn.transform = CGAffineTransform.identity
+                })
             })
-        })
+            
+        }
+        
     }
 
     
     func saveAnimation() {
-        let scaleTransform = CGAffineTransform(scaleX: 0.9, y: 0.9)
+        Dispatch.main.async { [weak self] in
+            guard let self = self else { return }
+            
+            let scaleTransform = CGAffineTransform(scaleX: 0.9, y: 0.9)
 
-        self.buttonsView.saveCountLbl.text = "\(formatPoints(num: Double(self.saveCount)))"
+            self.buttonsView.saveCountLbl.text = "\(formatPoints(num: Double(self.saveCount)))"
 
-        UIView.animate(withDuration: 0.1, animations: {
-            self.buttonsView.saveBtn.transform = scaleTransform
-            self.buttonsView.saveBtn.setImage(saveImage!, for: .normal)
-        }, completion: { _ in
             UIView.animate(withDuration: 0.1, animations: {
-                self.buttonsView.saveBtn.transform = CGAffineTransform.identity
+                self.buttonsView.saveBtn.transform = scaleTransform
+                self.buttonsView.saveBtn.setImage(saveImage!, for: .normal)
+            }, completion: { _ in
+                UIView.animate(withDuration: 0.1, animations: {
+                    self.buttonsView.saveBtn.transform = CGAffineTransform.identity
+                })
             })
-        })
+            
+        }
+        
     }
 
     
     func unSaveAnimation() {
-        let scaleTransform = CGAffineTransform(scaleX: 0.9, y: 0.9)
         
-        self.buttonsView.saveCountLbl.text = "\(formatPoints(num: Double(self.saveCount)))"
+        Dispatch.main.async { [weak self] in
+            guard let self = self else { return }
+            let scaleTransform = CGAffineTransform(scaleX: 0.9, y: 0.9)
+            
+            self.buttonsView.saveCountLbl.text = "\(formatPoints(num: Double(self.saveCount)))"
 
-        UIView.animate(withDuration: 0.1, animations: {
-            self.buttonsView.saveBtn.transform = scaleTransform
-            self.buttonsView.saveBtn.setImage(unsaveImage!, for: .normal)
-        }, completion: { _ in
             UIView.animate(withDuration: 0.1, animations: {
-                self.buttonsView.saveBtn.transform = CGAffineTransform.identity
+                self.buttonsView.saveBtn.transform = scaleTransform
+                self.buttonsView.saveBtn.setImage(unsaveImage!, for: .normal)
+            }, completion: { _ in
+                UIView.animate(withDuration: 0.1, animations: {
+                    self.buttonsView.saveBtn.transform = CGAffineTransform.identity
+                })
             })
-        })
+        }
+        
+        
     }
 
     
@@ -1409,6 +1469,86 @@ extension VideoNode {
         }
     }
 
+    
+    func loadReaction() {
+        APIManager.shared.getReactionPost(postId: post.id) { [weak self] result in
+            guard let self = self else { return }
+
+            switch result {
+            case .success(let apiResponse):
+                guard let message = apiResponse.body?["message"] as? String,
+                      message == "success",
+                      let data = apiResponse.body?["data"] as? [String: Any],
+                      let isFollower = data["isFollower"] as? Bool,
+                      let isFollowing = data["isFollowing"] as? Bool,
+                      let isLiked = data["isLike"] as? Bool,
+                      let isSaved = data["isSaved"] as? Bool else {
+                    print("Error: Invalid or missing data in response")
+                    return
+                }
+                
+                self.handleReaction(isFollower: isFollower, isFollowing: isFollowing, isLiked: isLiked, isSaved: isSaved)
+            case .failure(let error):
+                print(error)
+            }
+        }
+    }
+    
+    func handleReaction(isFollower: Bool, isFollowing: Bool, isLiked: Bool, isSaved: Bool) {
+        self.allowStitch = isFollower
+        if !isFollower {
+            self.hideStitchViews()
+        } else {
+            
+            if post.setting?.allowStitch == true {
+                self.showStitchViews()
+            } else {
+                self.hideStitchViews()
+            }
+            
+        }
+
+        if isFollowing {
+            self.hideFollowBtn()
+        } else {
+            self.setupFollowBtn()
+        }
+            
+        self.isSave = isSaved
+        if isSaved {
+            self.saveAnimation()
+        } else {
+            self.unSaveAnimation()
+        }
+
+            self.isLike = isLiked
+        DispatchQueue.main.async { [weak self] in
+            guard let self = self else { return }
+            let likeImage = isLiked ? likeImage! : emptyLikeImage!
+            self.buttonsView.likeBtn.setImage(likeImage, for: .normal)
+        }
+    }
+
+    func hideFollowBtn() {
+        Dispatch.main.async { [weak self] in
+            guard let self = self else { return }
+            self.headerView.followBtn.isHidden = true
+            self.isFollowingUser = true
+        }
+        
+    }
 
 
+    func setupFollowBtn() {
+        Dispatch.main.async { [weak self] in
+            guard let self = self else { return }
+            self.headerView.followBtn.isHidden = false
+            self.isFollowingUser = false
+            let followTap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(demoNode.followTap))
+            followTap.numberOfTapsRequired = 1
+            self.headerView.followBtn.addGestureRecognizer(followTap)
+            
+        }
+    }
+    
 }

@@ -11,6 +11,7 @@ import AlamofireImage
 import Alamofire
 import FLAnimatedImage
 import ObjectMapper
+import MarqueeLabel
 
 class StitchViewController: UIViewController, UICollectionViewDelegateFlowLayout, UIAdaptivePresentationControllerDelegate {
     
@@ -58,7 +59,7 @@ class StitchViewController: UIViewController, UICollectionViewDelegateFlowLayout
     var lastLoadTime: Date?
     var isPromote = false
     var rootId = ""
-    
+    var animatedLabel: MarqueeLabel!
     
     private var pullControl = UIRefreshControl()
     
@@ -101,11 +102,61 @@ class StitchViewController: UIViewController, UICollectionViewDelegateFlowLayout
     }
 
     
+    func addAnimatedLabelToTop() {
+        animatedLabel = MarqueeLabel(frame: CGRect.zero, rate: 30.0, fadeLength: 10.0)
+        animatedLabel.translatesAutoresizingMaskIntoConstraints = false
+        animatedLabel.backgroundColor = UIColor.clear
+        animatedLabel.type = .continuous
+        animatedLabel.leadingBuffer = 15.0
+        animatedLabel.trailingBuffer = 10.0
+        animatedLabel.animationDelay = 0.0
+        animatedLabel.textAlignment = .center
+        animatedLabel.font = FontManager.shared.roboto(.Bold, size: 16)
+        animatedLabel.textColor = UIColor.white
+        animatedLabel.layer.masksToBounds = true
+        animatedLabel.layer.cornerRadius = 10 // Round the corners for a cleaner look
+
+        let container = UIView()
+        container.translatesAutoresizingMaskIntoConstraints = false
+        self.view.addSubview(container)
+        container.addSubview(animatedLabel)
+        
+        NSLayoutConstraint.activate([
+            container.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: 100),
+            container.trailingAnchor.constraint(equalTo: self.view.trailingAnchor, constant: -100),
+            container.topAnchor.constraint(equalTo: self.view.topAnchor),
+            container.bottomAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.topAnchor, constant: 55),
+            animatedLabel.leadingAnchor.constraint(equalTo: container.leadingAnchor, constant: 10), // Add padding around the text
+            animatedLabel.trailingAnchor.constraint(equalTo: container.trailingAnchor, constant: -10), // Add padding around the text
+            animatedLabel.topAnchor.constraint(equalTo: container.topAnchor, constant: 10), // Add padding around the text
+            animatedLabel.bottomAnchor.constraint(equalTo: container.bottomAnchor, constant: -10) // Add padding around the text
+        ])
+        
+        // Make the label tappable
+        container.isUserInteractionEnabled = true
+        let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(StitchViewController.labelTapped))
+        tap.numberOfTapsRequired = 1
+        container.addGestureRecognizer(tap)
+        
+    }
+    
+    func applyAnimationText(text: String) {
+        if text != "" {
+            animatedLabel.pauseLabel()
+        } else {
+            animatedLabel.text = text + "                   "
+            animatedLabel.restartLabel()
+        }
+           
+    }
+    
+    
     @objc func clearAllData() {
         
         
         if rootId != "" {
             
+            animatedLabel.pauseLabel()
             refresh_request = true
             currentIndex = 0
             curPage = 1
@@ -165,8 +216,18 @@ class StitchViewController: UIViewController, UICollectionViewDelegateFlowLayout
     
     @IBAction func hideBtnPressed(_ sender: Any) {
         
-        
         selectPostCollectionView.isHidden = true
+        
+        if let index = currentIndex {
+            
+            if let cell = self.collectionNode.nodeForItem(at: IndexPath(row: index, section: 0)) as? VideoNode {
+
+                cell.showAllInfo()
+                
+            }
+            
+        }
+        
         
         
     }
@@ -308,6 +369,29 @@ extension StitchViewController {
         }
             
 
+    }
+    
+    func handleAnimationTextAndImage(for index: Int) {
+        
+        let nextIndex = index + 1
+        let postCount = self.posts.count
+        
+        if nextIndex < postCount {
+            let item = self.posts[nextIndex]
+            if let nextUsername = item.owner?.username {
+                
+                if item.stitchedTo {
+                    self.applyAnimationText(text: "Up next: @\(nextUsername)'s original!")
+                } else {
+                    self.applyAnimationText(text: "Up next: @\(nextUsername)'s stitch!")
+                }
+               
+            }
+        } else {
+            self.applyAnimationText(text: "")
+        }
+        
+        
     }
     
 }
@@ -537,44 +621,6 @@ extension StitchViewController {
         
         if rootId != "" {
             
-            APIManager.shared.getUserFeed { [weak self] result in
-                guard let self = self else { return }
-                
-                switch result {
-                case .success(let apiResponse):
-                    
-                    guard let data = apiResponse.body?["data"] as? [[String: Any]] else {
-                        let item = [[String: Any]]()
-                        DispatchQueue.main.async {
-                            block(item)
-                        }
-                        return
-                    }
-                    if !data.isEmpty {
-                        self.lastLoadTime = Date()
-                        print("Successfully retrieved \(data.count) posts.")
-                        let items = data
-                    
-                        DispatchQueue.main.async {
-                            block(items)
-                        }
-                    } else {
-                        
-                        let item = [[String: Any]]()
-                        DispatchQueue.main.async {
-                            block(item)
-                        }
-                    }
-                case .failure(let error):
-                    print(error)
-                    let item = [[String: Any]]()
-                    DispatchQueue.main.async {
-                        block(item)
-                    }
-                }
-            }
-            
-            /*
             APIManager.shared.getSuggestStitch(rootId: rootId, page: curPage) { [weak self] result in
                 guard let self = self else { return }
                 switch result {
@@ -608,7 +654,7 @@ extension StitchViewController {
                         block(item)
                     }
                 }
-            }*/
+            }
             
         } else {
             
@@ -1142,6 +1188,12 @@ extension StitchViewController {
         if let cell = self.collectionNode.nodeForItem(at: IndexPath(row: index, section: 0)) as? VideoNode {
             
             
+            if selectPostCollectionView.isHidden == false {
+                cell.hideAllInfo()
+            } else {
+                cell.showAllInfo()
+            }
+            
             // Cell selection/deselection logic
             let indexPath = IndexPath(row: index, section: 0)
             if let imgCell = galleryCollectionNode.nodeForItem(at: indexPath) as? StitchControlNode {
@@ -1194,6 +1246,15 @@ extension StitchViewController {
         
     }
     
+    
+    @objc func labelTapped() {
+        if currentIndex != nil, currentIndex! + 1 < posts.count {
+                
+            let indexPath = IndexPath(item: currentIndex! + 1, section: 0)
+            collectionNode.scrollToItem(at: indexPath, at: .centeredVertically, animated: true)
+                
+        }
+    }
     
 }
 

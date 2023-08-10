@@ -41,7 +41,6 @@ class ParentViewController: UIViewController {
         navigationControllerDelegate()
         
         
-        
         if let tabBarController = self.tabBarController {
             let viewControllersToPreload = [tabBarController.viewControllers?[1], tabBarController.viewControllers?[4]].compactMap { $0 }
             for viewController in viewControllersToPreload {
@@ -592,6 +591,7 @@ extension ParentViewController {
         
         print("observeRootChange")
         var shouldReload = false
+        
         if rootId == "" {
             
             rootId = mainRootId
@@ -608,14 +608,54 @@ extension ParentViewController {
         
         if shouldReload {
             
+            Dispatch.main.async { [weak self] in
+                guard let self = self else { return }
+                scrollView.isScrollEnabled = false
+            }
+            
             stitchViewController.rootId = rootId
             count += 1
-            delayItem.perform(after: 0.75) { [weak self] in
+            delayItem.perform(after: 1) { [weak self] in
                 guard let self = self else { return }
-                print("clearAllData: \(count) - \(stitchViewController.rootId)")
+                print("Loading stitches: \(count) - \(stitchViewController.rootId)")
                 self.stitchViewController.clearAllData()
-                
+                Dispatch.main.async { [weak self] in
+                    guard let self = self else { return }
+                    scrollView.isScrollEnabled = true
+                    
+                    delay(0.5) {[weak self] in
+                        guard let self = self else { return }
+                        self.processStichGuideline()
+                    }
+                   
+                }
             }
+            
+        }
+        
+    }
+
+    
+    func processStichGuideline() {
+        
+        let userDefaults = UserDefaults.standard
+        if userDefaults.bool(forKey: "hasShowStitched") == false {
+            
+            userDefaults.set(true, forKey: "hasShowStitched")
+            userDefaults.synchronize() // This forces the app to update userDefaults
+            
+            // Calculate the offset that represents a slight move to the right.
+            let nextOffset = scrollView.contentOffset.x + scrollView.frame.width * 0.2
+            scrollView.setContentOffset(CGPoint(x: nextOffset, y: 0), animated: true)
+
+            // Delay the scroll back by 0.75 seconds.
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.75) { [weak self] in
+                guard let self = self else { return }
+                // Scroll back to the original position (index 0).
+                let originalOffset = CGPoint(x: 0, y: 0)
+                scrollView.setContentOffset(originalOffset, animated: true)
+            }
+
             
         }
         

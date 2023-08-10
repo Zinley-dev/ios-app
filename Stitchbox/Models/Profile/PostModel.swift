@@ -4,8 +4,10 @@
 //
 //  Created by Khoi Nguyen on 1/15/23.
 //
+
 import Foundation
 import ObjectMapper
+import UIKit // Required for CGFloat
 
 class Setting: Mappable {
     private(set) var allowStitch: Bool = false
@@ -42,7 +44,7 @@ class EstimatedCount: Mappable {
 }
 
 class PostMetadata: Mappable {
-    private(set) var contentmode: String = ""
+    private(set) var contentmode: Int = 0
     private(set) var height: CGFloat = 0.0
     private(set) var length: Int = 0
     private(set) var width: CGFloat = 0.0
@@ -77,15 +79,17 @@ class PostModel: Mappable {
     var id: String = ""
     var stitchedTo = false
     var imageUrl: URL = URL(string: "https://via.placeholder.com/150")!
-    private(set) var isApproved: Bool = false // Make sure to handle this properly, as it's not in the sample data
+    private(set) var status: Int = 0
+    private(set) var likeThreshold: Int = 0
+    private(set) var totalSave: Int = 0
+    private(set) var userId: String = ""
+    private(set) var commentThreshold: Int = 0
+    private(set) var viewThreshold: Int = 0
     private(set) var content: String = ""
-    private(set) var image: [String]?
-    private(set) var hashtags: [String]?
+    private(set) var videoUrl: String = ""
     private(set) var muxPlaybackId: String = ""
     private(set) var muxAssetId: String = ""
-    private(set) var videoUrl: String = ""
-    private(set) var streamLink: String = ""
-    private(set) var owner: OwnerModel?
+    private(set) var owner: Owner?
     private(set) var setting: Setting?
     private(set) var estimatedCount: EstimatedCount?
     private(set) var metadata: PostMetadata?
@@ -94,19 +98,25 @@ class PostModel: Mappable {
     private(set) var totalComments: Int = 0
     private(set) var totalShares: Int = 0
     private(set) var updatedAt: Date?
-
+    private(set) var image: [String] = [""]
+    private(set) var hashtags: [String]?
+    private(set) var isApproved: Bool = false
+    
     required init?(map: ObjectMapper.Map) { }
 
     func mapping(map: ObjectMapper.Map) {
         id <- map["_id"]
+        status <- map["status"]
+        likeThreshold <- map["likeThreshold"]
+        totalSave <- map["totalSave"]
+        userId <- map["userId"]
+        commentThreshold <- map["commentThreshold"]
+        viewThreshold <- map["viewThreshold"]
         content <- map["content"]
-        image <- map["images"]
-        hashtags <- map["hashtags"]
+        videoUrl <- map["video.rawurl"]
         muxPlaybackId <- map["mux.playbackId"]
         muxAssetId <- map["mux.assetId"]
-        videoUrl <- map["video.rawurl"]
         owner <- map["owner"]
-        streamLink <- map["streamLink"]
         setting <- map["setting"]
         metadata <- map["metadata"]
         estimatedCount <- map["estimatedCount"]
@@ -115,12 +125,19 @@ class PostModel: Mappable {
         totalComments <- map["totalComments"]
         totalShares <- map["totalShares"]
         updatedAt <- (map["updatedAt"], ISODateTransform())
-
-        if let firstImage = image?.first, !firstImage.isEmpty {
-            imageUrl = URL(string: firstImage)!
+        image <- map["images"]
+        hashtags <- map["hashtags"]
+        isApproved <- map["isApproved"]
+        // Handle image URL logic as needed
+        
+        if image[0] != "" {
+            imageUrl = URL(string: image[0])!
         } else {
             imageUrl = URL(string: "https://image.mux.com/\(muxPlaybackId)/thumbnail.jpg?time=1")!
         }
+        
+        
+        
     }
 }
 
@@ -133,6 +150,4 @@ extension PostModel: Hashable {
     func hash(into hasher: inout Hasher) {
         hasher.combine(id)
     }
-    
 }
-
