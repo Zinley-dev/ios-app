@@ -132,73 +132,6 @@ class StitchViewController: UIViewController, UICollectionViewDelegateFlowLayout
     }
     
     
-    @objc func clearAllData() {
-        
-        
-        if rootId != "" {
-            
-            if animatedLabel != nil {
-                //animatedLabel.pauseLabel()
-                animatedLabel.text = ""
-            }
-            
-            refresh_request = true
-            currentIndex = 0
-            curPage = 1
-            isfirstLoad = true
-            didScroll = false
-            imageIndex = nil
-            updateData()
-            
-        }
-        
-        
-        
-    }
-    
-    func updateData() {
-        
-        self.retrieveNextPageWithCompletion { [weak self] (newPosts) in
-            guard let self = self else { return }
-            
-            if newPosts.count > 0 {
-                
-                self.insertNewRowsInCollectionNode(newPosts: newPosts)
-                
-                
-            } else {
-                
-                
-                self.refresh_request = false
-                
-                if !posts.isEmpty {
-                    
-                    self.posts.removeAll()
-                    self.collectionNode.reloadData()
-                    self.galleryCollectionNode.reloadData()
-                    
-                }
-                
-                if self.posts.isEmpty == true {
-                    
-                    self.collectionNode.view.setEmptyMessage("No stitch found!", color: .white)
-                    
-                    
-                } else {
-                    
-                    self.collectionNode.view.restore()
-                    
-                }
-                
-            }
-            
-           
-        }
-        
-        
-    }
-    
-    
     @IBAction func hideBtnPressed(_ sender: Any) {
         
         selectPostCollectionView.isHidden = true
@@ -604,104 +537,101 @@ extension StitchViewController {
     
     func retrieveNextPageWithCompletion(block: @escaping ([[String: Any]]) -> Void) {
         
-        if rootId != "" {
-            
-            APIManager.shared.getSuggestStitch(rootId: rootId, page: curPage) { [weak self] result in
-                guard let self = self else { return }
-                switch result {
-                case .success(let apiResponse):
-
-                    guard let data = apiResponse.body?["data"] as? [[String: Any]] else {
-                        let item = [[String: Any]]()
-                        DispatchQueue.main.async {
-                            block(item)
-                        }
-                        return
-                    }
-                    if !data.isEmpty {
-                        print("Successfully retrieved \(data.count) posts.")
-                        let items = data
-                        curPage += 1
-                        DispatchQueue.main.async {
-                            block(items)
-                        }
-                    } else {
-                        
-                        let item = [[String: Any]]()
-                        DispatchQueue.main.async {
-                            block(item)
-                        }
-                    }
-                case .failure(let error):
-                    print(error)
-                    let item = [[String: Any]]()
-                    DispatchQueue.main.async {
-                        block(item)
-                    }
-                }
-            }
-            
-        } else {
-            
-            let item = [[String: Any]]()
-            DispatchQueue.main.async {
-                block(item)
-            }
-            
-        }
-        
-    }
-    
-    func insertNewRowsInCollectionNode(newPosts: [[String: Any]]) {
-
-        // checking empty
-        guard newPosts.count > 0 else {
+        guard rootId != "" else {
+            completeWithEmptyData(block)
             return
         }
 
-        if refresh_request {
-
-            refresh_request = false
-
-            if !posts.isEmpty {
-                var delete_indexPaths: [IndexPath] = []
-                for row in 0..<self.posts.count {
-                    let path = IndexPath(row: row, section: 0) // single indexpath
-                    delete_indexPaths.append(path) // append
+        APIManager.shared.getSuggestStitch(rootId: rootId, page: curPage) { [weak self] result in
+            guard let self = self else { return }
+            
+            switch result {
+            case .success(let apiResponse):
+                if let data = apiResponse.body?["data"] as? [[String: Any]], !data.isEmpty {
+                    print("Successfully retrieved \(data.count) posts.")
+                    curPage += 1
+                    DispatchQueue.main.async {
+                        block(data)
+                    }
+                } else {
+                    self.completeWithEmptyData(block)
                 }
-                
-                posts.removeAll()
-                collectionNode.deleteItems(at: delete_indexPaths)
-                galleryCollectionNode.deleteItems(at: delete_indexPaths)
+            case .failure(let error):
+                print(error)
+                self.completeWithEmptyData(block)
             }
-        }
-
-        // Create new PostModel objects and append them to the current posts
-        var items = [PostModel]()
-        for i in newPosts {
-           
-            if let item = PostModel(JSON: i) {
-               
-                if !self.posts.contains(item) {
-                    self.posts.append(item)
-                    items.append(item)
-                }
-                
-            }
-        }
-
-        // Construct index paths for the new rows
-        if items.count > 0 {
-            let startIndex = self.posts.count - items.count
-            let endIndex = startIndex + items.count - 1
-            let indexPaths = (startIndex...endIndex).map { IndexPath(row: $0, section: 0) }
-
-            // Insert new items at index paths
-           collectionNode.insertItems(at: indexPaths)
-           galleryCollectionNode.insertItems(at: indexPaths)
-           items.removeAll()
         }
     }
+
+    private func completeWithEmptyData(_ block: @escaping ([[String: Any]]) -> Void) {
+        DispatchQueue.main.async {
+            block([])
+        }
+    }
+
+    func insertNewRowsInCollectionNode(newPosts: [[String: Any]]) {
+        guard newPosts.count > 0 else { return }
+        
+        if refresh_request {
+            clearExistingPosts()
+            refresh_request = false
+        }
+
+        var items = newPosts.compactMap { PostModel(JSON: $0) }.filter { !self.posts.contains($0) }
+        self.posts.append(contentsOf: items)
+        
+        if !items.isEmpty {
+            let indexPaths = generateIndexPaths(for: items)
+            collectionNode.insertItems(at: indexPaths)
+            galleryCollectionNode.insertItems(at: indexPaths)
+        }
+    }
+
+    private func clearExistingPosts() {
+        let deleteIndexPaths = posts.enumerated().map { IndexPath(row: $0.offset, section: 0) }
+        posts.removeAll()
+        collectionNode.deleteItems(at: deleteIndexPaths)
+        galleryCollectionNode.deleteItems(at: deleteIndexPaths)
+    }
+
+    private func generateIndexPaths(for items: [PostModel]) -> [IndexPath] {
+        let startIndex = self.posts.count - items.count
+        return (startIndex..<self.posts.count).map { IndexPath(row: $0, section: 0) }
+    }
+
+    func updateData() {
+        self.retrieveNextPageWithCompletion { [weak self] (newPosts) in
+            guard let self = self else { return }
+
+            if newPosts.isEmpty {
+                self.refresh_request = false
+                self.posts.removeAll()
+                self.collectionNode.reloadData()
+                self.galleryCollectionNode.reloadData()
+                if self.posts.isEmpty {
+                    self.collectionNode.view.setEmptyMessage("No stitch found!", color: .white)
+                } else {
+                    self.collectionNode.view.restore()
+                }
+            } else {
+                self.insertNewRowsInCollectionNode(newPosts: newPosts)
+            }
+        }
+    }
+
+    @objc func clearAllData() {
+        guard rootId != "" else { return }
+
+        animatedLabel?.text = ""
+        refresh_request = true
+        currentIndex = 0
+        curPage = 1
+        isfirstLoad = true
+        didScroll = false
+        imageIndex = nil
+        updateData()
+    }
+
 
     
     func collectionNode(_ collectionNode: ASCollectionNode, didSelectItemAt indexPath: IndexPath) {

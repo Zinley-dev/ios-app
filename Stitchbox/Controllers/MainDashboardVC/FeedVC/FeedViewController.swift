@@ -161,63 +161,6 @@ class FeedViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
         
     }
     
-    @objc func clearAllData() {
-        
-        refresh_request = true
-        currentIndex = 0
-        isfirstLoad = true
-        shouldMute = nil
-      
-        updateData()
-        
-    }
-    
-    func updateData() {
-        
-        self.retrieveNextPageWithCompletion { [weak self] (newPosts) in
-            guard let self = self else { return }
-            
-            if newPosts.count > 0 {
-                
-                self.insertNewRowsInCollectionNode(newPosts: newPosts)
-                
-                
-            } else {
-                
-                
-                self.refresh_request = false
-                
-                self.posts.removeAll()
-                self.collectionNode.reloadData()
-                
-                if self.posts.isEmpty == true {
-                    
-                    self.collectionNode.view.setEmptyMessage("No post found!", color: .black)
-                    
-                    
-                } else {
-                    
-                    self.collectionNode.view.restore()
-                    
-                }
-                
-            }
-            
-            if self.pullControl.isRefreshing == true {
-                self.pullControl.endRefreshing()
-            }
-            
-            self.delayItem.perform(after: 0.75) { [weak self] in
-                guard let self = self else { return }
-            
-                self.collectionNode.scrollToItem(at: IndexPath(row: 0, section: 0), at: .centeredVertically, animated: true)
-                    
-            }
-            
-        }
-        
-    }
-    
     
 }
 
@@ -404,6 +347,7 @@ extension FeedViewController: ASCollectionDataSource {
             let node = VideoNode(with: post, at: indexPath.row)
             node.neverShowPlaceholders = true
             node.debugName = "Node \(indexPath.row)"
+           
             node.isOriginal = true
             node.automaticallyManagesSubnodes = true
             
@@ -491,119 +435,90 @@ extension FeedViewController {
 }
 
 extension FeedViewController {
-    
-    
-    func retrieveNextPageWithCompletion(block: @escaping ([[String: Any]]) -> Void) {
-       
-        APIManager.shared.getUserFeed { [weak self] result in
+
+    @objc func clearAllData() {
+        refresh_request = true
+        currentIndex = 0
+        isfirstLoad = true
+        shouldMute = nil
+        updateData()
+    }
+
+    func updateData() {
+        self.retrieveNextPageWithCompletion { [weak self] newPosts in
             guard let self = self else { return }
-          
+
+            self.insertNewRowsInCollectionNode(newPosts: newPosts)
+
+            if self.pullControl.isRefreshing {
+                self.pullControl.endRefreshing()
+            }
+
+            self.delayItem.perform(after: 0.75) { [weak self] in
+                self?.collectionNode.scrollToItem(at: IndexPath(row: 0, section: 0), at: .centeredVertically, animated: true)
+            }
+        }
+    }
+
+    func retrieveNextPageWithCompletion(block: @escaping ([[String: Any]]) -> Void) {
+        APIManager.shared.getUserFeed { result in
+            var items: [[String: Any]] = []
             switch result {
             case .success(let apiResponse):
-                
-                guard let data = apiResponse.body?["data"] as? [[String: Any]] else {
-                    let item = [[String: Any]]()
-                    DispatchQueue.main.async {
-                        block(item)
-                    }
-                    return
-                }
-                
-                if !data.isEmpty {
-
-                    self.lastLoadTime = Date()
+                if let data = apiResponse.body?["data"] as? [[String: Any]], !data.isEmpty {
+                    items = data
                     print("Successfully retrieved \(data.count) posts.")
-                    let items = data
-                
-                    DispatchQueue.main.async {
-                        block(items)
-                    }
-                } else {
-                    
-                    let item = [[String: Any]]()
-                    DispatchQueue.main.async {
-                        block(item)
-                    }
                 }
             case .failure(let error):
                 print(error)
-                let item = [[String: Any]]()
-                DispatchQueue.main.async {
-                    block(item)
-                }
+            }
+            DispatchQueue.main.async {
+                block(items)
             }
         }
-        
     }
-    
-    func insertNewRowsInCollectionNode(newPosts: [[String: Any]]) {
 
-        // checking empty
-        guard newPosts.count > 0 else {
-            return
-        }
+    func insertNewRowsInCollectionNode(newPosts: [[String: Any]]) {
+        guard !newPosts.isEmpty else { return }
 
         if refresh_request {
-
+            clearExistingPosts()
             refresh_request = false
-
-            if !posts.isEmpty {
-                var delete_indexPaths: [IndexPath] = []
-                for row in 0..<self.posts.count {
-                    let path = IndexPath(row: row, section: 0) // single indexpath
-                    delete_indexPaths.append(path) // append
-                }
-                
-                posts.removeAll()
-                collectionNode.deleteItems(at: delete_indexPaths)
-                
-            }
         }
 
-        // Create new PostModel objects and append them to the current posts
-        var items = [PostModel]()
-        for i in newPosts {
-           
-            if let item = PostModel(JSON: i) {
-               
-                if !self.posts.contains(item) {
-                    self.posts.append(item)
-                    items.append(item)
-                }
-                
-            }
-        }
+        let uniquePosts = Set(self.posts)
+        let items = newPosts.compactMap { PostModel(JSON: $0) }.filter { !uniquePosts.contains($0) }
+        
+        guard !items.isEmpty else { return }
 
-        // Construct index paths for the new rows
-        if items.count > 0 {
-            let startIndex = self.posts.count - items.count
-            let endIndex = startIndex + items.count - 1
-            let indexPaths = (startIndex...endIndex).map { IndexPath(row: $0, section: 0) }
+        self.posts.append(contentsOf: items)
 
-            if firstAnimated {
+        let indexPaths = (posts.count - items.count..<posts.count).map { IndexPath(row: $0, section: 0) }
+        
+        
+        if firstAnimated {
                 firstAnimated = false
-
                 delay(0.15) { [weak self] in
-                    guard let self = self else { return }
-                    
                     UIView.animate(withDuration: 0.5) {
-                        self.loadingView.alpha = 0
+                        self?.loadingView.alpha = 0
                     }
-
                     DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
-                        if self.loadingView.alpha == 0 {
-                            self.loadingView.isHidden = true
+                        if self?.loadingView.alpha == 0 {
+                            self?.loadingView.isHidden = true
                         }
                     }
-                    
                 }
-                
             }
 
-            // Insert new items at index paths
-           collectionNode.insertItems(at: indexPaths)
-           items.removeAll()
-        }
+        collectionNode.insertItems(at: indexPaths)
+        
+    }
+
+
+    private func clearExistingPosts() {
+        let deleteIndexPaths = posts.enumerated().map { IndexPath(row: $0.offset, section: 0) }
+        posts.removeAll()
+        collectionNode.deleteItems(at: deleteIndexPaths)
     }
 
     
@@ -612,371 +527,6 @@ extension FeedViewController {
 
 
 extension FeedViewController {
-    
-    @objc func onClickDelete(_ sender: AnyObject) {
-        
-        
-        if let vc = UIViewController.currentViewController() {
-            if vc is FeedViewController {
-                
-                presentSwiftLoader()
-                
-                if let id = editeddPost?.id, id != "" {
- 
-                    APIManager.shared.deleteMyPost(pid: id) { [weak self ] result in
-                        guard let self = self else { return }
-                        switch result {
-                        case .success(_):
-                            needReloadPost = true
-                            
-                            SwiftLoader.hide()
-                            
-                            Dispatch.main.async { [weak self] in
-                                guard let self = self else { return }
-                                
-                                self.removePost()
-                                
-                            }
-                            
-                            
-                          case .failure(let error):
-                            print(error)
-                            SwiftLoader.hide()
-                            
-                            delay(0.1) {
-                                Dispatch.main.async { [weak self] in
-                                    guard let self = self else { return }
-                                    self.showErrorAlert("Oops!", msg: "Unable to delete this posts \(error.localizedDescription), please try again")
-                                }
-
-                            }
-                            
-                        }
-                      }
-                    
-                } else {
-                
-                    delay(0.1) { [weak self] in
-                        guard let self = self else { return }
-                        SwiftLoader.hide()
-                        self.showErrorAlert("Oops!", msg: "Unable to delete this posts, please try again")
-                    }
-                    
-                }
-                
-            }
-        }
-  
-
-    }
-    
-    @objc func removePost() {
-        
-        if let deletingPost = editeddPost {
-           
-            if let indexPath = posts.firstIndex(of: deletingPost) {
-                
-                posts.removeObject(deletingPost)
-
-                // check if there are no more posts
-                if posts.isEmpty {
-                    collectionNode.reloadData()
-                } else {
-                    collectionNode.deleteItems(at: [IndexPath(item: indexPath, section: 0)])
-                   
-                }
-            }
-            
-        }
-        
-        
-    }
-    
-    @objc func onClickEdit(_ sender: AnyObject) {
-        
-        if let vc = UIViewController.currentViewController() {
-            if vc is FeedViewController {
-                
-                print("Edit requested")
-                if let EPVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "EditPostVC") as? EditPostVC {
-                    
-                    navigationController?.setNavigationBarHidden(false, animated: true)
-                    EPVC.selectedPost = editeddPost
-                    self.navigationController?.pushViewController(EPVC, animated: true)
-                    
-                }
-                
-                
-            }
-            
-        }
-        
-        
-        
-    }
-    
-    @objc func onClickShowInfo(_ sender: AnyObject) {
-        
-        
-       
-        
-        
-        
-    }
-    
-    @objc func onClickStats(_ sender: AnyObject) {
-        
-        
-        if let vc = UIViewController.currentViewController() {
-            if vc is FeedViewController {
-                
-                print("Stats requested")
-                if let VVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "ViewVC") as? ViewVC {
-                    
-                    
-                    VVC.selected_item = editeddPost
-                    delay(0.1) {
-                        self.navigationController?.setNavigationBarHidden(false, animated: true)
-                        self.navigationController?.pushViewController(VVC, animated: true)
-                    }
-                    
-                }
-                
-            }
-            
-        }
-        
-        
-        
-    }
-    
-    @objc func onClickDownload(_ sender: AnyObject) {
-        
-        if let vc = UIViewController.currentViewController() {
-            if vc is FeedViewController {
-                
-                if let post = editeddPost {
-                    
-                    if post.muxPlaybackId != "" {
-                        
-                        let url = "https://stream.mux.com/\(post.muxPlaybackId)/high.mp4"
-                       
-                        downloadVideo(url: url, id: post.muxAssetId)
-                        
-                    } else {
-                        
-                        if let data = try? Data(contentsOf: post.imageUrl) {
-                            
-                            downloadImage(image: UIImage(data: data)!)
-                            
-                        }
-                        
-                    }
-                    
-                }
-                
-            }
-            
-        }
-        
-        
-        
-       
-    }
-    
-    func downloadVideo(url: String, id: String) {
-        
-        
-        AF.request(url).downloadProgress(closure : { (progress) in
-       
-            self.swiftLoader(progress: "\(String(format:"%.2f", Float(progress.fractionCompleted) * 100))%")
-            
-        }).responseData{ (response) in
-            
-            switch response.result {
-            
-            case let .success(value):
-                
-                
-                let data = value
-                let documentsURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
-                let videoURL = documentsURL.appendingPathComponent("\(id).mp4")
-                do {
-                    try data.write(to: videoURL)
-                } catch {
-                    print("Something went wrong!")
-                }
-          
-                PHPhotoLibrary.shared().performChanges({
-                    PHAssetChangeRequest.creationRequestForAssetFromVideo(atFileURL: videoURL)
-                }) { saved, error in
-                    
-                    
-                    DispatchQueue.main.async {
-                        SwiftLoader.hide()
-                    }
-                    
-                    if (error != nil) {
-                        
-                        
-                        DispatchQueue.main.async {
-                            print("Error: \(error!.localizedDescription)")
-                            self.showErrorAlert("Oops!", msg: error!.localizedDescription)
-                        }
-                        
-                    } else {
-                        
-                        
-                        DispatchQueue.main.async {
-                        
-                            let alertController = UIAlertController(title: "Your video was successfully saved", message: nil, preferredStyle: .alert)
-                            let defaultAction = UIAlertAction(title: "OK", style: .default, handler: nil)
-                            alertController.addAction(defaultAction)
-                            self.present(alertController, animated: true, completion: nil)
-                        }
-     
-                        
-                    }
-                }
-                
-            case let .failure(error):
-                print(error)
-                
-        }
-           
-           
-        }
-        
-    }
-    
-    func downloadImage(image: UIImage) {
-        
-        let imageSaver = ImageSaver()
-        imageSaver.writeToPhotoAlbum(image: image)
-        
-    }
-    
-    
-    func writeToPhotoAlbum(image: UIImage) {
-            UIImageWriteToSavedPhotosAlbum(image, self, #selector(saveCompleted), nil)
-        }
-
-        @objc func saveCompleted(_ image: UIImage, didFinishSavingWithError error: Error?, contextInfo: UnsafeRawPointer) {
-            print("Save finished!")
-    }
-    
-    @objc func copyPost() {
-        
-        if let id = self.editeddPost?.id {
-            
-            let link = "https://stitchbox.net/app/post/?uid=\(id)"
-            
-            UIPasteboard.general.string = link
-            showNote(text: "Post link is copied")
-            
-        } else {
-            showNote(text: "Post link is unable to be copied")
-        }
-        
-    }
-    
-    @objc func copyProfile() {
-        
-        if let id = self.editeddPost?.owner?.id {
-            
-            let link = "https://stitchbox.net/app/account/?uid=\(id)"
-            
-            UIPasteboard.general.string = link
-            showNote(text: "User profile link is copied")
-            
-        } else {
-            showNote(text: "User profile link is unable to be copied")
-        }
-        
-    }
-    
- 
-    
-    @objc func reportPost() {
-        
-        let slideVC =  reportView()
-        
-        slideVC.post_report = true
-        slideVC.postId = editeddPost?.id ?? ""
-        slideVC.modalPresentationStyle = .custom
-        slideVC.transitioningDelegate = self
-        global_presetingRate = Double(0.75)
-        global_cornerRadius = 35
-        
-        delay(0.1) {[weak self] in
-            guard let self = self else { return }
-            self.present(slideVC, animated: true, completion: nil)
-        }
-        
-    }
-    
-    @objc func sharePost() {
-        
-        guard let userDataSource = _AppCoreData.userDataSource.value, let userUID = userDataSource.userID, userUID != "" else {
-            print("Sendbird: Can't get userUID")
-            return
-        }
-        
-        let loadUsername = userDataSource.userName
-        let items: [Any] = ["Hi I am \(loadUsername ?? "") from Stitchbox, let's check out this!", URL(string: "https://stitchbox.net/app/post/?uid=\(editeddPost?.id ?? "")")!]
-        let ac = UIActivityViewController(activityItems: items, applicationActivities: nil)
-        
-        ac.completionWithItemsHandler = { (activityType, completed:Bool, returnedItems:[Any]?, error: Error?) in
-            
-            
-        }
-        
-        delay(0.1) {[weak self] in
-            guard let self = self else { return }
-            self.present(ac, animated: true, completion: nil)
-        }
-        
-    }
-    
-    @objc func createPostForStitch() {
-        
-        if let PNVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "PostNavVC") as? PostNavVC {
-            
-            
-            PNVC.modalPresentationStyle = .fullScreen
-            
-            if let rootvc = PNVC.viewControllers[0] as? PostVC {
-                rootvc.stitchPost = editeddPost
-            } else {
-                printContent(PNVC.viewControllers[0])
-            }
-            
-            delay(0.1) {
-                
-                self.present(PNVC, animated: true)
-            }
-            
-        }
-        
-    }
-    
-    
-    @objc func stitchToExistingPost() {
-        
-        if let ASTEVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "AddStitchToExistingVC") as? AddStitchToExistingVC {
-            
-            ASTEVC.hidesBottomBarWhenPushed = true
-            ASTEVC.stitchedPost = editeddPost
-            hideMiddleBtn(vc: self)
-            
-            delay(0.1) {
-                self.navigationController?.pushViewController(ASTEVC, animated: true)
-            }
-            
-        }
-        
-        
-    }
     
     func switchToProfileVC() {
     
