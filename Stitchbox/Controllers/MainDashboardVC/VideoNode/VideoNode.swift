@@ -43,10 +43,7 @@ class VideoNode: ASCellNode, ASVideoNodeDelegate {
     
     private var headerView: PostHeader!
     private var sideButtonsView: ButtonSideList!
-    private var buttonsView: ButtonsHeader!
-    private var contentNode: ASTextNode
-    private var headerNode: ASDisplayNode
-    private var buttonNode: ASDisplayNode
+    
     private var label: ActiveLabel!
     private let maximumShowing = 100
     private var isSave = false
@@ -66,9 +63,7 @@ class VideoNode: ASCellNode, ASVideoNodeDelegate {
         self.index = at
         self.gradientNode = GradienView()
         self.videoNode = ASVideoNode()
-        self.contentNode = ASTextNode()
-        self.headerNode = ASDisplayNode()
-        self.buttonNode = ASDisplayNode()
+      
         
         super.init()
 
@@ -84,7 +79,6 @@ class VideoNode: ASCellNode, ASVideoNodeDelegate {
          
         addPinchGestureRecognizer()
         addPanGestureRecognizer()
-        setupLabel()
         
         if UIViewController.currentViewController() is ParentViewController {
           
@@ -101,10 +95,23 @@ class VideoNode: ASCellNode, ASVideoNodeDelegate {
         }
         
         setupViews()
+        setupLabel()
+       
+    
         setupSpace(width: self.view.frame.width)
         clearMode()
 
      }
+    
+    
+    override func layout() {
+        super.layout()
+        if self.label != nil, self.headerView != nil {
+            self.label.frame = self.headerView.contentLbl.bounds
+            self.label.numberOfLines = Int(self.headerView.contentLbl.numberOfLines)
+        }
+        
+    }
     
     func clearMode() {
         
@@ -116,18 +123,11 @@ class VideoNode: ASCellNode, ASVideoNodeDelegate {
         
     }
     
-    override func layout() {
-        super.layout()
-        
-        if label != nil {
-            label.frame = contentNode.bounds
-        }
-     
-    }
+
     
     private func setupSpace(width: CGFloat) {
         
-        if let buttonsView = self.buttonsView {
+        if let buttonsView = self.headerView {
          
             let leftAndRightPadding: CGFloat = 16 * 2 // Padding for both sides
             let itemWidth: CGFloat = 60
@@ -346,57 +346,14 @@ class VideoNode: ASCellNode, ASVideoNodeDelegate {
         }
     }
     
-    
     override func layoutSpecThatFits(_ constrainedSize: ASSizeRange) -> ASLayoutSpec {
         
-        headerNode.style.preferredSize = CGSize(width: constrainedSize.max.width, height: 80)
-        videoNode.style.preferredSize = CGSize(width: constrainedSize.max.width, height: constrainedSize.max.height)
-
-        
-        let headerInset = UIEdgeInsets(top: 0, left: 0, bottom: 2, right: 8)
-        let headerInsetSpec = ASInsetLayoutSpec(insets: headerInset, child: headerNode)
-
-        let contentInset = UIEdgeInsets(top: 2, left: 20, bottom: 2, right: 70)
-        let contentInsetSpec = ASInsetLayoutSpec(insets: contentInset, child: contentNode)
-
-        let verticalStack = ASStackLayoutSpec.vertical()
-        let buttonsInsetSpec = createButtonsInsetSpec(constrainedSize: constrainedSize)
-
-        verticalStack.children = [headerInsetSpec]
-
-        if !post.content.isEmpty || ((post.hashtags?.contains(where: { !$0.isEmpty })) != nil) {
-            verticalStack.children?.append(contentInsetSpec)
-        }
-
-        verticalStack.children?.append(buttonsInsetSpec)
-
-        let verticalStackInset = UIEdgeInsets(top: 0, left: 0, bottom: 4, right: 8)
-        let verticalStackInsetSpec = ASInsetLayoutSpec(insets: verticalStackInset, child: verticalStack)
-         
-
-        let inset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
-        let gradientInsetSpec = ASInsetLayoutSpec(insets: inset, child: gradientNode)
-
-        // Here we have removed the roundedCornerNode and using videoNode directly
-        let videoInsetSpec = ASInsetLayoutSpec(insets: inset, child: videoNode)
-
-        let overlay = ASOverlayLayoutSpec(child: videoInsetSpec, overlay: gradientInsetSpec)
-
-        let relativeSpec = ASRelativeLayoutSpec(horizontalPosition: .start, verticalPosition: .end, sizingOption: [], child: verticalStackInsetSpec)
-        let finalOverlay = ASOverlayLayoutSpec(child: overlay, overlay: relativeSpec)
-
-        return finalOverlay
-        
+        let ratio = UIScreen.main.bounds.height / UIScreen.main.bounds.width
+        let ratioSpec = ASRatioLayoutSpec(ratio:ratio, child:self.videoNode);
+        let gradientOverlaySpec = ASOverlayLayoutSpec(child:ratioSpec, overlay:self.gradientNode)
+        return gradientOverlaySpec
     }
-    
-    
-    private func createButtonsInsetSpec(constrainedSize: ASSizeRange) -> ASInsetLayoutSpec {
-        buttonNode.style.preferredSize = CGSize(width: constrainedSize.max.width, height: 45)
-        let buttonsInset = UIEdgeInsets(top: 2, left: 8, bottom: 2, right: 8)
-        return ASInsetLayoutSpec(insets: buttonsInset, child: buttonNode)
-    }
-    
-
+   
  
 }
 
@@ -435,25 +392,21 @@ extension VideoNode {
     }
 
     func hideAllInfo() {
-        
-        headerNode.isHidden = true
-        contentNode.isHidden = true
-        sideButtonsView.isHidden = true
-        buttonNode.isHidden = true
+
         label.isHidden = true
         gradientNode.isHidden = true
-         
+        sideButtonsView.isHidden = true
+        headerView.isHidden = true
+        
     }
     
     func showAllInfo() {
         
-        headerNode.isHidden = false
-        contentNode.isHidden = false
-        sideButtonsView.isHidden = false
-        buttonNode.isHidden = false
         label.isHidden = false
         gradientNode.isHidden = false
-         
+        sideButtonsView.isHidden = false
+        headerView.isHidden = false
+        
     }
 
 
@@ -739,15 +692,16 @@ extension VideoNode: UIGestureRecognizerDelegate {
 
     func setupLabel() {
         self.label = ActiveLabel()
-        self.contentNode.backgroundColor = .clear
+    
         self.label.backgroundColor = .clear
-        self.contentNode.view.addSubview(self.label)
-        self.contentNode.view.isUserInteractionEnabled = true
+        self.headerView.contentLbl.addSubview(self.label)
+        self.headerView.contentLbl.isUserInteractionEnabled = true
+        
       
         let customType = ActiveType.custom(pattern: "\\*more\\b|\\*hide\\b")
         self.label.customColor[customType] = .lightGray
         self.label.enabledTypes = [.hashtag, .url, customType]
-        self.label.numberOfLines = Int(self.contentNode.lineCount)
+       
         self.label.hashtagColor = UIColor(red: 85.0/255, green: 172.0/255, blue: 238.0/255, alpha: 1)
         self.label.URLColor = UIColor(red: 135/255, green: 206/255, blue: 250/255, alpha: 1)
         
@@ -767,10 +721,7 @@ extension VideoNode: UIGestureRecognizerDelegate {
         }
     
         
-        contentNode.maximumNumberOfLines = 0
-        contentNode.truncationMode = .byWordWrapping
-        contentNode.style.flexShrink = 1
-        
+    
         setupDefaultContent()
         
     }
@@ -778,8 +729,8 @@ extension VideoNode: UIGestureRecognizerDelegate {
     func setupViews() {
         // Header View Setup
         self.headerView = PostHeader()
-        self.headerNode.view.addSubview(self.headerView)
-        addConstraints(to: self.headerView, within: self.headerNode.view)
+        self.view.addSubview(self.headerView)
+        addConstraints(to: self.headerView, within: self.view)
     
         if post.setting?.allowStitch == false {
             hideStitchViews()
@@ -787,16 +738,19 @@ extension VideoNode: UIGestureRecognizerDelegate {
             hideStitchViews()
         }
 
+        self.headerView.contentLbl.numberOfLines = 0
+        self.headerView.contentLbl.lineBreakMode = .byWordWrapping
+        
+        self.headerView.contentLbl.setContentHuggingPriority(.defaultHigh, for: .vertical)
+        self.headerView.contentLbl.setContentCompressionResistancePriority(.defaultHigh, for: .vertical)
+
 
         self.headerView.usernameLbl.text = "@\(post.owner?.username ?? "")"
 
-        // Buttons View Setup
-        self.buttonsView = ButtonsHeader()
-        self.buttonNode.view.addSubview(self.buttonsView)
-        addConstraints(to: self.buttonsView, within: self.buttonNode.view)
-        self.buttonsView.shareBtn.setImage(shareImage, for: .normal)
-        self.buttonsView.saveBtn.setImage(unsaveImage, for: .normal)
-        self.buttonsView.commentBtn.setImage(cmtImage, for: .normal)
+      
+        self.headerView.shareBtn.setImage(shareImage, for: .normal)
+        self.headerView.saveBtn.setImage(unsaveImage, for: .normal)
+        self.headerView.commentBtn.setImage(cmtImage, for: .normal)
 
         // Gesture Recognizers
         setupGestureRecognizers()
@@ -809,10 +763,10 @@ extension VideoNode: UIGestureRecognizerDelegate {
         likeCount = post.totalLikes
         saveCount = post.totalSave
         
-        self.buttonsView.likeCountLbl.text = "\(formatPoints(num: Double(post.totalLikes)))"
-        self.buttonsView.saveCountLbl.text = "\(formatPoints(num: Double(post.totalShares)))"
-        self.buttonsView.commentCountLbl.text = "\(formatPoints(num: Double(post.totalComments)))"
-        self.buttonsView.shareCountLbl.text = "\(formatPoints(num: Double(post.totalShares)))"
+        self.headerView.likeCountLbl.text = "\(formatPoints(num: Double(post.totalLikes)))"
+        self.headerView.saveCountLbl.text = "\(formatPoints(num: Double(post.totalShares)))"
+        self.headerView.commentCountLbl.text = "\(formatPoints(num: Double(post.totalComments)))"
+        self.headerView.shareCountLbl.text = "\(formatPoints(num: Double(post.totalShares)))"
         
     }
 
@@ -854,19 +808,19 @@ extension VideoNode: UIGestureRecognizerDelegate {
         self.headerView.usernameLbl.addGestureRecognizer(usernameTap)
         
         let shareTap = createTapGestureRecognizer(target: self, action: #selector(VideoNode.shareTapped))
-        self.buttonsView.shareBtn.addGestureRecognizer(shareTap)
+        self.headerView.shareBtn.addGestureRecognizer(shareTap)
 
         let likeTap = createTapGestureRecognizer(target: self, action: #selector(VideoNode.likeTapped))
-        self.buttonsView.likeBtn.addGestureRecognizer(likeTap)
+        self.headerView.likeBtn.addGestureRecognizer(likeTap)
 
         let stitchTap = createTapGestureRecognizer(target: self, action: #selector(VideoNode.stitchTapped))
         self.headerView.stichBtn.addGestureRecognizer(stitchTap)
 
         let saveTap = createTapGestureRecognizer(target: self, action: #selector(VideoNode.onClickSave))
-        self.buttonsView.saveBtn.addGestureRecognizer(saveTap)
+        self.headerView.saveBtn.addGestureRecognizer(saveTap)
 
         let commentTap = createTapGestureRecognizer(target: self, action: #selector(VideoNode.commentTapped))
-        self.buttonsView.commentBtn.addGestureRecognizer(commentTap)
+        self.headerView.commentBtn.addGestureRecognizer(commentTap)
 
         let doubleTap = createTapGestureRecognizer(target: self, action: #selector(VideoNode.likeHandle), taps: 2)
         doubleTap.delaysTouchesBegan = true
@@ -926,7 +880,7 @@ extension VideoNode: UIGestureRecognizerDelegate {
     
     func setupDefaultContent() {
 
-        headerNode.backgroundColor = UIColor.clear
+        headerView.backgroundColor = UIColor.clear
 
         let hashtagsText = post.hashtags?.joined(separator: " ")
         let finalText = post.content + " " + (hashtagsText ?? "")
@@ -948,18 +902,19 @@ extension VideoNode: UIGestureRecognizerDelegate {
             NSAttributedString.Key.foregroundColor: UIColor.white
         ])
         
-        self.contentNode.attributedText = attr1
+        self.headerView.contentLbl.attributedText = attr1
         label.attributedText = attr2
       
-        setNeedsLayout()
-        layoutIfNeeded()
-       
+        self.headerView.setNeedsLayout()
+        self.headerView.layoutIfNeeded()
+        
+        
         
     }
     
     func setupHideContent() {
         
-        headerNode.backgroundColor = UIColor.clear
+        headerView.backgroundColor = UIColor.clear
         
         let hashtagsText = post.hashtags?.joined(separator: " ")
         let finalText = post.content + " " + (hashtagsText ?? "")
@@ -982,12 +937,12 @@ extension VideoNode: UIGestureRecognizerDelegate {
         ])
         
         
-        self.contentNode.attributedText = attr1
+        self.headerView.contentLbl.attributedText = attr1
         label.attributedText = attr2
         
-        setNeedsLayout()
-        layoutIfNeeded()
-       
+        self.headerView.setNeedsLayout()
+        self.headerView.layoutIfNeeded()
+
        
     }
     
@@ -1213,7 +1168,7 @@ extension VideoNode {
 
                 DispatchQueue.main.async {
                     self.saveCount = countFromQuery
-                    self.buttonsView.saveCountLbl.text = "\(formatPoints(num: Double(countFromQuery)))"
+                    self.headerView.saveCountLbl.text = "\(formatPoints(num: Double(countFromQuery)))"
                 }
 
             case .failure(let error):
@@ -1240,7 +1195,7 @@ extension VideoNode {
                 }
 
                 DispatchQueue.main.async {
-                    self.buttonsView.shareCountLbl.text = "\(formatPoints(num: Double(countFromQuery)))"
+                    self.headerView.shareCountLbl.text = "\(formatPoints(num: Double(countFromQuery)))"
                 }
 
             case .failure(let error):
@@ -1361,7 +1316,7 @@ extension VideoNode {
 
         global_cornerRadius = 45
         
-        if buttonNode.isHidden {
+        if headerView.isHidden {
             
             global_presetingRate = 0.36
             
@@ -1379,7 +1334,7 @@ extension VideoNode {
             let newsFeedSettingVC = NewsFeedSettingVC()
             newsFeedSettingVC.modalPresentationStyle = .custom
             newsFeedSettingVC.transitioningDelegate = vc.self
-            newsFeedSettingVC.isInformationHidden = buttonNode.isHidden
+            newsFeedSettingVC.isInformationHidden = headerView.isHidden
             
             
             if let updateVC = vc as? ParentViewController {
@@ -1414,7 +1369,7 @@ extension VideoNode {
         
         postSettingVC.modalPresentationStyle = .custom
         postSettingVC.transitioningDelegate = viewController.self
-        postSettingVC.isInformationHidden = buttonNode.isHidden
+        postSettingVC.isInformationHidden = headerView.isHidden
        
 
         if let updateVC = viewController as? ParentViewController {
@@ -1488,7 +1443,7 @@ extension VideoNode {
         DispatchQueue.main.async { [weak self] in
             guard let self = self else { return }
             self.likeAnimation()
-            self.buttonsView.likeCountLbl.text = "\(formatPoints(num: Double(self.likeCount)))"
+            self.headerView.likeCountLbl.text = "\(formatPoints(num: Double(self.likeCount)))"
             self.isLike = true
         }
     }
@@ -1514,7 +1469,7 @@ extension VideoNode {
         DispatchQueue.main.async { [weak self] in
             guard let self = self else { return }
             self.unlikeAnimation()
-            self.buttonsView.likeCountLbl.text = "\(formatPoints(num: Double(self.likeCount)))"
+            self.headerView.likeCountLbl.text = "\(formatPoints(num: Double(self.likeCount)))"
             self.isLike = false
         }
     }
@@ -1527,11 +1482,11 @@ extension VideoNode {
             let scaleTransform = CGAffineTransform(scaleX: 0.9, y: 0.9)
             
             UIView.animate(withDuration: 0.1, animations: {
-                self.buttonsView.likeBtn.transform = scaleTransform
-                self.buttonsView.likeBtn.setImage(likeImage!, for: .normal)
+                self.headerView.likeBtn.transform = scaleTransform
+                self.headerView.likeBtn.setImage(likeImage!, for: .normal)
             }, completion: { _ in
                 UIView.animate(withDuration: 0.1, animations: {
-                    self.buttonsView.likeBtn.transform = CGAffineTransform.identity
+                    self.headerView.likeBtn.transform = CGAffineTransform.identity
                 })
             })
             
@@ -1546,14 +1501,14 @@ extension VideoNode {
             
             let scaleTransform = CGAffineTransform(scaleX: 0.9, y: 0.9)
 
-            self.buttonsView.saveCountLbl.text = "\(formatPoints(num: Double(self.saveCount)))"
+            self.headerView.saveCountLbl.text = "\(formatPoints(num: Double(self.saveCount)))"
 
             UIView.animate(withDuration: 0.1, animations: {
-                self.buttonsView.saveBtn.transform = scaleTransform
-                self.buttonsView.saveBtn.setImage(saveImage!, for: .normal)
+                self.headerView.saveBtn.transform = scaleTransform
+                self.headerView.saveBtn.setImage(saveImage!, for: .normal)
             }, completion: { _ in
                 UIView.animate(withDuration: 0.1, animations: {
-                    self.buttonsView.saveBtn.transform = CGAffineTransform.identity
+                    self.headerView.saveBtn.transform = CGAffineTransform.identity
                 })
             })
             
@@ -1568,14 +1523,14 @@ extension VideoNode {
             guard let self = self else { return }
             let scaleTransform = CGAffineTransform(scaleX: 0.9, y: 0.9)
             
-            self.buttonsView.saveCountLbl.text = "\(formatPoints(num: Double(self.saveCount)))"
+            self.headerView.saveCountLbl.text = "\(formatPoints(num: Double(self.saveCount)))"
 
             UIView.animate(withDuration: 0.1, animations: {
-                self.buttonsView.saveBtn.transform = scaleTransform
-                self.buttonsView.saveBtn.setImage(unsaveImage!, for: .normal)
+                self.headerView.saveBtn.transform = scaleTransform
+                self.headerView.saveBtn.setImage(unsaveImage!, for: .normal)
             }, completion: { _ in
                 UIView.animate(withDuration: 0.1, animations: {
-                    self.buttonsView.saveBtn.transform = CGAffineTransform.identity
+                    self.headerView.saveBtn.transform = CGAffineTransform.identity
                 })
             })
         }
@@ -1588,11 +1543,11 @@ extension VideoNode {
         let scaleTransform = CGAffineTransform(scaleX: 0.9, y: 0.9)
         
         UIView.animate(withDuration: 0.1, animations: {
-            self.buttonsView.likeBtn.transform = scaleTransform
-            self.buttonsView.likeBtn.setImage(emptyLikeImage!, for: .normal)
+            self.headerView.likeBtn.transform = scaleTransform
+            self.headerView.likeBtn.setImage(emptyLikeImage!, for: .normal)
         }, completion: { _ in
             UIView.animate(withDuration: 0.1, animations: {
-                self.buttonsView.likeBtn.transform = CGAffineTransform.identity
+                self.headerView.likeBtn.transform = CGAffineTransform.identity
             })
         })
     }
@@ -1704,7 +1659,7 @@ extension VideoNode {
         DispatchQueue.main.async { [weak self] in
             guard let self = self else { return }
             let likeImage = isLiked ? likeImage! : emptyLikeImage!
-            self.buttonsView.likeBtn.setImage(likeImage, for: .normal)
+            self.headerView.likeBtn.setImage(likeImage, for: .normal)
         }
     }
 

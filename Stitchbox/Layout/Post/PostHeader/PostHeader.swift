@@ -17,6 +17,18 @@ class PostHeader: UIView {
     @IBOutlet var stichBtn: UIButton!
     @IBOutlet var contentView: UIView!
     @IBOutlet var followBtn: UIButton!
+    
+    @IBOutlet weak var stackView: UIStackView!
+    @IBOutlet weak var shareBtn: UIButton!
+    @IBOutlet weak var commentBtn: UIButton!
+    @IBOutlet weak var commentCountLbl: UILabel!
+    @IBOutlet weak var likeBtn: UIButton!
+    @IBOutlet weak var likeCountLbl: UILabel!
+    @IBOutlet weak var shareCountLbl: UILabel!
+    @IBOutlet weak var saveBtn: UIButton!
+    @IBOutlet weak var saveCountLbl: UILabel!
+    
+    @IBOutlet weak var contentLbl: UILabel!
 
     let kCONTENT_XIB_NAME = "PostHeader"
     
