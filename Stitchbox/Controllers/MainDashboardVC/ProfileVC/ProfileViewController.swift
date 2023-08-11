@@ -76,7 +76,7 @@ class ProfileViewController: UIViewController {
         collectionView.setCollectionViewLayout(createLayout(), animated: true)
         collectionView.register(ProfilePostsHeaderView.nib, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: ProfilePostsHeaderView.reuseIdentifier)
         collectionView.register(ImageViewCell.self, forCellWithReuseIdentifier: ImageViewCell.reuseIdentifier)
-        collectionView.register(ProfileHeaderCell.self, forCellWithReuseIdentifier: ProfileHeaderCell.reuseIdentifier)
+       
     
         configureDatasource()
         wireDelegate()
@@ -686,16 +686,11 @@ extension ProfileViewController: UICollectionViewDelegate {
             if snap.count != 0 {
                 
                 if indexPath.row == snap.count - 5 {
-                    DispatchQueue.global(qos: .userInitiated).async { [weak self] in
+                    self.getMyPost { [weak self] (newPosts) in
                         guard let self = self else { return }
-                        self.getMyPost { [weak self] (newPosts) in
-                            guard let self = self else { return }
-                            self.insertNewRowsInCollectionNode(newPosts: newPosts)
-                        }
-                        
+                        self.insertNewRowsInCollectionNode(newPosts: newPosts)
                     }
-                    
-                    
+ 
                 }
                 
             }

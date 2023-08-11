@@ -121,15 +121,6 @@ class TrendingPostNode: ASCellNode {
         
     }
     
-    override func didLoad() {
-        super.didLoad()
-        
-        DispatchQueue.global(qos: .userInitiated).async { [weak self] in
-            self?.countView()
-            self?.countViewStitch()
-        }
-    
-    }
     
     override func layoutSpecThatFits(_ constrainedSize: ASSizeRange) -> ASLayoutSpec {
            

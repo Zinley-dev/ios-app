@@ -675,8 +675,6 @@ extension UserProfileVC: UICollectionViewDelegate {
                
                 self.navigationController?.pushViewController(SPVC, animated: true)
             }
-
-
             
         case .none:
             print("None")
@@ -693,7 +691,6 @@ extension UserProfileVC: UICollectionViewDelegate {
             let snap = datasource.snapshot().itemIdentifiers(inSection: .posts)
             
             if snap.count != 0 {
-                
                 // Infinite scrolling logic
                 let snap = datasource.snapshot().itemIdentifiers(inSection: .posts)
                 if indexPath.row == snap.count - 5 {

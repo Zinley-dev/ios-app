@@ -324,7 +324,19 @@ extension FeedViewController {
                 currentIndex = nil
                 
             }
-
+            
+            
+            // If the video is stuck, reset the buffer by seeking to the current playback time.
+            if let currentIndex = currentIndex, let cell = collectionNode.nodeForItem(at: IndexPath(row: currentIndex, section: 0)) as? VideoNode {
+                if let playerItem = cell.videoNode.currentItem, !playerItem.isPlaybackLikelyToKeepUp {
+                    if let currentTime = cell.videoNode.currentItem?.currentTime() {
+                        cell.videoNode.player?.seek(to: currentTime)
+                    } else {
+                        cell.videoNode.player?.seek(to: CMTime.zero)
+                    }
+                }
+            }
+            
             // If there's no current playing video and no visible video, pause the last playing video, if any.
             if !isVideoPlaying && currentIndex != nil {
                 pauseVideo(index: currentIndex!)
@@ -384,7 +396,10 @@ extension FeedViewController: ASCollectionDataSource {
     func collectionNode(_ collectionNode: ASCollectionNode, nodeBlockForItemAt indexPath: IndexPath) -> ASCellNodeBlock {
         let post = self.posts[indexPath.row]
         
-        return {
+        return { [weak self] in
+            guard let self = self else {
+                return ASCellNode()
+            }
             
             let node = VideoNode(with: post, at: indexPath.row)
             node.neverShowPlaceholders = true
@@ -392,7 +407,6 @@ extension FeedViewController: ASCollectionDataSource {
             node.isOriginal = true
             node.automaticallyManagesSubnodes = true
             
-            /*
             if isfirstLoad, indexPath.row == 0 {
                 isfirstLoad = true
                 node.isFirstItem = true
@@ -408,7 +422,7 @@ extension FeedViewController: ASCollectionDataSource {
                 }
                
             
-            }*/
+            }
             
             
             return node
@@ -1000,7 +1014,7 @@ extension FeedViewController {
                 applyAnimationText(text: "Up next: \(total) stitches!")
             }
             
-
+           
         } else {
             applyAnimationText(text: "")
         }
@@ -1017,11 +1031,12 @@ extension FeedViewController {
         
         if let cell = self.collectionNode.nodeForItem(at: IndexPath(row: index, section: 0)) as? VideoNode {
             
-            cell.pauseVideo()
+            cell.videoNode.pause()
             
             let time = CMTime(seconds: 0, preferredTimescale: 1)
-            cell.seekVideo(time: time)
-         
+            cell.videoNode.player?.seek(to: time)
+           // playTimeBar.setValue(Float(0), animated: false)
+            
         }
         
     }
@@ -1032,7 +1047,7 @@ extension FeedViewController {
         if let cell = self.collectionNode.nodeForItem(at: IndexPath(row: index, section: 0)) as? VideoNode {
             
            
-            cell.seekVideo(time: time)
+            cell.videoNode.player?.seek(to: time)
             
         }
         
@@ -1041,9 +1056,7 @@ extension FeedViewController {
     
     func playVideo(index: Int) {
         
-        /*
         if let cell = self.collectionNode.nodeForItem(at: IndexPath(row: index, section: 0)) as? VideoNode {
-            
             
             if !cell.videoNode.isPlaying() {
 
@@ -1089,7 +1102,7 @@ extension FeedViewController {
                 
             }
             
-        }*/
+        }
         
     }
     

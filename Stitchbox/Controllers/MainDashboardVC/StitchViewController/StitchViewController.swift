@@ -333,7 +333,16 @@ extension StitchViewController {
                     }
                 }
                 
-                
+                // If the video is stuck, reset the buffer by seeking to the current playback time.
+                if let currentIndex = currentIndex, let cell = collectionNode.nodeForItem(at: IndexPath(row: currentIndex, section: 0)) as? VideoNode {
+                    if let playerItem = cell.videoNode.currentItem, !playerItem.isPlaybackLikelyToKeepUp {
+                        if let currentTime = cell.videoNode.currentItem?.currentTime() {
+                            cell.videoNode.player?.seek(to: currentTime)
+                        } else {
+                            cell.videoNode.player?.seek(to: CMTime.zero)
+                        }
+                    }
+                }
                 
                 // If there's no current playing video and no visible video, pause the last playing video, if any.
                 if !isVideoPlaying && currentIndex != nil {
@@ -481,6 +490,7 @@ extension StitchViewController: ASCollectionDataSource {
                 let node = VideoNode(with: post, at: indexPath.row)
                 node.neverShowPlaceholders = true
                 node.debugName = "Node \(indexPath.row)"
+                
                 node.automaticallyManagesSubnodes = true
                  
                 return node
@@ -734,10 +744,11 @@ extension StitchViewController {
         
         if let cell = self.collectionNode.nodeForItem(at: IndexPath(row: index, section: 0)) as? VideoNode {
             
-            cell.pauseVideo()
+            cell.videoNode.pause()
+            
             let time = CMTime(seconds: 0, preferredTimescale: 1)
-            cell.seekVideo(time: time)
-           
+            cell.videoNode.player?.seek(to: time)
+           // playTimeBar.setValue(Float(0), animated: false)
             
         }
         
@@ -752,7 +763,7 @@ extension StitchViewController {
         if let cell = self.collectionNode.nodeForItem(at: IndexPath(row: index, section: 0)) as? VideoNode {
             
           
-            cell.seekVideo(time: time)
+            cell.videoNode.player?.seek(to: time)
             
             
         }
@@ -770,7 +781,7 @@ extension StitchViewController {
     func playVideo(index: Int) {
         
         print("StitchViewController: \(index) - play")
-        /*
+        
         if let cell = self.collectionNode.nodeForItem(at: IndexPath(row: index, section: 0)) as? VideoNode {
             
             handleAnimationTextAndImage(for: index)
@@ -840,9 +851,9 @@ extension StitchViewController {
                 
                 
             }
-           
+            
         }
-    */
+        
     }
     
     

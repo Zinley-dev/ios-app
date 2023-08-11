@@ -26,7 +26,7 @@ class RecentNode: ASCellNode {
     var upperNameNode: ASTextNode!
     var belowNameNode: ASTextNode!
     var imageNode: ASNetworkImageNode!
-    var gameNode: ASDisplayNode!
+    
     
     init(with item: RecentModel) {
         
@@ -34,7 +34,7 @@ class RecentNode: ASCellNode {
         self.upperNameNode = ASTextNode()
         self.imageNode = ASNetworkImageNode()
         self.belowNameNode = ASTextNode()
-        self.gameNode = ASDisplayNode()
+        
         super.init()
         
         self.backgroundColor = UIColor.clear
@@ -47,114 +47,68 @@ class RecentNode: ASCellNode {
         belowNameNode.backgroundColor = UIColor.clear
         
         automaticallyManagesSubnodes = true
-         
+          
+    }
+    
+    override func didLoad() {
+        super.didLoad()
         
-        if item.type == "game" {
-            
-            //imageNode.cornerRadius = OrganizerImageSize/2
-            imageNode.clipsToBounds = true
-            imageNode.shouldRenderProgressImages = true
-            imageNode.isLayerBacked = true
-            
-            DispatchQueue.main.async { [weak self] in
-                guard let self = self else { return }
-                let paragraphStyles = NSMutableParagraphStyle()
-                paragraphStyles.alignment = .left
-                self.upperNameNode.attributedText = NSAttributedString(
-                    string: item.game_name ?? "@",
-                    attributes: [
-                        NSAttributedString.Key.font: FontManager.shared.roboto(.Regular, size: FontSize + 1),
-                        NSAttributedString.Key.foregroundColor: UIColor.black,
-                        NSAttributedString.Key.paragraphStyle: paragraphStyles
-                    ]
-                )
-                
-                self.belowNameNode.attributedText = NSAttributedString(
-                    string: item.game_shortName ?? "@",
-                    attributes: [
-                        NSAttributedString.Key.font: FontManager.shared.roboto(.Regular, size: FontSize + 1),
-                        NSAttributedString.Key.foregroundColor: UIColor.black,
-                        NSAttributedString.Key.paragraphStyle: paragraphStyles
-                    ]
-                )
-                
-                if item.coverUrl != "" {
-                    self.imageNode.url = URL(string: item.coverUrl)
-                } else {
-                    self.imageNode.image = UIImage.init(named: "search-lightmode")
-                }
-                
-                self.imageNode.contentMode = .scaleAspectFit
-                self.imageNode.backgroundColor = .clear
-            }
-
-        } else if item.type == "user" {
+        if item.type == "user" {
             
             imageNode.cornerRadius = OrganizerImageSize/2
             imageNode.clipsToBounds = true
             imageNode.shouldRenderProgressImages = true
             imageNode.isLayerBacked = true
             
-            DispatchQueue.main.async { [weak self] in
-                guard let self = self else { return }
-                
+            let paragraphStyles = NSMutableParagraphStyle()
+            paragraphStyles.alignment = .left
+            self.upperNameNode.attributedText = NSAttributedString(
+                string: item.user_nickname ?? "@",
+                attributes: [
+                    NSAttributedString.Key.font: FontManager.shared.roboto(.Regular, size: FontSize + 1),
+                    NSAttributedString.Key.foregroundColor: UIColor.black,
+                    NSAttributedString.Key.paragraphStyle: paragraphStyles
+                ]
+            )
+            
+            self.belowNameNode.attributedText = NSAttributedString(
+                string: item.user_name ?? "@",
+                attributes: [
+                    NSAttributedString.Key.font: FontManager.shared.roboto(.Regular, size: FontSize + 1),
+                    NSAttributedString.Key.foregroundColor: UIColor.black,
+                    NSAttributedString.Key.paragraphStyle: paragraphStyles
+                ]
+            )
 
-                let paragraphStyles = NSMutableParagraphStyle()
-                paragraphStyles.alignment = .left
-                self.upperNameNode.attributedText = NSAttributedString(
-                    string: item.user_nickname ?? "@",
-                    attributes: [
-                        NSAttributedString.Key.font: FontManager.shared.roboto(.Regular, size: FontSize + 1),
-                        NSAttributedString.Key.foregroundColor: UIColor.black,
-                        NSAttributedString.Key.paragraphStyle: paragraphStyles
-                    ]
-                )
-                
-                self.belowNameNode.attributedText = NSAttributedString(
-                    string: item.user_name ?? "@",
-                    attributes: [
-                        NSAttributedString.Key.font: FontManager.shared.roboto(.Regular, size: FontSize + 1),
-                        NSAttributedString.Key.foregroundColor: UIColor.black,
-                        NSAttributedString.Key.paragraphStyle: paragraphStyles
-                    ]
-                )
-
-                if item.avatarUrl != "" {
-                    self.imageNode.url = URL(string: item.avatarUrl)
-                } else {
-                    self.imageNode.image = UIImage.init(named: "defaultuser")
-                }
-
-                
+            if item.avatarUrl != "" {
+                self.imageNode.url = URL(string: item.avatarUrl)
+            } else {
+                self.imageNode.image = UIImage.init(named: "defaultuser")
             }
 
             
 
         } else if item.type == "text" {
             
-            DispatchQueue.main.async { [weak self] in
-                guard let self = self else { return }
-                let paragraphStyles = NSMutableParagraphStyle()
-                paragraphStyles.alignment = .left
-                self.upperNameNode.attributedText = NSAttributedString(
-                    string: item.text ?? "@",
-                    attributes: [
-                        NSAttributedString.Key.font: FontManager.shared.roboto(.Regular, size: FontSize + 1),
-                        NSAttributedString.Key.foregroundColor: UIColor.black,
-                        NSAttributedString.Key.paragraphStyle: paragraphStyles
-                    ]
-                )
+            let paragraphStyles = NSMutableParagraphStyle()
+            paragraphStyles.alignment = .left
+            self.upperNameNode.attributedText = NSAttributedString(
+                string: item.text ?? "@",
+                attributes: [
+                    NSAttributedString.Key.font: FontManager.shared.roboto(.Regular, size: FontSize + 1),
+                    NSAttributedString.Key.foregroundColor: UIColor.black,
+                    NSAttributedString.Key.paragraphStyle: paragraphStyles
+                ]
+            )
 
-                self.imageNode.image = UIImage.init(named: "search-lightmode")
-                self.imageNode.contentMode = .scaleAspectFit
-            }
+            self.imageNode.image = UIImage.init(named: "search-lightmode")
+            self.imageNode.contentMode = .scaleAspectFit
 
             
         }
-
+        
         
     }
-    
   
     override func layoutSpecThatFits(_ constrainedSize: ASSizeRange) -> ASLayoutSpec {
         
@@ -163,7 +117,7 @@ class RecentNode: ASCellNode {
         
         
         imageNode.style.preferredSize = CGSize(width: OrganizerImageSize, height: OrganizerImageSize)
-        gameNode.style.preferredSize = CGSize(width: 150, height: 50)
+        
         
         headerSubStack.style.flexShrink = 16.0
         headerSubStack.style.flexGrow = 16.0
@@ -186,13 +140,7 @@ class RecentNode: ASCellNode {
         
         if item.type == "user" {
             
-            if let games = item.gameList, !games.isEmpty {
-                
-                headerStack.children = [imageNode, headerSubStack, gameNode]
-                
-            } else {
-                headerStack.children = [imageNode, headerSubStack]
-            }
+            headerStack.children = [imageNode, headerSubStack]
             
         } else {
             headerStack.children = [imageNode, headerSubStack]

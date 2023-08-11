@@ -25,8 +25,8 @@ class VideoNode: ASCellNode, ASVideoNodeDelegate {
     var last_view_timestamp =  NSDate().timeIntervalSince1970
     var totalWatchedTime: TimeInterval = 0.0
     var previousTimeStamp: TimeInterval = 0.0
-    private var videoNode: ASVideoNode
-    private var gradientNode: GradienView
+    var videoNode: ASVideoNode
+    var gradientNode: GradienView
     var time = 0
     var shouldCountView = true
     var isViewed = false
@@ -76,7 +76,7 @@ class VideoNode: ASCellNode, ASVideoNodeDelegate {
         configureVideoNode(with: post)
     }
 
-/*
+    
     override func didLoad() {
         super.didLoad()
     
@@ -104,7 +104,7 @@ class VideoNode: ASCellNode, ASVideoNodeDelegate {
         setupSpace(width: self.view.frame.width)
         clearMode()
 
-     } */
+     }
     
     func clearMode() {
         
@@ -265,7 +265,7 @@ class VideoNode: ASCellNode, ASVideoNodeDelegate {
     }
 
     private func configureVideoNode(with post: PostModel) {
-        /*
+        
         videoNode.url = getThumbnailURL(post: post)
         videoNode.player?.automaticallyWaitsToMinimizeStalling = true
         videoNode.shouldAutoplay = false
@@ -306,18 +306,7 @@ class VideoNode: ASCellNode, ASVideoNodeDelegate {
                 self.videoNode.play()
             }
             
-        } */
-        
-        self.videoNode.url = self.getThumbnailURL(post: post)
-        self.videoNode.shouldAutoplay = false
-        self.videoNode.shouldAutorepeat = true
-        self.videoNode.gravity = AVLayerVideoGravity.resizeAspectFill.rawValue;
-            
-        DispatchQueue.main.async() {
-            self.videoNode.asset = AVAsset(url: self.getVideoURL(post: post)!)
         }
-        
-        
     }
 
     private func addPinchGestureRecognizer() {
@@ -360,16 +349,6 @@ class VideoNode: ASCellNode, ASVideoNodeDelegate {
     
     override func layoutSpecThatFits(_ constrainedSize: ASSizeRange) -> ASLayoutSpec {
         
-        let ratio = UIScreen.main.bounds.height / UIScreen.main.bounds.width
-        let ratioSpec = ASRatioLayoutSpec(ratio:ratio, child:self.videoNode);
-        let gradientOverlaySpec = ASOverlayLayoutSpec(child:ratioSpec, overlay:self.gradientNode)
-        return gradientOverlaySpec
-    }
-    
-    
-    /*
-    override func layoutSpecThatFits(_ constrainedSize: ASSizeRange) -> ASLayoutSpec {
-        
         headerNode.style.preferredSize = CGSize(width: constrainedSize.max.width, height: 80)
         videoNode.style.preferredSize = CGSize(width: constrainedSize.max.width, height: constrainedSize.max.height)
 
@@ -408,7 +387,7 @@ class VideoNode: ASCellNode, ASVideoNodeDelegate {
 
         return finalOverlay
         
-    } */
+    }
     
     
     private func createButtonsInsetSpec(constrainedSize: ASSizeRange) -> ASInsetLayoutSpec {
@@ -456,25 +435,25 @@ extension VideoNode {
     }
 
     func hideAllInfo() {
-        /*
+        
         headerNode.isHidden = true
         contentNode.isHidden = true
         sideButtonsView.isHidden = true
         buttonNode.isHidden = true
         label.isHidden = true
         gradientNode.isHidden = true
-         */
+         
     }
     
     func showAllInfo() {
-        /*
+        
         headerNode.isHidden = false
         contentNode.isHidden = false
         sideButtonsView.isHidden = false
         buttonNode.isHidden = false
         label.isHidden = false
         gradientNode.isHidden = false
-         */
+         
     }
 
 
@@ -1749,26 +1728,6 @@ extension VideoNode {
             self.headerView.followBtn.addGestureRecognizer(followTap)
             
         }
-    }
-    
-    func playVideo() {
-        videoNode.play()
-    }
-    
-    func pauseVideo() {
-        videoNode.pause()
-    }
-    
-    func seekVideo(time: CMTime) {
-        videoNode.player?.seek(to: time)
-    }
-    
-    func muteVideo() {
-        videoNode.muted = true
-    }
-    
-    func unmuteVideo() {
-        videoNode.muted = false
     }
     
 }

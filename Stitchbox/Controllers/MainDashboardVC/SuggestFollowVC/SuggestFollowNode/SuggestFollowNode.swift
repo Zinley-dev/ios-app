@@ -97,9 +97,7 @@ class SuggestFollowNode: ASCellNode {
         super.didLoad()
         
         
-        DispatchQueue.global(qos: .userInitiated).async { [weak self] in
-            self?.checkIfFollow()
-        }
+        self.checkIfFollow()
         
     }
 

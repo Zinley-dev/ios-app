@@ -240,9 +240,7 @@ class StitchControlForRemoveNode: ASCellNode, ASVideoNodeDelegate {
                 
             } else {
                 
-                DispatchQueue.global(qos: .userInitiated).async { [weak self] in
-                    self?.checkIfFollow()
-                }
+                self.checkIfFollow()
                
             }
 

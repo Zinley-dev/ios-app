@@ -497,6 +497,7 @@ extension SearchViewController {
                 
             }
         }
+        
     }
     
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
@@ -647,7 +648,8 @@ extension SearchViewController {
 
                 switch result {
                 case .success(_):
-                    DispatchQueue.main.async {
+                    DispatchQueue.main.async { [weak self] in
+                        guard let self = self else { return }
                         self.recentList.remove(at: row)
                         self.recentTableNode.deleteRows(at: [IndexPath(row: row, section: 0)], with: .automatic)
                         showNote(text: "Search removed!")
@@ -672,16 +674,19 @@ extension SearchViewController {
                     
                     firstAnimated = false
                     
-                    UIView.animate(withDuration: 0.5) {
+                    UIView.animate(withDuration: 0.5) { [weak self] in
+                        guard let self = self else { return }
                         
-                        Dispatch.main.async {
+                        Dispatch.main.async { [weak self] in
+                            guard let self = self else { return }
                             self.loadingView.alpha = 0
                         }
                         
                     }
                     
                     
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) { [weak self] in
+                        guard let self = self else { return }
                         
                         if self.loadingView.alpha == 0 {
                             
