@@ -122,7 +122,22 @@ class StartViewController: UIViewController, ControllerType, ZSWTappableLabelTap
         
         self.loadNewestCoreData {
             self.loadSettings {
-                RedirectionHelper.redirectToDashboard()
+                
+                if !UserDefaults.standard.bool(forKey: "hasShowCleaned") {
+                    //UserDefaults.standard.set(true, forKey: "hasShowStitched")
+                    
+                    DispatchQueue.main.async { [weak self] in
+                        if let vc = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "ShowCleanModeVC") as? ShowCleanModeVC {
+                            vc.modalPresentationStyle = .fullScreen
+                            SwiftLoader.hide()
+                            self?.present(vc, animated: true)
+                        }
+                    }
+                    
+                    
+                } else {
+                    RedirectionHelper.redirectToDashboard()
+                }
                 
             }
         }
@@ -323,7 +338,24 @@ class StartViewController: UIViewController, ControllerType, ZSWTappableLabelTap
     
     vm.output.loginResultObservable.subscribe(onNext: { isTrue in
       if (isTrue) {
-          RedirectionHelper.redirectToDashboard()
+          
+          if !UserDefaults.standard.bool(forKey: "hasShowCleaned") {
+              //UserDefaults.standard.set(true, forKey: "hasShowStitched")
+              
+              DispatchQueue.main.async { [weak self] in
+                  if let vc = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "ShowCleanModeVC") as? ShowCleanModeVC {
+                      vc.modalPresentationStyle = .fullScreen
+                      SwiftLoader.hide()
+                      self?.present(vc, animated: true)
+                  }
+              }
+              
+              
+          } else {
+              RedirectionHelper.redirectToDashboard()
+          }
+          
+        
       }
     })
     .disposed(by: disposeBag)

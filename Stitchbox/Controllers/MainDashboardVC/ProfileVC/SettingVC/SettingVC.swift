@@ -159,24 +159,11 @@ class SettingVC: UIViewController {
         delay(1) { [weak self] in
         guard let self = self else { return }
             
-        _AppCoreData.signOut()
-            
-            
-            
-        if let SNVC = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "StartViewController") as? StartViewController {
-                
-                
-            let nav = UINavigationController(rootViewController: SNVC)
-
-            // Customize the navigation bar appearance
-            nav.navigationBar.barTintColor = .background
-            nav.navigationBar.tintColor = .white
-            nav.navigationBar.titleTextAttributes = [.foregroundColor: UIColor.white]
-
-            nav.modalPresentationStyle = .fullScreen
-            self.present(nav, animated: true, completion: nil)
-                
-            }
+            SwiftLoader.hide()
+            CacheManager.shared.clearAllCache()
+            _AppCoreData.signOut()
+            RedirectionHelper.redirectToLogin()
+         
         }
         
         

@@ -17,6 +17,8 @@ class ParentViewController: UIViewController {
     var scrollView: UIScrollView!
     private var containerView: UIView!
     let homeButton: UIButton = UIButton(type: .custom)
+    let notiButton = UIButton(type: .custom)
+    let searchButton = UIButton(type: .custom)
     
     var hasViewAppeared = false
     var feedViewController: FeedViewController!
@@ -264,24 +266,21 @@ extension ParentViewController {
     
     func setupEmptyNotiButton() {
         
-        let notiButton = UIButton(type: .custom)
+    
         notiButton.setImage(UIImage.init(named: "noNoti")?.resize(targetSize: CGSize(width: 30, height: 30)), for: [])
         notiButton.addTarget(self, action: #selector(onClickNoti(_:)), for: .touchUpInside)
         notiButton.frame = CGRect(x: -1, y: 0, width: 30, height: 30)
         let notiBarButton = UIBarButtonItem(customView: notiButton)
         
-        let searchButton = UIButton(type: .custom)
+       
         searchButton.setImage(UIImage(named: "search")?.resize(targetSize: CGSize(width: 20, height: 20)), for: [])
         searchButton.addTarget(self, action: #selector(onClickSearch(_:)), for: .touchUpInside)
         searchButton.frame = CGRect(x: -1, y: 0, width: 30, height: 30)
         let searchBarButton = UIBarButtonItem(customView: searchButton)
         
         
-        
-        
         let fixedSpace = UIBarButtonItem(barButtonSystemItem: .fixedSpace, target: nil, action: nil)
         fixedSpace.width = 2
-        
         
         //let promotionBarButton = self.createPromotionButton()
         self.navigationItem.rightBarButtonItems = [notiBarButton, fixedSpace, searchBarButton]
@@ -292,13 +291,12 @@ extension ParentViewController {
     
     func setupHasNotiButton() {
         
-        let notiButton = UIButton(type: .custom)
         notiButton.setImage(UIImage.init(named: "homeNoti")?.resize(targetSize: CGSize(width: 30, height: 30)), for: [])
         notiButton.addTarget(self, action: #selector(onClickNoti(_:)), for: .touchUpInside)
         notiButton.frame = CGRect(x: -1, y: 0, width: 30, height: 30)
         let notiBarButton = UIBarButtonItem(customView: notiButton)
         
-        let searchButton = UIButton(type: .custom)
+        
         searchButton.setImage(UIImage(named: "search")?.resize(targetSize: CGSize(width: 20, height: 20)), for: [])
         searchButton.addTarget(self, action: #selector(onClickSearch(_:)), for: .touchUpInside)
         searchButton.frame = CGRect(x: -1, y: 0, width: 30, height: 30)
@@ -320,7 +318,7 @@ extension ParentViewController {
 extension ParentViewController {
     
     @objc func onClickHome(_ sender: AnyObject) {
-        //shouldScrollToTop()
+        shouldScrollToTop()
     }
     
     

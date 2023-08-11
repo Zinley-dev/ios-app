@@ -53,7 +53,7 @@ class VideoNode: ASCellNode, ASVideoNodeDelegate {
     private var likeCount = 0
     private var isLike = false
     private var allowProcess = true
-    fileprivate let FontSize: CGFloat = 14
+    fileprivate let FontSize: CGFloat = 13
     fileprivate let OrganizerImageSize: CGFloat = 30
     private var index: Int!
     
@@ -777,8 +777,6 @@ extension VideoNode: UIGestureRecognizerDelegate {
         Dispatch.main.async { [weak self] in
             guard let self = self else { return }
             self.headerView.createStitchView.isHidden = true
-            self.headerView.createStitchStack.isHidden = true
-            self.headerView.stichBtn.isHidden = true
         }
         
        
@@ -789,8 +787,6 @@ extension VideoNode: UIGestureRecognizerDelegate {
         Dispatch.main.async { [weak self] in
             guard let self = self else { return }
             self.headerView.createStitchView.isHidden = false
-            self.headerView.stichBtn.isHidden = false
-            self.headerView.createStitchStack.isHidden = false
         }
     
     }

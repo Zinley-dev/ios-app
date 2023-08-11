@@ -110,6 +110,32 @@ final class CacheManager {
             }
         }
     }
+    
+    func clearAllCache() {
+        // Clearing data cache
+        dataStorage?.async.removeAll { result in
+            switch result {
+            case .value:
+                print("All data cache cleared.")
+            case .error(let error):
+                print("Failed to clear data cache: \(error)")
+                
+            }
+            
+        }
+        
+        imageStorage?.async.removeAll { result in
+            switch result {
+            case .value:
+                print("All image cache cleared.")
+            case .error(let error):
+                print("Failed to clear image cache: \(error)")
+            }
+            
+        }
+
+    }
+
 
 }
 
