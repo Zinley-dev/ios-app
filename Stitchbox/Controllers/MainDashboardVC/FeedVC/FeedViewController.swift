@@ -154,6 +154,71 @@ class FeedViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
            
     }
     
+    @objc private func refreshListData(_ sender: Any) {
+        // Call API
+        
+        self.clearAllData()
+        
+    }
+    
+    @objc func clearAllData() {
+        
+        refresh_request = true
+        currentIndex = 0
+        isfirstLoad = true
+        shouldMute = nil
+      
+        updateData()
+        
+    }
+    
+    func updateData() {
+        
+        self.retrieveNextPageWithCompletion { [weak self] (newPosts) in
+            guard let self = self else { return }
+            
+            if newPosts.count > 0 {
+                
+                self.insertNewRowsInCollectionNode(newPosts: newPosts)
+                
+                
+            } else {
+                
+                
+                self.refresh_request = false
+                
+                self.posts.removeAll()
+                self.collectionNode.reloadData()
+                
+                if self.posts.isEmpty == true {
+                    
+                    self.collectionNode.view.setEmptyMessage("No post found!", color: .black)
+                    
+                    
+                } else {
+                    
+                    self.collectionNode.view.restore()
+                    
+                }
+                
+            }
+            
+            if self.pullControl.isRefreshing == true {
+                self.pullControl.endRefreshing()
+            }
+            
+            self.delayItem.perform(after: 0.75) { [weak self] in
+                guard let self = self else { return }
+            
+                self.collectionNode.scrollToItem(at: IndexPath(row: 0, section: 0), at: .centeredVertically, animated: true)
+                    
+            }
+            
+        }
+        
+    }
+    
+    
 }
 
 extension FeedViewController {
@@ -259,19 +324,7 @@ extension FeedViewController {
                 currentIndex = nil
                 
             }
-            
-            
-            // If the video is stuck, reset the buffer by seeking to the current playback time.
-            if let currentIndex = currentIndex, let cell = collectionNode.nodeForItem(at: IndexPath(row: currentIndex, section: 0)) as? VideoNode {
-                if let playerItem = cell.videoNode.currentItem, !playerItem.isPlaybackLikelyToKeepUp {
-                    if let currentTime = cell.videoNode.currentItem?.currentTime() {
-                        cell.videoNode.player?.seek(to: currentTime)
-                    } else {
-                        cell.videoNode.player?.seek(to: CMTime.zero)
-                    }
-                }
-            }
-            
+
             // If there's no current playing video and no visible video, pause the last playing video, if any.
             if !isVideoPlaying && currentIndex != nil {
                 pauseVideo(index: currentIndex!)
@@ -331,18 +384,15 @@ extension FeedViewController: ASCollectionDataSource {
     func collectionNode(_ collectionNode: ASCollectionNode, nodeBlockForItemAt indexPath: IndexPath) -> ASCellNodeBlock {
         let post = self.posts[indexPath.row]
         
-        return { [weak self] in
-            guard let self = self else {
-                return ASCellNode()
-            }
+        return {
             
             let node = VideoNode(with: post, at: indexPath.row)
             node.neverShowPlaceholders = true
             node.debugName = "Node \(indexPath.row)"
-            node.collectionNode = self.collectionNode
             node.isOriginal = true
             node.automaticallyManagesSubnodes = true
             
+            /*
             if isfirstLoad, indexPath.row == 0 {
                 isfirstLoad = true
                 node.isFirstItem = true
@@ -358,7 +408,7 @@ extension FeedViewController: ASCollectionDataSource {
                 }
                
             
-            }
+            }*/
             
             
             return node
@@ -429,102 +479,117 @@ extension FeedViewController {
 extension FeedViewController {
     
     
-    @objc private func refreshListData(_ sender: Any) {
-        self.clearAllData()
-    }
-
-    @objc func clearAllData() {
-        refresh_request = true
-        currentIndex = 0
-        isfirstLoad = true
-        shouldMute = nil
-        updateData()
-    }
-
-    func updateData() {
-        self.retrieveNextPageWithCompletion { [weak self] newPosts in
-            guard let self = self else { return }
-
-            self.insertNewRowsInCollectionNode(newPosts: newPosts)
-
-            if self.pullControl.isRefreshing {
-                self.pullControl.endRefreshing()
-            }
-
-            self.delayItem.perform(after: 0.75) { [weak self] in
-                self?.collectionNode.scrollToItem(at: IndexPath(row: 0, section: 0), at: .centeredVertically, animated: true)
-            }
-        }
-    }
-
     func retrieveNextPageWithCompletion(block: @escaping ([[String: Any]]) -> Void) {
-        APIManager.shared.getUserFeed { result in
-            var items: [[String: Any]] = []
+       
+        APIManager.shared.getUserFeed { [weak self] result in
+            guard let self = self else { return }
+          
             switch result {
             case .success(let apiResponse):
-                if let data = apiResponse.body?["data"] as? [[String: Any]], !data.isEmpty {
-                    items = data
+                
+                guard let data = apiResponse.body?["data"] as? [[String: Any]] else {
+                    let item = [[String: Any]]()
+                    DispatchQueue.main.async {
+                        block(item)
+                    }
+                    return
+                }
+                
+                if !data.isEmpty {
+
+                    self.lastLoadTime = Date()
                     print("Successfully retrieved \(data.count) posts.")
+                    let items = data
+                
+                    DispatchQueue.main.async {
+                        block(items)
+                    }
+                } else {
+                    
+                    let item = [[String: Any]]()
+                    DispatchQueue.main.async {
+                        block(item)
+                    }
                 }
             case .failure(let error):
                 print(error)
-            }
-            DispatchQueue.main.async {
-                block(items)
-            }
-        }
-    }
-
-    func insertNewRowsInCollectionNode(newPosts: [[String: Any]]) {
-        if newPosts.isEmpty {
-            if refresh_request {
-                refresh_request = false
-                posts.removeAll()
-                collectionNode.reloadData()
-                if posts.isEmpty {
-                    self.collectionNode.view.setEmptyMessage("No post found!", color: .black)
-                } else {
-                    self.collectionNode.view.restore()
+                let item = [[String: Any]]()
+                DispatchQueue.main.async {
+                    block(item)
                 }
             }
+        }
+        
+    }
+    
+    func insertNewRowsInCollectionNode(newPosts: [[String: Any]]) {
+
+        // checking empty
+        guard newPosts.count > 0 else {
             return
         }
 
         if refresh_request {
+
             refresh_request = false
-            posts.removeAll()
-            collectionNode.reloadData()
+
+            if !posts.isEmpty {
+                var delete_indexPaths: [IndexPath] = []
+                for row in 0..<self.posts.count {
+                    let path = IndexPath(row: row, section: 0) // single indexpath
+                    delete_indexPaths.append(path) // append
+                }
+                
+                posts.removeAll()
+                collectionNode.deleteItems(at: delete_indexPaths)
+                
+            }
         }
 
+        // Create new PostModel objects and append them to the current posts
         var items = [PostModel]()
-        let postsSet = Set(posts)
-        for postData in newPosts {
-            if let item = PostModel(JSON: postData), !postsSet.contains(item) {
-                posts.append(item)
-                items.append(item)
+        for i in newPosts {
+           
+            if let item = PostModel(JSON: i) {
+               
+                if !self.posts.contains(item) {
+                    self.posts.append(item)
+                    items.append(item)
+                }
+                
             }
         }
 
-        if items.isEmpty { return }
+        // Construct index paths for the new rows
+        if items.count > 0 {
+            let startIndex = self.posts.count - items.count
+            let endIndex = startIndex + items.count - 1
+            let indexPaths = (startIndex...endIndex).map { IndexPath(row: $0, section: 0) }
 
-        let indexPaths = (posts.count - items.count..<posts.count).map { IndexPath(row: $0, section: 0) }
+            if firstAnimated {
+                firstAnimated = false
 
-        if firstAnimated {
-            firstAnimated = false
-            delay(0.15) { [weak self] in
-                UIView.animate(withDuration: 0.5) {
-                    self?.loadingView.alpha = 0
-                }
-                DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
-                    if self?.loadingView.alpha == 0 {
-                        self?.loadingView.isHidden = true
+                delay(0.15) { [weak self] in
+                    guard let self = self else { return }
+                    
+                    UIView.animate(withDuration: 0.5) {
+                        self.loadingView.alpha = 0
                     }
-                }
-            }
-        }
 
-        collectionNode.insertItems(at: indexPaths)
-        items.removeAll()
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
+                        if self.loadingView.alpha == 0 {
+                            self.loadingView.isHidden = true
+                        }
+                    }
+                    
+                }
+                
+            }
+
+            // Insert new items at index paths
+           collectionNode.insertItems(at: indexPaths)
+           items.removeAll()
+        }
     }
 
     
@@ -935,6 +1000,7 @@ extension FeedViewController {
                 applyAnimationText(text: "Up next: \(total) stitches!")
             }
             
+
         } else {
             applyAnimationText(text: "")
         }
@@ -951,12 +1017,11 @@ extension FeedViewController {
         
         if let cell = self.collectionNode.nodeForItem(at: IndexPath(row: index, section: 0)) as? VideoNode {
             
-            cell.videoNode.pause()
+            cell.pauseVideo()
             
             let time = CMTime(seconds: 0, preferredTimescale: 1)
-            cell.videoNode.player?.seek(to: time)
-           // playTimeBar.setValue(Float(0), animated: false)
-            
+            cell.seekVideo(time: time)
+         
         }
         
     }
@@ -967,7 +1032,7 @@ extension FeedViewController {
         if let cell = self.collectionNode.nodeForItem(at: IndexPath(row: index, section: 0)) as? VideoNode {
             
            
-            cell.videoNode.player?.seek(to: time)
+            cell.seekVideo(time: time)
             
         }
         
@@ -976,7 +1041,9 @@ extension FeedViewController {
     
     func playVideo(index: Int) {
         
+        /*
         if let cell = self.collectionNode.nodeForItem(at: IndexPath(row: index, section: 0)) as? VideoNode {
+            
             
             if !cell.videoNode.isPlaying() {
 
@@ -1022,7 +1089,7 @@ extension FeedViewController {
                 
             }
             
-        }
+        }*/
         
     }
     

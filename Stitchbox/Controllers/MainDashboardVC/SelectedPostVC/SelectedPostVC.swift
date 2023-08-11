@@ -327,17 +327,7 @@ extension SelectedPostVC {
                    
                }
                
-               
-               // If the video is stuck, reset the buffer by seeking to the current playback time.
-               if let currentIndex = currentIndex, let cell = collectionNode.nodeForItem(at: IndexPath(row: currentIndex, section: 0)) as? VideoNode {
-                   if let playerItem = cell.videoNode.currentItem, !playerItem.isPlaybackLikelyToKeepUp {
-                       if let currentTime = cell.videoNode.currentItem?.currentTime() {
-                           cell.videoNode.player?.seek(to: currentTime)
-                       } else {
-                           cell.videoNode.player?.seek(to: CMTime.zero)
-                       }
-                   }
-               }
+
                
                // If there's no current playing video and no visible video, pause the last playing video, if any.
                if !isVideoPlaying && currentIndex != nil {
@@ -958,28 +948,28 @@ extension SelectedPostVC {
     
     
     func pauseVideo(index: Int) {
-        
+        /*
         if let cell = self.collectionNode.nodeForItem(at: IndexPath(row: index, section: 0)) as? VideoNode {
             cell.videoNode.pause()
             
         }
-        
+        */
     }
     
     func seekVideo(index: Int, time: CMTime) {
-        
+        /*
         if let cell = self.collectionNode.nodeForItem(at: IndexPath(row: index, section: 0)) as? VideoNode {
             
             cell.videoNode.player?.seek(to: time)
             
-        }
+        }*/
         
     }
     
     
     func playVideo(index: Int) {
         
-        
+        /*
         if let cell = self.collectionNode.nodeForItem(at: IndexPath(row: index, section: 0)) as? VideoNode {
             
             if !cell.videoNode.isPlaying() {
@@ -1011,7 +1001,7 @@ extension SelectedPostVC {
               
             }
             
-        }
+        }*/
         
     }
     

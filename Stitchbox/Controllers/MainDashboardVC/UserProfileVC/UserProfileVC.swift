@@ -35,6 +35,8 @@ class UserProfileVC: UIViewController {
         case posts(PostModel)
     }
     
+    var reload = false
+    
     let backButton: UIButton = UIButton(type: .custom)
     let shareButton: UIButton = UIButton(type: .custom)
     
@@ -70,6 +72,7 @@ class UserProfileVC: UIViewController {
     var userData: UserDataSource?
     var currpage = 1
     
+    let dispatchGroup = DispatchGroup()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -96,11 +99,11 @@ class UserProfileVC: UIViewController {
             
             configureDatasource()
             
-            DispatchQueue.global(qos: .userInitiated).async { [weak self] in
-                self?.loadUserData()
-            }
+            loadUserData()
         
-         
+            dispatchGroup.notify(queue: .main) {
+                self.applyChanges(to: [.header])
+            }
             
         }
         
@@ -286,7 +289,7 @@ extension UserProfileVC {
             self.allowProcess = false
             self.isFollow = true
             followerCount += 1
-            self.applyHeaderChange()
+            applyChanges(to: [.header])
             
             APIManager.shared.insertFollows(params: ["FollowId": userId ?? ""]) { [weak self] result in
                 guard let self = self else { return }
@@ -310,7 +313,7 @@ extension UserProfileVC {
                         self.isFollow = false
                         self.followerCount += 1
                         showNote(text: "Something happened!")
-                        self.applyHeaderChange()
+                        self.applyChanges(to: [.header])
                     }
                     
                     
@@ -332,7 +335,7 @@ extension UserProfileVC {
             self.allowProcess = false
             self.isFollow = false
             followerCount -= 1
-            self.applyHeaderChange()
+            applyChanges(to: [.header])
             
             APIManager.shared.unFollow(params: ["FollowId": userId ?? ""]) { [weak self] result in
                 guard let self = self else { return }
@@ -355,7 +358,7 @@ extension UserProfileVC {
                         self.isFollow = true
                         self.followerCount -= 1
                         showNote(text: "Something happened!")
-                        self.applyHeaderChange()
+                        self.applyChanges(to: [.header])
                     }
                     
                     
@@ -685,13 +688,24 @@ extension UserProfileVC: UICollectionViewDelegate {
     
     func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
         
-        // Infinite scrolling logic
-        let snap = datasource.snapshot().itemIdentifiers(inSection: .posts)
-        if indexPath.row == snap.count - 5 {
-            self.getUserPost { (newPosts) in
-                self.insertNewRowsInCollectionNode(newPosts: newPosts)
+        if !reload {
+            
+            let snap = datasource.snapshot().itemIdentifiers(inSection: .posts)
+            
+            if snap.count != 0 {
+                
+                // Infinite scrolling logic
+                let snap = datasource.snapshot().itemIdentifiers(inSection: .posts)
+                if indexPath.row == snap.count - 5 {
+                    self.getUserPost { (newPosts) in
+                        self.insertNewRowsInCollectionNode(newPosts: newPosts)
+                    }
+                }
+                
             }
+            
         }
+        
     }
     
 }
@@ -797,23 +811,20 @@ extension UserProfileVC {
     
     @objc func clearAllData() {
         
+        
+        reload = true
         reloadPost()
         
         checkIfFollow()
-       
-        
-        reloadUserInformation {
-            self.reloadGetFollowers {
-                self.reloadGetFollowing {
-                    self.reloadGetStitches {
-                        self.applyAllChange()
-                        Dispatch.main.async {
-                            self.pullControl.endRefreshing()
-                        }
-                    }
-                    
-                }
-            }
+        reloadUserInformation()
+        reloadGetFollowers()
+        reloadGetFollowing()
+        reloadGetStitches()
+
+        dispatchGroup.notify(queue: .main) {
+            self.applyChanges(to: [.header])
+            self.pullControl.endRefreshing()
+            
         }
         
         
@@ -840,10 +851,10 @@ extension UserProfileVC {
 extension UserProfileVC {
     
     func loadUserData() {
-        
+        dispatchGroup.enter()
         APIManager.shared.getUserInfo(userId: self.userId!) {[weak self] result in
             guard let self = self else { return }
-            
+            defer { self.dispatchGroup.leave() }  // Ensure that leave() is always called
             switch result {
             case .success(let response):
                 guard let data = response.body else {
@@ -851,26 +862,18 @@ extension UserProfileVC {
                 }
                 
                 self.userData = Mapper<UserDataSource>().map(JSONObject: data)
-                self.applyUIChange()
-                self.hideAnimation()
                 
-               
-                DispatchQueue.global(qos: .userInitiated).async { [weak self] in
-                                        
-                    self?.countFollowings()
-                    self?.countFollowers()
-                    self?.checkIfFollow()
-                    self?.getStitchCount()
+                self.countFollowings()
+                self.countFollowers()
+                self.checkIfFollow()
+                self.getStitchCount()
+                
+                self.getUserPost { (newPosts) in
                     
-                    self?.getUserPost { (newPosts) in
-                        
-                        self?.insertNewRowsInCollectionNode(newPosts: newPosts)
-                        
-                    }
-                                        
+                    self.insertNewRowsInCollectionNode(newPosts: newPosts)
+                    
                 }
-                
-                
+                  
             case .failure(_):
                 
                 Dispatch.main.async { [weak self] in
@@ -884,10 +887,10 @@ extension UserProfileVC {
     }
     
     func getStitchCount() {
-        
+        dispatchGroup.enter()
         APIManager.shared.countStitchByUser(userId: userId!) { [weak self] result in
             guard let self = self else { return }
-            
+            defer { self.dispatchGroup.leave() }  // Ensure that leave() is always called
             switch result {
             case .success(let apiResponse):
                 
@@ -900,7 +903,7 @@ extension UserProfileVC {
                 }
                 
                 self.stitchCount = totalStitch
-                self.applyUIChange()
+                
                 
             case .failure(let error):
                 self.stitchCount = 0
@@ -913,10 +916,10 @@ extension UserProfileVC {
     }
     
     func countFollowers() {
-        
+        dispatchGroup.enter()
         APIManager.shared.getFollowers(userId: userId, page: 1) { [weak self] result in
             guard let self = self else { return }
-            
+            defer { self.dispatchGroup.leave() }  // Ensure that leave() is always called
             switch result {
             case .success(let response):
                 guard response.body?["message"] as? String == "success",
@@ -930,8 +933,7 @@ extension UserProfileVC {
                     self.followerCount = 0
                 }
                 
-                self.applyUIChange()
-                
+        
             case .failure(let error):
                 print("Error loading follower: ", error)
             }
@@ -940,10 +942,10 @@ extension UserProfileVC {
     }
     
     func countFollowings() {
-        
+        dispatchGroup.enter()
         APIManager.shared.getFollows(userId: userId, page:1) { [weak self] result in
             guard let self = self else { return }
-            
+            defer { self.dispatchGroup.leave() }  // Ensure that leave() is always called
             switch result {
             case .success(let response):
                 
@@ -959,8 +961,7 @@ extension UserProfileVC {
                     self.followingCount = 0
                 }
                 
-                self.applyUIChange()
-                
+               
             case .failure(let error):
                 print("Error loading following: ", error)
                 
@@ -1012,21 +1013,19 @@ extension UserProfileVC {
     }
     
     func checkIfFollow() {
-        
+        dispatchGroup.enter()
         APIManager.shared.isFollowing(uid: userId ?? "") { [weak self] result in
             guard let self = self else { return }
-            
+            defer { self.dispatchGroup.leave() }  // Ensure that leave() is always called
             switch result {
             case .success(let apiResponse):
-                
-                print(apiResponse)
                 
                 guard let isFollowing = apiResponse.body?["data"] as? Bool else {
                     return
                 }
                 
                 self.isFollow = isFollowing
-                self.applyHeaderChange()
+               
                 
             case .failure(let error):
                 print(error)
@@ -1047,105 +1046,85 @@ extension UserProfileVC {
         snapshot.appendItems(newItems.map({Item.posts($0)}), toSection: .posts)
         self.datasource.apply(snapshot, animatingDifferences: true)
         
-    }
-    
-    
-    
-    func applyHeaderChange() {
-        
-        Dispatch.main.async {
-            var updatedSnapshot = self.datasource.snapshot()
-            updatedSnapshot.reloadSections([.header])
-            self.datasource.apply(updatedSnapshot, animatingDifferences: false)
-        }
-        
-        
-    }
-    
-    func applyAllChange() {
-        Dispatch.main.async {
-            var updatedSnapshot = self.datasource.snapshot()
-            updatedSnapshot.reloadSections([.header, .posts])
-            self.datasource.apply(updatedSnapshot, animatingDifferences: false)
+        if reload {
+            reload = false
         }
         
     }
     
-    func applyUIChange() {
-        
-        Dispatch.main.async {
+
+    func applyChanges(to sections: [Section], animatingDifferences: Bool = false) {
+        DispatchQueue.main.async { [weak self] in
+            guard let self = self else { return }
             var updatedSnapshot = self.datasource.snapshot()
-            updatedSnapshot.reloadSections([.header])
-            self.datasource.apply(updatedSnapshot, animatingDifferences: false)
+            updatedSnapshot.reloadSections(sections)
+            self.datasource.apply(updatedSnapshot, animatingDifferences: animatingDifferences)
         }
-        
     }
     
 }
 
 extension UserProfileVC {
     
-    func reloadUserInformation(completed: @escaping DownloadComplete) {
-        
+    func reloadUserInformation() {
+        dispatchGroup.enter()
         APIManager.shared.getUserInfo(userId: self.userId!) { [weak self] result in
             guard let self = self else { return }
+            defer { self.dispatchGroup.leave() }  // Ensure that leave() is always called
             
             switch result {
             case .success(let response):
                 guard let data = response.body else {
-                    completed()
+                    
                     return
                 }
                 
                 self.userData = Mapper<UserDataSource>().map(JSONObject: data)
-                completed()
+               
                 
             case .failure(let error):
                 print(error)
-                completed()
+               
             }
         }
         
     }
     
-    func reloadGetStitches(completed: @escaping DownloadComplete) {
-        
+    func reloadGetStitches() {
+        dispatchGroup.enter()
         APIManager.shared.countStitchByUser(userId: userId!) { [weak self] result in
             guard let self = self else { return }
-            
+            defer { self.dispatchGroup.leave() }  // Ensure that leave() is always called
             switch result {
             case .success(let apiResponse):
                   
                 guard let totalStitch = apiResponse.body?["totalStitch"] as? Int else {
                     print("Couldn't find the 'totalStitch' key")
                     self.stitchCount = 0
-                    completed()
                     return
                 }
                 
                 self.stitchCount = totalStitch
-                completed()
-                
+               
             case .failure(let error):
                 self.stitchCount = 0
                 print("Error loading stitch: ", error)
-                completed()
+                
             }
         }
     }
     
-    func reloadGetFollowing(completed: @escaping DownloadComplete) {
-        
+    func reloadGetFollowing() {
+        dispatchGroup.enter()
         APIManager.shared.getFollows(userId: userId, page:1) { [weak self] result in
             guard let self = self else { return }
-            
+            defer { self.dispatchGroup.leave() }  // Ensure that leave() is always called
             switch result {
             case .success(let response):
                 
                 guard response.body?["message"] as? String == "success",
                       let data = response.body?["paging"] as? [String: Any] else {
                     self.followingCount = 0
-                    completed()
                     return
                 }
                 
@@ -1155,25 +1134,22 @@ extension UserProfileVC {
                     self.followingCount = 0
                 }
                 
-                completed()
-                
+               
             case .failure(let error):
                 print("Error loading following: ", error)
-                completed()
-                
+ 
             }
         }
     }
-    func reloadGetFollowers(completed: @escaping DownloadComplete) {
-        
+    func reloadGetFollowers() {
+        dispatchGroup.enter()
         APIManager.shared.getFollowers(userId: userId, page: 1) { [weak self] result in
             guard let self = self else { return }
-            
+            defer { self.dispatchGroup.leave() }  // Ensure that leave() is always called
             switch result {
             case .success(let response):
                 guard response.body?["message"] as? String == "success",
                       let data = response.body?["paging"] as? [String: Any] else {
-                    completed()
                     return
                 }
                 
@@ -1183,11 +1159,9 @@ extension UserProfileVC {
                     self.followerCount = 0
                 }
                 
-                completed()
-                
             case .failure(let error):
                 print("Error loading follower: ", error)
-                completed()
+               
             }
         }
     }

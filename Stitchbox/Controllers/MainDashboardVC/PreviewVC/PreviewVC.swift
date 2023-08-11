@@ -405,7 +405,7 @@ extension PreviewVC {
         if let cell = self.collectionNode.nodeForItem(at: IndexPath(row: index, section: 0)) as? VideoNode {
          
             
-            cell.videoNode.pause()
+            cell.pauseVideo()
             
         }
         
@@ -415,8 +415,7 @@ extension PreviewVC {
         
         if let cell = self.collectionNode.nodeForItem(at: IndexPath(row: index, section: 0)) as? VideoNode {
             
-            cell.videoNode.player?.seek(to: time)
-            
+            cell.seekVideo(time: time)
         }
         
     }
@@ -424,11 +423,13 @@ extension PreviewVC {
     
     func playVideo(index: Int) {
         
+        /*
         if let cell = self.collectionNode.nodeForItem(at: IndexPath(row: index, section: 0)) as? VideoNode {
+            
             
             if !cell.videoNode.isPlaying() {
                 
-                /*
+               
                 if cell.headerView != nil {
                     cell.headerView.stichBtn.isHidden = true
                     cell.headerView.createStitchView.isHidden = true
@@ -450,7 +451,7 @@ extension PreviewVC {
                 cell.contentNode.isUserInteractionEnabled = false
                 
                 cell.setNeedsLayout()
-                */
+               
 
                 if let muteStatus = shouldMute {
                     
@@ -479,7 +480,7 @@ extension PreviewVC {
                 
             }
             
-        }
+        } */
         
     }
     

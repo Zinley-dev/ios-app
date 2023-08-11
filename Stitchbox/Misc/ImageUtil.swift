@@ -38,11 +38,13 @@ extension UIButton {
     func setImageWithCache(from url: URL) {
         let cacheKey = url.absoluteString
         
-        imageStorage.async.object(forKey: cacheKey) { result in
+        imageStorage.async.object(forKey: cacheKey) { [weak self] result in
+            guard let self = self else { return }
             if case .value(let image) = result {
                 
                
-                DispatchQueue.main.async {
+                DispatchQueue.main.async { [weak self] in
+                    guard let self = self else { return }
                     let resize = image.resize(targetSize: CGSize(width: self.bounds.width - 15, height: self.bounds.height - 15))
                     self.setImage(resize, for: .normal)
                     self.imageView?.backgroundColor = .clear
@@ -53,13 +55,14 @@ extension UIButton {
                
             } else {
                 
-                AF.request(url).responseImage { response in
-                                      
+                AF.request(url).responseImage { [weak self] response in
+                    guard let self = self else { return }
                    switch response.result {
                     case let .success(value):
                        
                       
-                       DispatchQueue.main.async {
+                       DispatchQueue.main.async { [weak self] in
+                           guard let self = self else { return }
                            let resize = value.resize(targetSize: CGSize(width: self.bounds.width - 15, height: self.bounds.height - 15))
                            self.setImage(resize, for: .normal)
                            self.imageView?.backgroundColor = .clear
@@ -100,21 +103,24 @@ extension UIImageView {
     
     func load(url: URL, str: String) {
         
-        imageStorage.async.object(forKey: str) { result in
+        imageStorage.async.object(forKey: str) { [weak self] result in
+            guard let self = self else { return }
             if case .value(let image) = result {
                 
-                DispatchQueue.main.async {
+                DispatchQueue.main.async { [weak self] in
+                    guard let self = self else { return }
                     self.image = image
                 }
                
                 
             } else {
                 
-                AF.request(url).responseImage { response in
-                                      
+                AF.request(url).responseImage { [weak self] response in
+                    guard let self = self else { return }
                    switch response.result {
                     case let .success(value):
-                       DispatchQueue.main.async {
+                       DispatchQueue.main.async { [weak self] in
+                           guard let self = self else { return }
                            self.image = value
                        }
                        try? imageStorage.setObject(value, forKey: str, expiry: .date(Date().addingTimeInterval(2 * 3600)))
@@ -134,84 +140,35 @@ extension UIImageView {
     }
     
     func loadProfileContent(url: URL, str: String) {
- 
-        imageStorage.async.object(forKey: str) { result in
-            if case .value(let image) = result {
-                
+        imageStorage.async.object(forKey: str) { [weak self] result in
+            switch result {
+            case .value(let image):
                 DispatchQueue.main.async {
-                    self.image = image
+                    self?.image = image
                 }
-               
-                
-            } else {
-                
-                AF.request(url).responseImage { response in
-                                      
-                   switch response.result {
-                    case let .success(value):
-                       DispatchQueue.main.async {
-                           self.image = value
-                       }
-                       try? imageStorage.setObject(value, forKey: str, expiry: .date(Date().addingTimeInterval(2 * 3600)))
-                                          
-                           case let .failure(error):
-                               print(error)
-                                self.image = UIImage.init(named: "empty")
-                        }
-                  
-                  }
-                
+            case .error:
+                self?.fetchImageFromServer(url: url, cacheKey: str)
             }
         }
-  
     }
-    
-    func loadGame(url: URL) {
-        
-        let cacheKey = url.absoluteString
-        
-        imageStorage.async.object(forKey: cacheKey) { result in
-            if case .value(let image) = result {
-                
-               
+
+    private func fetchImageFromServer(url: URL, cacheKey: String) {
+        AF.request(url).responseImage { [weak self] response in
+            switch response.result {
+            case .success(let value):
                 DispatchQueue.main.async {
-                    let resize = image.resize(targetSize: CGSize(width: self.bounds.width - 15, height: self.bounds.height - 15))
-                    self.image = resize
-                    self.backgroundColor = .clear
-                    self.contentMode = .scaleAspectFit
-                    self.layer.cornerRadius = self.bounds.size.width / 2
-                    self.clipsToBounds = true
+                    self?.image = value
                 }
-               
-            } else {
-                
-                AF.request(url).responseImage { response in
-                                      
-                   switch response.result {
-                    case let .success(value):
-                       
-                      
-                       DispatchQueue.main.async {
-                           let resize = value.resize(targetSize: CGSize(width: self.bounds.width - 15, height: self.bounds.height - 15))
-                           self.image = resize
-                           self.backgroundColor = .clear
-                           self.contentMode = .scaleAspectFit
-                           self.layer.cornerRadius = self.bounds.size.width / 2
-                           self.clipsToBounds = true
-                       }
-                       
-                       try? imageStorage.setObject(value, forKey: cacheKey, expiry: .date(Date().addingTimeInterval(2 * 3600)))
-                                          
-                           case let .failure(error):
-                               print(error)
-                        }
-                                      
-                  }
-                
+                try? imageStorage.setObject(value, forKey: cacheKey, expiry: .date(Date().addingTimeInterval(2 * 3600)))
+            case .failure(let error):
+                print(error)
+                DispatchQueue.main.async {
+                    self?.image = UIImage(named: "empty")
+                }
             }
         }
-  
     }
+
     
 }
 
@@ -333,10 +290,12 @@ class ProfileImageView: UIView {
         let imageView = UIImageView()
         imageView.contentMode = .scaleAspectFill
         
-        imageStorage.async.object(forKey: coverUrl) { result in
+        imageStorage.async.object(forKey: coverUrl) { [weak self] result in
+            guard let self = self else { return }
             if case .value(let image) = result {
                 
-                DispatchQueue.main.async { // Make sure you're on the main thread here
+                DispatchQueue.main.async { [weak self] in
+                    guard let self = self else { return }
                        
                     imageView.image = image
            
@@ -345,8 +304,8 @@ class ProfileImageView: UIView {
             } else {
                 
                 
-             AF.request(coverUrl).responseImage { response in
-                    
+             AF.request(coverUrl).responseImage { [weak self] response in
+                 guard let self = self else { return }
                     switch response.result {
                     case let .success(value):
                         imageView.image = value

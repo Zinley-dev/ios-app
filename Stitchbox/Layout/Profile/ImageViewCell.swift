@@ -176,13 +176,6 @@ class ImageViewCell: UICollectionViewCell {
         imageView.layer.cornerRadius = 10
         imageView.layer.masksToBounds = true
 
-        // Add gradient overlay
-        let gradient = CAGradientLayer()
-        gradient.frame = imageView.bounds
-        gradient.colors = [UIColor.clear.cgColor, UIColor.black.cgColor]
-        gradient.locations = [0.5, 1.0]
-        imageView.layer.insertSublayer(gradient, at: 0)
-
         contentView.addSubview(stackView)
         contentView.addSubview(stitchStackView)
         contentView.addSubview(infoLabel)
@@ -232,85 +225,5 @@ class ImageViewCell: UICollectionViewCell {
         self.layer.borderColor = UIColor.clear.cgColor
     }
     
-    func countView(with data: PostModel) {
-        
-        if viewCount == nil {
-            
-            APIManager.shared.getPostStats(postId: data.id) { [weak self] result in
-                guard let self = self else { return }
-
-                switch result {
-                case .success(let apiResponse):
-
-                    guard let dataDictionary = apiResponse.body?["data"] as? [String: Any] else {
-                        print("Couldn't cast")
-                        self.viewCount = 0
-                        return
-                    }
-                
-                    do {
-                        let data = try JSONSerialization.data(withJSONObject: dataDictionary, options: .fragmentsAllowed)
-                        let decoder = JSONDecoder()
-                        let stats = try decoder.decode(Stats.self, from: data)
-                        DispatchQueue.main.async {
-                            self.viewCount = stats.view.total
-                            self.countLabel.text = "\(formatPoints(num: Double(stats.view.total)))"
-                        }
-                    } catch {
-                        print("Error decoding JSON: \(error)")
-                    }
-                case .failure(let error):
-                    print(error)
-                }
-            }
-            
-        } else {
-            self.viewCount = 0
-        }
-        
-    }
-
-    
-    
-    func countViewStitch(with data: PostModel) {
-        
-        if stitchViewCount == nil {
-            
-            APIManager.shared.countPostStitch(pid: data.id) { [weak self] result in
-                guard let self = self else { return }
-
-                switch result {
-                case .success(let apiResponse):
-                    print(apiResponse)
-
-                    guard let total = apiResponse.body?["total"] as? Int else {
-                        print("Couldn't find the 'total' key")
-                        DispatchQueue.main.async {
-                            self.viewCount = 0
-                            self.stitchCountLabel.text = "0"
-                        }
-                        return
-                    }
-
-                    DispatchQueue.main.async {
-                        self.viewCount = total
-                        self.stitchCountLabel.text = "\(formatPoints(num: Double(total)))"
-                    }
-                case .failure(let error):
-                    DispatchQueue.main.async {
-                        self.viewCount = 0
-                        self.stitchCountLabel.text = "0"
-                    }
-                    print(error)
-                }
-            }
-
-        
-        } else {
-            self.stitchViewCount = 0
-        }
-        
-    }
-
 
 }

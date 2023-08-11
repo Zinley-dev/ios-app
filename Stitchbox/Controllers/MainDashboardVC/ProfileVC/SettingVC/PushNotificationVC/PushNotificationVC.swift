@@ -139,7 +139,8 @@ class PushNotificationVC: UIViewController {
                 print("Setting API update success")
                 reloadGlobalSettings()
             case.failure(let error):
-                DispatchQueue.main.async {
+                DispatchQueue.main.async { [weak self] in
+                    guard let self = self else { return }
                     self.showErrorAlert("Oops!", msg: "Cannot update user's setting information \(error.localizedDescription)")
                 }
             }
@@ -171,7 +172,8 @@ class PushNotificationVC: UIViewController {
                 print("Setting API update success")
                 reloadGlobalSettings()
             case.failure(let error):
-                DispatchQueue.main.async {
+                DispatchQueue.main.async { [weak self] in
+                    guard let self = self else { return }
                     self.showErrorAlert("Oops!", msg: "Cannot update user's setting information \(error.localizedDescription)")
                 }
             }
@@ -203,7 +205,8 @@ class PushNotificationVC: UIViewController {
                 print("Setting API update success")
                 reloadGlobalSettings()
             case.failure(let error):
-                DispatchQueue.main.async {
+                DispatchQueue.main.async { [weak self] in
+                    guard let self = self else { return }
                     self.showErrorAlert("Oops!", msg: "Cannot update user's setting information \(error.localizedDescription)")
                 }
             }
@@ -234,7 +237,8 @@ class PushNotificationVC: UIViewController {
                 print("Setting API update success")
                 reloadGlobalSettings()
             case.failure(let error):
-                DispatchQueue.main.async {
+                DispatchQueue.main.async { [weak self] in
+                    guard let self = self else { return }
                     self.showErrorAlert("Oops!", msg: "Cannot update user's setting information \(error.localizedDescription)")
                 }
             }
@@ -265,7 +269,8 @@ class PushNotificationVC: UIViewController {
                 print("Setting API update success")
                 reloadGlobalSettings()
             case.failure(let error):
-                DispatchQueue.main.async {
+                DispatchQueue.main.async { [weak self] in
+                    guard let self = self else { return }
                     self.showErrorAlert("Oops!", msg: "Cannot update user's setting information \(error.localizedDescription)")
                 }
             }
@@ -297,7 +302,8 @@ class PushNotificationVC: UIViewController {
                 print("Setting API update success")
                 reloadGlobalSettings()
             case.failure(let error):
-                DispatchQueue.main.async {
+                DispatchQueue.main.async { [weak self] in
+                    guard let self = self else { return }
                     self.showErrorAlert("Oops!", msg: "Cannot update user's setting information \(error.localizedDescription)")
                 }
             }

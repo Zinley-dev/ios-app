@@ -132,107 +132,71 @@ class StitchViewController: UIViewController, UICollectionViewDelegateFlowLayout
     }
     
     
-    func retrieveNextPageWithCompletion(block: @escaping ([[String: Any]]) -> Void) {
+    @objc func clearAllData() {
         
-        guard rootId != "" else {
-            completeWithEmptyData(block)
-            return
-        }
-
-        APIManager.shared.getSuggestStitch(rootId: rootId, page: curPage) { [weak self] result in
-            guard let self = self else { return }
+        
+        if rootId != "" {
             
-            switch result {
-            case .success(let apiResponse):
-                if let data = apiResponse.body?["data"] as? [[String: Any]], !data.isEmpty {
-                    print("Successfully retrieved \(data.count) posts.")
-                    curPage += 1
-                    DispatchQueue.main.async {
-                        block(data)
-                    }
-                } else {
-                    self.completeWithEmptyData(block)
-                }
-            case .failure(let error):
-                print(error)
-                self.completeWithEmptyData(block)
+            if animatedLabel != nil {
+                //animatedLabel.pauseLabel()
+                animatedLabel.text = ""
             }
+            
+            refresh_request = true
+            currentIndex = 0
+            curPage = 1
+            isfirstLoad = true
+            didScroll = false
+            imageIndex = nil
+            updateData()
+            
         }
-    }
-
-    private func completeWithEmptyData(_ block: @escaping ([[String: Any]]) -> Void) {
-        DispatchQueue.main.async {
-            block([])
-        }
-    }
-
-    func insertNewRowsInCollectionNode(newPosts: [[String: Any]]) {
-        guard !newPosts.isEmpty else { return }
-
-        if refresh_request {
-            clearExistingPosts()
-            refresh_request = false
-        }
-
-        let uniquePosts = Set(self.posts)
-        let items = newPosts.compactMap { PostModel(JSON: $0) }.filter { !uniquePosts.contains($0) }
         
-        guard !items.isEmpty else { return }
-
-        self.posts.append(contentsOf: items)
-
-        let indexPaths = (posts.count - items.count..<posts.count).map { IndexPath(row: $0, section: 0) }
-
-        collectionNode.insertItems(at: indexPaths)
-        galleryCollectionNode.insertItems(at: indexPaths)
+        
+        
     }
-
-
-    private func clearExistingPosts() {
-        let deleteIndexPaths = posts.enumerated().map { IndexPath(row: $0.offset, section: 0) }
-        posts.removeAll()
-        collectionNode.deleteItems(at: deleteIndexPaths)
-        galleryCollectionNode.deleteItems(at: deleteIndexPaths)
-    }
-
-    private func generateIndexPaths(for items: [PostModel]) -> [IndexPath] {
-        let startIndex = self.posts.count - items.count
-        return (startIndex..<self.posts.count).map { IndexPath(row: $0, section: 0) }
-    }
-
+    
     func updateData() {
+        
         self.retrieveNextPageWithCompletion { [weak self] (newPosts) in
             guard let self = self else { return }
-
-            if newPosts.isEmpty {
-                self.refresh_request = false
-                self.posts.removeAll()
-                self.collectionNode.reloadData()
-                self.galleryCollectionNode.reloadData()
-                if self.posts.isEmpty {
-                    self.collectionNode.view.setEmptyMessage("No stitch found!", color: .white)
-                } else {
-                    self.collectionNode.view.restore()
-                }
-            } else {
+            
+            if newPosts.count > 0 {
+                
                 self.insertNewRowsInCollectionNode(newPosts: newPosts)
+                
+                
+            } else {
+                
+                
+                self.refresh_request = false
+                
+                if !posts.isEmpty {
+                    
+                    self.posts.removeAll()
+                    self.collectionNode.reloadData()
+                    self.galleryCollectionNode.reloadData()
+                    
+                }
+                
+                if self.posts.isEmpty == true {
+                    
+                    self.collectionNode.view.setEmptyMessage("No stitch found!", color: .white)
+                    
+                    
+                } else {
+                    
+                    self.collectionNode.view.restore()
+                    
+                }
+                
             }
+            
+           
         }
+        
+        
     }
-
-    @objc func clearAllData() {
-        guard rootId != "" else { return }
-
-        animatedLabel?.text = ""
-        refresh_request = true
-        currentIndex = 0
-        curPage = 1
-        isfirstLoad = true
-        didScroll = false
-        imageIndex = nil
-        updateData()
-    }
-
     
     
     @IBAction func hideBtnPressed(_ sender: Any) {
@@ -369,16 +333,7 @@ extension StitchViewController {
                     }
                 }
                 
-                // If the video is stuck, reset the buffer by seeking to the current playback time.
-                if let currentIndex = currentIndex, let cell = collectionNode.nodeForItem(at: IndexPath(row: currentIndex, section: 0)) as? VideoNode {
-                    if let playerItem = cell.videoNode.currentItem, !playerItem.isPlaybackLikelyToKeepUp {
-                        if let currentTime = cell.videoNode.currentItem?.currentTime() {
-                            cell.videoNode.player?.seek(to: currentTime)
-                        } else {
-                            cell.videoNode.player?.seek(to: CMTime.zero)
-                        }
-                    }
-                }
+                
                 
                 // If there's no current playing video and no visible video, pause the last playing video, if any.
                 if !isVideoPlaying && currentIndex != nil {
@@ -526,7 +481,6 @@ extension StitchViewController: ASCollectionDataSource {
                 let node = VideoNode(with: post, at: indexPath.row)
                 node.neverShowPlaceholders = true
                 node.debugName = "Node \(indexPath.row)"
-                node.collectionNode = self.collectionNode
                 node.automaticallyManagesSubnodes = true
                  
                 return node
@@ -637,7 +591,7 @@ extension StitchViewController {
 
 extension StitchViewController {
     
-    /*
+    
     func retrieveNextPageWithCompletion(block: @escaping ([[String: Any]]) -> Void) {
         
         if rootId != "" {
@@ -738,7 +692,7 @@ extension StitchViewController {
            items.removeAll()
         }
     }
-*/
+
     
     func collectionNode(_ collectionNode: ASCollectionNode, didSelectItemAt indexPath: IndexPath) {
         
@@ -774,18 +728,16 @@ extension StitchViewController {
 
 }
 
-
 extension StitchViewController {
     
     func pauseVideo(index: Int) {
         
         if let cell = self.collectionNode.nodeForItem(at: IndexPath(row: index, section: 0)) as? VideoNode {
             
-            cell.videoNode.pause()
-            
+            cell.pauseVideo()
             let time = CMTime(seconds: 0, preferredTimescale: 1)
-            cell.videoNode.player?.seek(to: time)
-           // playTimeBar.setValue(Float(0), animated: false)
+            cell.seekVideo(time: time)
+           
             
         }
         
@@ -800,7 +752,7 @@ extension StitchViewController {
         if let cell = self.collectionNode.nodeForItem(at: IndexPath(row: index, section: 0)) as? VideoNode {
             
           
-            cell.videoNode.player?.seek(to: time)
+            cell.seekVideo(time: time)
             
             
         }
@@ -818,7 +770,7 @@ extension StitchViewController {
     func playVideo(index: Int) {
         
         print("StitchViewController: \(index) - play")
-        
+        /*
         if let cell = self.collectionNode.nodeForItem(at: IndexPath(row: index, section: 0)) as? VideoNode {
             
             handleAnimationTextAndImage(for: index)
@@ -888,9 +840,9 @@ extension StitchViewController {
                 
                 
             }
-            
+           
         }
-        
+    */
     }
     
     

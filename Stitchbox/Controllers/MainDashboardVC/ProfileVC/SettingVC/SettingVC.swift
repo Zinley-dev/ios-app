@@ -415,7 +415,8 @@ extension SettingVC {
     
     func loadSettings() {
         
-        DispatchQueue.main {
+        DispatchQueue.main.async { [weak self] in
+            guard let self = self else { return }
             self.processDefaultData()
         }
         
@@ -443,18 +444,18 @@ extension SettingVC {
             
             if globalSetting.PublicStitch == true {
                 self.PublicStitchSwitch.setOn(true, animated: true)
-                isStitch = true
+                isPublicStitch = true
             } else {
                 self.PublicStitchSwitch.setOn(false, animated: true)
-                isStitch = false
+                isPublicStitch = false
             }
             
             if globalSetting.ClearMode == true {
                 self.ClearSwitch.setOn(true, animated: true)
-                isStitch = true
+                isClearMode = true
             } else {
                 self.ClearSwitch.setOn(false, animated: true)
-                isStitch = false
+                isClearMode = false
             }
             
         }
@@ -500,10 +501,12 @@ extension SettingVC {
     
     func checkPlan() {
         
-        IAPManager.shared.checkPermissions { result in
+        IAPManager.shared.checkPermissions { [weak self] result in
+            guard let self = self else { return }
             if result == false {
                 
-                Dispatch.main.async {
+                Dispatch.main.async { [weak self] in
+                    guard let self = self else { return }
                     
                     self.setupLayoutForNonPro()
                     
@@ -512,7 +515,8 @@ extension SettingVC {
                 
             } else {
              
-                Dispatch.main.async {
+                Dispatch.main.async { [weak self] in
+                    guard let self = self else { return }
                 
                     self.setupLayoutForPro()
                     

@@ -318,32 +318,6 @@ extension UITextView {
 }
 
 
-func handlePauseVideoInCell(_ cell: VideoNode) {
-    cell.videoNode.player?.seek(to: CMTime.zero)
-    cell.videoNode.pause()
-}
-
-func handlePauseVideoInReelCell(_ cell: VideoNode) {
-    cell.videoNode.player?.seek(to: CMTime.zero)
-    cell.videoNode.pause()
-}
-
-func handleVideoNodeInCell(_ cell: VideoNode, muteStatus: Bool) {
-    guard !cell.videoNode.isPlaying() else { return }
-    
-    cell.videoNode.muted = muteStatus
-    cell.videoNode.play()
-}
-
-func handleVideoNodeInReelCell(_ cell: VideoNode, muteStatus: Bool) {
-    guard !cell.videoNode.isPlaying() else { return }
-    cell.videoNode.muted = muteStatus
-    cell.videoNode.play()
-    
-}
-
-
-
 class ImageSaver: NSObject {
     func writeToPhotoAlbum(image: UIImage) {
         UIImageWriteToSavedPhotosAlbum(image, self, #selector(saveCompleted), nil)
@@ -536,6 +510,7 @@ func reloadGlobalSettings() {
 
 func unmuteVideoIfNeed() {
   
+    /*
     if let vc = UIViewController.currentViewController() {
          
         if vc is ParentViewController {
@@ -660,7 +635,7 @@ func unmuteVideoIfNeed() {
         }
              
         
-    }
+    }*/
     
 }
 
