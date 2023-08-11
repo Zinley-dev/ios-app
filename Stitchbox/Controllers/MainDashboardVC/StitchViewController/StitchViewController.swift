@@ -408,7 +408,7 @@ extension StitchViewController: ASCollectionDataSource {
         if collectionNode == galleryCollectionNode {
                    
             return {
-                let node = StitchControlNode(with: post)
+                let node = StitchGalleryNode(with: post)
                 node.neverShowPlaceholders = true
                 node.debugName = "Node \(indexPath.row)"
                 node.automaticallyManagesSubnodes = true
@@ -700,7 +700,7 @@ extension StitchViewController {
         
     }
     
-    func updateCellAppearance(_ cell: StitchControlNode, isSelected: Bool) {
+    func updateCellAppearance(_ cell: StitchGalleryNode, isSelected: Bool) {
             cell.layer.cornerRadius = 10
             cell.layer.borderWidth = isSelected ? 2 : 0
             cell.layer.borderColor = isSelected ? UIColor.secondary.cgColor : UIColor.clear.cgColor
@@ -736,14 +736,14 @@ extension StitchViewController {
             
             // Cell selection/deselection logic
             let indexPath = IndexPath(row: index, section: 0)
-            if let imgCell = galleryCollectionNode.nodeForItem(at: indexPath) as? StitchControlNode {
+            if let imgCell = galleryCollectionNode.nodeForItem(at: indexPath) as? StitchGalleryNode {
                 updateCellAppearance(imgCell, isSelected: true)
                 galleryCollectionNode.selectItem(at: indexPath, animated: false, scrollPosition: [])
                 galleryCollectionNode.scrollToItem(at: indexPath, at: .centeredHorizontally, animated: true)
 
                 // Deselect all other cells
                 for i in 0..<galleryCollectionNode.numberOfItems(inSection: 0) {
-                    if i != index, let otherCell = galleryCollectionNode.nodeForItem(at: IndexPath(row: i, section: 0)) as? StitchControlNode {
+                    if i != index, let otherCell = galleryCollectionNode.nodeForItem(at: IndexPath(row: i, section: 0)) as? StitchGalleryNode {
                         updateCellAppearance(otherCell, isSelected: false)
                     }
                 }

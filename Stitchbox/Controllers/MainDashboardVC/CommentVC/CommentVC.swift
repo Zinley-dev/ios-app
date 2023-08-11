@@ -643,26 +643,22 @@ extension CommentVC {
         }
         let avatarUrl = userDataSource.avatarURL
         
-        imageStorage.async.object(forKey: avatarUrl) { [weak self ] result in
-            guard let self = self else { return }
-            if case .value(let image) = result {
-                // Return the image from cache
-                DispatchQueue.main.async { [weak self] in
-                    guard let self = self else { return }
-                    self.avatarView.image = image
+        CacheManager.shared.fetchImage(forKey: avatarUrl) { [weak self] cachedImage in
+            if let image = cachedImage {
+                DispatchQueue.main.async {
+                    self?.avatarView.image = image
                 }
-                return
-            }
-            
-            // Image not found in cache or storage, fetch from network
-            AF.request(avatarUrl).validate().responseImage { [weak self] response in
-                guard let self = self else { return }
-                switch response.result {
-                case .success(let image):
-                    self.avatarView.image = image
-                    try? imageStorage.setObject(image, forKey: avatarUrl)
-                case .failure(let error):
-                    print(error)
+            } else {
+                AF.request(avatarUrl).validate().responseImage { [weak self] response in
+                    switch response.result {
+                    case .success(let image):
+                        DispatchQueue.main.async {
+                            self?.avatarView.image = image
+                        }
+                        CacheManager.shared.storeImage(forKey: avatarUrl, image: image)
+                    case .failure(let error):
+                        print(error)
+                    }
                 }
             }
         }

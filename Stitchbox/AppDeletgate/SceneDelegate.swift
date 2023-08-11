@@ -68,24 +68,16 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         
         
         if let currentFeedVC = currentVC as? ParentViewController {
-            if currentFeedVC.isFeed {
-                currentFeedVC.feedViewController.loadFeed()
-            } else {
-                
-                if let index = currentFeedVC.stitchViewController.currentIndex, !currentFeedVC.stitchViewController.posts.isEmpty {
-                    currentFeedVC.stitchViewController.playVideo(index: index)
-                }
-               
-            }
+            currentFeedVC.loadFeed()
         }
 
         
         UIApplication.shared.applicationIconBadgeNumber = 0
         requestAppleReview()
-     
         
+        CacheManager.shared.asyncRemoveExpiredObjects()
+     
     }
-
 
     func sceneWillResignActive(_ scene: UIScene) {
         // Called when the scene will move from an active state to an inactive state.

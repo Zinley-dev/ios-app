@@ -75,30 +75,23 @@ class VideoNode: ASCellNode, ASVideoNodeDelegate {
     override func didLoad() {
         super.didLoad()
     
-         
-         
+        
         addPinchGestureRecognizer()
         addPanGestureRecognizer()
         
+        setupViews()
+        setupLabel()
+        setupSpace(width: self.view.frame.width)
+        
         if UIViewController.currentViewController() is ParentViewController {
-          
             if isOriginal {
                 // Handle count stitch if not then hide
-                
-            
                 addSideButtons(isOwned: true, total: post.totalStitchTo + post.totalMemberStitch)
-                
-                
             } else {
                 addSideButtons(isOwned: false)
             }
         }
-        
-        setupViews()
-        setupLabel()
-       
-    
-        setupSpace(width: self.view.frame.width)
+
         clearMode()
 
      }
@@ -187,7 +180,6 @@ class VideoNode: ASCellNode, ASVideoNodeDelegate {
 
             let pushToStitch = UITapGestureRecognizer(target: self, action: #selector(VideoNode.pushToStitchView))
             sideButtonsView.originalStack.addGestureRecognizer(pushToStitch)
-            
             sideButtonsView.originalStack.isUserInteractionEnabled = true
             sideButtonsView.originalStitchCount.text = "\(formatPoints(num: Double(finalTotal)))"
         } else {
@@ -392,21 +384,21 @@ extension VideoNode {
     }
 
     func hideAllInfo() {
-
-        label.isHidden = true
-        gradientNode.isHidden = true
-        sideButtonsView.isHidden = true
-        headerView.isHidden = true
-        
+        if sideButtonsView != nil, headerView != nil, label != nil {
+            label.isHidden = true
+            gradientNode.isHidden = true
+            sideButtonsView.isHidden = true
+            headerView.isHidden = true
+        }
     }
     
     func showAllInfo() {
-        
-        label.isHidden = false
-        gradientNode.isHidden = false
-        sideButtonsView.isHidden = false
-        headerView.isHidden = false
-        
+        if sideButtonsView != nil, headerView != nil, label != nil {
+            label.isHidden = false
+            gradientNode.isHidden = false
+            sideButtonsView.isHidden = false
+            headerView.isHidden = false
+        }
     }
 
 
@@ -702,7 +694,8 @@ extension VideoNode: UIGestureRecognizerDelegate {
         self.label.customColor[customType] = .lightGray
         self.label.enabledTypes = [.hashtag, .url, customType]
        
-        self.label.hashtagColor = UIColor(red: 85.0/255, green: 172.0/255, blue: 238.0/255, alpha: 1)
+        self.label.hashtagColor = UIColor(red: 0.0/255, green: 204.0/255, blue: 255.0/255, alpha: 1)
+
         self.label.URLColor = UIColor(red: 135/255, green: 206/255, blue: 250/255, alpha: 1)
         
         self.label.handleCustomTap(for: customType) { [weak self] element in
@@ -730,6 +723,7 @@ extension VideoNode: UIGestureRecognizerDelegate {
         // Header View Setup
         self.headerView = PostHeader()
         self.view.addSubview(self.headerView)
+        
         addConstraints(to: self.headerView, within: self.view)
     
         if post.setting?.allowStitch == false {

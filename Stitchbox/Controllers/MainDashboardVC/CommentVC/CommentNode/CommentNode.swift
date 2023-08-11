@@ -169,7 +169,8 @@ class CommentNode: ASCellNode {
         label.mentionColor = .secondary
                   
         // A blue color for hashtags
-        label.hashtagColor = UIColor(red: 85.0/255, green: 172.0/255, blue: 238.0/255, alpha: 1)
+        label.hashtagColor = UIColor(red: 0.0/255, green: 204.0/255, blue: 255.0/255, alpha: 1)
+
 
         // A contrasting green color for URLs
         label.URLColor = UIColor(red: 50/255, green: 205/255, blue: 50/255, alpha: 1)

@@ -30,7 +30,7 @@ class NewsFeedSettingVC: UIViewController {
     @IBOutlet weak var showInfoBtn: UIButton!
     
     @IBOutlet weak var showInfoStack: UIStackView!
-    
+    @IBOutlet weak var showInfoLbl: UILabel!
     
     
     var isOwner = false
@@ -39,6 +39,7 @@ class NewsFeedSettingVC: UIViewController {
     var isSelected = false
     var isReels = false
     var isInformationHidden = false
+  
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -51,9 +52,9 @@ class NewsFeedSettingVC: UIViewController {
         }
         
         if isInformationHidden {
-            showInfoStack.isHidden = false
+            showInfoLbl.text = "Show video information"
         } else {
-            showInfoStack.isHidden = true
+            showInfoLbl.text = "Hide video information"
         }
 
     }
@@ -79,7 +80,11 @@ class NewsFeedSettingVC: UIViewController {
         if isSelected {
             NotificationCenter.default.post(name: (NSNotification.Name(rawValue: "showInfo_selected")), object: nil)
         } else {
-            NotificationCenter.default.post(name: (NSNotification.Name(rawValue: "showInfo")), object: nil)
+            if isInformationHidden {
+                NotificationCenter.default.post(name: (NSNotification.Name(rawValue: "showInfo")), object: nil)
+            } else {
+                NotificationCenter.default.post(name: (NSNotification.Name(rawValue: "hideInfo")), object: nil)
+            }
         }
         
         self.dismiss(animated: true)

@@ -805,7 +805,7 @@ class CustomSlider: UISlider {
     
     private lazy var thumbView: UIView = {
         let thumb = UIView()
-        thumb.backgroundColor = .white
+        thumb.backgroundColor = .clear
         return thumb
     }()
     

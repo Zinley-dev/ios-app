@@ -98,36 +98,20 @@ class UserSearchNode: ASCellNode {
     }
     
     func cacheUrlIfNeed(url: String) {
-        
-        
-        imageStorage.async.object(forKey: url) { result in
-            if case .value(_) = result {
-                
-            } else {
-                
-                
-             AF.request(url).responseImage { response in
-                    
-                    
+        CacheManager.shared.hasImage(forKey: url) { exists in
+            if !exists {
+                // If the image does not exist in the cache, fetch it
+                AF.request(url).responseImage { response in
                     switch response.result {
                     case let .success(value):
-                     
-                        try? imageStorage.setObject(value, forKey: url, expiry: .seconds(3000))
-                        
+                        CacheManager.shared.storeImage(forKey: url, image: value)
                     case let .failure(error):
-                        print(error)
+                        print("Error fetching image: \(error)")
                     }
-                    
-                    
-                    
                 }
-                
             }
-            
         }
-        
     }
-    
 
     override func layoutSpecThatFits(_ constrainedSize: ASSizeRange) -> ASLayoutSpec {
         

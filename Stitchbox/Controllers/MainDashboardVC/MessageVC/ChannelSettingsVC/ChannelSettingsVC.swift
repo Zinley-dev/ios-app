@@ -317,38 +317,35 @@ class ChannelSettingsVC: UIViewController, UINavigationControllerDelegate  {
     }
 
     func setAvatarImage(for imageView: UIImageView, withProfileUrl profileUrl: String?) {
+        guard let coverUrl = profileUrl, !coverUrl.isEmpty else {
+            imageView.image = UIImage(named: "defaultuser")
+            return
+        }
         
-        if profileUrl != "" {
-            
-            if let coverUrl = profileUrl {
-                imageStorage.async.object(forKey: coverUrl) { result in
-                    if case .value(let image) = result {
+        CacheManager.shared.fetchImage(forKey: coverUrl) { [weak imageView] cachedImage in
+            if let image = cachedImage {
+                DispatchQueue.main.async {
+                    imageView?.image = image
+                }
+            } else {
+                AF.request(coverUrl).responseImage { response in
+                    switch response.result {
+                    case .success(let value):
                         DispatchQueue.main.async {
-                            imageView.image = image
+                            imageView?.image = value
                         }
-                    } else {
-                        AF.request(coverUrl).responseImage { response in
-                            switch response.result {
-                            case let .success(value):
-                                imageView.image = value
-                                try? imageStorage.setObject(value, forKey: coverUrl)
-                            case let .failure(error):
-                                print(error)
-                            }
+                        CacheManager.shared.storeImage(forKey: coverUrl, image: value)
+                    case .failure(let error):
+                        print(error)
+                        DispatchQueue.main.async {
+                            imageView?.image = UIImage(named: "defaultuser")
                         }
                     }
                 }
-            } else {
-                imageView.image = UIImage(named: "defaultuser")
             }
-            
-        } else {
-            
-            imageView.image = UIImage(named: "defaultuser")
-            
         }
-        
     }
+
 
     
     func setupBackButton() {

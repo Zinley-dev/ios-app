@@ -32,7 +32,10 @@ class PostSettingVC: UIViewController{
     
     @IBOutlet weak var showInfoBtn: UIButton!
     
+    @IBOutlet weak var showInfoLbl: UILabel!
+    
     var isInformationHidden = false
+    var isSelected = false
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -40,9 +43,9 @@ class PostSettingVC: UIViewController{
         emptyLbl()
         
         if isInformationHidden {
-            showInfoStack.isHidden = false
+            showInfoLbl.text = "Show video information"
         } else {
-            showInfoStack.isHidden = true
+            showInfoLbl.text = "Hide video information"
         }
 
     }
@@ -63,7 +66,17 @@ class PostSettingVC: UIViewController{
     
     @IBAction func showVideoInfoBtnPressed(_ sender: Any) {
         
-        NotificationCenter.default.post(name: (NSNotification.Name(rawValue: "showInfo")), object: nil)
+        if isSelected {
+            
+        } else {
+           
+            if isInformationHidden {
+                NotificationCenter.default.post(name: (NSNotification.Name(rawValue: "showInfo")), object: nil)
+            } else {
+                NotificationCenter.default.post(name: (NSNotification.Name(rawValue: "hideInfo")), object: nil)
+            }
+            
+        }
         
         self.dismiss(animated: true)
         
@@ -71,14 +84,29 @@ class PostSettingVC: UIViewController{
     
     @IBAction func editBtnPressed(_ sender: Any) {
         
-        NotificationCenter.default.post(name: (NSNotification.Name(rawValue: "edit")), object: nil)
+        if isSelected {
+            
+        } else {
+           
+            NotificationCenter.default.post(name: (NSNotification.Name(rawValue: "edit")), object: nil)
+            
+        }
+        
+       
         self.dismiss(animated: true)
         
     }
     
     @IBAction func downloadBtnPressed(_ sender: Any) {
         
-        NotificationCenter.default.post(name: (NSNotification.Name(rawValue: "download")), object: nil)
+        if isSelected {
+            
+        } else {
+           
+            NotificationCenter.default.post(name: (NSNotification.Name(rawValue: "download")), object: nil)
+            
+        }
+        
         self.dismiss(animated: true)
         
     }
@@ -91,14 +119,30 @@ class PostSettingVC: UIViewController{
     
     @IBAction func statsBtnPressed(_ sender: Any) {
         
-        NotificationCenter.default.post(name: (NSNotification.Name(rawValue: "stats")), object: nil)
+       
+        
+        if isSelected {
+            
+        } else {
+           
+            NotificationCenter.default.post(name: (NSNotification.Name(rawValue: "stats")), object: nil)
+            
+        }
+        
         self.dismiss(animated: true)
         
     }
     
     @IBAction func deleteBtnPressed(_ sender: Any) {
         
-        NotificationCenter.default.post(name: (NSNotification.Name(rawValue: "delete")), object: nil)
+        if isSelected {
+            
+        } else {
+           
+            NotificationCenter.default.post(name: (NSNotification.Name(rawValue: "delete")), object: nil)
+            
+        }
+        
         self.dismiss(animated: true)
         
     }
@@ -106,7 +150,15 @@ class PostSettingVC: UIViewController{
     
     @IBAction func copyLinkBtnPressed(_ sender: Any) {
         
-        NotificationCenter.default.post(name: (NSNotification.Name(rawValue: "copyLink")), object: nil)
+        if isSelected {
+            
+        } else {
+           
+            NotificationCenter.default.post(name: (NSNotification.Name(rawValue: "copyLink")), object: nil)
+            
+        }
+        
+        
         self.dismiss(animated: true)
         
     }
@@ -114,7 +166,15 @@ class PostSettingVC: UIViewController{
     
     @IBAction func sendBtnPressed(_ sender: Any) {
         
-        NotificationCenter.default.post(name: (NSNotification.Name(rawValue: "share")), object: nil)
+        if isSelected {
+            
+        } else {
+           
+            NotificationCenter.default.post(name: (NSNotification.Name(rawValue: "share")), object: nil)
+            
+        }
+        
+      
         self.dismiss(animated: true)
         
     }

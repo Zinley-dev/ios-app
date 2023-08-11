@@ -46,7 +46,7 @@
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="bTO-xa-SF4">
-                    <rect key="frame" x="0.0" y="-6.5" width="150" height="35"/>
+                    <rect key="frame" x="0.0" y="-2.5" width="150" height="35"/>
                     <subviews>
                         <view hidden="YES" alpha="0.59999999999999998" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="cM4-9B-opX">
                             <rect key="frame" x="0.0" y="0.0" width="150" height="35"/>
@@ -103,7 +103,7 @@
                     </constraints>
                 </view>
                 <stackView opaque="NO" contentMode="scaleToFill" spacing="12" translatesAutoresizingMaskIntoConstraints="NO" id="b7l-gf-zMh">
-                    <rect key="frame" x="16" y="36.5" width="156.5" height="25"/>
+                    <rect key="frame" x="16" y="40.5" width="156.5" height="25"/>
                     <subviews>
                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" verticalCompressionResistancePriority="749" text="foobar" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="nAq-It-wTT">
                             <rect key="frame" x="0.0" y="0.0" width="44.5" height="25"/>
@@ -141,7 +141,7 @@
                     </subviews>
                 </stackView>
                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="KEo-rm-xre">
-                    <rect key="frame" x="16" y="77.5" width="603" height="15.5"/>
+                    <rect key="frame" x="16" y="81.5" width="603" height="15.5"/>
                     <fontDescription key="fontDescription" name="Roboto-Regular" family="Roboto" pointSize="13"/>
                     <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                     <nil key="highlightedColor"/>
@@ -255,7 +255,7 @@
                 <constraint firstItem="Lru-gO-4Tt" firstAttribute="centerX" secondItem="iN0-l3-epB" secondAttribute="centerX" id="ZFu-v1-CF9"/>
                 <constraint firstItem="vUN-kp-3ea" firstAttribute="trailing" secondItem="KEo-rm-xre" secondAttribute="trailing" constant="70" id="lA8-Ai-s1H"/>
                 <constraint firstItem="KEo-rm-xre" firstAttribute="top" secondItem="b7l-gf-zMh" secondAttribute="bottom" constant="16" id="lvs-0T-blM"/>
-                <constraint firstItem="Lru-gO-4Tt" firstAttribute="top" secondItem="KEo-rm-xre" secondAttribute="bottom" constant="12" id="nBJ-tu-TwQ"/>
+                <constraint firstItem="Lru-gO-4Tt" firstAttribute="top" secondItem="KEo-rm-xre" secondAttribute="bottom" constant="8" id="nBJ-tu-TwQ"/>
                 <constraint firstItem="KEo-rm-xre" firstAttribute="leading" secondItem="vUN-kp-3ea" secondAttribute="leading" constant="16" id="vdl-S4-ViN"/>
             </constraints>
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>

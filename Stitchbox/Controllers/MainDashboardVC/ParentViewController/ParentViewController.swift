@@ -67,8 +67,7 @@ class ParentViewController: UIViewController {
         if _AppCoreData.userDataSource.value?.userID != "" {
             requestTrackingAuthorization(userId: _AppCoreData.userDataSource.value?.userID ?? "")
         }
-        
-        
+     
         NotificationCenter.default.addObserver(self, selector: #selector(ParentViewController.observeRootChange), name: (NSNotification.Name(rawValue: "observeRootChange")), object: nil)
        
         NotificationCenter.default.addObserver(self, selector: #selector(ParentViewController.copyProfile), name: (NSNotification.Name(rawValue: "copy_profile")), object: nil)
@@ -83,6 +82,7 @@ class ParentViewController: UIViewController {
         NotificationCenter.default.addObserver(self, selector: #selector(ParentViewController.onClickDownload), name: (NSNotification.Name(rawValue: "download")), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(ParentViewController.onClickStats), name: (NSNotification.Name(rawValue: "stats")), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(ParentViewController.onClickShowInfo), name: (NSNotification.Name(rawValue: "showInfo")), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(ParentViewController.onClickHideInfo), name: (NSNotification.Name(rawValue: "hideInfo")), object: nil)
         
     }
     
@@ -93,19 +93,10 @@ class ParentViewController: UIViewController {
         setupNavBar()
         checkNotification()
         showMiddleBtn(vc: self)
-        
-        if isFeed {
-            if feedViewController.currentIndex != nil {
-                feedViewController.playVideo(index: feedViewController.currentIndex!)
-            }
-        } else {
-            
-            if stitchViewController.currentIndex != nil {
-                stitchViewController.playVideo(index: stitchViewController.currentIndex!)
-            }
-        }
-        
+        loadFeed()
         hasViewAppeared = true
+        
+
         
         delay(1) {
             NotificationCenter.default.addObserver(self, selector: #selector(ParentViewController.shouldScrollToTop), name: (NSNotification.Name(rawValue: "scrollToTop")), object: nil)
@@ -702,6 +693,15 @@ extension ParentViewController {
             }
             
             
+        } else {
+            
+            let offset = CGFloat(0) * scrollView.bounds.width
+
+            // Scroll to the next page
+            scrollView.setContentOffset(CGPoint(x: offset, y: 0), animated: true)
+            showFeed()
+            
+            
         }
     
     }
@@ -845,6 +845,20 @@ extension ParentViewController {
         } else if let index = stitchViewController.currentIndex, !stitchViewController.posts.isEmpty {
             if let node = stitchViewController.collectionNode.nodeForItem(at: IndexPath(row: index, section: 0)) as? VideoNode {
                 node.showAllInfo()
+            }
+        }
+    }
+    
+    
+    @objc func onClickHideInfo(_ sender: AnyObject) {
+        
+        if isFeed, let index = feedViewController.currentIndex, !feedViewController.posts.isEmpty {
+            if let node = feedViewController.collectionNode.nodeForItem(at: IndexPath(row: index, section: 0)) as? VideoNode {
+                node.hideAllInfo()
+            }
+        } else if let index = stitchViewController.currentIndex, !stitchViewController.posts.isEmpty {
+            if let node = stitchViewController.collectionNode.nodeForItem(at: IndexPath(row: index, section: 0)) as? VideoNode {
+                node.hideAllInfo()
             }
         }
     }
@@ -1034,6 +1048,50 @@ extension ParentViewController {
         delay(0.1) {
             self.navigationController?.pushViewController(ASTEVC, animated: true)
         }
+    }
+    
+    func loadFeed() {
+        
+        let now = Date()
+        let fortyFiveMinutesAgo = now.addingTimeInterval(-2700) // 2700 seconds = 45 minutes
+        
+        if feedViewController.lastLoadTime != nil, feedViewController.lastLoadTime! < fortyFiveMinutesAgo, !feedViewController.posts.isEmpty {
+            
+            feedViewController.clearAllData()
+            
+            if isFeed {
+                feedViewController.clearAllData()
+            } else {
+                
+                let offset = CGFloat(0) * scrollView.bounds.width
+
+                // Scroll to the next page
+                scrollView.setContentOffset(CGPoint(x: offset, y: 0), animated: true)
+                
+                feedViewController.clearAllData()
+                
+            }
+            
+        } else {
+            
+            resumeVideo()
+            
+        }
+        
+    }
+    
+    func resumeVideo() {
+        
+        if isFeed {
+            if feedViewController.currentIndex != nil {
+                feedViewController.playVideo(index: feedViewController.currentIndex!)
+            }
+        } else {
+            if stitchViewController.currentIndex != nil {
+                stitchViewController.playVideo(index: stitchViewController.currentIndex!)
+            }
+        }
+        
     }
 
     

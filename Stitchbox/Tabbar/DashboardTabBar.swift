@@ -247,17 +247,14 @@ import Alamofire
         return imageWithBorder.withRenderingMode(.alwaysOriginal)
     }
 
-
-
     func setUserProfileImageOnTabbar() {
         guard let items = tabBar.items, let lastItem = items.last else { return }
+
+        if let userImageUrl = _AppCoreData.userDataSource.value?.avatarURL, !userImageUrl.isEmpty {
             
-        if _AppCoreData.userDataSource.value?.avatarURL != "" {
-            let userImageUrl = _AppCoreData.userDataSource.value?.avatarURL
-                
-            imageStorage.async.object(forKey: userImageUrl!) { result in
-                if case .value(let image) = result {
-                    DispatchQueue.main.async { [weak self] in
+            CacheManager.shared.fetchImage(forKey: userImageUrl) { [weak self] cachedImage in
+                if let image = cachedImage {
+                    DispatchQueue.main.async {
                         let customImage = self?.createCustomImageView(with: image)
                         let selectedCustomImage = self?.createCustomSelectedImageView(with: image)
                         
@@ -265,10 +262,10 @@ import Alamofire
                         lastItem.selectedImage = selectedCustomImage
                     }
                 } else {
-                    AF.request(userImageUrl!).responseImage { response in
+                    AF.request(userImageUrl).responseImage { [weak self] response in
                         switch response.result {
-                        case let .success(image):
-                            DispatchQueue.main.async { [weak self] in
+                        case .success(let image):
+                            DispatchQueue.main.async {
                                 let customImage = self?.createCustomImageView(with: image)
                                 let selectedCustomImage = self?.createCustomSelectedImageView(with: image)
                                 
@@ -276,11 +273,10 @@ import Alamofire
                                 lastItem.selectedImage = selectedCustomImage
                             }
                             
-                            try? imageStorage.setObject(image, forKey: userImageUrl!, expiry: .date(Date().addingTimeInterval(2 * 3600)))
-                          
-                        case let .failure(error):
+                            CacheManager.shared.storeImage(forKey: userImageUrl, image: image)
+                        case .failure(let error):
                             print(error)
-                            DispatchQueue.main.async { [weak self] in
+                            DispatchQueue.main.async {
                                 let defaultImage = UIImage(named: "defaultuser")!
                                 
                                 let customImage = self?.createCustomImageView(with: defaultImage)
@@ -304,6 +300,7 @@ import Alamofire
             lastItem.selectedImage = selectedCustomImage
         }
     }
+
 
     
     

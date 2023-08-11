@@ -352,7 +352,7 @@ extension FeedViewController: ASCollectionDataSource {
             node.automaticallyManagesSubnodes = true
             
             if isfirstLoad, indexPath.row == 0 {
-                isfirstLoad = true
+                isfirstLoad = false
                 node.isFirstItem = true
                 mainRootId = post.id
                 currentIndex = 0
@@ -461,12 +461,13 @@ extension FeedViewController {
     }
 
     func retrieveNextPageWithCompletion(block: @escaping ([[String: Any]]) -> Void) {
-        APIManager.shared.getUserFeed { result in
+        APIManager.shared.getUserFeed { [weak self] result in
             var items: [[String: Any]] = []
             switch result {
             case .success(let apiResponse):
                 if let data = apiResponse.body?["data"] as? [[String: Any]], !data.isEmpty {
                     items = data
+                    self?.lastLoadTime = Date()
                     print("Successfully retrieved \(data.count) posts.")
                 }
             case .failure(let error):
@@ -535,31 +536,13 @@ extension FeedViewController {
     }
     
     
-    func loadFeed() {
-        let now = Date()
-        let fortyFiveMinutesAgo = now.addingTimeInterval(-2700) // 2700 seconds = 45 minutes
-        
-        if lastLoadTime != nil, lastLoadTime! < fortyFiveMinutesAgo, !posts.isEmpty {
-            
-            pullControl.beginRefreshing()
-            clearAllData()
-            
-        } else {
-            
-            if let index = currentIndex {
-                playVideo(index: index)
-            }
-    
-        }
-    }
-    
     func handleAnimationTextAndImage(post: PostModel) {
         
         let total = post.totalStitchTo + post.totalMemberStitch
         
         if total > 0 {
             if total == 1 {
-                applyAnimationText(text: "Up next: \(total) stitch!")
+                applyAnimationText(text: "Up next: one new stitch!")
             } else {
                 applyAnimationText(text: "Up next: \(total) stitches!")
             }
