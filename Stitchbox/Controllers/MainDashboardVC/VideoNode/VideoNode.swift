@@ -694,6 +694,19 @@ extension VideoNode: UIGestureRecognizerDelegate {
                       
                     }
                 }
+            } else if vc is SelectedParentVC {
+                if let update1 = vc as? SelectedParentVC {
+                    if update1.isRoot {
+                        // Calculate the next page index
+                       
+                        let offset = CGFloat(1) * update1.scrollView.bounds.width
+                        
+                        // Scroll to the next page
+                        update1.scrollView.setContentOffset(CGPoint(x: offset, y: 0), animated: true)
+                        update1.showStitch()
+                      
+                    }
+                }
             }
         }
     }
@@ -703,6 +716,14 @@ extension VideoNode: UIGestureRecognizerDelegate {
             if vc is ParentViewController {
                 if let update1 = vc as? ParentViewController {
                     if !update1.isFeed {
+                        hideAllInfo()
+                        update1.stitchViewController.selectPostCollectionView.isHidden = false
+                      
+                    }
+                }
+            } else if vc is SelectedParentVC {
+                if let update1 = vc as? SelectedParentVC {
+                    if !update1.isRoot {
                         hideAllInfo()
                         update1.stitchViewController.selectPostCollectionView.isHidden = false
                       
@@ -725,6 +746,17 @@ extension VideoNode: UIGestureRecognizerDelegate {
                         // Scroll to the next page
                         update1.scrollView.setContentOffset(CGPoint(x: offset, y: 0), animated: true)
                         update1.showFeed()
+                       
+                    }
+                } else if let update1 = vc as? SelectedParentVC {
+                    if !update1.isRoot {
+                        // Calculate the next page index
+                       
+                        let offset = CGFloat(0) * update1.scrollView.bounds.width
+        
+                        // Scroll to the next page
+                        update1.scrollView.setContentOffset(CGPoint(x: offset, y: 0), animated: true)
+                        update1.resumeVideo()
                        
                     }
                 }
@@ -861,7 +893,7 @@ extension VideoNode: UIGestureRecognizerDelegate {
         self.view.addGestureRecognizer(doubleTap)
 
         let longPress = UILongPressGestureRecognizer(target: self, action: #selector(VideoNode.settingTapped))
-        longPress.minimumPressDuration = 0.65
+        longPress.minimumPressDuration = 0.35
         longPress.delaysTouchesBegan = true
         self.view.addGestureRecognizer(longPress)
         

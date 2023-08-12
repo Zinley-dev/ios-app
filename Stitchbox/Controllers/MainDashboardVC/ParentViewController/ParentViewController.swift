@@ -41,16 +41,7 @@ class ParentViewController: UIViewController {
         addViewControllers()
         setupNavBar()
         navigationControllerDelegate()
-        
-        /*
-        if let tabBarController = self.tabBarController {
-            let viewControllersToPreload = [tabBarController.viewControllers?[1], tabBarController.viewControllers?[4]].compactMap { $0 }
-            for viewController in viewControllersToPreload {
-                _ = viewController.view
-            }
-        }*/
-        
-        
+
         
         if let navigationController = self.navigationController {
             navigationController.navigationBar.prefersLargeTitles = false
@@ -133,7 +124,7 @@ class ParentViewController: UIViewController {
         scrollView.isPagingEnabled = true
         scrollView.showsVerticalScrollIndicator = false
         scrollView.showsHorizontalScrollIndicator = false
-        scrollView.bounces = false
+        //scrollView.bounces = false
         scrollView.translatesAutoresizingMaskIntoConstraints = false
         scrollView.contentInsetAdjustmentBehavior = .never
         scrollView.backgroundColor = .clear
@@ -149,7 +140,7 @@ class ParentViewController: UIViewController {
 
         containerView = UIView()
         containerView.translatesAutoresizingMaskIntoConstraints = false
-        containerView.backgroundColor = .blue
+        containerView.backgroundColor = .black
         scrollView.addSubview(containerView)
 
         NSLayoutConstraint.activate([
@@ -1053,9 +1044,9 @@ extension ParentViewController {
     func loadFeed() {
         
         let now = Date()
-        let fortyFiveMinutesAgo = now.addingTimeInterval(-2700) // 2700 seconds = 45 minutes
-        
-        if feedViewController.lastLoadTime != nil, feedViewController.lastLoadTime! < fortyFiveMinutesAgo, !feedViewController.posts.isEmpty {
+        let thirtyMinutesAgo = now.addingTimeInterval(-1800) // 1800 seconds = 30 minutes
+
+        if feedViewController.lastLoadTime != nil, feedViewController.lastLoadTime! < thirtyMinutesAgo, !feedViewController.posts.isEmpty {
             
             feedViewController.clearAllData()
             
@@ -1069,7 +1060,7 @@ extension ParentViewController {
                 scrollView.setContentOffset(CGPoint(x: offset, y: 0), animated: true)
                 
                 feedViewController.clearAllData()
-                
+            
             }
             
         } else {

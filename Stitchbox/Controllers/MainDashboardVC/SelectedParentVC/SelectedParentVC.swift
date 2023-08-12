@@ -147,7 +147,7 @@ class SelectedParentVC: UIViewController, UIScrollViewDelegate {
         scrollView.isPagingEnabled = true
         scrollView.showsVerticalScrollIndicator = false
         scrollView.showsHorizontalScrollIndicator = false
-        scrollView.bounces = false
+        //scrollView.bounces = false
         scrollView.translatesAutoresizingMaskIntoConstraints = false
         scrollView.contentInsetAdjustmentBehavior = .never
         scrollView.backgroundColor = .clear
@@ -179,8 +179,8 @@ class SelectedParentVC: UIViewController, UIScrollViewDelegate {
     private func addViewControllers() {
         let storyboard = UIStoryboard(name: "Dashboard", bundle: nil)
         
-        selectedRootPostVC = storyboard.instantiateViewController(withIdentifier: "SelectedRootPostVC") as! SelectedRootPostVC
-        stitchViewController = storyboard.instantiateViewController(withIdentifier: "StitchViewController") as! StitchViewController
+        selectedRootPostVC = storyboard.instantiateViewController(withIdentifier: "SelectedRootPostVC") as? SelectedRootPostVC
+        stitchViewController = storyboard.instantiateViewController(withIdentifier: "StitchViewController") as? StitchViewController
 
         add(childViewController: selectedRootPostVC, at: 0)
         add(childViewController: stitchViewController, at: 1)
