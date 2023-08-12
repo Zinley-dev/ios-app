@@ -62,43 +62,7 @@ class CommentNode: ASCellNode {
       
         super.init()
         
-        DispatchQueue.main.async { [weak self] in
-            guard let self = self else { return }
-              
-            let textAttributes: [NSAttributedString.Key: Any] = [
-                .font: FontManager.shared.roboto(.Regular, size: FontSize),
-                .foregroundColor: UIColor.black
-            ]
 
-            let timeAttributes: [NSAttributedString.Key: Any] = [
-                .font: FontManager.shared.roboto(.Regular, size: FontSize),
-                .foregroundColor: UIColor.darkGray
-            ]
-
-            let clearTextAttributes: [NSAttributedString.Key: Any] = [
-                .font: FontManager.shared.roboto(.Regular, size: FontSize),
-                .foregroundColor: UIColor.clear
-            ]
-
-
-            
-            if let replyToUsername = self.post.reply_to_username, !self.post.reply_to.isEmpty {
-                self.replyUsername = replyToUsername
-                let username = "\(replyToUsername): " // Remove "@" symbol here
-                let clearUser = createAttributedString(username: username, text: self.post.text, clear: true, clearTextAttributes: clearTextAttributes, textAttributes: textAttributes)
-                let user = createAttributedString(username: username, text: self.post.text, clear: false, clearTextAttributes: clearTextAttributes, textAttributes: textAttributes)
-                let time = createTimeAttributedString(createdAt: self.post.createdAt, updatedAt: self.post.is_title == true ? self.post.updatedAt : nil, timeAttributes: timeAttributes)
-                updateUI(username: username, clearUser: clearUser, user: user, time: time)
-            } else {
-                let clearUser = createAttributedString(username: nil, text: self.post.text, clear: true, clearTextAttributes: clearTextAttributes, textAttributes: textAttributes)
-                let user = createAttributedString(username: nil, text: self.post.text, clear: false, clearTextAttributes: clearTextAttributes, textAttributes: textAttributes)
-                let time = createTimeAttributedString(createdAt: self.post.createdAt, updatedAt: self.post.is_title == true ? self.post.updatedAt : nil, timeAttributes: timeAttributes)
-                updateUI(username: nil, clearUser: clearUser, user: user, time: time)
-            }
-
-            
-        }
-        
         // Configure the reply button.
         self.replyBtnNode.setTitle("Reply", with: FontManager.shared.roboto(.Medium, size: FontSize), with: UIColor.darkGray, for: .normal)
         self.replyBtnNode.addTarget(self, action: #selector(CommentNode.replyBtnPressed), forControlEvents: .touchUpInside)
@@ -173,7 +137,8 @@ class CommentNode: ASCellNode {
 
 
         // A contrasting green color for URLs
-        label.URLColor = UIColor(red: 50/255, green: 205/255, blue: 50/255, alpha: 1)
+        label.URLColor = UIColor(red: 30/255, green: 85/255, blue: 150/255, alpha: 1)
+
         
         self.label.customize { [weak self] label in
             guard let self = self else { return }
@@ -215,6 +180,38 @@ class CommentNode: ASCellNode {
                     UIApplication.shared.open(requestUrl, options: [:], completionHandler: nil)
                 }
             }
+        }
+        
+        
+        let textAttributes: [NSAttributedString.Key: Any] = [
+            .font: FontManager.shared.roboto(.Regular, size: FontSize),
+            .foregroundColor: UIColor.black
+        ]
+
+        let timeAttributes: [NSAttributedString.Key: Any] = [
+            .font: FontManager.shared.roboto(.Regular, size: FontSize),
+            .foregroundColor: UIColor.darkGray
+        ]
+
+        let clearTextAttributes: [NSAttributedString.Key: Any] = [
+            .font: FontManager.shared.roboto(.Regular, size: FontSize),
+            .foregroundColor: UIColor.clear
+        ]
+
+
+        
+        if let replyToUsername = self.post.reply_to_username, !self.post.reply_to.isEmpty {
+            self.replyUsername = replyToUsername
+            let username = "\(replyToUsername): " // Remove "@" symbol here
+            let clearUser = createAttributedString(username: username, text: self.post.text, clear: true, clearTextAttributes: clearTextAttributes, textAttributes: textAttributes)
+            let user = createAttributedString(username: username, text: self.post.text, clear: false, clearTextAttributes: clearTextAttributes, textAttributes: textAttributes)
+            let time = createTimeAttributedString(createdAt: self.post.createdAt, updatedAt: self.post.is_title == true ? self.post.updatedAt : nil, timeAttributes: timeAttributes)
+            updateUI(username: username, clearUser: clearUser, user: user, time: time)
+        } else {
+            let clearUser = createAttributedString(username: nil, text: self.post.text, clear: true, clearTextAttributes: clearTextAttributes, textAttributes: textAttributes)
+            let user = createAttributedString(username: nil, text: self.post.text, clear: false, clearTextAttributes: clearTextAttributes, textAttributes: textAttributes)
+            let time = createTimeAttributedString(createdAt: self.post.createdAt, updatedAt: self.post.is_title == true ? self.post.updatedAt : nil, timeAttributes: timeAttributes)
+            updateUI(username: nil, clearUser: clearUser, user: user, time: time)
         }
         
         

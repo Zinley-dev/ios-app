@@ -784,7 +784,8 @@ extension VideoNode: UIGestureRecognizerDelegate {
        
         self.label.hashtagColor = UIColor(red: 0.0/255, green: 204.0/255, blue: 255.0/255, alpha: 1)
 
-        self.label.URLColor = UIColor(red: 135/255, green: 206/255, blue: 250/255, alpha: 1)
+        self.label.URLColor = UIColor(red: 30/255, green: 85/255, blue: 150/255, alpha: 1)
+
         
         self.label.handleCustomTap(for: customType) { [weak self] element in
             guard let self = self else { return }
