@@ -662,6 +662,9 @@ extension ProfileViewController: UICollectionViewDelegate {
 
                 // Set the startIndex to the position of the selected post within the sliced array
                 SPVC.startIndex = currentIndex - beforeIndex
+                SPVC.page = currpage
+                SPVC.selectedLoadingMode = .myPost
+                SPVC.keepLoading = true
                 SPVC.hidesBottomBarWhenPushed = true
                 hideMiddleBtn(vc: self)
                 self.navigationController?.pushViewController(SPVC, animated: true)
@@ -938,38 +941,21 @@ extension ProfileViewController {
             
             switch result {
             case .success(let apiResponse):
-                
-                guard let data = apiResponse.body?["data"] as? [[String: Any]] else {
-                    let item = [[String: Any]]()
-                    DispatchQueue.main.async {
-                        block(item)
-                    }
-                    return
-                }
-                if !data.isEmpty {
-                    
-                    print("Successfully retrieved \(data.count) posts - \(currpage)")
+                if let data = apiResponse.body?["data"] as? [[String: Any]], !data.isEmpty {
+                    print("Successfully retrieved \(data.count) posts.")
                     self.currpage += 1
-                    let items = data
                     DispatchQueue.main.async {
-                        block(items)
+                        block(data)
                     }
                 } else {
-                    
-                    let item = [[String: Any]]()
-                    DispatchQueue.main.async {
-                        block(item)
-                    }
+                    self.completeWithEmptyData(block)
                 }
             case .failure(let error):
                 print(error)
-                let item = [[String: Any]]()
-                DispatchQueue.main.async {
-                    block(item)
-                }
+                self.completeWithEmptyData(block)
             }
         }
-        
+
     }
     
     func insertNewRowsInCollectionNode(newPosts: [[String: Any]]) {
@@ -989,6 +975,12 @@ extension ProfileViewController {
         }
     
         
+    }
+    
+    private func completeWithEmptyData(_ block: @escaping ([[String: Any]]) -> Void) {
+        DispatchQueue.main.async {
+            block([])
+        }
     }
     
     

@@ -18,6 +18,16 @@ class SelectedRootPostVC: UIViewController, UICollectionViewDelegateFlowLayout {
         print("SelectedRootPostVC is being deallocated.")
     }
     
+    enum loadingMode {
+        case myPost
+        case userPost
+        case hashTags
+        case search
+        case save
+        case trending
+        case none
+    }
+    
     
     @IBOutlet weak var topConstraint: NSLayoutConstraint!
     @IBOutlet weak var contentView: UIView!
@@ -32,11 +42,16 @@ class SelectedRootPostVC: UIViewController, UICollectionViewDelegateFlowLayout {
     var currentIndex: Int?
 
     let backButton: UIButton = UIButton(type: .custom)
-
+    var keyword = ""
+    var userId = ""
+    var hashtag = ""
+    var keepLoading = false
     var firstAnimated = true
     var isVideoPlaying = false
     var newPlayingIndex: Int?
     var animatedLabel: MarqueeLabel!
+    var selectedLoadingMode = loadingMode.none
+    var page = 0
     
     @IBOutlet weak var loadingImage: FLAnimatedImageView!
     @IBOutlet weak var loadingView: UIView!
@@ -45,7 +60,7 @@ class SelectedRootPostVC: UIViewController, UICollectionViewDelegateFlowLayout {
         super.viewDidLoad()
         
         // Do any additional setup after loading the view.
-        setupCollectionNode()
+        print("SelectedRootPostVC did load")
         
     }
     
@@ -240,6 +255,76 @@ extension SelectedRootPostVC {
 
 }
 
+extension SelectedRootPostVC {
+    func shouldBatchFetch(for collectionNode: ASCollectionNode) -> Bool {
+        return keepLoading
+    }
+    
+    func collectionNode(_ collectionNode: ASCollectionNode, willBeginBatchFetchWith context: ASBatchContext) {
+        retrieveNextPageWithCompletion { [weak self] (newPosts) in
+            guard let self = self else { return }
+            self.insertNewRowsInCollectionNode(newPosts: newPosts)
+            
+            context.completeBatchFetching(true)
+        }
+    }
+    
+    func retrieveNextPageWithCompletion(block: @escaping ([[String: Any]]) -> Void) {
+
+        let handleResponse: (Result) -> Void = { [weak self] result in
+            var items: [[String: Any]] = []
+            if case .success(let apiResponse) = result,
+               let data = apiResponse.body?["data"] as? [[String: Any]],
+               !data.isEmpty {
+                items = data
+                self?.page += 1
+                print("Successfully retrieved \(data.count) posts for SelectedRootPostVC")
+            }
+
+            DispatchQueue.main.async {
+                block(items)
+            }
+        }
+
+        switch selectedLoadingMode {
+        case .hashTags:
+            APIManager.shared.getHashtagPost(tag: hashtag, page: page, completion: handleResponse)
+        case .myPost:
+            APIManager.shared.getMyPost(page: page, completion: handleResponse)
+        case .userPost:
+            APIManager.shared.getUserPost(userId: self.userId, page: page, completion: handleResponse)
+        case .search:
+            APIManager.shared.searchPost(query: keyword, page: page, completion: handleResponse)
+        case .save:
+            APIManager.shared.getSavedPost(page: page, completion: handleResponse)
+        case .trending:
+            APIManager.shared.getPostTrending(page: page, completion: handleResponse)
+        case .none:
+            DispatchQueue.main.async {
+                block([])
+            }
+        }
+    }
+
+
+
+    func insertNewRowsInCollectionNode(newPosts: [[String: Any]]) {
+        guard !newPosts.isEmpty else { return }
+
+        let uniquePosts = Set(self.posts)
+        let items = newPosts.compactMap { PostModel(JSON: $0) }.filter { !uniquePosts.contains($0) }
+        
+        guard !items.isEmpty else { return }
+
+        self.posts.append(contentsOf: items)
+
+        let indexPaths = (posts.count - items.count..<posts.count).map { IndexPath(row: $0, section: 0) }
+        
+        collectionNode.insertItems(at: indexPaths)
+        
+    }
+    
+}
 
 extension SelectedRootPostVC: ASCollectionDelegate {
     
@@ -250,9 +335,6 @@ extension SelectedRootPostVC: ASCollectionDelegate {
         return ASSizeRangeMake(min, max);
     }
     
-    func shouldBatchFetch(for collectionNode: ASCollectionNode) -> Bool {
-        return false
-    }
     
 }
 

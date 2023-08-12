@@ -130,7 +130,7 @@ class VideoNode: ASCellNode, ASVideoNodeDelegate {
         
         if let buttonsView = self.headerView {
          
-            let leftAndRightPadding: CGFloat = 16 * 2 // Padding for both sides
+            let leftAndRightPadding: CGFloat = 20 * 2 // Padding for both sides
             let itemWidth: CGFloat = 60
             let numberOfItems: CGFloat = 4 // Number of items in the stack view
             let superViewWidth: CGFloat = width // Assuming this is the superview's width

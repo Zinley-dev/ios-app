@@ -14,7 +14,22 @@ import ObjectMapper
 
 class SelectedParentVC: UIViewController, UIScrollViewDelegate {
     
+    
+    enum loadingMode {
+        case myPost
+        case userPost
+        case hashTags
+        case search
+        case save
+        case trending
+        case none
+    }
+    
     let backButton: UIButton = UIButton(type: .custom)
+    
+    var keyword = ""
+    var userId = ""
+    var hashtag = ""
     
     var scrollView: UIScrollView!
     private var containerView: UIView!
@@ -34,7 +49,10 @@ class SelectedParentVC: UIViewController, UIScrollViewDelegate {
     var count = 0
     var posts = [PostModel]()
     var startIndex = 0
-
+    var keepLoading = false
+    var page = 0
+    var selectedLoadingMode = loadingMode.none
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -50,11 +68,41 @@ class SelectedParentVC: UIViewController, UIScrollViewDelegate {
         
         if selectedRootPostVC != nil {
             
+            if keepLoading {
+                selectedRootPostVC.keepLoading = true
+                selectedRootPostVC.page = page
+                
+                switch selectedLoadingMode {
+
+                    case .hashTags:
+                        selectedRootPostVC.selectedLoadingMode = .hashTags
+                        selectedRootPostVC.hashtag = hashtag
+                    case .myPost:
+                        selectedRootPostVC.selectedLoadingMode = .myPost
+                    case .userPost:
+                        selectedRootPostVC.selectedLoadingMode = .userPost
+                        selectedRootPostVC.userId = userId
+                    case .search:
+                        selectedRootPostVC.selectedLoadingMode = .search
+                        selectedRootPostVC.keyword = keyword
+                    case .save:
+                        selectedRootPostVC.selectedLoadingMode = .save
+                    case .trending:
+                        selectedRootPostVC.selectedLoadingMode = .trending
+                    case .none:
+                        selectedRootPostVC.selectedLoadingMode = .none
+                    
+                }
+                
+            }
+            
+            selectedRootPostVC.setupCollectionNode()
             selectedRootPostVC.posts = posts
             selectedRootPostVC.startIndex = startIndex
             selectedRootPostVC.addAnimatedLabelToTop()
             selectedRootPostVC.loadPosts()
             selectedRootPostVC.hideLoading()
+            
             
             
             

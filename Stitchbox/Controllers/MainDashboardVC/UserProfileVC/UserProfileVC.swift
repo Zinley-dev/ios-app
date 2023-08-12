@@ -672,6 +672,11 @@ extension UserProfileVC: UICollectionViewDelegate {
 
                 // Set the startIndex to the position of the selected post within the sliced array
                 SPVC.startIndex = currentIndex - beforeIndex
+                
+                SPVC.page = currpage
+                SPVC.selectedLoadingMode = .userPost
+                SPVC.userId = self.userId ?? ""
+                SPVC.keepLoading = true
                
                 self.navigationController?.pushViewController(SPVC, animated: true)
             }

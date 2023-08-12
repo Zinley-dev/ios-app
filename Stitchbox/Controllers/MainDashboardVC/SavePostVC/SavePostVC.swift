@@ -23,33 +23,21 @@ class SavePostVC: UIViewController, UICollectionViewDelegateFlowLayout, UIAdapti
     }
 
 
-    var hasViewAppeared = false
     let backButton: UIButton = UIButton(type: .custom)
     
     @IBOutlet weak var loadingImage: FLAnimatedImageView!
     @IBOutlet weak var loadingView: UIView!
     @IBOutlet weak var contentView: UIView!
    
-    
-    var isVideoPlaying = false
-    var newPlayingIndex: Int?
-    var onPresent = false
     //====================================
     
     
-    var currentIndex: Int?
-    var imageIndex: Int?
     var isfirstLoad = true
    
     var posts = [PostModel]()
-    var selected_itemList = [PostModel]()
-    var selectedIndexPath = 0
     var page = 1
-    var selected_item: PostModel!
     var collectionNode: ASCollectionNode!
-    var editeddPost: PostModel?
     var refresh_request = false
-    var startIndex: Int!
    
     private var pullControl = UIRefreshControl()
     
@@ -120,7 +108,6 @@ class SavePostVC: UIViewController, UICollectionViewDelegateFlowLayout, UIAdapti
         
         loadingView.backgroundColor = self.view.backgroundColor
         navigationController?.setNavigationBarHidden(false, animated: true)
-        hasViewAppeared = true
         
         delay(1.25) { [weak self] in
             guard let self = self else { return }
@@ -157,60 +144,6 @@ class SavePostVC: UIViewController, UICollectionViewDelegateFlowLayout, UIAdapti
         clearAllData()
         
     }
-    
-    
-    @objc func clearAllData() {
-        
-        refresh_request = true
-        currentIndex = 0
-        isfirstLoad = true
-        
-        shouldMute = nil
-        page = 1
-        updateData()
-        
-    }
-    
-    
-    func updateData() {
-        self.retrieveNextPageWithCompletion { (newPosts) in
-            
-            if newPosts.count > 0 {
-                
-                self.insertNewRowsInCollectionNode(newPosts: newPosts)
-                
-                
-            } else {
-                
-                
-                self.refresh_request = false
-                self.posts.removeAll()
-                self.collectionNode.reloadData()
-                
-                if self.posts.isEmpty == true {
-                    
-                    self.collectionNode.view.setEmptyMessage("We can't find any available posts for you right now, can you post something?", color: .black)
-                    
-                    
-                } else {
-                    
-                    self.collectionNode.view.restore()
-                    
-                }
-                
-            }
-            
-            if self.pullControl.isRefreshing == true {
-                self.pullControl.endRefreshing()
-            }
-            
-    
-        }
-        
-        
-    }
-    
-    
     
 }
 
@@ -251,11 +184,7 @@ extension SavePostVC {
     
     @objc func onClickBack(_ sender: AnyObject) {
         
-        if onPresent {
-            self.dismiss(animated: true)
-        } else {
-            pop()
-        }
+        pop()
         
     }
     
@@ -350,7 +279,7 @@ extension SavePostVC: ASCollectionDataSource {
         
         if self.posts.count == 0 {
             
-            collectionNode.view.setEmptyMessage("No saved posts!", color: .black)
+            collectionNode.view.setEmptyMessage("No post found!", color: .black)
             
         } else {
             collectionNode.view.restore()
@@ -452,6 +381,10 @@ extension SavePostVC {
             // Set the startIndex to the position of the selected post within the sliced array
             selectedPostVC.startIndex = currentIndex - beforeIndex
             
+            selectedPostVC.page = page
+            selectedPostVC.selectedLoadingMode = .save
+            selectedPostVC.keepLoading = true
+            
             self.navigationController?.pushViewController(selectedPostVC, animated: true)
         }
     }
@@ -463,7 +396,6 @@ extension SavePostVC {
 
 extension SavePostVC {
     
-    
     func retrieveNextPageWithCompletion(block: @escaping ([[String: Any]]) -> Void) {
         
         APIManager.shared.getSavedPost(page: page) { [weak self] result in
@@ -471,86 +403,86 @@ extension SavePostVC {
             
             switch result {
             case .success(let apiResponse):
-                
-                guard let data = apiResponse.body?["data"] as? [[String: Any]] else {
-                    let item = [[String: Any]]()
-                    DispatchQueue.main.async {
-                        block(item)
-                    }
-                    return
-                }
-                if !data.isEmpty {
+                if let data = apiResponse.body?["data"] as? [[String: Any]], !data.isEmpty {
                     print("Successfully retrieved \(data.count) posts.")
                     self.page += 1
-                    let items = data
                     DispatchQueue.main.async {
-                        block(items)
+                        block(data)
                     }
                 } else {
-                    
-                    let item = [[String: Any]]()
-                    DispatchQueue.main.async {
-                        block(item)
-                    }
+                    self.completeWithEmptyData(block)
                 }
             case .failure(let error):
                 print(error)
-                let item = [[String: Any]]()
-                DispatchQueue.main.async {
-                    block(item)
-                }
+                self.completeWithEmptyData(block)
             }
         }
-      
     }
-    
-    
+
+    private func completeWithEmptyData(_ block: @escaping ([[String: Any]]) -> Void) {
+        DispatchQueue.main.async {
+            block([])
+        }
+    }
+
     func insertNewRowsInCollectionNode(newPosts: [[String: Any]]) {
-
-        // checking empty
-        guard newPosts.count > 0 else {
-            return
-        }
-
+        guard newPosts.count > 0 else { return }
+        
         if refresh_request {
-
+            clearExistingPosts()
             refresh_request = false
-
-            if !self.posts.isEmpty {
-                var delete_indexPaths: [IndexPath] = []
-                for row in 0..<self.posts.count {
-                    let path = IndexPath(row: row, section: 0) // single indexpath
-                    delete_indexPaths.append(path) // append
-                }
-
-                self.posts.removeAll()
-                self.collectionNode.deleteItems(at: delete_indexPaths)
-            }
         }
 
-        // Create new PostModel objects and append them to the current posts
-        var items = [PostModel]()
-        for i in newPosts {
-            if let item = PostModel(JSON: i) {
-                if !self.posts.contains(item) {
-                    self.posts.append(item)
-                    items.append(item)
-                }
-            }
-        }
-
-        // Construct index paths for the new rows
-        if items.count > 0 {
-            let startIndex = self.posts.count - items.count
-            let endIndex = startIndex + items.count - 1
-            print(startIndex, endIndex)
-            let indexPaths = (startIndex...endIndex).map { IndexPath(row: $0, section: 0) }
-
-            // Insert new items at index paths
-            self.collectionNode.insertItems(at: indexPaths)
+        var items = newPosts.compactMap { PostModel(JSON: $0) }.filter { !self.posts.contains($0) }
+        self.posts.append(contentsOf: items)
+        
+        if !items.isEmpty {
+            let indexPaths = generateIndexPaths(for: items)
+            collectionNode.insertItems(at: indexPaths)
         }
     }
 
+    private func clearExistingPosts() {
+        let deleteIndexPaths = posts.enumerated().map { IndexPath(row: $0.offset, section: 0) }
+        posts.removeAll()
+        collectionNode.deleteItems(at: deleteIndexPaths)
+    }
+
+    private func generateIndexPaths(for items: [PostModel]) -> [IndexPath] {
+        let startIndex = self.posts.count - items.count
+        return (startIndex..<self.posts.count).map { IndexPath(row: $0, section: 0) }
+    }
+
+    func updateData() {
+        self.retrieveNextPageWithCompletion { [weak self] (newPosts) in
+            guard let self = self else { return }
+
+            if self.pullControl.isRefreshing {
+                self.pullControl.endRefreshing()
+            }
+            
+            if newPosts.isEmpty {
+                self.refresh_request = false
+                self.posts.removeAll()
+                self.collectionNode.reloadData()
+                if self.posts.isEmpty {
+                    self.collectionNode.view.setEmptyMessage("No post found!", color: .white)
+                } else {
+                    self.collectionNode.view.restore()
+                }
+            } else {
+                self.insertNewRowsInCollectionNode(newPosts: newPosts)
+            }
+        }
+    }
+
+    @objc func clearAllData() {
+      
+        refresh_request = true
+        page = 1
+        updateData()
+    }
     
+  
 }
 
