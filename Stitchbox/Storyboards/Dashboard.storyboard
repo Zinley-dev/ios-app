@@ -55,42 +55,18 @@
                                 <rect key="frame" x="0.0" y="50" width="375" height="728"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             </view>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Xif-uZ-qjO">
-                                <rect key="frame" x="0.0" y="50" width="375" height="728"/>
-                                <subviews>
-                                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="bwv-i0-H64" customClass="FLAnimatedImageView">
-                                        <rect key="frame" x="150" y="326.66666666666669" width="75" height="75"/>
-                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                        <constraints>
-                                            <constraint firstAttribute="width" constant="75" id="XCX-pX-SNT"/>
-                                            <constraint firstAttribute="height" constant="75" id="lma-Iq-pjf"/>
-                                        </constraints>
-                                    </imageView>
-                                </subviews>
-                                <color key="backgroundColor" red="0.15877044200000001" green="0.1632023454" blue="0.18738254900000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                <constraints>
-                                    <constraint firstItem="bwv-i0-H64" firstAttribute="centerX" secondItem="Xif-uZ-qjO" secondAttribute="centerX" id="dtx-Ew-h1m"/>
-                                    <constraint firstItem="bwv-i0-H64" firstAttribute="centerY" secondItem="Xif-uZ-qjO" secondAttribute="centerY" id="eOj-zh-icp"/>
-                                </constraints>
-                            </view>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="Jjm-3E-pnz"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
                             <constraint firstItem="K8o-ju-QEg" firstAttribute="top" secondItem="Jjm-3E-pnz" secondAttribute="top" id="18C-4X-Qxs"/>
-                            <constraint firstItem="K8o-ju-QEg" firstAttribute="centerX" secondItem="Xif-uZ-qjO" secondAttribute="centerX" id="E4e-au-a6r"/>
-                            <constraint firstItem="K8o-ju-QEg" firstAttribute="width" secondItem="Xif-uZ-qjO" secondAttribute="width" id="e5t-wF-m7E"/>
-                            <constraint firstItem="K8o-ju-QEg" firstAttribute="height" secondItem="Xif-uZ-qjO" secondAttribute="height" id="fKN-wQ-Keg"/>
                             <constraint firstItem="Jjm-3E-pnz" firstAttribute="bottom" secondItem="K8o-ju-QEg" secondAttribute="bottom" id="hxq-Ws-iji"/>
-                            <constraint firstItem="K8o-ju-QEg" firstAttribute="centerY" secondItem="Xif-uZ-qjO" secondAttribute="centerY" id="kfN-ef-XxK"/>
                             <constraint firstItem="K8o-ju-QEg" firstAttribute="leading" secondItem="Jjm-3E-pnz" secondAttribute="leading" id="lnk-3W-PmN"/>
                             <constraint firstItem="Jjm-3E-pnz" firstAttribute="trailing" secondItem="K8o-ju-QEg" secondAttribute="trailing" id="uhs-J8-Z1X"/>
                         </constraints>
                     </view>
                     <connections>
                         <outlet property="contentView" destination="K8o-ju-QEg" id="hBh-mW-F6F"/>
-                        <outlet property="loadingImage" destination="bwv-i0-H64" id="xdB-xn-2OF"/>
-                        <outlet property="loadingView" destination="Xif-uZ-qjO" id="eXJ-Mz-hmK"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="xor-KS-DvQ" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>

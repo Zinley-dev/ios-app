@@ -43,3 +43,15 @@ struct TrendingHashtag: Codable {
         try container.encode(hashtag, forKey: .hashtag)
     }
 }
+
+extension TrendingHashtag: Hashable {
+    
+    static func == (lhs: TrendingHashtag, rhs: TrendingHashtag) -> Bool {
+        return lhs.id == rhs.id
+    }
+    
+    func hash(into hasher: inout Hasher) {
+        hasher.combine(id)
+    }
+    
+}
