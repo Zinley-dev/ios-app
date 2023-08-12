@@ -30,6 +30,7 @@
                 <outlet property="followBtn" destination="bQB-3X-6Av" id="l52-ue-0rL"/>
                 <outlet property="likeBtn" destination="7Qh-15-WlP" id="0em-Vx-BO5"/>
                 <outlet property="likeCountLbl" destination="0e7-xX-0rM" id="Os0-FX-z9F"/>
+                <outlet property="restView" destination="hJk-x8-wRN" id="gSV-uC-oON"/>
                 <outlet property="saveBtn" destination="1ov-wa-tED" id="qJB-Dh-mva"/>
                 <outlet property="saveCountLbl" destination="bBg-kT-vRZ" id="AFT-Z0-xRi"/>
                 <outlet property="shareBtn" destination="E7v-CO-rN3" id="ss6-bB-SLv"/>
@@ -42,11 +43,11 @@
         </placeholder>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
         <view contentMode="scaleToFill" id="iN0-l3-epB">
-            <rect key="frame" x="0.0" y="0.0" width="689" height="189"/>
+            <rect key="frame" x="0.0" y="0.0" width="689" height="662"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="bTO-xa-SF4">
-                    <rect key="frame" x="0.0" y="-2.5" width="150" height="35"/>
+                    <rect key="frame" x="0.0" y="470.5" width="150" height="35"/>
                     <subviews>
                         <view alpha="0.59999999999999998" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="cM4-9B-opX">
                             <rect key="frame" x="0.0" y="0.0" width="150" height="35"/>
@@ -103,7 +104,7 @@
                     </constraints>
                 </view>
                 <stackView opaque="NO" contentMode="scaleToFill" spacing="12" translatesAutoresizingMaskIntoConstraints="NO" id="b7l-gf-zMh">
-                    <rect key="frame" x="16" y="40.5" width="156.5" height="25"/>
+                    <rect key="frame" x="16" y="513.5" width="156.5" height="25"/>
                     <subviews>
                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" verticalCompressionResistancePriority="749" text="foobar" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="nAq-It-wTT">
                             <rect key="frame" x="0.0" y="0.0" width="44.5" height="25"/>
@@ -141,13 +142,13 @@
                     </subviews>
                 </stackView>
                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="KEo-rm-xre">
-                    <rect key="frame" x="16" y="81.5" width="603" height="15.5"/>
+                    <rect key="frame" x="16" y="554.5" width="603" height="15.5"/>
                     <fontDescription key="fontDescription" name="Roboto-Regular" family="Roboto" pointSize="13"/>
                     <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                     <nil key="highlightedColor"/>
                 </label>
                 <stackView opaque="NO" contentMode="scaleToFill" spacing="30" translatesAutoresizingMaskIntoConstraints="NO" id="Lru-gO-4Tt">
-                    <rect key="frame" x="169.5" y="105" width="350" height="50"/>
+                    <rect key="frame" x="169.5" y="578" width="350" height="50"/>
                     <subviews>
                         <stackView opaque="NO" contentMode="scaleToFill" alignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="rTw-5H-vot">
                             <rect key="frame" x="0.0" y="0.0" width="65" height="50"/>
@@ -244,22 +245,30 @@
                     </subviews>
                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                 </stackView>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="hJk-x8-wRN">
+                    <rect key="frame" x="0.0" y="48" width="689" height="422.5"/>
+                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                </view>
             </subviews>
             <viewLayoutGuide key="safeArea" id="vUN-kp-3ea"/>
             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
             <constraints>
+                <constraint firstItem="vUN-kp-3ea" firstAttribute="trailing" secondItem="hJk-x8-wRN" secondAttribute="trailing" id="79H-LZ-nmH"/>
                 <constraint firstItem="vUN-kp-3ea" firstAttribute="bottom" secondItem="Lru-gO-4Tt" secondAttribute="bottom" id="Gf3-5c-IFO"/>
+                <constraint firstItem="hJk-x8-wRN" firstAttribute="top" secondItem="vUN-kp-3ea" secondAttribute="top" id="KBw-Sy-hdf"/>
                 <constraint firstItem="bTO-xa-SF4" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" id="Kgk-Do-cjJ"/>
                 <constraint firstItem="b7l-gf-zMh" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" constant="16" id="Wmj-jA-itl"/>
                 <constraint firstItem="b7l-gf-zMh" firstAttribute="top" secondItem="bTO-xa-SF4" secondAttribute="bottom" constant="8" id="ZDc-Wb-Rcf"/>
                 <constraint firstItem="Lru-gO-4Tt" firstAttribute="centerX" secondItem="iN0-l3-epB" secondAttribute="centerX" id="ZFu-v1-CF9"/>
+                <constraint firstItem="bTO-xa-SF4" firstAttribute="top" secondItem="hJk-x8-wRN" secondAttribute="bottom" id="ZJL-GU-kjq"/>
                 <constraint firstItem="vUN-kp-3ea" firstAttribute="trailing" secondItem="KEo-rm-xre" secondAttribute="trailing" constant="70" id="lA8-Ai-s1H"/>
                 <constraint firstItem="KEo-rm-xre" firstAttribute="top" secondItem="b7l-gf-zMh" secondAttribute="bottom" constant="16" id="lvs-0T-blM"/>
                 <constraint firstItem="Lru-gO-4Tt" firstAttribute="top" secondItem="KEo-rm-xre" secondAttribute="bottom" constant="8" id="nBJ-tu-TwQ"/>
+                <constraint firstItem="hJk-x8-wRN" firstAttribute="leading" secondItem="vUN-kp-3ea" secondAttribute="leading" id="oRH-wm-cix"/>
                 <constraint firstItem="KEo-rm-xre" firstAttribute="leading" secondItem="vUN-kp-3ea" secondAttribute="leading" constant="16" id="vdl-S4-ViN"/>
             </constraints>
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
-            <point key="canvasLocation" x="-231.15942028985509" y="-359.26339285714283"/>
+            <point key="canvasLocation" x="-231.15942028985509" y="-517.63392857142856"/>
         </view>
     </objects>
     <resources>

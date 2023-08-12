@@ -358,18 +358,8 @@ class VideoNode: ASCellNode, ASVideoNodeDelegate {
 
 extension VideoNode {
     
-    func playProcess() {
+    @objc func tapProcess() {
         
-        if cellVideoNode.isPlaying() {
-            cellVideoNode.pause()
-        } else {
-            cellVideoNode.play()
-        }
-        
-    }
-
-  
-    func didTap(_ videoNode: ASVideoNode) {
         if let vc = UIViewController.currentViewController() {
             switch vc {
             case _ as PreviewVC:
@@ -396,6 +386,22 @@ extension VideoNode {
                 break
             }
         }
+        
+    }
+    
+    func playProcess() {
+        
+        if cellVideoNode.isPlaying() {
+            cellVideoNode.pause()
+        } else {
+            cellVideoNode.play()
+        }
+        
+    }
+
+  
+    func didTap(_ videoNode: ASVideoNode) {
+        tapProcess()
     }
 
     func hideAllInfo() {
@@ -821,7 +827,8 @@ extension VideoNode: UIGestureRecognizerDelegate {
         self.headerView.shareBtn.setImage(shareImage, for: .normal)
         self.headerView.saveBtn.setImage(unsaveImage, for: .normal)
         self.headerView.commentBtn.setImage(cmtImage, for: .normal)
-
+        
+        
         // Gesture Recognizers
         setupGestureRecognizers()
         fillStats()
@@ -868,6 +875,10 @@ extension VideoNode: UIGestureRecognizerDelegate {
     }
 
     func setupGestureRecognizers() {
+        
+        let vidTap = createTapGestureRecognizer(target: self, action: #selector(VideoNode.tapProcess))
+        self.headerView.restView.isUserInteractionEnabled = true
+        self.headerView.restView.addGestureRecognizer(vidTap)
      
         let usernameTap = createTapGestureRecognizer(target: self, action: #selector(VideoNode.userTapped))
         self.headerView.usernameLbl.isUserInteractionEnabled = true

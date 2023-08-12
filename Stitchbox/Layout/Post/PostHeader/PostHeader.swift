@@ -17,7 +17,7 @@ class PostHeader: UIView {
     @IBOutlet var stichBtn: UIButton!
     @IBOutlet var contentView: UIView!
     @IBOutlet var followBtn: UIButton!
-    
+    @IBOutlet weak var restView: UIView!
     @IBOutlet weak var stackView: UIStackView!
     @IBOutlet weak var shareBtn: UIButton!
     @IBOutlet weak var commentBtn: UIButton!
