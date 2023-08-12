@@ -39,9 +39,6 @@ class PostSearchVC: UIViewController, UICollectionViewDelegateFlowLayout, UIAdap
     var refresh_request = false
     var startIndex: Int!
     
-    lazy var delayItem = workItem()
-    lazy var delayItem2 = workItem()
-    lazy var delayItem3 = workItem()
     private var pullControl = UIRefreshControl()
     
     
@@ -292,7 +289,7 @@ extension PostSearchVC {
     
     
     func collectionNode(_ collectionNode: ASCollectionNode, didSelectItemAt indexPath: IndexPath) {
-        if let selectedPostVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "SelectedPostVC") as? SelectedPostVC {
+        if let selectedPostVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "SelectedParentVC") as? SelectedParentVC {
             
             // Find the index of the selected post
             let currentIndex = indexPath.row

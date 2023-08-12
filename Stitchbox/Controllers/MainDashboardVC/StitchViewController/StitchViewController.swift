@@ -268,11 +268,11 @@ extension StitchViewController {
                 
                 // If the video is stuck, reset the buffer by seeking to the current playback time.
                 if let currentIndex = currentIndex, let cell = collectionNode.nodeForItem(at: IndexPath(row: currentIndex, section: 0)) as? VideoNode {
-                    if let playerItem = cell.videoNode.currentItem, !playerItem.isPlaybackLikelyToKeepUp {
-                        if let currentTime = cell.videoNode.currentItem?.currentTime() {
-                            cell.videoNode.player?.seek(to: currentTime)
+                    if let playerItem = cell.cellVideoNode.currentItem, !playerItem.isPlaybackLikelyToKeepUp {
+                        if let currentTime = cell.cellVideoNode.currentItem?.currentTime() {
+                            cell.cellVideoNode.player?.seek(to: currentTime)
                         } else {
-                            cell.videoNode.player?.seek(to: CMTime.zero)
+                            cell.cellVideoNode.player?.seek(to: CMTime.zero)
                         }
                     }
                 }
@@ -674,10 +674,10 @@ extension StitchViewController {
         
         if let cell = self.collectionNode.nodeForItem(at: IndexPath(row: index, section: 0)) as? VideoNode {
             
-            cell.videoNode.pause()
+            cell.cellVideoNode.pause()
             
             let time = CMTime(seconds: 0, preferredTimescale: 1)
-            cell.videoNode.player?.seek(to: time)
+            cell.cellVideoNode.player?.seek(to: time)
            // playTimeBar.setValue(Float(0), animated: false)
             
         }
@@ -693,7 +693,7 @@ extension StitchViewController {
         if let cell = self.collectionNode.nodeForItem(at: IndexPath(row: index, section: 0)) as? VideoNode {
             
           
-            cell.videoNode.player?.seek(to: time)
+            cell.cellVideoNode.player?.seek(to: time)
             
             
         }
@@ -751,7 +751,7 @@ extension StitchViewController {
                 print("Couldn't cast ?")
             }
             
-            if !cell.videoNode.isPlaying() {
+            if !cell.cellVideoNode.isPlaying() {
                 
                 cell.updateStitchCount(text: "\(index + 1)/\(posts.count)")
 
@@ -760,22 +760,22 @@ extension StitchViewController {
                     
                     
                     if muteStatus {
-                        cell.videoNode.muted = true
+                        cell.cellVideoNode.muted = true
                     } else {
-                        cell.videoNode.muted = false
+                        cell.cellVideoNode.muted = false
                     }
                     
-                    cell.videoNode.play()
+                    cell.cellVideoNode.play()
                     
                 } else {
                     
                     if globalIsSound {
-                        cell.videoNode.muted = false
+                        cell.cellVideoNode.muted = false
                     } else {
-                        cell.videoNode.muted = true
+                        cell.cellVideoNode.muted = true
                     }
                     
-                    cell.videoNode.play()
+                    cell.cellVideoNode.play()
                     
                 }
                 

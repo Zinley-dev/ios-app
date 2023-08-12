@@ -13,7 +13,8 @@ class StitchSettingVC: UIViewController {
     
     @IBOutlet weak var createNewBtn: UIButton!
     @IBOutlet weak var stitchToExistBtn: UIButton!
-    var isFeed = true
+    var isSelected = false
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -33,28 +34,25 @@ class StitchSettingVC: UIViewController {
     
     @IBAction func cancelBtnPressed(_ sender: Any) {
         
-       
-        
         self.dismiss(animated: true)
         
     }
     
     @IBAction func createNewBtnPressed(_ sender: Any) {
         
-        if isFeed {
+        if !isSelected {
             NotificationCenter.default.post(name: (NSNotification.Name(rawValue: "create_new_for_stitch")), object: nil)
         } else {
             NotificationCenter.default.post(name: (NSNotification.Name(rawValue: "create_new_for_stitch_selected")), object: nil)
         }
       
-       
         self.dismiss(animated: true)
         
     }
     
     @IBAction func stitchToExistPressed(_ sender: Any) {
          
-        if isFeed {
+        if !isSelected {
             NotificationCenter.default.post(name: (NSNotification.Name(rawValue: "stitch_to_exist_one")), object: nil)
         } else {
             NotificationCenter.default.post(name: (NSNotification.Name(rawValue: "stitch_to_exist_one_selected")), object: nil)

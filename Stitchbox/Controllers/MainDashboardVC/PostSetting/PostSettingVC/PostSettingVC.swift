@@ -68,6 +68,12 @@ class PostSettingVC: UIViewController{
         
         if isSelected {
             
+            if isInformationHidden {
+                NotificationCenter.default.post(name: (NSNotification.Name(rawValue: "showInfo_selected")), object: nil)
+            } else {
+                NotificationCenter.default.post(name: (NSNotification.Name(rawValue: "hideInfo_selected")), object: nil)
+            }
+            
         } else {
            
             if isInformationHidden {
@@ -85,7 +91,7 @@ class PostSettingVC: UIViewController{
     @IBAction func editBtnPressed(_ sender: Any) {
         
         if isSelected {
-            
+            NotificationCenter.default.post(name: (NSNotification.Name(rawValue: "edit_selected")), object: nil)
         } else {
            
             NotificationCenter.default.post(name: (NSNotification.Name(rawValue: "edit")), object: nil)
@@ -100,7 +106,7 @@ class PostSettingVC: UIViewController{
     @IBAction func downloadBtnPressed(_ sender: Any) {
         
         if isSelected {
-            
+            NotificationCenter.default.post(name: (NSNotification.Name(rawValue: "download_selected")), object: nil)
         } else {
            
             NotificationCenter.default.post(name: (NSNotification.Name(rawValue: "download")), object: nil)
@@ -122,7 +128,7 @@ class PostSettingVC: UIViewController{
        
         
         if isSelected {
-            
+            NotificationCenter.default.post(name: (NSNotification.Name(rawValue: "stats_selected")), object: nil)
         } else {
            
             NotificationCenter.default.post(name: (NSNotification.Name(rawValue: "stats")), object: nil)
@@ -136,7 +142,7 @@ class PostSettingVC: UIViewController{
     @IBAction func deleteBtnPressed(_ sender: Any) {
         
         if isSelected {
-            
+            NotificationCenter.default.post(name: (NSNotification.Name(rawValue: "delete_selected")), object: nil)
         } else {
            
             NotificationCenter.default.post(name: (NSNotification.Name(rawValue: "delete")), object: nil)
@@ -151,7 +157,7 @@ class PostSettingVC: UIViewController{
     @IBAction func copyLinkBtnPressed(_ sender: Any) {
         
         if isSelected {
-            
+            NotificationCenter.default.post(name: (NSNotification.Name(rawValue: "copyLink_selected")), object: nil)
         } else {
            
             NotificationCenter.default.post(name: (NSNotification.Name(rawValue: "copyLink")), object: nil)
@@ -167,7 +173,7 @@ class PostSettingVC: UIViewController{
     @IBAction func sendBtnPressed(_ sender: Any) {
         
         if isSelected {
-            
+            NotificationCenter.default.post(name: (NSNotification.Name(rawValue: "share_selected")), object: nil)
         } else {
            
             NotificationCenter.default.post(name: (NSNotification.Name(rawValue: "share")), object: nil)

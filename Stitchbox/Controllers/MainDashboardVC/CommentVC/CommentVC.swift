@@ -301,7 +301,7 @@ class CommentVC: UIViewController, UITextViewDelegate, UIGestureRecognizerDelega
                     }
                     
                     
-                } else if let update1 = vc as? SelectedPostVC {
+                } else if let update1 = vc as? SelectedParentVC {
                     
                     if !update1.hasViewAppeared {
                         update1.viewWillAppear(true)

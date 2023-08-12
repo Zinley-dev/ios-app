@@ -42,13 +42,13 @@ class ParentViewController: UIViewController {
         setupNavBar()
         navigationControllerDelegate()
         
-        
+        /*
         if let tabBarController = self.tabBarController {
             let viewControllersToPreload = [tabBarController.viewControllers?[1], tabBarController.viewControllers?[4]].compactMap { $0 }
             for viewController in viewControllersToPreload {
                 _ = viewController.view
             }
-        }
+        }*/
         
         
         
@@ -70,7 +70,7 @@ class ParentViewController: UIViewController {
             requestTrackingAuthorization(userId: _AppCoreData.userDataSource.value?.userID ?? "")
         }
      
-        NotificationCenter.default.addObserver(self, selector: #selector(ParentViewController.observeRootChange), name: (NSNotification.Name(rawValue: "observeRootChange")), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(ParentViewController.observeRootChange), name: (NSNotification.Name(rawValue: "observeRootChangeForFeed")), object: nil)
        
         NotificationCenter.default.addObserver(self, selector: #selector(ParentViewController.copyProfile), name: (NSNotification.Name(rawValue: "copy_profile")), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(ParentViewController.copyPost), name: (NSNotification.Name(rawValue: "copy_post")), object: nil)
@@ -79,6 +79,7 @@ class ParentViewController: UIViewController {
         NotificationCenter.default.addObserver(self, selector: #selector(ParentViewController.sharePost), name: (NSNotification.Name(rawValue: "share_post")), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(ParentViewController.createPostForStitch), name: (NSNotification.Name(rawValue: "create_new_for_stitch")), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(ParentViewController.stitchToExistingPost), name: (NSNotification.Name(rawValue: "stitch_to_exist_one")), object: nil)
+        
         NotificationCenter.default.addObserver(self, selector: #selector(ParentViewController.onClickDelete), name: (NSNotification.Name(rawValue: "delete")), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(ParentViewController.onClickEdit), name: (NSNotification.Name(rawValue: "edit")), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(ParentViewController.onClickDownload), name: (NSNotification.Name(rawValue: "download")), object: nil)
@@ -605,6 +606,7 @@ extension ParentViewController {
         if rootId == "" || rootId != mainRootId {
             rootId = mainRootId
             shouldReload = true
+            print("observeRootChange - \(rootId)")
         } else {
             print("observeRootChange - \(rootId) - \(mainRootId)")
         }

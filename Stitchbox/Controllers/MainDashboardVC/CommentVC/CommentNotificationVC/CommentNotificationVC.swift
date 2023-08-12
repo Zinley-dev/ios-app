@@ -343,7 +343,7 @@ class CommentNotificationVC: UIViewController, UITextViewDelegate, UIGestureReco
                     }
                     
                     
-                } else if let update1 = vc as? SelectedPostVC {
+                } else if let update1 = vc as? SelectedParentVC {
                     
                     if !update1.hasViewAppeared {
                         update1.viewWillAppear(true)
@@ -990,7 +990,7 @@ class CommentNotificationVC: UIViewController, UITextViewDelegate, UIGestureReco
         
         if let viewPost = self.post {
             
-            if let RVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "SelectedPostVC") as? SelectedPostVC {
+            if let RVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "SelectedParentVC") as? SelectedParentVC {
                 
                 let nav = UINavigationController(rootViewController: RVC)
                 
@@ -1007,10 +1007,7 @@ class CommentNotificationVC: UIViewController, UITextViewDelegate, UIGestureReco
                 RVC.posts = [viewPost]
                 RVC.startIndex = 0
                 // Customize the navigation bar appearance
-                nav.navigationBar.barTintColor = .background
-                nav.navigationBar.tintColor = .white
-                nav.navigationBar.titleTextAttributes = [.foregroundColor: UIColor.white]
-                
+               
                 nav.modalPresentationStyle = .fullScreen
                 self.present(nav, animated: true, completion: nil)
                 

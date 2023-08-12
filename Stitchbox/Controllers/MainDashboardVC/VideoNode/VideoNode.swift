@@ -25,7 +25,7 @@ class VideoNode: ASCellNode, ASVideoNodeDelegate {
     var last_view_timestamp =  NSDate().timeIntervalSince1970
     var totalWatchedTime: TimeInterval = 0.0
     var previousTimeStamp: TimeInterval = 0.0
-    var videoNode: ASVideoNode
+    var cellVideoNode: ASVideoNode
     var gradientNode: GradienView
     var time = 0
     var shouldCountView = true
@@ -62,7 +62,7 @@ class VideoNode: ASCellNode, ASVideoNodeDelegate {
         self.post = post
         self.index = at
         self.gradientNode = GradienView()
-        self.videoNode = ASVideoNode()
+        self.cellVideoNode = ASVideoNode()
       
         
         super.init()
@@ -81,9 +81,16 @@ class VideoNode: ASCellNode, ASVideoNodeDelegate {
         
         setupViews()
         setupLabel()
-        setupSpace(width: self.view.frame.width)
+        setupSpace(width: UIScreen.main.bounds.width)
         
         if UIViewController.currentViewController() is ParentViewController {
+            if isOriginal {
+                // Handle count stitch if not then hide
+                addSideButtons(isOwned: true, total: post.totalStitchTo + post.totalMemberStitch)
+            } else {
+                addSideButtons(isOwned: false)
+            }
+        } else if UIViewController.currentViewController() is SelectedParentVC {
             if isOriginal {
                 // Handle count stitch if not then hide
                 addSideButtons(isOwned: true, total: post.totalStitchTo + post.totalMemberStitch)
@@ -104,6 +111,7 @@ class VideoNode: ASCellNode, ASVideoNodeDelegate {
             self.label.numberOfLines = Int(self.headerView.contentLbl.numberOfLines)
         }
         
+        setupSpace(width: view.frame.width)
     }
     
     func clearMode() {
@@ -137,18 +145,16 @@ class VideoNode: ASCellNode, ASVideoNodeDelegate {
             let spacing: CGFloat = totalSpacingWidth / (numberOfItems - 1)
             
             // Set the calculated spacing
-            print(spacing)
             buttonsView.stackView.spacing = spacing
         }
     }
     
     override func didExitVisibleState() {
-        videoNode.pause()
+        cellVideoNode.pause()
     }
 
     private func addSideButtons(isOwned: Bool, total: Int? = 0) {
         setupSideButtonsView()
-
         if isOwned {
             configureForOwnedState(total: total)
         } else {
@@ -258,44 +264,44 @@ class VideoNode: ASCellNode, ASVideoNodeDelegate {
 
     private func configureVideoNode(with post: PostModel) {
         
-        videoNode.url = getThumbnailURL(post: post)
-        videoNode.player?.automaticallyWaitsToMinimizeStalling = true
-        videoNode.shouldAutoplay = false
-        videoNode.shouldAutorepeat = true
-        videoNode.delegate = self
+        cellVideoNode.url = getThumbnailURL(post: post)
+        cellVideoNode.player?.automaticallyWaitsToMinimizeStalling = true
+        cellVideoNode.shouldAutoplay = false
+        cellVideoNode.shouldAutorepeat = true
+        cellVideoNode.delegate = self
 
         if let width = post.metadata?.width, let height = post.metadata?.height, width != 0, height != 0 {
                 // Calculate aspect ratio
             let aspectRatio = Float(width) / Float(height)
 
             if aspectRatio >= 0.5 && aspectRatio <= 0.7 { // Close to 9:16 aspect ratio (vertical)
-                videoNode.contentMode = .scaleAspectFill
-                videoNode.gravity = AVLayerVideoGravity.resizeAspectFill.rawValue
+                cellVideoNode.contentMode = .scaleAspectFill
+                cellVideoNode.gravity = AVLayerVideoGravity.resizeAspectFill.rawValue
             } else if aspectRatio >= 1.7 && aspectRatio <= 1.9 { // Close to 16:9 aspect ratio (landscape)
-                videoNode.contentMode = .scaleAspectFit
-                videoNode.gravity = AVLayerVideoGravity.resizeAspect.rawValue
+                cellVideoNode.contentMode = .scaleAspectFit
+                cellVideoNode.gravity = AVLayerVideoGravity.resizeAspect.rawValue
                    
             } else {
                 // Default contentMode, adjust as needed
-                videoNode.contentMode = .scaleAspectFit
-                videoNode.gravity = AVLayerVideoGravity.resizeAspectFill.rawValue
+                cellVideoNode.contentMode = .scaleAspectFit
+                cellVideoNode.gravity = AVLayerVideoGravity.resizeAspectFill.rawValue
                    
             }
         } else {
                 // Default contentMode, adjust as needed
-            videoNode.contentMode = .scaleAspectFill
-            videoNode.gravity = AVLayerVideoGravity.resizeAspectFill.rawValue
+            cellVideoNode.contentMode = .scaleAspectFill
+            cellVideoNode.gravity = AVLayerVideoGravity.resizeAspectFill.rawValue
                 
         }
         
     
         DispatchQueue.main.async { [weak self] in
             guard let self = self else { return }
-            self.videoNode.asset = AVAsset(url: self.getVideoURL(post: post)!)
+            self.cellVideoNode.asset = AVAsset(url: self.getVideoURL(post: post)!)
 
             if self.isFirstItem {
-                self.videoNode.muted = shouldMute ?? !globalIsSound
-                self.videoNode.play()
+                self.cellVideoNode.muted = shouldMute ?? !globalIsSound
+                self.cellVideoNode.play()
             }
             
         }
@@ -341,7 +347,7 @@ class VideoNode: ASCellNode, ASVideoNodeDelegate {
     override func layoutSpecThatFits(_ constrainedSize: ASSizeRange) -> ASLayoutSpec {
         
         let ratio = UIScreen.main.bounds.height / UIScreen.main.bounds.width
-        let ratioSpec = ASRatioLayoutSpec(ratio:ratio, child:self.videoNode);
+        let ratioSpec = ASRatioLayoutSpec(ratio:ratio, child:self.cellVideoNode);
         let gradientOverlaySpec = ASOverlayLayoutSpec(child:ratioSpec, overlay:self.gradientNode)
         return gradientOverlaySpec
     }
@@ -354,10 +360,10 @@ extension VideoNode {
     
     func playProcess() {
         
-        if videoNode.isPlaying() {
-            videoNode.pause()
+        if cellVideoNode.isPlaying() {
+            cellVideoNode.pause()
         } else {
-            videoNode.play()
+            cellVideoNode.play()
         }
         
     }
@@ -377,6 +383,15 @@ extension VideoNode {
                 } else {
                     playProcess()
                 }
+            case let parentVC as SelectedParentVC:
+                if parentVC.isRoot {
+                    playProcess()
+                } else if !parentVC.stitchViewController.selectPostCollectionView.isHidden {
+                    parentVC.stitchViewController.selectPostCollectionView.isHidden = true
+                    showAllInfo()
+                } else {
+                    playProcess()
+                }
             default:
                 break
             }
@@ -389,17 +404,44 @@ extension VideoNode {
             gradientNode.isHidden = true
             sideButtonsView.isHidden = true
             headerView.isHidden = true
+        } else {
+            if sideButtonsView == nil {
+                print("sideButtonsView is nil.")
+            }
+            if headerView == nil {
+                print("headerView is nil.")
+            }
+            if label == nil {
+                print("label is nil.")
+            }
+            
+            print("Failed to hideAllInfo due to nil elements.")
         }
     }
+
     
     func showAllInfo() {
-        if sideButtonsView != nil, headerView != nil, label != nil {
+        if sideButtonsView != nil, headerView != nil, label != nil{
             label.isHidden = false
             gradientNode.isHidden = false
             sideButtonsView.isHidden = false
             headerView.isHidden = false
+        } else {
+            if sideButtonsView == nil {
+                print("sideButtonsView is nil.")
+            }
+            if headerView == nil {
+                print("headerView is nil.")
+            }
+            if label == nil {
+                print("label is nil.")
+            }
+            
+            print("Failed to showAllInfo due to nil elements.")
         }
     }
+
+
 
 
     func videoNode(_ videoNode: ASVideoNode, didPlayToTimeInterval timeInterval: TimeInterval) {
@@ -477,8 +519,12 @@ extension VideoNode {
                     updateSlider(currentTime: currentTime, maxDuration: maxDuration, playTimeBar: update1.stitchViewController.playTimeBar)
                 }
                 
-            } else if let update1 = vc as? SelectedPostVC {
-                updateSlider(currentTime: currentTime, maxDuration: maxDuration, playTimeBar: update1.playTimeBar)
+            } else if let update1 = vc as? SelectedParentVC {
+                if update1.isRoot {
+                    updateSlider(currentTime: currentTime, maxDuration: maxDuration, playTimeBar: update1.selectedRootPostVC.playTimeBar)
+                } else {
+                    updateSlider(currentTime: currentTime, maxDuration: maxDuration, playTimeBar: update1.stitchViewController.playTimeBar)
+                }
             } else if let update1 = vc as? PreviewVC {
                 updateSlider(currentTime: currentTime, maxDuration: maxDuration, playTimeBar: update1.playTimeBar)
             }
@@ -517,8 +563,8 @@ extension VideoNode {
           
             
             if post.muxPlaybackId != "" {
-                let tempTransform = videoNode.view.transform.concatenating(scaleTransform)
-                videoNode.view.transform = tempTransform
+                let tempTransform = cellVideoNode.view.transform.concatenating(scaleTransform)
+                cellVideoNode.view.transform = tempTransform
             }
             
         
@@ -531,11 +577,11 @@ extension VideoNode {
             let scaleTransform = CGAffineTransform(scaleX: scale, y: scale)
             
             if post.muxPlaybackId != "" {
-                let tempTransform = videoNode.view.transform.concatenating(scaleTransform)
+                let tempTransform = cellVideoNode.view.transform.concatenating(scaleTransform)
                 
                 UIView.animate(withDuration: 0.2, animations: {
                     if tempTransform.a < 1.0 {
-                        self.videoNode.view.transform = CGAffineTransform.identity
+                        self.cellVideoNode.view.transform = CGAffineTransform.identity
                         //self.videoNode.view.center = self.originalCenter!
                     }
                         }, completion: { [weak self]_ in
@@ -560,9 +606,9 @@ extension VideoNode {
             
             if post.muxPlaybackId != "" {
                 
-                let translation = recognizer.translation(in: videoNode.view)
-                videoNode.view.center = CGPoint(x: videoNode.view.center.x + translation.x, y: videoNode.view.center.y + translation.y)
-                recognizer.setTranslation(.zero, in: videoNode.view)
+                let translation = recognizer.translation(in: cellVideoNode.view)
+                cellVideoNode.view.center = CGPoint(x: cellVideoNode.view.center.x + translation.x, y: cellVideoNode.view.center.y + translation.y)
+                recognizer.setTranslation(.zero, in: cellVideoNode.view)
                 
             }
             
@@ -589,8 +635,12 @@ extension VideoNode {
                 } else {
                     parentVC.stitchViewController.collectionNode.view.isScrollEnabled = isEnabled
                 }
-            case let selectedPostVC as SelectedPostVC:
-                selectedPostVC.collectionNode.view.isScrollEnabled = isEnabled
+            case let selectedPostVC as SelectedParentVC:
+                if selectedPostVC.isRoot {
+                    selectedPostVC.selectedRootPostVC.collectionNode.view.isScrollEnabled = isEnabled
+                } else {
+                    selectedPostVC.stitchViewController.collectionNode.view.isScrollEnabled = isEnabled
+                }
             default:
                 break
             }
@@ -726,12 +776,6 @@ extension VideoNode: UIGestureRecognizerDelegate {
         
         addConstraints(to: self.headerView, within: self.view)
     
-        if post.setting?.allowStitch == false {
-            hideStitchViews()
-        } else if _AppCoreData.userDataSource.value?.userID == self.post.owner?.id {
-            hideStitchViews()
-        }
-
         self.headerView.contentLbl.numberOfLines = 0
         self.headerView.contentLbl.lineBreakMode = .byWordWrapping
         
@@ -989,7 +1033,7 @@ extension VideoNode: UIGestureRecognizerDelegate {
     }
 
     func presentSelectedPostVC(with posts: [PostModel]) {
-        guard let RVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "SelectedPostVC") as? SelectedPostVC,
+        guard let RVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "SelectedPostVC") as? SelectedParentVC,
               let vc = UIViewController.currentViewController() else { return }
 
         if general_vc != nil {
@@ -999,12 +1043,10 @@ extension VideoNode: UIGestureRecognizerDelegate {
 
         RVC.onPresent = true
         RVC.posts = posts
-
+        RVC.startIndex = 0
+        
         let nav = UINavigationController(rootViewController: RVC)
-        nav.navigationBar.barTintColor = .background
-        nav.navigationBar.tintColor = .white
-        nav.navigationBar.titleTextAttributes = [.foregroundColor: UIColor.white]
-        nav.modalPresentationStyle = .fullScreen
+
 
         vc.present(nav, animated: true, completion: nil)
     }
@@ -1252,37 +1294,49 @@ extension VideoNode {
             return
         }
 
-        if let updateVC = vc as? ParentViewController{
-            if updateVC.isFeed {
-                updateVC.feedViewController.editeddPost = post
-            } else {
-                updateVC.stitchViewController.editeddPost = post
-            }
-        
-        }
-
-        general_vc = vc
-
         let slideVC = StitchSettingVC()
-        slideVC.isFeed = vc is FeedViewController
         slideVC.modalPresentationStyle = .custom
         slideVC.transitioningDelegate = vc.self
         global_presetingRate = 0.25
         global_cornerRadius = 35
 
+        if let updateVC = vc as? ParentViewController {
+            slideVC.isSelected = false
+            
+            if updateVC.isFeed {
+                updateVC.feedViewController.editeddPost = post
+            } else {
+                updateVC.stitchViewController.editeddPost = post
+            }
+        } else {
+            slideVC.isSelected = true
+        }
+
+        general_vc = vc
         vc.present(slideVC, animated: true, completion: nil)
     }
 
+
     private func showStitchError() {
-        /*
-        guard let vc = UIViewController.currentViewController() as? FeedViewController ?? UIViewController.currentViewController() as? SelectedPostVC, let username = post.owner?.username else { return }
+        
+        guard let vc = UIViewController.currentViewController() else {
+            return
+        }
 
-        let myUsername = _AppCoreData.userDataSource.value?.userName
-        let title = myUsername != nil ? "Hi \(myUsername!)," : "Oops!"
-        let message = "@\(username) have to follow you to enable stitch."
-
-        vc.showErrorAlert(title, msg: message)
-        */
+        if let stitchUsername = post.owner?.username {
+            
+            let myUsername = _AppCoreData.userDataSource.value?.userName
+            let title = myUsername != nil ? "Hi \(myUsername!)," : "Oops!"
+            let message = "@\(stitchUsername) have to follow you to enable stitch or technical issue happens"
+            
+            if let update1 = vc as? ParentViewController {
+                update1.showErrorAlert(title, msg: message)
+            } else {
+                
+            }
+            
+        }
+       
     }
 
     
@@ -1339,10 +1393,17 @@ extension VideoNode {
                     updateVC.present(newsFeedSettingVC, animated: true)
                 }
                 
-            } else if let updateVC = vc as? SelectedPostVC {
-                updateVC.editeddPost = post
-                setOwnership(for: newsFeedSettingVC)
-                vc.present(newsFeedSettingVC, animated: true)
+            } else if let updateVC = vc as? SelectedParentVC {
+                newsFeedSettingVC.isSelected = true
+                if updateVC.isRoot {
+                    updateVC.selectedRootPostVC.editeddPost = post
+                    setOwnership(for: newsFeedSettingVC)
+                    updateVC.present(newsFeedSettingVC, animated: true)
+                } else {
+                    updateVC.stitchViewController.editeddPost = post
+                    setOwnership(for: newsFeedSettingVC)
+                    updateVC.present(newsFeedSettingVC, animated: true)
+                }
             }
         }
     }
@@ -1372,9 +1433,15 @@ extension VideoNode {
                 updateVC.present(postSettingVC, animated: true)
             }
             
-        } else if let updateVC = viewController as? SelectedPostVC {
-            updateVC.editeddPost = post
-            viewController.present(postSettingVC, animated: true)
+        } else if let updateVC = viewController as? SelectedParentVC {
+            postSettingVC.isSelected = true
+            if updateVC.isRoot {
+                updateVC.selectedRootPostVC.editeddPost = post
+                updateVC.present(postSettingVC, animated: true)
+            } else {
+                updateVC.stitchViewController.editeddPost = post
+                updateVC.present(postSettingVC, animated: true)
+            }
         }
     }
 
@@ -1619,24 +1686,19 @@ extension VideoNode {
     }
     
     func handleReaction(isFollower: Bool, isFollowing: Bool, isLiked: Bool, isSaved: Bool) {
-        self.allowStitch = isFollower
-        if !isFollower {
-            self.hideStitchViews()
-        } else {
-            
-            if post.setting?.allowStitch == true {
-                self.showStitchViews()
-            } else {
-                self.hideStitchViews()
-            }
-            
-        }
+       
+        
+        processStitchStatus(isFollowingMe: isFollower)
 
         if isFollowing {
             self.hideFollowBtn()
         } else {
             self.setupFollowBtn()
         }
+        
+        processStitchStatus(isFollowingMe: isFollowing)
+        
+        
             
         self.isSave = isSaved
         if isSaved {
@@ -1652,6 +1714,22 @@ extension VideoNode {
             self.headerView.likeBtn.setImage(likeImage, for: .normal)
         }
     }
+    
+    func processStitchStatus(isFollowingMe: Bool) {
+
+        // If user has a public stitch, or if the post allows stitching and the user is following me
+        let shouldShowStitch = (post.userSettings?.publicStitch == true) ||
+                              (post.setting?.allowStitch == true && isFollowingMe)
+
+        if shouldShowStitch {
+            showStitchViews()
+            self.allowStitch = true
+        } else {
+            hideStitchViews()
+            self.allowStitch = false
+        }
+    }
+
 
     func hideFollowBtn() {
         Dispatch.main.async { [weak self] in
@@ -1668,9 +1746,9 @@ extension VideoNode {
             guard let self = self else { return }
             self.headerView.followBtn.isHidden = false
             self.isFollowingUser = false
-            let followTap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(demoNode.followTap))
-            followTap.numberOfTapsRequired = 1
-            self.headerView.followBtn.addGestureRecognizer(followTap)
+            let followTapped: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(VideoNode.followTap))
+            followTapped.numberOfTapsRequired = 1
+            self.headerView.followBtn.addGestureRecognizer(followTapped)
             
         }
     }

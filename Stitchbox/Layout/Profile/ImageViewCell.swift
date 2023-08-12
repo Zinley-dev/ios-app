@@ -120,10 +120,6 @@ class ImageViewCell: UICollectionViewCell {
         return stackView
     }()
 
-
-    var viewCount: Int?
-    var stitchViewCount: Int?
-
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -158,8 +154,10 @@ class ImageViewCell: UICollectionViewCell {
             
             stackView.isHidden = false
             stitchStackView.isHidden = false
-            //countView(with: data)
-            //countViewStitch(with: data)
+            
+            stitchCountLabel.text =  "\(formatPoints(num: Double(data.totalStitchTo + data.totalMemberStitch)))"
+            countLabel.text = "\(formatPoints(num: Double(data.estimatedCount?.sizeViews ?? 0)))"
+        
         } else {
             
             stackView.isHidden = true

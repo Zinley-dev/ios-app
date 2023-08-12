@@ -9,6 +9,57 @@ import Foundation
 import ObjectMapper
 import UIKit // Required for CGFloat
 
+class UserSettings: Mappable {
+    private(set) var id: String = ""
+    private(set) var allowChallenge: Bool = false
+    private(set) var allowStitch: Bool = false
+    private(set) var allowStreamingLink: Bool = false
+    private(set) var autoPlaySound: Bool = false
+    private(set) var enableEmailTwoFactor: Bool = false
+    private(set) var enablePhoneTwoFactor: Bool = false
+    private(set) var privateAccount: Bool = false
+    private(set) var publicStitch: Bool = false
+    private(set) var userId: String = ""
+    
+    private(set) var notifications: Notifications?
+
+    required init?(map: ObjectMapper.Map) { }
+
+    func mapping(map: ObjectMapper.Map) {
+        id <- map["_id"]
+        allowChallenge <- map["allowChallenge"]
+        allowStitch <- map["allowStitch"]
+        allowStreamingLink <- map["allowStreamingLink"]
+        autoPlaySound <- map["autoPlaySound"]
+        enableEmailTwoFactor <- map["enableEmailTwoFactor"]
+        enablePhoneTwoFactor <- map["enablePhoneTwoFactor"]
+        privateAccount <- map["privateAccount"]
+        publicStitch <- map["publicStitch"]
+        userId <- map["userId"]
+        notifications <- map["notifications"]
+    }
+}
+
+class Notifications: Mappable {
+    private(set) var comment: Bool = false
+    private(set) var follow: Bool = false
+    private(set) var mention: Bool = false
+    private(set) var message: Bool = false
+    private(set) var posts: Bool = false
+    private(set) var stitch: Bool = false
+
+    required init?(map: ObjectMapper.Map) { }
+
+    func mapping(map: ObjectMapper.Map) {
+        comment <- map["comment"]
+        follow <- map["follow"]
+        mention <- map["mention"]
+        message <- map["message"]
+        posts <- map["posts"]
+        stitch <- map["stitch"]
+    }
+}
+
 class Setting: Mappable {
     private(set) var allowStitch: Bool = false
     private(set) var allowComment: Bool = false
@@ -114,6 +165,7 @@ class PostModel: Mappable {
     private(set) var isApproved: Bool = false
     private(set) var totalMemberStitch: Int = 0
     private(set) var totalStitchTo: Int = 0
+    private(set) var userSettings: UserSettings?
     
     required init?(map: ObjectMapper.Map) {}
 
@@ -144,6 +196,7 @@ class PostModel: Mappable {
         isApproved <- map["isApproved"]
         totalMemberStitch <- map["totalMemberStitch"]
         totalStitchTo <- map["totalStitchTo"]
+        userSettings <- map["userSettings"]
         // Handle image URL logic as needed
         
         if image[0] != "" {

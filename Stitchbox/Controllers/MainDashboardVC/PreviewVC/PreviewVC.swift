@@ -405,7 +405,7 @@ extension PreviewVC {
         if let cell = self.collectionNode.nodeForItem(at: IndexPath(row: index, section: 0)) as? VideoNode {
          
             
-            cell.videoNode.pause()
+            cell.cellVideoNode.pause()
             
         }
         
@@ -415,7 +415,7 @@ extension PreviewVC {
         
         if let cell = self.collectionNode.nodeForItem(at: IndexPath(row: index, section: 0)) as? VideoNode {
             
-            cell.videoNode.player?.seek(to: time)
+            cell.cellVideoNode.player?.seek(to: time)
             
         }
         
@@ -426,7 +426,7 @@ extension PreviewVC {
         
         if let cell = self.collectionNode.nodeForItem(at: IndexPath(row: index, section: 0)) as? VideoNode {
             
-            if !cell.videoNode.isPlaying() {
+            if !cell.cellVideoNode.isPlaying() {
                 
                 /*
                 if cell.headerView != nil {
@@ -456,23 +456,23 @@ extension PreviewVC {
                     
 
                     if muteStatus {
-                        cell.videoNode.muted = true
+                        cell.cellVideoNode.muted = true
                     } else {
-                        cell.videoNode.muted = false
+                        cell.cellVideoNode.muted = false
                     }
                     
-                    cell.videoNode.play()
+                    cell.cellVideoNode.play()
                     
                 } else {
                     
                     
                     if globalIsSound {
-                        cell.videoNode.muted = false
+                        cell.cellVideoNode.muted = false
                     } else {
-                        cell.videoNode.muted = true
+                        cell.cellVideoNode.muted = true
                     }
                     
-                    cell.videoNode.play()
+                    cell.cellVideoNode.play()
                     
                 }
                 

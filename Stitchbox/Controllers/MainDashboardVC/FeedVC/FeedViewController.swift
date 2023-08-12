@@ -36,9 +36,7 @@ class FeedViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
     var collectionNode: ASCollectionNode!
     var editeddPost: PostModel?
     var refresh_request = false
-   
 
-    var imageTimerWorkItem: DispatchWorkItem?
     let backButton: UIButton = UIButton(type: .custom)
     lazy var delayItem = workItem()
     lazy var delayItem3 = workItem()
@@ -271,11 +269,11 @@ extension FeedViewController {
             
             // If the video is stuck, reset the buffer by seeking to the current playback time.
             if let currentIndex = currentIndex, let cell = collectionNode.nodeForItem(at: IndexPath(row: currentIndex, section: 0)) as? VideoNode {
-                if let playerItem = cell.videoNode.currentItem, !playerItem.isPlaybackLikelyToKeepUp {
-                    if let currentTime = cell.videoNode.currentItem?.currentTime() {
-                        cell.videoNode.player?.seek(to: currentTime)
+                if let playerItem = cell.cellVideoNode.currentItem, !playerItem.isPlaybackLikelyToKeepUp {
+                    if let currentTime = cell.cellVideoNode.currentItem?.currentTime() {
+                        cell.cellVideoNode.player?.seek(to: currentTime)
                     } else {
-                        cell.videoNode.player?.seek(to: CMTime.zero)
+                        cell.cellVideoNode.player?.seek(to: CMTime.zero)
                     }
                 }
             }
@@ -356,7 +354,7 @@ extension FeedViewController: ASCollectionDataSource {
                 node.isFirstItem = true
                 mainRootId = post.id
                 currentIndex = 0
-                NotificationCenter.default.post(name: (NSNotification.Name(rawValue: "observeRootChange")), object: nil)
+                NotificationCenter.default.post(name: (NSNotification.Name(rawValue: "observeRootChangeForFeed")), object: nil)
                 
                 Dispatch.main.async() { [weak self] in
                     guard let self = self else {
@@ -467,6 +465,7 @@ extension FeedViewController {
             case .success(let apiResponse):
                 if let data = apiResponse.body?["data"] as? [[String: Any]], !data.isEmpty {
                     items = data
+                    
                     self?.lastLoadTime = Date()
                     print("Successfully retrieved \(data.count) posts.")
                 }
@@ -564,10 +563,10 @@ extension FeedViewController {
         
         if let cell = self.collectionNode.nodeForItem(at: IndexPath(row: index, section: 0)) as? VideoNode {
             
-            cell.videoNode.pause()
+            cell.cellVideoNode.pause()
             
             let time = CMTime(seconds: 0, preferredTimescale: 1)
-            cell.videoNode.player?.seek(to: time)
+            cell.cellVideoNode.player?.seek(to: time)
            // playTimeBar.setValue(Float(0), animated: false)
             
         }
@@ -580,7 +579,7 @@ extension FeedViewController {
         if let cell = self.collectionNode.nodeForItem(at: IndexPath(row: index, section: 0)) as? VideoNode {
             
            
-            cell.videoNode.player?.seek(to: time)
+            cell.cellVideoNode.player?.seek(to: time)
             
         }
         
@@ -591,7 +590,7 @@ extension FeedViewController {
         
         if let cell = self.collectionNode.nodeForItem(at: IndexPath(row: index, section: 0)) as? VideoNode {
             
-            if !cell.videoNode.isPlaying() {
+            if !cell.cellVideoNode.isPlaying() {
 
                 handleAnimationTextAndImage(post: cell.post)
                 
@@ -609,29 +608,29 @@ extension FeedViewController {
                     
                     
                     if muteStatus {
-                        cell.videoNode.muted = true
+                        cell.cellVideoNode.muted = true
                     } else {
-                        cell.videoNode.muted = false
+                        cell.cellVideoNode.muted = false
                     }
                     
-                    cell.videoNode.play()
+                    cell.cellVideoNode.play()
                     
                 } else {
                     
                     if globalIsSound {
-                        cell.videoNode.muted = false
+                        cell.cellVideoNode.muted = false
                     } else {
-                        cell.videoNode.muted = true
+                        cell.cellVideoNode.muted = true
                     }
                     
-                    cell.videoNode.play()
+                    cell.cellVideoNode.play()
                     
                 }
                 
                 mainRootId = cell.post.id
                 
                 
-                NotificationCenter.default.post(name: (NSNotification.Name(rawValue: "observeRootChange")), object: nil)
+                NotificationCenter.default.post(name: (NSNotification.Name(rawValue: "observeRootChangeForFeed")), object: nil)
                 
             }
             

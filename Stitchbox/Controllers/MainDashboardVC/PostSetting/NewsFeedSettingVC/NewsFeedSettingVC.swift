@@ -78,7 +78,11 @@ class NewsFeedSettingVC: UIViewController {
     @IBAction func showVideoInfoBtnPressed(_ sender: Any) {
         
         if isSelected {
-            NotificationCenter.default.post(name: (NSNotification.Name(rawValue: "showInfo_selected")), object: nil)
+            if isInformationHidden {
+                NotificationCenter.default.post(name: (NSNotification.Name(rawValue: "showInfo_selected")), object: nil)
+            } else {
+                NotificationCenter.default.post(name: (NSNotification.Name(rawValue: "hideInfo_selected")), object: nil)
+            }
         } else {
             if isInformationHidden {
                 NotificationCenter.default.post(name: (NSNotification.Name(rawValue: "showInfo")), object: nil)

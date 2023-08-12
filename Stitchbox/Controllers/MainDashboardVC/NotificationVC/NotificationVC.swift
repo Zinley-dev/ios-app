@@ -337,17 +337,13 @@ extension NotificationVC {
     
     func openPost(post: PostModel) {
         
-        if let RVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "SelectedPostVC") as? SelectedPostVC {
+        if let RVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "SelectedParentVC") as? SelectedParentVC {
             
             let nav = UINavigationController(rootViewController: RVC)
             
             // Set the user ID, nickname, and onPresent properties of UPVC
             RVC.posts = [post]
-            
-            // Customize the navigation bar appearance
-            nav.navigationBar.barTintColor = .background
-            nav.navigationBar.tintColor = .white
-            nav.navigationBar.titleTextAttributes = [.foregroundColor: UIColor.white]
+            RVC.startIndex = 0
             
             nav.modalPresentationStyle = .fullScreen
             self.present(nav, animated: true, completion: nil)

@@ -124,7 +124,7 @@ class StartViewController: UIViewController, ControllerType, ZSWTappableLabelTap
             self.loadSettings {
                 
                 if !UserDefaults.standard.bool(forKey: "hasShowCleaned") {
-                    //UserDefaults.standard.set(true, forKey: "hasShowStitched")
+                    UserDefaults.standard.set(true, forKey: "hasShowCleaned")
                     
                     DispatchQueue.main.async { [weak self] in
                         if let vc = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "ShowCleanModeVC") as? ShowCleanModeVC {
@@ -335,12 +335,12 @@ class StartViewController: UIViewController, ControllerType, ZSWTappableLabelTap
         }
       })
       .disposed(by: disposeBag)
-    
+
     vm.output.loginResultObservable.subscribe(onNext: { isTrue in
       if (isTrue) {
           
           if !UserDefaults.standard.bool(forKey: "hasShowCleaned") {
-              //UserDefaults.standard.set(true, forKey: "hasShowStitched")
+              UserDefaults.standard.set(true, forKey: "hasShowCleaned")
               
               DispatchQueue.main.async { [weak self] in
                   if let vc = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "ShowCleanModeVC") as? ShowCleanModeVC {

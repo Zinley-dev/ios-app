@@ -18,7 +18,7 @@ class ShowCleanModeVC: UIViewController {
     @IBOutlet weak var videoView: UIView!
     @IBOutlet weak var ClearSwitch: UISwitch!
     var isClearMode = false
-    var muxPlaybackId = "UdUmeendEvBt02eoX3oy7bK00FVu5vBE01WVvXQj9reIDA"
+    var muxPlaybackId = "UGzRce5Jy9lymhq5wk02mAdEQXwafvncFd4NdIqnVVVY"
     @IBOutlet weak var mainViewWidth: NSLayoutConstraint!
     @IBOutlet weak var mainStackWidth: NSLayoutConstraint!
     

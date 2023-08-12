@@ -560,7 +560,7 @@ class CommentNode: ASCellNode {
                         
                         if let post = PostModel(JSON: data) {
                             
-                            if let RVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "SelectedPostVC") as? SelectedPostVC {
+                            if let RVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "SelectedParentVC") as? SelectedParentVC {
                                 
                                 if let vc = UIViewController.currentViewController() {
                                 
@@ -578,7 +578,7 @@ class CommentNode: ASCellNode {
 
                                     // Set the user ID, nickname, and onPresent properties of UPVC
                                     RVC.posts = [post]
-                              
+                                    RVC.startIndex = 0
 
                                     nav.modalPresentationStyle = .fullScreen
                                     

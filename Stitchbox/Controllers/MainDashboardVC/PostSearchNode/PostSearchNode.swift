@@ -45,7 +45,6 @@ class PostSearchNode: ASCellNode {
         super.init()
         
         self.backgroundColor = .clear // set background to clear
-        setupnode()
         paragraphStyles.alignment = .center
         
         let title = post.content
@@ -75,6 +74,21 @@ class PostSearchNode: ASCellNode {
         imageNode.contentMode = .scaleAspectFill
         imageNode.cornerRadius = 10 // set corner radius of imageNode to 15
         
+        automaticallyManagesSubnodes = true
+    }
+    
+    override func didLoad() {
+        super.didLoad()
+        
+        setupUsername()
+        setupStitchCount()
+        setupViewCount()
+        setupnode()
+        
+    }
+    
+    func setupUsername() {
+        
         let paragraphStyle = NSMutableParagraphStyle()
         paragraphStyle.alignment = .center
         infoNode.attributedText = NSAttributedString(
@@ -86,9 +100,37 @@ class PostSearchNode: ASCellNode {
             ]
         )
         
-        automaticallyManagesSubnodes = true
     }
     
+    func setupStitchCount() {
+        
+        let paragraphStyle = NSMutableParagraphStyle()
+        paragraphStyle.alignment = .center
+        self.stitchCountNode.attributedText = NSAttributedString(
+            string: "\(formatPoints(num: Double(post.totalStitchTo + post.totalMemberStitch)))",
+            attributes: [
+                NSAttributedString.Key.font: FontManager.shared.roboto(.Regular, size: FontSize - 3), // Using the Roboto Regular style
+                NSAttributedString.Key.foregroundColor: UIColor.white,
+                NSAttributedString.Key.paragraphStyle: paragraphStyle
+            ]
+        )
+        
+    }
+    
+    func setupViewCount() {
+        
+        let paragraphStyle = NSMutableParagraphStyle()
+        paragraphStyle.alignment = .center
+        self.countNode.attributedText = NSAttributedString(
+            string: "\(formatPoints(num: Double(post.estimatedCount?.sizeViews ?? 0)))",
+            attributes: [
+                NSAttributedString.Key.font: FontManager.shared.roboto(.Regular, size: FontSize - 3), // Using the Roboto Regular style
+                NSAttributedString.Key.foregroundColor: UIColor.white,
+                NSAttributedString.Key.paragraphStyle: paragraphStyle
+            ]
+        )
+        
+    }
     
     
     override func layoutSpecThatFits(_ constrainedSize: ASSizeRange) -> ASLayoutSpec {

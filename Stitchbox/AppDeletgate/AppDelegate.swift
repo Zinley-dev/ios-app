@@ -580,7 +580,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
     
     func openPost(post: PostModel) {
         
-        if let SPVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "SelectedPostVC") as? SelectedPostVC {
+        if let SPVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "SelectedParentVC") as? SelectedParentVC {
             
             if let vc = UIViewController.currentViewController() {
                 
@@ -591,12 +591,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
                 SPVC.posts = [post]
                 SPVC.startIndex = 0
                 
-                
-                // Customize the navigation bar appearance
-                nav.navigationBar.barTintColor = .background
-                nav.navigationBar.tintColor = .white
-                nav.navigationBar.titleTextAttributes = [.foregroundColor: UIColor.white]
-                
+              
                 nav.modalPresentationStyle = .fullScreen
                 vc.present(nav, animated: true, completion: nil)
                 

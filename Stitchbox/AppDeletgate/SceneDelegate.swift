@@ -69,6 +69,8 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         
         if let currentFeedVC = currentVC as? ParentViewController {
             currentFeedVC.loadFeed()
+        } else if  let currentFeedVC = currentVC as? SelectedParentVC {
+            currentFeedVC.resumeVideo()
         }
 
         
@@ -89,6 +91,20 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
                 
                 if let index = currentFeedVC.feedViewController.currentIndex, !currentFeedVC.feedViewController.posts.isEmpty {
                     currentFeedVC.feedViewController.pauseVideo(index: index)
+                }
+                
+            } else {
+                
+                if let index = currentFeedVC.stitchViewController.currentIndex, !currentFeedVC.stitchViewController.posts.isEmpty {
+                    currentFeedVC.stitchViewController.pauseVideo(index: index)
+                }
+               
+            }
+        } else if let currentFeedVC = currentVC as? SelectedParentVC {
+            if currentFeedVC.isRoot {
+                
+                if let index = currentFeedVC.selectedRootPostVC.currentIndex, !currentFeedVC.selectedRootPostVC.posts.isEmpty {
+                    currentFeedVC.selectedRootPostVC.pauseVideo(index: index)
                 }
                 
             } else {

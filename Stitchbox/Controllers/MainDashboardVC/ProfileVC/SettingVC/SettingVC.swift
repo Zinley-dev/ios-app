@@ -127,7 +127,7 @@ class SettingVC: UIViewController {
     
     @IBAction func contactUsBtnPressed(_ sender: Any) {
         
-        if let CUVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "ContactUsVC") as? ContactUsVC {
+        if let CUVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "SupportVC") as? SupportVC {
             self.navigationController?.pushViewController(CUVC, animated: true)
             
         }

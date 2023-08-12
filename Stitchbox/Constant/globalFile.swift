@@ -23,6 +23,7 @@ let incomingCallGreen = UIColor(red: 76.0/255.0, green: 217.0/255.0, blue: 100.0
 let hashtagPurple = UIColor(red: 88.0/255.0, green: 86.0/255.0, blue: 214.0/255.0, alpha: 1.0)
 let alertColor = UIColor(red: 0.8, green: 0.2, blue: 0.2, alpha: 1.0)
 var mainRootId = ""
+var mainSeletedId = ""
 let saveImage = UIImage.init(named: "saved.filled")?.resize(targetSize: CGSize(width: 16, height: 20.3125))
 let unsaveImage = UIImage.init(named: "save")?.resize(targetSize: CGSize(width: 16, height: 20.3125))
 
@@ -884,10 +885,14 @@ class CustomSlider: UISlider {
                     update1.stitchViewController.timeLbl.text = processTime()
                 }
                 
-            } else if let update1 = vc as? SelectedPostVC {
+            } else if let update1 = vc as? SelectedParentVC {
                 
-                update1.timeLbl.text = processTime()
-                
+                if update1.isRoot {
+                    update1.selectedRootPostVC.timeLbl.text = processTime()
+                } else {
+                    update1.stitchViewController.timeLbl.text = processTime()
+                }
+             
             }
             
         }
@@ -965,30 +970,40 @@ class CustomSlider: UISlider {
                 
                 
                 
-            }  else if let update1 = vc as? SelectedPostVC {
+            }  else if let update1 = vc as? SelectedParentVC {
                 
                
-                if update1.currentIndex != nil {
-                    update1.pauseVideo(index: update1.currentIndex!)
-                } else if update1.startIndex != nil {
-                    update1.pauseVideo(index: update1.startIndex!)
-                }
+                update1.scrollView.isScrollEnabled = false
                 
-                if update1.currentIndex != nil {
-                    //update1.pauseVideo(index: update1.currentIndex!)
+                if update1.isRoot {
                     
-                    update1.pauseVideo(index: update1.currentIndex!)
+                   
+                    if update1.selectedRootPostVC.currentIndex != nil {
+                        //update1.pauseVideo(index: update1.currentIndex!)
+                        
+                        update1.selectedRootPostVC.pauseVideo(index: update1.selectedRootPostVC.currentIndex!)
+                        
+                    }
+                    
+                    update1.selectedRootPostVC.timeLbl.text = processTime()
+                    update1.selectedRootPostVC.timeLbl.isHidden = false
+                    update1.selectedRootPostVC.blurView.isHidden = false
                     
                 } else {
+                
+                    if update1.stitchViewController.currentIndex != nil {
+                        //update1.pauseVideo(index: update1.currentIndex!)
+                        
+                        update1.stitchViewController.pauseVideo(index: update1.stitchViewController.currentIndex!)
+                        
+                    }
                     
-                    update1.pauseVideo(index: update1.startIndex!)
+                    update1.stitchViewController.timeLbl.text = processTime()
+                    update1.stitchViewController.timeLbl.isHidden = false
+                    update1.stitchViewController.blurView.isHidden = false
                     
                     
                 }
-                
-                update1.timeLbl.text = processTime()
-                update1.timeLbl.isHidden = false
-                update1.blurView.isHidden = false
                 
             } else if let update1 = vc as? PreviewVC {
                 
@@ -1067,33 +1082,45 @@ class CustomSlider: UISlider {
                 
                 
                 
-            } else if let update1 = vc as? SelectedPostVC {
+            } else if let update1 = vc as? SelectedParentVC {
                 
                
-                if update1.currentIndex != nil {
-                    //newPlayingIndex
+                update1.scrollView.isScrollEnabled = true
+                
+                if update1.isRoot {
                     
-                    let newVideoTime = CMTimeMakeWithSeconds(Float64(self.value), preferredTimescale: Int32(NSEC_PER_SEC))
-                    
-                    update1.seekVideo(index: update1.currentIndex!, time: newVideoTime)
-                    update1.playVideo(index: update1.currentIndex!)
-
-                } else {
-                    
-                    if update1.startIndex != nil {
+                   
+                    if update1.selectedRootPostVC.currentIndex != nil {
                         //newPlayingIndex
                         
                         let newVideoTime = CMTimeMakeWithSeconds(Float64(self.value), preferredTimescale: Int32(NSEC_PER_SEC))
                         
-                        update1.seekVideo(index: update1.startIndex!, time: newVideoTime)
-                        update1.playVideo(index: update1.startIndex!)
+                        update1.selectedRootPostVC.seekVideo(index: update1.selectedRootPostVC.currentIndex!, time: newVideoTime)
+                        update1.selectedRootPostVC.playVideo(index: update1.selectedRootPostVC.currentIndex!)
+                        
+
 
                     }
                     
+                    update1.selectedRootPostVC.timeLbl.isHidden = true
+                    update1.selectedRootPostVC.blurView.isHidden = true
+                    
+                } else {
+                    
+                    if update1.stitchViewController.currentIndex != nil {
+                        //newPlayingIndex
+                        
+                        let newVideoTime = CMTimeMakeWithSeconds(Float64(self.value), preferredTimescale: Int32(NSEC_PER_SEC))
+                        
+                        update1.stitchViewController.seekVideo(index: update1.stitchViewController.currentIndex!, time: newVideoTime)
+                        update1.stitchViewController.playVideo(index: update1.stitchViewController.currentIndex!)
+                        
+                    }
+                    
+                    update1.stitchViewController.timeLbl.isHidden = true
+                    update1.stitchViewController.blurView.isHidden = true
+                    
                 }
-                
-                update1.timeLbl.isHidden = true
-                update1.blurView.isHidden = true
                 
             } else if let update1 = vc as? PreviewVC {
                 
