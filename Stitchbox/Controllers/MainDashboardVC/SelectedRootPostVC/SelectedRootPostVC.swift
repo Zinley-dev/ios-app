@@ -66,7 +66,7 @@ class SelectedRootPostVC: UIViewController, UICollectionViewDelegateFlowLayout {
                             guard let self = self else { return }
 
                             self.loadingImage.animatedImage = image
-                            self.loadingView.backgroundColor = self.view.backgroundColor
+                            self.loadingView.backgroundColor = .white
                         }
                     }
                 } catch {
@@ -335,6 +335,7 @@ extension SelectedRootPostVC {
                     
                 }
                 
+
             }
             
         }

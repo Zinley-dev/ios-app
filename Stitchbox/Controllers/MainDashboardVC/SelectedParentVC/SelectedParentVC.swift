@@ -56,6 +56,8 @@ class SelectedParentVC: UIViewController, UIScrollViewDelegate {
             selectedRootPostVC.loadPosts()
             selectedRootPostVC.hideLoading()
             
+            
+            
         } else {
             
             print("Failed to init: selectedRootPostVC")
@@ -63,6 +65,8 @@ class SelectedParentVC: UIViewController, UIScrollViewDelegate {
         }
         
     }
+    
+    
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
@@ -153,7 +157,7 @@ class SelectedParentVC: UIViewController, UIScrollViewDelegate {
             scrollView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             scrollView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             scrollView.topAnchor.constraint(equalTo: view.topAnchor, constant: 0),
-            scrollView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor,constant: 0)
+            scrollView.bottomAnchor.constraint(equalTo: view.bottomAnchor,constant: 0)
         ])
 
 

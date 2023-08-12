@@ -7512,7 +7512,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="GFQ-ih-h6U" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-5231" y="844"/>
+            <point key="canvasLocation" x="-5231.1999999999998" y="843.8423645320197"/>
         </scene>
         <!--Selected Root PostVC-->
         <scene sceneID="Gek-QX-C9c">
@@ -7523,7 +7523,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="p5q-wi-MaU">
-                                <rect key="frame" x="0.0" y="0.0" width="375" height="732"/>
+                                <rect key="frame" x="0.0" y="0.0" width="375" height="742"/>
                                 <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             </view>
                             <view hidden="YES" alpha="0.60000002384185791" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="KJQ-mW-SJo">
@@ -7531,14 +7531,14 @@
                                 <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             </view>
                             <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="00:00 / 00:00" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="tf5-cM-Vth">
-                                <rect key="frame" x="142.33333333333334" y="656" width="90.666666666666657" height="18"/>
+                                <rect key="frame" x="142.33333333333334" y="666" width="90.666666666666657" height="18"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <fontDescription key="fontDescription" name="Roboto-Bold" family="Roboto" pointSize="15"/>
                                 <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" minValue="0.0" maxValue="1" translatesAutoresizingMaskIntoConstraints="NO" id="RLL-7O-DSd" customClass="CustomSlider" customModule="Stitchbox" customModuleProvider="target">
-                                <rect key="frame" x="-2" y="738" width="379" height="31"/>
+                                <rect key="frame" x="-2" y="748" width="379" height="31"/>
                                 <color key="minimumTrackTintColor" name="Secondary"/>
                                 <color key="maximumTrackTintColor" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <color key="thumbTintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -7579,7 +7579,7 @@
                             <constraint firstItem="RLL-7O-DSd" firstAttribute="leading" secondItem="87l-QF-AP9" secondAttribute="leading" id="nes-WG-7zU"/>
                             <constraint firstAttribute="trailing" secondItem="H3B-cd-aBU" secondAttribute="trailing" id="prY-Ev-sT6"/>
                             <constraint firstItem="RLL-7O-DSd" firstAttribute="top" secondItem="p5q-wi-MaU" secondAttribute="bottom" constant="6" id="uUV-2Y-rY9"/>
-                            <constraint firstItem="c8J-Xm-nT3" firstAttribute="bottom" secondItem="RLL-7O-DSd" secondAttribute="bottom" constant="10" id="ubd-pH-gWc"/>
+                            <constraint firstItem="c8J-Xm-nT3" firstAttribute="bottom" secondItem="RLL-7O-DSd" secondAttribute="bottom" id="ubd-pH-gWc"/>
                             <constraint firstItem="KJQ-mW-SJo" firstAttribute="leading" secondItem="87l-QF-AP9" secondAttribute="leading" id="una-uX-DmJ"/>
                             <constraint firstAttribute="trailing" secondItem="RLL-7O-DSd" secondAttribute="trailing" id="wDs-3H-2PC"/>
                         </constraints>
