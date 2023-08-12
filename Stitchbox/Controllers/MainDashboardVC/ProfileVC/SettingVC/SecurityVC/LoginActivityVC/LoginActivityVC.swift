@@ -14,9 +14,7 @@ class LoginActivityVC: UIViewController {
     let backButton: UIButton = UIButton(type: .custom)
     
     var page = 1
-    @IBOutlet weak var loadingImage: FLAnimatedImageView!
     @IBOutlet weak var contentView: UIView!
-    @IBOutlet weak var loadingView: UIView!
     private var pullControl = UIRefreshControl()
     
     var refresh_request = false
@@ -69,51 +67,7 @@ class LoginActivityVC: UIViewController {
         }
         
     }
-    
-    
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        loadingView.isHidden = true
-        /*
-        do {
-            
-            let path = Bundle.main.path(forResource: "fox2", ofType: "gif")!
-            let gifData = try NSData(contentsOfFile: path) as Data
-            let image = FLAnimatedImage(animatedGIFData: gifData)
-            
-            
-            self.loadingImage.animatedImage = image
-            
-        } catch {
-            print(error.localizedDescription)
-        }
-        */
-        loadingView.backgroundColor = self.view.backgroundColor
-        
-        
-        delay(1.0) {
-            
-            UIView.animate(withDuration: 0.5) {
-                
-                self.loadingView.alpha = 0
-                
-            }
-            
-            
-            DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
-                
-                if self.loadingView.alpha == 0 {
-                    
-                    self.loadingView.isHidden = true
-                    
-                }
-                
-            }
-            
-        }
-        
-    }
-    
+
     
 }
 
@@ -191,49 +145,6 @@ extension LoginActivityVC {
         
     }
     
-    
-    func updateData() {
-        self.retrieveNextPageWithCompletion { (newActivities) in
-            
-            if newActivities.count > 0 {
-                
-                self.insertNewRowsInTableNode(newActivities: newActivities)
-                
-            } else {
-                
-                self.refresh_request = false
-                self.userLoginActivityList.removeAll()
-                self.tableNode.reloadData()
-                
-                if self.userLoginActivityList.isEmpty == true {
-                    
-                    self.tableNode.view.setEmptyMessage("No active notification")
-                    
-                } else {
-                    
-                    self.tableNode.view.restore()
-                    
-                }
-                
-            }
-            
-            if self.pullControl.isRefreshing == true {
-                self.pullControl.endRefreshing()
-            }
-            
-            self.delayItem.perform(after: 0.75) {
-                
-                self.tableNode.scrollToRow(at: IndexPath(row: 0, section: 0), at: .top, animated: true)
-                
-            }
-            
-            
-        }
-        
-        
-    }
-    
-    
 }
 
 extension LoginActivityVC {
@@ -260,7 +171,6 @@ extension LoginActivityVC {
 
 extension LoginActivityVC {
     
-    
     func tableNode(_ tableNode: ASTableNode, didSelectRowAt indexPath: IndexPath) {
         
         let item = userLoginActivityList[indexPath.row]
@@ -271,8 +181,7 @@ extension LoginActivityVC {
             self.navigationController?.pushViewController(LIVC, animated: true)
             
         }
-        
-        
+    
     }
     
 }
@@ -314,11 +223,8 @@ extension LoginActivityVC: ASTableDelegate {
             context.completeBatchFetching(true)
             
         }
-        
-        
     }
-    
-    
+
 }
 
 
@@ -331,69 +237,77 @@ extension LoginActivityVC {
             
             switch result {
             case .success(let apiResponse):
-                
-                guard let data = apiResponse.body?["data"] as? [[String: Any]] else {
-                    let item = [[String: Any]]()
-                    DispatchQueue.main.async {
-                        block(item)
-                    }
-                    return
-                }
-                
-                if !data.isEmpty {
+                if let data = apiResponse.body?["data"] as? [[String: Any]], !data.isEmpty {
+                    print("Successfully retrieved \(data.count) posts.")
                     self.page += 1
-                    print("Successfully retrieved \(data.count) activities.")
-                    let items = data
                     DispatchQueue.main.async {
-                        block(items)
+                        block(data)
                     }
                 } else {
-                    
-                    let item = [[String: Any]]()
-                    DispatchQueue.main.async {
-                        block(item)
-                    }
+                    self.completeWithEmptyData(block)
                 }
-                
             case .failure(let error):
                 print(error)
-                let item = [[String: Any]]()
-                DispatchQueue.main.async {
-                    block(item)
-                }
+                self.completeWithEmptyData(block)
             }
         }
-        
     }
-    
-    
+
+    private func completeWithEmptyData(_ block: @escaping ([[String: Any]]) -> Void) {
+        DispatchQueue.main.async {
+            block([])
+        }
+    }
+
     func insertNewRowsInTableNode(newActivities: [[String: Any]]) {
+        guard newActivities.count > 0 else { return }
         
-        guard newActivities.count > 0 else {
-            return
+        if refresh_request {
+            clearExistingPosts()
+            refresh_request = false
         }
-        
-        let section = 0
-        var items = [UserLoginActivityModel]()
-        var indexPaths: [IndexPath] = []
-        let total = self.userLoginActivityList.count + newActivities.count
-        
-        for row in self.userLoginActivityList.count...total-1 {
-            let path = IndexPath(row: row, section: section)
-            indexPaths.append(path)
-        }
-        
-        for i in newActivities {
-            
-            let item = UserLoginActivityModel(userLoginActivity: i)
-            items.append(item)
-            
-        }
-        
-        
+
+        let items = newActivities.compactMap { UserLoginActivityModel(userLoginActivity: $0) }.filter { !self.userLoginActivityList.contains($0) }
         self.userLoginActivityList.append(contentsOf: items)
-        self.tableNode.insertRows(at: indexPaths, with: .none)
         
+        if !items.isEmpty {
+            let indexPaths = generateIndexPaths(for: items)
+            tableNode.insertRows(at: indexPaths, with: .automatic)
+        }
+    }
+
+    private func clearExistingPosts() {
+        let deleteIndexPaths = userLoginActivityList.enumerated().map { IndexPath(row: $0.offset, section: 0) }
+        userLoginActivityList.removeAll()
+        tableNode.deleteRows(at: deleteIndexPaths, with: .automatic)
+    }
+
+    private func generateIndexPaths(for items: [UserLoginActivityModel]) -> [IndexPath] {
+        let startIndex = self.userLoginActivityList.count - items.count
+        return (startIndex..<self.userLoginActivityList.count).map { IndexPath(row: $0, section: 0) }
+    }
+
+    func updateData() {
+        self.retrieveNextPageWithCompletion { [weak self] (newNotis) in
+            guard let self = self else { return }
+
+            if self.pullControl.isRefreshing {
+                self.pullControl.endRefreshing()
+            }
+            
+            if newNotis.isEmpty {
+                self.refresh_request = false
+                self.userLoginActivityList.removeAll()
+                self.tableNode.reloadData()
+                if self.userLoginActivityList.isEmpty {
+                    self.tableNode.view.setEmptyMessage("No active activity!")
+                } else {
+                    self.tableNode.view.restore()
+                }
+            } else {
+                self.insertNewRowsInTableNode(newActivities: newNotis)
+            }
+        }
     }
     
 }
