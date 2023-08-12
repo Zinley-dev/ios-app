@@ -101,7 +101,7 @@ class ParentViewController: UIViewController {
         
 
         
-        delay(1) {
+        delay(1.25) {
             NotificationCenter.default.addObserver(self, selector: #selector(ParentViewController.shouldScrollToTop), name: (NSNotification.Name(rawValue: "scrollToTop")), object: nil)
         }
         
@@ -621,7 +621,7 @@ extension ParentViewController {
             stitchViewController.rootId = rootId
             count += 1
             
-            delayItem.perform(after: 1.25) { [weak self] in
+            delayItem.perform(after: 1.05) { [weak self] in
                 guard let self = self else { return }
                 print("Loading stitches: \(self.count) - \(self.stitchViewController.rootId)")
                 self.stitchViewController.clearAllData()
