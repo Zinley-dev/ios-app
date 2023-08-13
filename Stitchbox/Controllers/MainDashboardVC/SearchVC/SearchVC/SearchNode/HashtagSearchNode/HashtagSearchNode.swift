@@ -42,8 +42,17 @@ class HashTagSearchNode: ASCellNode {
 
         hashtagTextNode.isLayerBacked = true
         hashtagTextNode.backgroundColor = UIColor.clear
+        hashtagTextNode.maximumNumberOfLines = 2
         
         automaticallyManagesSubnodes = true
+        
+        
+        
+    }
+    
+    
+    override func didLoad() {
+        super.didLoad()
         
         let paragraphStyles = NSMutableParagraphStyle()
         paragraphStyles.alignment = .right
@@ -67,7 +76,7 @@ class HashTagSearchNode: ASCellNode {
                     NSAttributedString.Key.paragraphStyle: paragraphStyles
                 ]
             )
-
+            
             self.coutNode.attributedText = NSAttributedString(
                 string: "\(formatPoints(num: Double(hashtag.count))) posts",
                 attributes: [
@@ -81,15 +90,13 @@ class HashTagSearchNode: ASCellNode {
         
         coutNode.backgroundColor = UIColor.clear
         
-        
     }
-    
     
     override func layoutSpecThatFits(_ constrainedSize: ASSizeRange) -> ASLayoutSpec {
         
         
         
-        coutNode.style.preferredSize = CGSize(width: 60.0, height: 15.0)
+        coutNode.style.preferredSize = CGSize(width: 100.0, height: 15.0)
     
         //
       

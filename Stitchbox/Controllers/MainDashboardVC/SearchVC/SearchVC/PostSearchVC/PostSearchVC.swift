@@ -271,8 +271,7 @@ extension PostSearchVC {
     func retrieveNextPageWithCompletion(block: @escaping ([[String: Any]]) -> Void) {
         
         if keyword != "" {
-            
-           
+    
             APIManager.shared.searchPost(query: keyword, page: page) { [weak self] result in
                 guard let self = self else { return }
                 

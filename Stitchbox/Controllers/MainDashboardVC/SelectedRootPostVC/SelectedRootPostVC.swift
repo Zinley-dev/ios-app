@@ -399,7 +399,10 @@ extension SelectedRootPostVC {
         DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(250)) { [weak self] in
             guard let self = self else { return }
             let indexPath = IndexPath(row: startIndex, section: 0)
-            self.collectionNode.scrollToItem(at: indexPath, at: .centeredVertically, animated: false)
+            
+            if startIndex != 0 {
+                self.collectionNode.scrollToItem(at: indexPath, at: .centeredVertically, animated: false)
+            }
             
             DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(250)) { [weak self] in
                 guard let self = self else { return }
@@ -612,7 +615,7 @@ extension SelectedRootPostVC {
         
         // Make the label tappable
         container.isUserInteractionEnabled = true
-        let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(FeedViewController.labelTapped))
+        let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(SelectedRootPostVC.labelTapped))
         tap.numberOfTapsRequired = 1
         container.addGestureRecognizer(tap)
         
@@ -627,6 +630,27 @@ extension SelectedRootPostVC {
             animatedLabel.text = text
         }
            
+    }
+    
+    @objc func labelTapped() {
+        
+        if let vc = UIViewController.currentViewController() {
+            if vc is ParentViewController {
+                if let update1 = vc as? SelectedParentVC {
+                    if update1.isRoot {
+                        // Calculate the next page index
+                       
+                        let offset = CGFloat(1) * update1.scrollView.bounds.width
+                        
+                        // Scroll to the next page
+                        update1.scrollView.setContentOffset(CGPoint(x: offset, y: 0), animated: true)
+                        update1.showStitch()
+                      
+                    }
+                }
+            }
+        }
+        
     }
     
 }

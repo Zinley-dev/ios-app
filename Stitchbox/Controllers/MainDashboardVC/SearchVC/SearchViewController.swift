@@ -27,8 +27,6 @@ class SearchViewController: UIViewController, UINavigationControllerDelegate, UI
 
     @IBOutlet weak var searchView: UIView!
     @IBOutlet weak var contentview: UIView!
-    @IBOutlet weak var loadingImage: FLAnimatedImageView!
-    @IBOutlet weak var loadingView: UIView!
     
     var searchController: UISearchController?
     var recentList = [RecentModel]()
@@ -36,7 +34,7 @@ class SearchViewController: UIViewController, UINavigationControllerDelegate, UI
     var recentTableNode: ASTableNode!
     var searchTableNode: ASTableNode!
     lazy var delayItem = workItem()
-    var firstLoad = true
+    
     var firstAnimated = true
     let backButton: UIButton = UIButton(type: .custom)
     
@@ -52,32 +50,6 @@ class SearchViewController: UIViewController, UINavigationControllerDelegate, UI
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        
-        if firstLoad {
-            
-            firstLoad = false
-            
-            DispatchQueue.global(qos: .userInitiated).async {
-                do {
-                    if let path = Bundle.main.path(forResource: "fox2", ofType: "gif") {
-                        let gifData = try Data(contentsOf: URL(fileURLWithPath: path))
-                        let image = FLAnimatedImage(animatedGIFData: gifData)
-
-                    DispatchQueue.main.async { [weak self] in
-                        guard let self = self else { return }
-
-                        self.loadingImage.animatedImage = image
-                        self.loadingView.backgroundColor = self.view.backgroundColor
-                    }
-                }
-                } catch {
-                        print(error.localizedDescription)
-                    }
-            }
-            
-            loadingView.backgroundColor = self.view.backgroundColor
-            
-        }
        
         let navigationBarAppearance = UINavigationBarAppearance()
         navigationBarAppearance.configureWithOpaqueBackground()
@@ -98,8 +70,7 @@ class SearchViewController: UIViewController, UINavigationControllerDelegate, UI
         
     }
     
-    
-    
+
 }
 
 extension SearchViewController {
@@ -192,25 +163,17 @@ extension SearchViewController {
                     
                     DispatchQueue.main.async { [weak self] in
                         guard let self = self else { return }
-                        self.hideAnimation()
+                      
                         self.recentTableNode.reloadData()
                         
                     }
                     
-                } else {
-                    DispatchQueue.main.async { [weak self] in
-                        guard let self = self else { return }
-                        self.hideAnimation()
-                    }
                 }
                 
                
                 
             case .failure(let error):
-                DispatchQueue.main.async { [weak self] in
-                    guard let self = self else { return }
-                    self.hideAnimation()
-                }
+        
                 print(error)
                
             }
@@ -407,19 +370,7 @@ extension SearchViewController: ASTableDataSource, ASTableDelegate {
             
             let item = recentList[indexPath.row]
             
-            if item.type == "game" {
-                
-                if let MSVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "MainSearchVC") as? MainSearchVC {
-                    
-                    MSVC.initialType = "post"
-                    MSVC.hidesBottomBarWhenPushed = true
-                    hideMiddleBtn(vc: self)
-                    MSVC.currentSearchText = item.game_shortName
-                    self.navigationController?.pushViewController(MSVC, animated: true)
-                    
-                }
-                
-            } else if item.type == "user" {
+            if item.type == "user" {
                 
                 saveRecentUser(userId: item.userId)
                 
@@ -666,39 +617,6 @@ extension SearchViewController {
         }
         
     }
-    
-    
-    func hideAnimation() {
-        
-        if firstAnimated {
-                    
-                    firstAnimated = false
-                    
-                    UIView.animate(withDuration: 0.5) { [weak self] in
-                        guard let self = self else { return }
-                        
-                        Dispatch.main.async { [weak self] in
-                            guard let self = self else { return }
-                            self.loadingView.alpha = 0
-                        }
-                        
-                    }
-                    
-                    
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) { [weak self] in
-                        guard let self = self else { return }
-                        
-                        if self.loadingView.alpha == 0 {
-                            
-                            self.loadingView.isHidden = true
-                            
-                        }
-                        
-                    }
-                    
-                    
-                }
-        
-    }
+
     
 }
