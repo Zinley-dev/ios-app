@@ -638,7 +638,7 @@ public enum PostAPI {
     case deleteMyPost(pid: String)
     case stats(pid: String)
     case reaction(pid: String)
-    case moderation
+    case moderation(page: Int)
 }
 extension PostAPI: EndPointType {
     var module: String {
@@ -681,8 +681,8 @@ extension PostAPI: EndPointType {
             return "/stats/\(pid)"
           case .reaction(let pid):
             return "/reaction/\(pid)"
-          case .moderation:
-            return "/moderation"
+          case .moderation(let page):
+            return "/moderation?page=\(page)"
         }
     }
     

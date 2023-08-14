@@ -1096,8 +1096,8 @@ extension APIManager {
       completion(resut)
     }
   }
-  func getModeration(completion: @escaping APICompletion) {
-    postManager.request(.moderation) { resut in
+  func getModeration(page: Int, completion: @escaping APICompletion) {
+    postManager.request(.moderation(page: page)) { resut in
       completion(resut)
     }
   }
