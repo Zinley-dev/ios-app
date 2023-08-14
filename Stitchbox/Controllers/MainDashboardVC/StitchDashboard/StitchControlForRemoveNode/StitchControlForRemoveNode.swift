@@ -25,33 +25,14 @@ class StitchControlForRemoveNode: ASCellNode, ASVideoNodeDelegate {
         print("StitchControlForRemoveNode is being deallocated.")
     }
     
-    var allowProcess = true
-    var isFollowingUser = false
-    var isSave = false
-    var previousTimeStamp: TimeInterval = 0.0
-    var totalWatchedTime: TimeInterval = 0.0
+    
     var post: PostModel!
-    var last_view_timestamp =  NSDate().timeIntervalSince1970
     var videoNode: ASVideoNode
     var contentNode: ASTextNode
     var headerNode: ASDisplayNode
-   
-    var toggleContentNode = ASTextNode()
-   
     var headerView: PostHeader!
    
     var gradientNode: GradienView
-    var time = 0
-    var likeCount = 0
-    var saveCount = 0
-    var isLike = false
-    var isSelectedPost = false
-    var settingBtn : ((ASCellNode) -> Void)?
-    var viewStitchBtn : ((ASCellNode) -> Void)?
-    var soundBtn : ((ASCellNode) -> Void)?
-    var isViewed = false
-    var currentTimeStamp: TimeInterval!
-    var originalCenter: CGPoint?
     var label: ActiveLabel!
     var buttonNode: ASDisplayNode
     var stitchView: UnStitchView!
@@ -60,7 +41,8 @@ class StitchControlForRemoveNode: ASCellNode, ASVideoNodeDelegate {
     
     var unstitchBtn : ((ASCellNode) -> Void)?
     var stitchTo: Bool
-
+    var isFollowingUser = false
+    var allowProcess = false
     private lazy var infoNode: ASTextNode = {
         let textNode = ASTextNode()
         //textNode.style.preferredSize.width = 70
@@ -102,170 +84,6 @@ class StitchControlForRemoveNode: ASCellNode, ASVideoNodeDelegate {
         self.gradientNode.isOpaque = false
     
         
-        DispatchQueue.main.async { [weak self] in
-            guard let self = self else { return }
-            
-            self.gradientNode.cornerRadius = 25
-            self.gradientNode.clipsToBounds = true
-            
-            self.label = ActiveLabel()
-           
-            self.label.backgroundColor = .clear
-            self.contentNode.view.isUserInteractionEnabled = true
-        
-            self.label.setContentHuggingPriority(.defaultLow, for: .horizontal)
-            self.label.setContentHuggingPriority(.defaultLow, for: .vertical)
-            self.label.setContentCompressionResistancePriority(.defaultHigh, for: .horizontal)
-            self.label.setContentCompressionResistancePriority(.defaultHigh, for: .vertical)
-
-            
-
-            let customType = ActiveType.custom(pattern: "\\*more\\b|\\*hide\\b")
-            self.label.customColor[customType] = .lightGray
-            self.label.numberOfLines = Int(self.contentNode.lineCount)
-            self.label.enabledTypes = [.hashtag, .url, customType]
-            self.label.attributedText = self.contentNode.attributedText
-            
-            
-                //self.label.mentionColor = .secondary
-            
-            self.label.hashtagColor = UIColor(red: 85.0/255, green: 172.0/255, blue: 238.0/255, alpha: 1)
-            self.label.URLColor = UIColor(red: 135/255, green: 206/255, blue: 250/255, alpha: 1)
-            
-            self.label.handleCustomTap(for: customType) { [weak self] element in
-                guard let self = self else { return }
-                if element == "*more" {
-                    self.seeMore()
-                } else if element == "*hide" {
-                    self.hideContent()
-                }
-            }
-
-            self.label.handleHashtagTap { hashtag in
-                
-                var selectedHashtag = hashtag
-                selectedHashtag.insert("#", at: selectedHashtag.startIndex)
-                
-            
-                if let PLHVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "PostListWithHashtagVC") as? PostListWithHashtagVC {
-                    
-                    if let vc = UIViewController.currentViewController() {
-                        
-                        let nav = UINavigationController(rootViewController: PLHVC)
-
-                        // Set the user ID, nickname, and onPresent properties of UPVC
-                        PLHVC.searchHashtag = selectedHashtag
-                        PLHVC.onPresent = true
-
-                        // Customize the navigation bar appearance
-                        nav.navigationBar.barTintColor = .background
-                        nav.navigationBar.tintColor = .white
-                        nav.navigationBar.titleTextAttributes = [.foregroundColor: UIColor.white]
-
-                        nav.modalPresentationStyle = .fullScreen
-                        vc.present(nav, animated: true, completion: nil)
-               
-                    }
-                }
-                
-                
-            }
-
-            self.label.handleURLTap { [weak self] string in
-                guard let self = self else { return }
-                let url = string.absoluteString
-                
-                if url.contains("https://stitchbox.gg/app/account/") {
-                    
-                    if let id = self.getUIDParameter(from: url) {
-                        self.moveToUserProfileVC(id: id)
-                    }
-        
-                } else if url.contains("https://stitchbox.gg/app/post/") {
-                
-                    if let id = self.getUIDParameter(from: url) {
-                        self.openPost(id: id)
-                    }
-
-                } else {
-                    
-                    guard let requestUrl = URL(string: url) else {
-                        return
-                    }
-
-                    if UIApplication.shared.canOpenURL(requestUrl) {
-                         UIApplication.shared.open(requestUrl, options: [:], completionHandler: nil)
-                    }
-                }
-                
-            }
-            
-            
-            self.setupDefaultContent()
-            
-            self.contentNode.backgroundColor = .clear
-            
-            self.headerView = PostHeader()
-            self.headerNode.view.addSubview(self.headerView)
-
-            self.headerView.translatesAutoresizingMaskIntoConstraints = false
-            self.headerView.topAnchor.constraint(equalTo: self.headerNode.view.topAnchor, constant: 0).isActive = true
-            self.headerView.bottomAnchor.constraint(equalTo: self.headerNode.view.bottomAnchor, constant: 0).isActive = true
-            self.headerView.leadingAnchor.constraint(equalTo: self.headerNode.view.leadingAnchor, constant: 0).isActive = true
-            self.headerView.trailingAnchor.constraint(equalTo: self.headerNode.view.trailingAnchor, constant: 0).isActive = true
-            
-            self.headerView.createStitchView.isHidden = true
-            self.headerView.createStitchStack.isHidden = true
-            self.headerView.stichBtn.isHidden = true
-            
-            if _AppCoreData.userDataSource.value?.userID == self.post.owner?.id {
-                
-                self.headerView.followBtn.isHidden = true
-                
-            } else {
-                
-                self.checkIfFollow()
-               
-            }
-
-            
-            let avatarTap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(StitchControlForRemoveNode.userTapped))
-            avatarTap.numberOfTapsRequired = 1
-          
-            let usernameTap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(StitchControlForRemoveNode.userTapped))
-            usernameTap.numberOfTapsRequired = 1
-            self.headerView.usernameLbl.isUserInteractionEnabled = true
-            self.headerView.usernameLbl.addGestureRecognizer(usernameTap)
-            self.headerView.usernameLbl.font = FontManager.shared.roboto(.Bold, size: 12)
-
-            
-            let username2Tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(StitchControlForRemoveNode.userTapped))
-            username2Tap.numberOfTapsRequired = 1
-
-            
-            
-            self.headerView.usernameLbl.text = "@\(post.owner?.username ?? "")"
-            
-            
-            self.stitchView = UnStitchView()
-            self.buttonNode.view.addSubview(self.stitchView)
-            self.stitchView.translatesAutoresizingMaskIntoConstraints = false
-            self.stitchView.topAnchor.constraint(equalTo: self.buttonNode.view.topAnchor, constant: 0).isActive = true
-            self.stitchView.bottomAnchor.constraint(equalTo: self.buttonNode.view.bottomAnchor, constant: 0).isActive = true
-            self.stitchView.leadingAnchor.constraint(equalTo: self.buttonNode.view.leadingAnchor, constant: 0).isActive = true
-            self.stitchView.trailingAnchor.constraint(equalTo: self.buttonNode.view.trailingAnchor, constant: 0).isActive = true
-            
-            
-            //
-            
-            let unstitchTap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(StitchControlForRemoveNode.unstitchBtnTapped))
-            unstitchTap.numberOfTapsRequired = 1
-            self.stitchView.unstitchBtn.addGestureRecognizer(unstitchTap)
-            
-      
-        }
-       
-        
         automaticallyManagesSubnodes = true
     
         if post.muxPlaybackId != "" {
@@ -275,7 +93,7 @@ class StitchControlForRemoveNode: ASCellNode, ASVideoNodeDelegate {
             self.videoNode.shouldAutorepeat = true
             
             self.videoNode.muted = false
-            self.videoNode.delegate = self
+          
             
             
             if let width = self.post.metadata?.width, let height = self.post.metadata?.height, width != 0, height != 0 {
@@ -346,6 +164,177 @@ class StitchControlForRemoveNode: ASCellNode, ASVideoNodeDelegate {
         }
         
        
+    }
+    
+    override func didLoad() {
+        super.didLoad()
+        
+        self.gradientNode.cornerRadius = 25
+        self.gradientNode.clipsToBounds = true
+        
+        self.label = ActiveLabel()
+        self.contentNode.view.addSubview(label)
+        self.label.backgroundColor = .clear
+        self.contentNode.view.isUserInteractionEnabled = true
+    
+        self.label.setContentHuggingPriority(.defaultLow, for: .horizontal)
+        self.label.setContentHuggingPriority(.defaultLow, for: .vertical)
+        self.label.setContentCompressionResistancePriority(.defaultHigh, for: .horizontal)
+        self.label.setContentCompressionResistancePriority(.defaultHigh, for: .vertical)
+
+        
+
+        let customType = ActiveType.custom(pattern: "\\*more\\b|\\*hide\\b")
+        self.label.customColor[customType] = .lightGray
+        self.label.numberOfLines = Int(self.contentNode.lineCount)
+        self.label.enabledTypes = [.hashtag, .url, customType]
+        self.label.attributedText = self.contentNode.attributedText
+        
+        
+            //self.label.mentionColor = .secondary
+        
+        self.label.hashtagColor = UIColor(red: 85.0/255, green: 172.0/255, blue: 238.0/255, alpha: 1)
+        self.label.URLColor = UIColor(red: 135/255, green: 206/255, blue: 250/255, alpha: 1)
+        
+        self.label.handleCustomTap(for: customType) { [weak self] element in
+            guard let self = self else { return }
+            if element == "*more" {
+                self.seeMore()
+            } else if element == "*hide" {
+                self.hideContent()
+            }
+        }
+
+        self.label.handleHashtagTap { hashtag in
+            
+            var selectedHashtag = hashtag
+            selectedHashtag.insert("#", at: selectedHashtag.startIndex)
+            
+        
+            if let PLHVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "PostListWithHashtagVC") as? PostListWithHashtagVC {
+                
+                if let vc = UIViewController.currentViewController() {
+                    
+                    let nav = UINavigationController(rootViewController: PLHVC)
+
+                    // Set the user ID, nickname, and onPresent properties of UPVC
+                    PLHVC.searchHashtag = selectedHashtag
+                    PLHVC.onPresent = true
+
+                    // Customize the navigation bar appearance
+                    nav.navigationBar.barTintColor = .background
+                    nav.navigationBar.tintColor = .white
+                    nav.navigationBar.titleTextAttributes = [.foregroundColor: UIColor.white]
+
+                    nav.modalPresentationStyle = .fullScreen
+                    vc.present(nav, animated: true, completion: nil)
+           
+                }
+            }
+            
+            
+        }
+
+        self.label.handleURLTap { [weak self] string in
+            guard let self = self else { return }
+            let url = string.absoluteString
+            
+            if url.contains("https://stitchbox.gg/app/account/") {
+                
+                if let id = self.getUIDParameter(from: url) {
+                    self.moveToUserProfileVC(id: id)
+                }
+    
+            } else if url.contains("https://stitchbox.gg/app/post/") {
+            
+                if let id = self.getUIDParameter(from: url) {
+                    self.openPost(id: id)
+                }
+
+            } else {
+                
+                guard let requestUrl = URL(string: url) else {
+                    return
+                }
+
+                if UIApplication.shared.canOpenURL(requestUrl) {
+                     UIApplication.shared.open(requestUrl, options: [:], completionHandler: nil)
+                }
+            }
+            
+        }
+        
+        
+        self.setupDefaultContent()
+        
+        self.contentNode.backgroundColor = .clear
+        
+        self.headerView = PostHeader()
+        self.headerNode.view.addSubview(self.headerView)
+
+        self.headerView.translatesAutoresizingMaskIntoConstraints = false
+        self.headerView.topAnchor.constraint(equalTo: self.headerNode.view.topAnchor, constant: 0).isActive = true
+        self.headerView.bottomAnchor.constraint(equalTo: self.headerNode.view.bottomAnchor, constant: 0).isActive = true
+        self.headerView.leadingAnchor.constraint(equalTo: self.headerNode.view.leadingAnchor, constant: 0).isActive = true
+        self.headerView.trailingAnchor.constraint(equalTo: self.headerNode.view.trailingAnchor, constant: 0).isActive = true
+        
+        self.headerView.createStitchView.isHidden = true
+        self.headerView.createStitchStack.isHidden = true
+        self.headerView.stichBtn.isHidden = true
+        
+        if _AppCoreData.userDataSource.value?.userID == self.post.owner?.id {
+            
+            self.headerView.followBtn.isHidden = true
+            
+        } else {
+            
+            self.checkIfFollow()
+           
+        }
+
+        
+        let avatarTap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(StitchControlForRemoveNode.userTapped))
+        avatarTap.numberOfTapsRequired = 1
+      
+        let usernameTap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(StitchControlForRemoveNode.userTapped))
+        usernameTap.numberOfTapsRequired = 1
+        self.headerView.usernameLbl.isUserInteractionEnabled = true
+        self.headerView.usernameLbl.addGestureRecognizer(usernameTap)
+        self.headerView.usernameLbl.font = FontManager.shared.roboto(.Bold, size: 12)
+
+        
+        let username2Tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(StitchControlForRemoveNode.userTapped))
+        username2Tap.numberOfTapsRequired = 1
+
+        
+        
+        self.headerView.usernameLbl.text = "@\(post.owner?.username ?? "")"
+        
+        
+        self.stitchView = UnStitchView()
+        self.buttonNode.view.addSubview(self.stitchView)
+        self.stitchView.translatesAutoresizingMaskIntoConstraints = false
+        self.stitchView.topAnchor.constraint(equalTo: self.buttonNode.view.topAnchor, constant: 0).isActive = true
+        self.stitchView.bottomAnchor.constraint(equalTo: self.buttonNode.view.bottomAnchor, constant: 0).isActive = true
+        self.stitchView.leadingAnchor.constraint(equalTo: self.buttonNode.view.leadingAnchor, constant: 0).isActive = true
+        self.stitchView.trailingAnchor.constraint(equalTo: self.buttonNode.view.trailingAnchor, constant: 0).isActive = true
+        
+        
+        //
+        
+        let unstitchTap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(StitchControlForRemoveNode.unstitchBtnTapped))
+        unstitchTap.numberOfTapsRequired = 1
+        self.stitchView.unstitchBtn.addGestureRecognizer(unstitchTap)
+        
+        
+    }
+    
+    override func layout() {
+        super.layout()
+        if label != nil {
+            label.frame = self.contentNode.view.bounds
+        }
+        
     }
 
     func navigateToHashtag(_ hashtag: String) {
@@ -437,14 +426,11 @@ class StitchControlForRemoveNode: ASCellNode, ASVideoNodeDelegate {
         ])
         
         self.contentNode.attributedText = attr1
-
+        self.label.attributedText = attr2
         
         setNeedsLayout()
         layoutIfNeeded()
 
-        label.attributedText = attr2
-        self.label.removeFromSuperview()
-        addActiveLabel()
     }
 
     private func truncateTextIfNeeded(_ text: String) -> String {
@@ -454,8 +440,6 @@ class StitchControlForRemoveNode: ASCellNode, ASVideoNodeDelegate {
             return text
         }
     }
-
-
 
     
     func checkIfFollow() {
@@ -618,13 +602,10 @@ class StitchControlForRemoveNode: ASCellNode, ASVideoNodeDelegate {
         ])
         
         self.contentNode.attributedText = attr1
-
+        self.label.attributedText = attr2
+        
         setNeedsLayout()
         layoutIfNeeded()
-
-        label.attributedText = attr2
-        self.label.removeFromSuperview()
-        addActiveLabel()
     }
 
     private func processTextForHiding(_ text: String) -> String {
@@ -633,16 +614,6 @@ class StitchControlForRemoveNode: ASCellNode, ASVideoNodeDelegate {
         } else {
             return text
         }
-    }
-
-    
-    func addActiveLabel() {
-    
-        self.contentNode.view.addSubview(self.label)
-          
-        // Set label's frame to match the contentNode's bounds.
-        self.label.frame = self.contentNode.view.bounds
-       
     }
 
 
@@ -664,7 +635,7 @@ class StitchControlForRemoveNode: ASCellNode, ASVideoNodeDelegate {
         
         if post.muxPlaybackId != "" {
             
-            let urlString = "https://image.mux.com/\(post.muxPlaybackId)/thumbnail.jpg?time=1"
+            let urlString = "https://image.mux.com/\(post.muxPlaybackId)/thumbnail.jpg?time=0"
             
             return URL(string: urlString)
             
@@ -692,33 +663,6 @@ class StitchControlForRemoveNode: ASCellNode, ASVideoNodeDelegate {
 
 }
 
-extension StitchControlForRemoveNode {
-    
-    /*
-    func didTap(_ videoNode: ASVideoNode) {
-        
-        soundProcess()
-        
-    } */
-    
-    
-    @objc func soundProcess() {
-        
-        if videoNode.muted == true {
-            videoNode.muted = false
-            shouldMute = false
-            animateUnmute()
-    
-        } else {
-            videoNode.muted = true
-            shouldMute = true
-            animateMute()
-        }
-        
-    }
-    
-    
-}
 
 
 extension StitchControlForRemoveNode {
@@ -776,37 +720,6 @@ extension StitchControlForRemoveNode {
             
         }
          
-    }
-
-  
-    
-    
-    func animateMute() {
-        let imgView = UIImageView(image: muteImage)
-        imgView.frame.size = CGSize(width: 45, height: 45)
-        imgView.center = self.view.center
-        self.view.addSubview(imgView)
-
-        UIView.animate(withDuration: 0.5, animations: {
-            imgView.alpha = 0
-            imgView.transform = CGAffineTransform(scaleX: 1.3, y: 1.3)
-        }) { _ in
-            imgView.removeFromSuperview()
-        }
-    }
-
-    func animateUnmute() {
-        let imgView = UIImageView(image: unmuteImage)
-        imgView.frame.size = CGSize(width: 45, height: 45)
-        imgView.center = self.view.center
-        self.view.addSubview(imgView)
-
-        UIView.animate(withDuration: 0.5, animations: {
-            imgView.alpha = 0
-            imgView.transform = CGAffineTransform(scaleX: 1.3, y: 1.3)
-        }) { _ in
-            imgView.removeFromSuperview()
-        }
     }
 
 

@@ -87,8 +87,9 @@ class StitchToVC: UIViewController, UINavigationBarDelegate, UINavigationControl
     func updateData() {
         
         
-        self.retrieveNextPageForStitchtWithCompletion { (newPosts) in
-            
+        self.retrieveNextPageForStitchtWithCompletion { [weak self] (newPosts) in
+            guard let self = self else { return }
+
             if newPosts.count > 0 {
                 
                 self.insertNewRowsInCollectionNodeForWaitList(newPosts: newPosts)
@@ -219,7 +220,7 @@ extension StitchToVC: ASCollectionDataSource {
             
             let post = self.waitPost[indexPath.row]
             
-            return {
+            return { [weak self] in
                 let node = StitchControlForRemoveNode(with: post, stitchTo: true)
                 node.neverShowPlaceholders = true
                 node.debugName = "Node \(indexPath.row)"

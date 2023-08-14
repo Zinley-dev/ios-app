@@ -88,7 +88,8 @@ class ApprovedStitchVC: UIViewController, UINavigationBarDelegate, UINavigationC
         
         
         
-        self.retrieveNextPageForWaitListWithCompletion { (newPosts) in
+        self.retrieveNextPageForWaitListWithCompletion { [weak self] (newPosts) in
+            guard let self = self else { return }
             
             if newPosts.count > 0 {
                 
@@ -222,7 +223,7 @@ extension ApprovedStitchVC: ASCollectionDataSource {
             
             let post = self.waitPost[indexPath.row]
             
-            return {
+            return { [weak self] in
                 let node = StitchControlForRemoveNode(with: post, stitchTo: false)
                 node.neverShowPlaceholders = true
                 node.debugName = "Node \(indexPath.row)"
@@ -242,7 +243,6 @@ extension ApprovedStitchVC: ASCollectionDataSource {
     }
     
     func collectionNode(_ collectionNode: ASCollectionNode, willBeginBatchFetchWith context: ASBatchContext) {
-        
         
         if collectionNode == myCollectionNode {
             

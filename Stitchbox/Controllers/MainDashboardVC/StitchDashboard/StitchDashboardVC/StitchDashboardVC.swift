@@ -97,7 +97,8 @@ class StitchDashboardVC: UIViewController {
         setupNavBar()
         showMiddleBtn(vc: self)
         
-        DispatchQueue.global(qos: .userInitiated).async {
+        DispatchQueue.global(qos: .userInitiated).async { [weak self] in
+            guard let self = self else { return }
             do {
                 if let path = Bundle.main.path(forResource: "fox2", ofType: "gif") {
                     let gifData = try Data(contentsOf: URL(fileURLWithPath: path))
@@ -119,7 +120,8 @@ class StitchDashboardVC: UIViewController {
         navigationController?.setNavigationBarHidden(false, animated: true)
   
         
-        delay(1.5) {
+        delay(1.5) { [weak self] in
+            guard let self = self else { return }
             
             UIView.animate(withDuration: 0.5) {
                 
@@ -128,7 +130,8 @@ class StitchDashboardVC: UIViewController {
             }
             
             
-            DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) { [weak self] in
+                guard let self = self else { return }
                 
                 if self.loadingView.alpha == 0 {
                     

@@ -89,7 +89,8 @@ class PendingVC: UIViewController, UINavigationBarDelegate, UINavigationControll
     func updateData() {
         
     
-        self.retrieveNextPageForWaitListWithCompletion { (newPosts) in
+        self.retrieveNextPageForWaitListWithCompletion { [weak self] (newPosts) in
+            guard let self = self else { return }
             
             if newPosts.count > 0 {
                 
@@ -223,7 +224,7 @@ extension PendingVC: ASCollectionDataSource {
             
             let post = self.waitPost[indexPath.row]
             
-            return {
+            return { [weak self] in
                 let node = PendingNode(with: post)
                 node.neverShowPlaceholders = true
                 node.debugName = "Node \(indexPath.row)"
@@ -765,8 +766,8 @@ extension PendingVC {
             
             presentSwiftLoader()
             
-            APIManager.shared.acceptStitch(rootId: rootPost.id, memberId: post.id) { result in
-                
+            APIManager.shared.acceptStitch(rootId: rootPost.id, memberId: post.id) { [weak self] result in
+                guard let self = self else { return }
                 switch result {
                 case .success(_):
                     
@@ -831,8 +832,8 @@ extension PendingVC {
             
             presentSwiftLoader()
             
-            APIManager.shared.deniedStitch(rootId: rootPost.id, memberId: post.id) { result in
-                
+            APIManager.shared.deniedStitch(rootId: rootPost.id, memberId: post.id) { [weak self] result in
+                guard let self = self else { return }
                 switch result {
                 case .success(_):
                     

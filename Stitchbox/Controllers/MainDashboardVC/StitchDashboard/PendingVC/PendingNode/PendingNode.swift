@@ -32,30 +32,13 @@ class PendingNode: ASCellNode, ASVideoNodeDelegate {
     var totalWatchedTime: TimeInterval = 0.0
    
     var post: PostModel!
-    var last_view_timestamp =  NSDate().timeIntervalSince1970
     var videoNode: ASVideoNode
     var contentNode: ASTextNode
     var headerNode: ASDisplayNode
-   
-    var toggleContentNode = ASTextNode()
-   
-    var shouldCountView = true
     var headerView: PostHeader!
    
     var gradientNode: GradienView
-    var time = 0
-    var likeCount = 0
-    var saveCount = 0
-    var isLike = false
-    var isSelectedPost = false
-    var settingBtn : ((ASCellNode) -> Void)?
-    var viewStitchBtn : ((ASCellNode) -> Void)?
-    var soundBtn : ((ASCellNode) -> Void)?
-    var isViewed = false
-    var currentTimeStamp: TimeInterval!
-    var originalCenter: CGPoint?
     var label: ActiveLabel!
-
     var buttonNode: ASDisplayNode
     var pendingView: HandlePendingView!
     //HandlePendingView
@@ -65,7 +48,6 @@ class PendingNode: ASCellNode, ASVideoNodeDelegate {
     var approveBtn : ((ASCellNode) -> Void)?
     var declineBtn : ((ASCellNode) -> Void)?
 
-    
     init(with post: PostModel) {
         self.post = post
       
@@ -82,7 +64,6 @@ class PendingNode: ASCellNode, ASVideoNodeDelegate {
         self.gradientNode.isLayerBacked = true
         self.gradientNode.isOpaque = false
     
-     
         automaticallyManagesSubnodes = true
     
         if post.muxPlaybackId != "" {
@@ -92,7 +73,7 @@ class PendingNode: ASCellNode, ASVideoNodeDelegate {
             self.videoNode.shouldAutorepeat = true
             
             self.videoNode.muted = false
-            self.videoNode.delegate = self
+            //self.videoNode.delegate = self
             
             
             if let width = self.post.metadata?.width, let height = self.post.metadata?.height, width != 0, height != 0 {
@@ -106,18 +87,17 @@ class PendingNode: ASCellNode, ASVideoNodeDelegate {
                 } else if aspectRatio >= 1.7 && aspectRatio <= 1.9 { // Close to 16:9 aspect ratio (landscape)
                     self.videoNode.contentMode = .scaleAspectFit
                     self.videoNode.gravity = AVLayerVideoGravity.resizeAspect.rawValue
-                    //self.backgroundImage.setGradientImage(with: self.getThumbnailVideoNodeURL(post: post)!)
+                  
                 } else {
                     // Default contentMode, adjust as needed
                     self.videoNode.contentMode = .scaleAspectFit
                     self.videoNode.gravity = AVLayerVideoGravity.resizeAspect.rawValue
-                    //self.backgroundImage.setGradientImage(with: self.getThumbnailVideoNodeURL(post: post)!)
+                   
                 }
             } else {
                 // Default contentMode, adjust as needed
                 self.videoNode.contentMode = .scaleAspectFill
                 self.videoNode.gravity = AVLayerVideoGravity.resizeAspectFill.rawValue
-                //self.backgroundImage.setGradientImage(with: self.getThumbnailVideoNodeURL(post: post)!)
             }
 
             
@@ -135,6 +115,15 @@ class PendingNode: ASCellNode, ASVideoNodeDelegate {
        
     }
     
+    override func layout() {
+        super.layout()
+        
+        if label != nil {
+            label.frame = self.contentNode.view.bounds
+        }
+        
+    }
+    
     override func didLoad() {
         super.didLoad()
         
@@ -142,7 +131,7 @@ class PendingNode: ASCellNode, ASVideoNodeDelegate {
         self.gradientNode.clipsToBounds = true
         
         self.label = ActiveLabel()
-       
+        self.contentNode.view.addSubview(label)
         self.label.backgroundColor = .clear
         self.contentNode.view.isUserInteractionEnabled = true
     
@@ -391,14 +380,11 @@ class PendingNode: ASCellNode, ASVideoNodeDelegate {
         ])
         
         self.contentNode.attributedText = attr1
-
+        label.attributedText = attr2
         
         setNeedsLayout()
         layoutIfNeeded()
-
-        label.attributedText = attr2
-        self.label.removeFromSuperview()
-        addActiveLabel()
+    
     }
 
     private func truncateTextIfNeeded(_ text: String) -> String {
@@ -578,13 +564,11 @@ class PendingNode: ASCellNode, ASVideoNodeDelegate {
         ])
         
         self.contentNode.attributedText = attr1
-
+        label.attributedText = attr2
         setNeedsLayout()
         layoutIfNeeded()
 
-        label.attributedText = attr2
-        self.label.removeFromSuperview()
-        addActiveLabel()
+      
     }
 
     private func processTextForHiding(_ text: String) -> String {
@@ -595,17 +579,6 @@ class PendingNode: ASCellNode, ASVideoNodeDelegate {
         }
     }
 
-
-
-    
-    func addActiveLabel() {
-    
-        self.contentNode.view.addSubview(self.label)
-          
-        // Set label's frame to match the contentNode's bounds.
-        self.label.frame = self.contentNode.view.bounds
-       
-    }
 
     func getThumbnailBackgroundVideoNodeURL(post: PostModel) -> URL? {
         
@@ -625,7 +598,7 @@ class PendingNode: ASCellNode, ASVideoNodeDelegate {
         
         if post.muxPlaybackId != "" {
             
-            let urlString = "https://image.mux.com/\(post.muxPlaybackId)/thumbnail.png?time=1"
+            let urlString = "https://image.mux.com/\(post.muxPlaybackId)/thumbnail.jpg?time=10"
             
             return URL(string: urlString)
             
@@ -652,135 +625,8 @@ class PendingNode: ASCellNode, ASVideoNodeDelegate {
 
 }
 
-extension PendingNode {
-    
-    /*
-    func didTap(_ videoNode: ASVideoNode) {
-        
-        soundProcess()
-        
-    } */
-    
-    
-    @objc func soundProcess() {
-        
-        if videoNode.muted == true {
-            videoNode.muted = false
-            shouldMute = false
-            animateUnmute()
-    
-        } else {
-            videoNode.muted = true
-            shouldMute = true
-            animateMute()
-        }
-        
-    }
-    
-    
-    func videoDidPlay(toEnd videoNode: ASVideoNode) {
-    
-        shouldCountView = true
-       
-        
-    }
-    
-    @objc func endVideo(watchTime: Double) {
-        
-        if _AppCoreData.userDataSource.value != nil {
-            
-            time += 1
-            
-            if time < 2 {
-                
-                last_view_timestamp = NSDate().timeIntervalSince1970
-                isViewed = true
-            
-                APIManager.shared.createView(post: post.id, watchTime: watchTime) { result in
-                    
-                    switch result {
-                    case .success(let apiResponse):
-            
-                        print(apiResponse)
-                        
-                    case .failure(let error):
-                        print(error)
-                    }
-                
-                }
-                
-            }
-            
-        }
-        
-        
-    }
-    
-    func endImage(id: String) {
-        
-        if _AppCoreData.userDataSource.value != nil {
-            
-            time += 1
-            
-            if time < 2 {
-                
-                last_view_timestamp = NSDate().timeIntervalSince1970
-                isViewed = true
-            
-                APIManager.shared.createView(post: id, watchTime: 0) { result in
-                    
-                    switch result {
-                    case .success(let apiResponse):
-            
-                        print(apiResponse)
-                        
-                    case .failure(let error):
-                        print(error)
-                    }
-                
-                }
-                
-            }
-            
-        }
-        
-        
-    }
-    
-    
-    @objc func zoomAnimation() {
-        
-        let imgView = UIImageView()
-        imgView.frame.size = CGSize(width: 170, height: 120)
-        
-        imgView.center = self.view.center
-        self.view.addSubview(imgView)
-        
-        let tapImages: [UIImage] = [
-            UIImage(named: "zoom1")!,
-            UIImage(named: "zoom2")!,
-            UIImage(named: "zoom3")!
-        ]
-        
-        imgView.animationImages = tapImages
-        imgView.animationDuration = 1.5 // time duration for complete animation cycle
-        imgView.animationRepeatCount = 1 // number of times the animation repeats, set to 1 to play once
-        imgView.startAnimating()
-        
-        // Optional: clear images after animation ends
-        DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) { [weak self] in
-            guard let self = self else { return }
-            imgView.animationImages = nil
-            imgView.removeFromSuperview()
-        }
-        
-    }
-    
-}
-
 
 extension PendingNode {
-    
     
     @objc func userTapped() {
         
@@ -835,38 +681,7 @@ extension PendingNode {
         }
          
     }
-
-  
     
-    
-    func animateMute() {
-        let imgView = UIImageView(image: muteImage)
-        imgView.frame.size = CGSize(width: 45, height: 45)
-        imgView.center = self.view.center
-        self.view.addSubview(imgView)
-
-        UIView.animate(withDuration: 0.5, animations: {
-            imgView.alpha = 0
-            imgView.transform = CGAffineTransform(scaleX: 1.3, y: 1.3)
-        }) { _ in
-            imgView.removeFromSuperview()
-        }
-    }
-
-    func animateUnmute() {
-        let imgView = UIImageView(image: unmuteImage)
-        imgView.frame.size = CGSize(width: 45, height: 45)
-        imgView.center = self.view.center
-        self.view.addSubview(imgView)
-
-        UIView.animate(withDuration: 0.5, animations: {
-            imgView.alpha = 0
-            imgView.transform = CGAffineTransform(scaleX: 1.3, y: 1.3)
-        }) { _ in
-            imgView.removeFromSuperview()
-        }
-    }
-
 
 }
 
@@ -989,18 +804,16 @@ extension PendingNode {
             switch result {
             case .success(let apiResponse):
                 guard let data = apiResponse.body else {
-                    Dispatch.main.async { [weak self] in
-                        guard let self = self else { return }
+                    Dispatch.main.async {
                         SwiftLoader.hide()
                     }
                   return
                 }
                
                 if !data.isEmpty {
-                    Dispatch.main.async { [weak self] in
-                        guard let self = self else { return }
+                    Dispatch.main.async {
                         SwiftLoader.hide()
-                        
+    
                         if let post = PostModel(JSON: data) {
                             
                             if let RVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "SelectedParentVC") as? SelectedParentVC {
@@ -1040,16 +853,14 @@ extension PendingNode {
                     }
                     
                 } else {
-                    Dispatch.main.async { [weak self] in
-                        guard let self = self else { return }
+                    Dispatch.main.async {
                         SwiftLoader.hide()
                     }
                 }
 
             case .failure(let error):
                 print(error)
-                Dispatch.main.async { [weak self] in
-                    guard let self = self else { return }
+                Dispatch.main.async {
                     SwiftLoader.hide()
                 }
                 

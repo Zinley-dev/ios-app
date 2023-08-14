@@ -32,11 +32,11 @@ class StitchControlNode: ASCellNode {
       
         self.imageNode.backgroundColor = .clear
         
-       
+        print(post.imageUrl)
         imageNode.url = post.imageUrl
         imageNode.contentMode = .scaleAspectFill
         imageNode.cornerRadius = 10 // set corner radius of imageNode to 15
-        
+        automaticallyManagesSubnodes = true
       
     }
     
