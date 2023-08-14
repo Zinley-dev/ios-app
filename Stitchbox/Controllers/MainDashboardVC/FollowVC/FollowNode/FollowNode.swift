@@ -171,7 +171,8 @@ class FollowNode: ASCellNode {
         
         if let userId = user.userId {
             
-            DispatchQueue.main.async {
+            DispatchQueue.main.async { [weak self] in
+                guard let self = self else { return }
                 self.isFollowingUser = true
                 self.followBtnNode.backgroundColor = .normalButtonBackground
                 self.followBtnNode.layer.cornerRadius = 10.0
@@ -204,7 +205,8 @@ class FollowNode: ASCellNode {
                     
                     if self.user.loadFromUserId == _AppCoreData.userDataSource.value?.userID, self.user.loadFromMode == "follower" {
                         
-                        DispatchQueue.main.async {
+                        DispatchQueue.main.async { [weak self] in
+                            guard let self = self else { return }
                             self.isFollowingUser = false
                             self.followBtnNode.backgroundColor = .secondary
                             self.followBtnNode.layer.cornerRadius = 10.0
@@ -216,7 +218,8 @@ class FollowNode: ASCellNode {
                         
                     } else {
                         
-                        DispatchQueue.main.async {
+                        DispatchQueue.main.async { [weak self] in
+                            guard let self = self else { return }
                             self.isFollowingUser = false
                             self.followBtnNode.backgroundColor = .secondary
                             self.followBtnNode.layer.cornerRadius = 10.0
@@ -244,7 +247,8 @@ class FollowNode: ASCellNode {
             
             if self.user.loadFromUserId == _AppCoreData.userDataSource.value?.userID, self.user.loadFromMode == "follower" {
                 
-                DispatchQueue.main.async {
+                DispatchQueue.main.async { [weak self] in
+                    guard let self = self else { return }
                     
                     self.followBtnNode.backgroundColor = .secondary
                     self.followBtnNode.layer.cornerRadius = 10.0
@@ -256,7 +260,8 @@ class FollowNode: ASCellNode {
                 
             } else {
                 
-                DispatchQueue.main.async {
+                DispatchQueue.main.async { [weak self] in
+                    guard let self = self else { return }
                     
                     self.followBtnNode.backgroundColor = .secondary
                     self.followBtnNode.layer.cornerRadius = 10.0
@@ -278,12 +283,14 @@ class FollowNode: ASCellNode {
                     needRecount = true
                     self.allowProcess = true
                 case .failure(_):
-                    DispatchQueue.main.async {
+                    DispatchQueue.main.async { [weak self] in
+                        guard let self = self else { return }
                         self.allowProcess = true
                         showNote(text: "Something happened!")
                     }
                     
-                    DispatchQueue.main.async {
+                    DispatchQueue.main.async { [weak self] in
+                        guard let self = self else { return }
                         self.followBtnNode.backgroundColor = .normalButtonBackground
                         self.followBtnNode.layer.cornerRadius = 10.0
                         self.followBtnNode.clipsToBounds = true

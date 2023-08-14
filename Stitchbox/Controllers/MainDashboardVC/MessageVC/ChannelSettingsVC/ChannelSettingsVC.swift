@@ -96,7 +96,9 @@ class ChannelSettingsVC: UIViewController, UINavigationControllerDelegate  {
     @objc func leaveChannel() {
         
         
-        self.channel?.leave(completionHandler: { (error) in
+        self.channel?.leave(completionHandler: { [weak self] (error) in
+            guard let self = self else { return }
+
             if let error = error {
                 Utils.showAlertController(error: error, viewController: self)
                 print(error.localizedDescription, error.code)
@@ -133,7 +135,8 @@ class ChannelSettingsVC: UIViewController, UINavigationControllerDelegate  {
                     let param = SBDGroupChannelParams()
                     param.name = newName
                     
-                    self.channel?.update(with: param, completionHandler: { updatedChannel, error in
+                    self.channel?.update(with: param, completionHandler: { [weak self] updatedChannel, error in
+                        guard let self = self else { return }
                         if let error = error {
                             Utils.showAlertController(error: error, viewController: self)
                             print(error.localizedDescription, error.code)
@@ -151,8 +154,9 @@ class ChannelSettingsVC: UIViewController, UINavigationControllerDelegate  {
     
     @objc func changeAvatar() {
         
-        delay(0.25) { [self] in
-            changeAvatarRequest()
+        delay(0.25) { [weak self] in
+            guard let self = self else { return }
+            self.changeAvatarRequest()
         }
       
     }
@@ -497,7 +501,8 @@ extension ChannelSettingsVC: EditControllerDelegate {
         if let image = session.image {
             
             
-            ImageExporter.shared.export(image: image, completion: { (error, uiImage) in
+            ImageExporter.shared.export(image: image, completion: { [weak self] (error, uiImage) in
+                guard let self = self else { return }
                     if let error = error {
                         self.showErrorAlert("Oops!", msg: "Unable to export image: \(error)")
                         return

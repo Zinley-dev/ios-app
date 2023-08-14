@@ -635,7 +635,7 @@ extension SelectedRootPostVC {
     @objc func labelTapped() {
         
         if let vc = UIViewController.currentViewController() {
-            if vc is ParentViewController {
+            if vc is SelectedParentVC {
                 if let update1 = vc as? SelectedParentVC {
                     if update1.isRoot {
                         // Calculate the next page index

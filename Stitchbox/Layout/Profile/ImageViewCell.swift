@@ -146,9 +146,7 @@ class ImageViewCell: UICollectionViewCell {
   
     func configureWithUrl(with data: PostModel) {
         
-        if self.imageView.image == nil {
-            self.imageView.loadProfileContent(url: data.imageUrl, str: data.imageUrl.absoluteString)
-        }
+        self.imageView.loadProfileContent(url: data.imageUrl, str: data.imageUrl.absoluteString)
  
         if !data.muxPlaybackId.isEmpty {
             

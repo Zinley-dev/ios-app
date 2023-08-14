@@ -33,3 +33,10 @@ class FollowModel: Mappable {
         isFollowing <- map ["isFollowing"]
     }
 }
+
+
+extension FollowModel: Equatable {
+    static func == (lhs: FollowModel, rhs: FollowModel) -> Bool {
+        return lhs.userId == rhs.userId
+    }
+}

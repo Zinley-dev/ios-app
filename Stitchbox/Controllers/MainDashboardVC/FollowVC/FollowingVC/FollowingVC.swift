@@ -216,6 +216,7 @@ extension FollowingVC {
 
 extension FollowingVC {
     
+    
     func retrieveNextPageWithCompletion(block: @escaping ([[String: Any]]) -> Void) {
         
         APIManager.shared.getFollows(userId: userId, page: currPage) { [weak self] result in
@@ -223,62 +224,54 @@ extension FollowingVC {
             
             switch result {
             case .success(let apiResponse):
-                
-                guard let data = apiResponse.body?["data"] as? [[String: Any]] else {
-                    let item = [[String: Any]]()
-                    DispatchQueue.main.async {
-                        block(item)
-                    }
-                    return
-                }
-                
-                if !data.isEmpty {
+                if let data = apiResponse.body?["data"] as? [[String: Any]], !data.isEmpty {
+                    print("Successfully retrieved \(data.count) posts.")
                     self.currPage += 1
-                    print("Successfully retrieved \(data.count) followings.")
-                    let items = data
                     DispatchQueue.main.async {
-                        block(items)
+                        block(data)
                     }
                 } else {
-                    
-                    let item = [[String: Any]]()
-                    DispatchQueue.main.async {
-                        block(item)
-                    }
+                    self.completeWithEmptyData(block)
                 }
-                
             case .failure(let error):
                 print(error)
-                let item = [[String: Any]]()
-                DispatchQueue.main.async {
-                    block(item)
-                }
+                self.completeWithEmptyData(block)
             }
         }
-        
     }
-    
+
+    private func completeWithEmptyData(_ block: @escaping ([[String: Any]]) -> Void) {
+        DispatchQueue.main.async {
+            block([])
+        }
+    }
+
     func insertNewRowsInTableNode(newFollowings: [[String: Any]]) {
-        // Check if there are new posts to insert
-        guard !newFollowings.isEmpty else { return }
+        guard newFollowings.count > 0 else { return }
         
+        if refresh_request {
+            clearExistingPosts()
+            refresh_request = false
+        }
+
+        let items = newFollowings.compactMap { FollowModel(JSON: $0) }.filter { !self.userList.contains($0) }
+        self.userList.append(contentsOf: items)
         
-        // Calculate the range of new rows
-        let startIndex = userList.count
-        let endIndex = startIndex + newFollowings.count
-        
-        // Create an array of PostModel objects
-        let newItems = newFollowings.compactMap { FollowModel(JSON: $0) }
-        
-        // Append the new items to the existing array
-        userList.append(contentsOf: newItems)
-        
-        // Create an array of index paths for the new rows
-        let insertIndexPaths = (startIndex..<endIndex).map { IndexPath(row: $0, section: 0) }
-        
-        // Insert the new rows
-        tableNode.insertRows(at: insertIndexPaths, with: .automatic)
-        
+        if !items.isEmpty {
+            let indexPaths = generateIndexPaths(for: items)
+            tableNode.insertRows(at: indexPaths, with: .automatic)
+        }
+    }
+
+    private func clearExistingPosts() {
+        let deleteIndexPaths = userList.enumerated().map { IndexPath(row: $0.offset, section: 0) }
+        userList.removeAll()
+        tableNode.deleteRows(at: deleteIndexPaths, with: .automatic)
+    }
+
+    private func generateIndexPaths(for items: [FollowModel]) -> [IndexPath] {
+        let startIndex = self.userList.count - items.count
+        return (startIndex..<self.userList.count).map { IndexPath(row: $0, section: 0) }
     }
     
 }
@@ -305,42 +298,24 @@ extension FollowingVC {
     func updateData() {
         self.retrieveNextPageWithCompletion { [weak self] (newFollowings) in
             guard let self = self else { return }
-           
-            
-            if newFollowings.count > 0 {
-                
-                self.userList.removeAll()
-                self.tableNode.reloadData()
-                
-                self.insertNewRowsInTableNode(newFollowings: newFollowings)
-                
-            } else {
-                
-                self.refresh_request = false
-                self.userList.removeAll()
-                self.tableNode.reloadData()
-                
-                if self.userList.isEmpty == true {
-                    
-                    self.tableNode.view.setEmptyMessage("No following")
-                    
-                } else {
-                    
-                    self.tableNode.view.restore()
-                    
-                }
-                
-            }
-            
-            if self.pullControl.isRefreshing == true {
+
+            if self.pullControl.isRefreshing {
                 self.pullControl.endRefreshing()
             }
             
-           
-            
+            if newFollowings.isEmpty {
+                self.refresh_request = false
+                self.userList.removeAll()
+                self.tableNode.reloadData()
+                if self.userList.isEmpty {
+                    self.tableNode.view.setEmptyMessage("No following!")
+                } else {
+                    self.tableNode.view.restore()
+                }
+            } else {
+                self.insertNewRowsInTableNode(newFollowings: newFollowings)
+            }
         }
-        
-        
     }
     
     

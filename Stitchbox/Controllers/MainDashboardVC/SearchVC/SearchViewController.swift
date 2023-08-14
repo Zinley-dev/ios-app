@@ -504,7 +504,8 @@ extension SearchViewController {
                     
                     if self.searchList != newSearchList {
                         self.searchList = newSearchList
-                        DispatchQueue.main.async {
+                        DispatchQueue.main.async { [weak self] in
+                            guard let self = self else { return }
                             self.searchTableNode.reloadData()
                         }
                     }
@@ -607,7 +608,8 @@ extension SearchViewController {
                     }
                    
                 case .failure(_):
-                    DispatchQueue.main.async {
+                    DispatchQueue.main.async { [weak self] in
+                        guard let self = self else { return }
                         showNote(text: "Unable to remove recent!")
                     }
                     

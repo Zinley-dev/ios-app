@@ -336,8 +336,8 @@ extension PreviewVC: ASCollectionDataSource {
             //node.collectionNode = self.collectionNode
             node.neverShowPlaceholders = true
             node.debugName = "Node \(indexPath.row)"
-            
-           
+            node.isOriginal = true
+            node.automaticallyManagesSubnodes = true
             //
             return node
         }
@@ -428,29 +428,11 @@ extension PreviewVC {
             
             if !cell.cellVideoNode.isPlaying() {
                 
-                /*
-                if cell.headerView != nil {
-                    cell.headerView.stichBtn.isHidden = true
-                    cell.headerView.createStitchView.isHidden = true
-                    cell.headerView.createStitchStack.isHidden = true
-                    cell.headerView.followBtn.isHidden = true
-                    cell.headerView.isUserInteractionEnabled = false
-                }
                 
-                if cell.sideButtonsView != nil {
-                    
-                    cell.sideButtonsView.isHidden = true
-                    
-                }
-                
-                if cell.buttonsView != nil {
-                    cell.buttonsView.isHidden = true
-                }
-                
-                cell.contentNode.isUserInteractionEnabled = false
+                cell.disableTouching()
                 
                 cell.setNeedsLayout()
-                */
+                
 
                 if let muteStatus = shouldMute {
                     

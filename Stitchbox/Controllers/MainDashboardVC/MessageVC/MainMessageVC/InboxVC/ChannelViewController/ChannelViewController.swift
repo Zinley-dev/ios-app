@@ -42,15 +42,7 @@ class ChannelViewController: SBUChannelViewController {
         
         
     }
-    
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        
-        //changeTabBar(hidden: true)
-        //self.tabBarController?.tabBar.isTranslucent = true
-        //hideMiddleBtn(vc: self)
-    
-    }
+
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
@@ -182,7 +174,8 @@ class ChannelViewController: SBUChannelViewController {
                     self.currentRoomID = SBRoomInfo?.room_id ?? ""
                    
                     // Fetch the room from the server
-                    SendBirdCall.fetchRoom(by: self.currentRoomID) { room, error in
+                    SendBirdCall.fetchRoom(by: self.currentRoomID) { [weak self] room, error in
+                        guard let self = self else { return }
                         // Check for errors
                         if let error = error {
                             // Handle different error codes
@@ -289,7 +282,8 @@ class ChannelViewController: SBUChannelViewController {
         if let room = self.getRoom {
             enterRoom(room: room, chanelUrl: chanelUrl)
         } else {
-            SendBirdCall.fetchRoom(by: currentRoomID) { room, error in
+            SendBirdCall.fetchRoom(by: currentRoomID) { [weak self] room, error in
+                guard let self = self else { return }
                 guard let room = room, error == nil else {
                     self.handleError(error!)
                     return
@@ -301,7 +295,8 @@ class ChannelViewController: SBUChannelViewController {
     
     private func enterRoom(room: Room, chanelUrl: String) {
         let params = Room.EnterParams(isVideoEnabled: false, isAudioEnabled: true)
-        room.enter(with: params, completionHandler: { err in
+        room.enter(with: params, completionHandler: { [weak self] err in
+            guard let self = self else { return }
             if let err = err {
                 self.handleError(err)
             } else {
@@ -378,7 +373,8 @@ class ChannelViewController: SBUChannelViewController {
                 presentSwiftLoaderWithText(text: "Authenticating...")
             }
             SBUGlobals.CurrentUser = SBUUser(userId: userUID)
-            SBUMain.connect { usr, error in
+            SBUMain.connect { [weak self] usr, error in
+                guard let self = self else { return }
                 if let error = error {
                     print(error.localizedDescription)
                 } else if let user = usr {

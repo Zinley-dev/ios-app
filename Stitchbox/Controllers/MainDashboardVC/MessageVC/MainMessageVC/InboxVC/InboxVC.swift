@@ -119,7 +119,7 @@ class InboxVC: UIViewController, UITableViewDelegate, UITableViewDataSource, SBD
                     channel.leave(completionHandler: { (error) in
                         if let error = error {
                             if let strongSelf = self {
-                                //Utils.showAlertController(error: error, viewController: strongSelf)
+                                Utils.showAlertController(error: error, viewController: strongSelf)
                             }
                             return
                         }
@@ -129,7 +129,7 @@ class InboxVC: UIViewController, UITableViewDelegate, UITableViewDataSource, SBD
                 let actionNotificationOn = UIAlertAction(title: "Turn notification on", style: .default) { [weak self] (action) in
                     channel.setMyPushTriggerOption(.all) { error in
                         if let error = error, let strongSelf = self {
-                            //Utils.showAlertController(error: error, viewController: strongSelf)
+                            Utils.showAlertController(error: error, viewController: strongSelf)
                             return
                         }
                     }
@@ -138,7 +138,7 @@ class InboxVC: UIViewController, UITableViewDelegate, UITableViewDataSource, SBD
                 let actionNotificationOff = UIAlertAction(title: "Turn notification off", style: .default) { [weak self] (action) in
                     channel.setMyPushTriggerOption(.off) { error in
                         if let error = error, let strongSelf = self {
-                            //Utils.showAlertController(error: error, viewController: strongSelf)
+                            Utils.showAlertController(error: error, viewController: strongSelf)
                             return
                         }
                     }
@@ -332,6 +332,7 @@ class InboxVC: UIViewController, UITableViewDelegate, UITableViewDataSource, SBD
             cell.frozenImageView.image = SBUIconSet.iconFreeze.resize(targetSize: CGSize(width: 20, height: 20)).withTintColor(UIColor.black)
 
             DispatchQueue.main.async { [weak self] in
+                guard let self = self else { return }
                 if let members = channel.members {
                     let filteredMembers = members.compactMap { $0 as? SBDMember }.filter { $0.userId != SBDMain.getCurrentUser()?.userId }
                     let count = filteredMembers.count
@@ -414,7 +415,6 @@ class InboxVC: UIViewController, UITableViewDelegate, UITableViewDataSource, SBD
                     // Check if there are any active members in the channel
                     let hasActiveMember = filteredMembers.contains(where: { $0.connectionStatus.rawValue == 1 })
                     // Update the background color of the active view based on the active status of the members
-                    print(hasActiveMember)
                     updateCell.activeView.backgroundColor = hasActiveMember ? .green : .lightGray
                 }
             }
@@ -679,7 +679,8 @@ class InboxVC: UIViewController, UITableViewDelegate, UITableViewDataSource, SBD
     
     
     func deleteChannel(channel: SBDGroupChannel) {
-        DispatchQueue.main.async {
+        DispatchQueue.main.async { [weak self] in
+            guard let self = self else { return }
             if let index = self.channels.firstIndex(of: channel as SBDGroupChannel) {
                 self.channels.remove(at: index)
                 self.groupChannelsTableView.deleteRows(at: [IndexPath(row: index, section: 0)], with: .automatic)

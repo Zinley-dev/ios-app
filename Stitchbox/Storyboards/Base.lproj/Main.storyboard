@@ -234,7 +234,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="3SZ-lb-BaQ">
-                                <rect key="frame" x="87.5" y="20" width="200" height="495"/>
+                                <rect key="frame" x="87.5" y="36" width="200" height="479"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="200" id="D1h-1x-LwM"/>
@@ -321,7 +321,7 @@
                             <constraint firstItem="cNr-Zl-aDr" firstAttribute="centerX" secondItem="OAG-Em-hQl" secondAttribute="centerX" id="b62-Ps-18e"/>
                             <constraint firstItem="A06-x4-K3Z" firstAttribute="bottom" secondItem="cNr-Zl-aDr" secondAttribute="bottom" constant="32" id="dbI-Mt-a2P"/>
                             <constraint firstItem="cNr-Zl-aDr" firstAttribute="top" secondItem="N4k-xw-nb6" secondAttribute="bottom" constant="20" id="tc2-gv-Thw"/>
-                            <constraint firstItem="3SZ-lb-BaQ" firstAttribute="top" secondItem="A06-x4-K3Z" secondAttribute="top" id="vSB-lX-yjz"/>
+                            <constraint firstItem="3SZ-lb-BaQ" firstAttribute="top" secondItem="A06-x4-K3Z" secondAttribute="top" constant="16" id="vSB-lX-yjz"/>
                         </constraints>
                     </view>
                     <connections>

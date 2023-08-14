@@ -101,38 +101,34 @@ extension EditGeneralInformationVC {
             
             if let url = URL(string: urlString) {
                 
-                if let domain = url.host {
+                self.view.endEditing(true)
+                presentSwiftLoader()
+                APIManager.shared.updateme(params: ["discordLink": urlString]) { [weak self] result in
+                    guard let self = self else { return }
                     
-                    self.view.endEditing(true)
-                    presentSwiftLoader()
-                    APIManager.shared.updateme(params: ["discordLink": urlString]) { [weak self] result in
-                        guard let self = self else { return }
+                    switch result {
+                    case .success(let apiResponse):
                         
-                        switch result {
-                        case .success(let apiResponse):
-                            
-                            guard apiResponse.body?["message"] as? String == "success" else {
-                                return
-                            }
-                            
-                            DispatchQueue.main {
-                                SwiftLoader.hide()
-                                self.infoTxtField.text = ""
-                                self.infoTxtField.placeholder = urlString
-                                NotificationCenter.default.post(name: (NSNotification.Name(rawValue: "refreshData")), object: nil)
-                                showNote(text: "Updated successfully")
-                                
-                            }
-                            
-                        case .failure(let error):
-                            DispatchQueue.main {
-                                SwiftLoader.hide()
-                                self.showErrorAlert("Oops!", msg: error.localizedDescription)
-                            }
+                        guard apiResponse.body?["message"] as? String == "success" else {
+                            return
+                        }
+                        
+                        DispatchQueue.main {
+                            SwiftLoader.hide()
+                            self.infoTxtField.text = ""
+                            self.infoTxtField.placeholder = urlString
+                            NotificationCenter.default.post(name: (NSNotification.Name(rawValue: "refreshData")), object: nil)
+                            showNote(text: "Updated successfully")
                             
                         }
+                        
+                    case .failure(let error):
+                        DispatchQueue.main {
+                            SwiftLoader.hide()
+                            self.showErrorAlert("Oops!", msg: error.localizedDescription)
+                        }
+                        
                     }
-                    
                 }
             }
             

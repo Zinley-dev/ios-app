@@ -142,6 +142,8 @@
 		6A4031192A872B770038B655 /* SupportVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A4031182A872B770038B655 /* SupportVC.swift */; };
 		6A40311C2A872D600038B655 /* ResolutionVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A40311B2A872D600038B655 /* ResolutionVC.swift */; };
 		6A40311F2A8739AD0038B655 /* SelectedParentVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A40311E2A8739AD0038B655 /* SelectedParentVC.swift */; };
+		6A4031222A89B5A70038B655 /* VideoIssueNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A4031212A89B5A70038B655 /* VideoIssueNode.swift */; };
+		6A4031252A89B6390038B655 /* VideoIssueModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A4031242A89B6390038B655 /* VideoIssueModel.swift */; };
 		6A467E5729AD8D0700214108 /* PostListWithHashtagVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A467E5629AD8D0700214108 /* PostListWithHashtagVC.swift */; };
 		6A467E5A29AD946D00214108 /* NewsFeedSettingVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A467E5929AD946D00214108 /* NewsFeedSettingVC.swift */; };
 		6A467E5C29AD951600214108 /* NewsFeedSettingVC.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6A467E5B29AD951600214108 /* NewsFeedSettingVC.xib */; };
@@ -640,6 +642,8 @@
 		6A4031182A872B770038B655 /* SupportVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SupportVC.swift; sourceTree = "<group>"; };
 		6A40311B2A872D600038B655 /* ResolutionVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResolutionVC.swift; sourceTree = "<group>"; };
 		6A40311E2A8739AD0038B655 /* SelectedParentVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectedParentVC.swift; sourceTree = "<group>"; };
+		6A4031212A89B5A70038B655 /* VideoIssueNode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoIssueNode.swift; sourceTree = "<group>"; };
+		6A4031242A89B6390038B655 /* VideoIssueModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoIssueModel.swift; sourceTree = "<group>"; };
 		6A467E5629AD8D0700214108 /* PostListWithHashtagVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostListWithHashtagVC.swift; sourceTree = "<group>"; };
 		6A467E5929AD946D00214108 /* NewsFeedSettingVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewsFeedSettingVC.swift; sourceTree = "<group>"; };
 		6A467E5B29AD951600214108 /* NewsFeedSettingVC.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = NewsFeedSettingVC.xib; sourceTree = "<group>"; };
@@ -1003,6 +1007,7 @@
 		143684302918C5B800FA87D7 /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				6A4031232A89B6300038B655 /* VideoIssueModel */,
 				6AE3BEE22A688DB100AAA5DD /* FriendSuggestionModel */,
 				6A47AAB32A19EB2F00E3E1FF /* StatsModel */,
 				6A7ED4C12A1707B800C8204E /* PromoteModel */,
@@ -1941,6 +1946,7 @@
 		6A40311A2A872D4E0038B655 /* ResolutionVC */ = {
 			isa = PBXGroup;
 			children = (
+				6A4031202A89B5950038B655 /* VideoIssueNode */,
 				6A40311B2A872D600038B655 /* ResolutionVC.swift */,
 			);
 			path = ResolutionVC;
@@ -1952,6 +1958,22 @@
 				6A40311E2A8739AD0038B655 /* SelectedParentVC.swift */,
 			);
 			path = SelectedParentVC;
+			sourceTree = "<group>";
+		};
+		6A4031202A89B5950038B655 /* VideoIssueNode */ = {
+			isa = PBXGroup;
+			children = (
+				6A4031212A89B5A70038B655 /* VideoIssueNode.swift */,
+			);
+			path = VideoIssueNode;
+			sourceTree = "<group>";
+		};
+		6A4031232A89B6300038B655 /* VideoIssueModel */ = {
+			isa = PBXGroup;
+			children = (
+				6A4031242A89B6390038B655 /* VideoIssueModel.swift */,
+			);
+			path = VideoIssueModel;
 			sourceTree = "<group>";
 		};
 		6A467E5529AD8CEB00214108 /* PostSearchVC */ = {
@@ -4062,6 +4084,7 @@
 				6AAD7A1D294C65DD003E3AB6 /* UIImageView+QuickStart.swift in Sources */,
 				147187EB2920AF6E0039B89E /* ViewModelProtocol.swift in Sources */,
 				6A78486C29862931008B2263 /* StreamingDomainModel.swift in Sources */,
+				6A4031252A89B6390038B655 /* VideoIssueModel.swift in Sources */,
 				395477BD294D6BCA008EED97 /* LoginByPhoneVerifyController.swift in Sources */,
 				6A47AAA52A1867DC00E3E1FF /* SparkViewFactory.swift in Sources */,
 				395477BF294D714F008EED97 /* CreateAccountViewModel.swift in Sources */,
@@ -4327,6 +4350,7 @@
 				6AEA74FA29680B53005C802B /* NormalLoginVC.swift in Sources */,
 				A5DF81FD295D3FE200E8DDB8 /* SearchViewController.swift in Sources */,
 				6A6FB09629DB6F2B003FCF6E /* ButtonSideList.swift in Sources */,
+				6A4031222A89B5A70038B655 /* VideoIssueNode.swift in Sources */,
 				6AAD7A1E294C65DD003E3AB6 /* UIApplication+QuickStart.swift in Sources */,
 				A5F9C91C296C14ED00D339A1 /* ResetPasswordViewModel.swift in Sources */,
 				6AA276EB2A83705C0001D69A /* StitchViewController.swift in Sources */,

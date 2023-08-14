@@ -188,12 +188,19 @@ extension ParentViewController: UIScrollViewDelegate {
     
     func setupTabBar() {
         
-        let tabBarAppearance = UITabBarAppearance()
-        tabBarAppearance.configureWithOpaqueBackground()
-        tabBarAppearance.backgroundColor = .black
-        tabBarAppearance.stackedLayoutAppearance.selected.iconColor = .black
-        tabBarAppearance.stackedLayoutAppearance.normal.iconColor = .black
-        self.tabBarController?.tabBar.standardAppearance = tabBarAppearance
+        setupBlackTabbar()
+        
+    }
+    
+    func setupBlackTabbar() {
+        
+        if let tabbar = self.tabBarController as? DashboardTabBarController {
+            
+            tabbar.setupBlackTabBar()
+            
+        }
+        
+        
         
     }
     
@@ -690,6 +697,8 @@ extension ParentViewController {
 
             // Scroll to the next page
             scrollView.setContentOffset(CGPoint(x: offset, y: 0), animated: true)
+            feedViewController.currentIndex = 0
+            feedViewController.newPlayingIndex = 0
             showFeed()
             
             

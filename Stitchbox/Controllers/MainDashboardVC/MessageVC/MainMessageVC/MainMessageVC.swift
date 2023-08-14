@@ -120,7 +120,8 @@ class MainMessageVC: UIViewController, UINavigationBarDelegate, UINavigationCont
             navigationItem.searchController = searchController
             searchController?.searchBar.isHidden = false
             
-            delay(0.025) {
+            delay(0.025) { [weak self] in
+                guard let self = self else { return }
                 self.searchController?.searchBar.becomeFirstResponder()
             }
             

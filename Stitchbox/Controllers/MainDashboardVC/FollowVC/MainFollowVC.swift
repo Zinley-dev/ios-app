@@ -102,14 +102,15 @@ class MainFollowVC: UIViewController, UINavigationBarDelegate, UINavigationContr
         if let user = self.userId {
             
             countFollowers(userId: user) {
-                Dispatch.main.async {
-                    
+                Dispatch.main.async { [weak self] in
+                    guard let self = self else { return }
                     self.followerBtn.setTitle("\(formatPoints(num: Double(self.followerCount))) Followers", for: .normal)
                 }
             }
             
             countFollowings(userId: user) {
-                Dispatch.main.async {
+                Dispatch.main.async { [weak self] in
+                    guard let self = self else { return }
                     self.followingBtn.setTitle("\(formatPoints(num: Double(self.followingCount))) Followings", for: .normal)
                 }
             }
@@ -123,44 +124,7 @@ class MainFollowVC: UIViewController, UINavigationBarDelegate, UINavigationContr
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         self.loadingView.isHidden = true
-        /*
-        do {
-            
-            let path = Bundle.main.path(forResource: "fox2", ofType: "gif")!
-            let gifData = try NSData(contentsOfFile: path) as Data
-            let image = FLAnimatedImage(animatedGIFData: gifData)
-            
-            
-            self.loadingImage.animatedImage = image
-            
-        } catch {
-            print(error.localizedDescription)
-        }
-        
-        loadingView.backgroundColor = self.view.backgroundColor
-        
-        
-        delay(0.75) {
-            
-            UIView.animate(withDuration: 0.5) {
-                
-                self.loadingView.alpha = 0
-                
-            }
-            
-            
-            DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
-                
-                if self.loadingView.alpha == 0 {
-                    
-                    self.loadingView.isHidden = true
-                    
-                }
-                
-            }
-            
-        } */
-        
+
         
         let navigationBarAppearance = UINavigationBarAppearance()
         navigationBarAppearance.configureWithOpaqueBackground()
@@ -312,11 +276,7 @@ extension MainFollowVC {
             self.navigationItem.title = self.username ?? ""
             
         }
-        
-        
-        
-        
-        
+
     }
     
     func setupSearchBar() {
@@ -548,7 +508,8 @@ extension MainFollowVC {
                         return FollowModel(JSON: item)!
                     }
                     
-                    DispatchQueue.main.async {
+                    DispatchQueue.main.async { [weak self] in
+                        guard let self = self else { return }
                         self.FollowerVC.searchUserList = list
                         self.FollowerVC.tableNode.reloadData()
                     }
@@ -585,7 +546,8 @@ extension MainFollowVC {
                         return FollowModel(JSON: item)!
                     }
                     
-                    DispatchQueue.main.async {
+                    DispatchQueue.main.async { [weak self] in
+                        guard let self = self else { return }
                         self.FollowingVC.searchUserList = list
                         self.FollowingVC.tableNode.reloadData()
                     }
@@ -654,9 +616,5 @@ extension MainFollowVC {
         childViewController.view.removeFromSuperview()
         childViewController.removeFromParent()
     }
-    
-}
-
-extension MainFollowVC {
     
 }

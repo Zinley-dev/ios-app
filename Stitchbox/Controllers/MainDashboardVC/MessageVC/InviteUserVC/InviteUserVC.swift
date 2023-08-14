@@ -320,7 +320,8 @@ class InviteUserVC: UIViewController, UISearchBarDelegate, UINavigationControlle
             searchUserList = filteredUsers.isEmpty ? [] : filteredUsers
             tableView.reloadData()
             if searchText != "", filteredUsers.isEmpty {
-                delayItem.perform(after: 0.35) {
+                delayItem.perform(after: 0.35) { [weak self] in
+                    guard let self = self else { return }
                     self.searchUsers(keyword: searchText)
                 }
             }
@@ -449,7 +450,8 @@ class InviteUserVC: UIViewController, UISearchBarDelegate, UINavigationControlle
            channelParams.operatorUserIds = [userUID]
 
            // Create a new group channel or invite users to existing group channel
-           SBDGroupChannel.createChannel(with: channelParams) { groupChannel, error in
+           SBDGroupChannel.createChannel(with: channelParams) { [weak self] groupChannel, error in
+               guard let self = self else { return }
                guard error == nil else {
                    self.showErrorAlert("Oops!", msg: error!.localizedDescription)
                    return
@@ -481,8 +483,8 @@ class InviteUserVC: UIViewController, UISearchBarDelegate, UINavigationControlle
     
     func checkForChannelInvitation(channelUrl: String, user_ids: [String]) {
         
-        
-        APIManager.shared.channelCheckForInviation(userIds: user_ids, channelUrl: channelUrl) { result in
+        APIManager.shared.channelCheckForInviation(userIds: user_ids, channelUrl: channelUrl) { [weak self] result in
+            guard let self = self else { return }
             switch result {
             case .success(let apiResponse):
                 // Check if the request was successful

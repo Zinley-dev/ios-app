@@ -46,7 +46,7 @@
             <rect key="frame" x="0.0" y="0.0" width="689" height="662"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
-                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="bTO-xa-SF4">
+                <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="bTO-xa-SF4">
                     <rect key="frame" x="0.0" y="470.5" width="150" height="35"/>
                     <subviews>
                         <view alpha="0.59999999999999998" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="cM4-9B-opX">

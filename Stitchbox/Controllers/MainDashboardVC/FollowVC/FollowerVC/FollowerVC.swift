@@ -111,14 +111,16 @@ class FollowerVC: UIViewController {
                 
                 switch result {
                 case .success(_):
-                    DispatchQueue.main.async {
+                    DispatchQueue.main.async { [weak self] in
+                        guard let self = self else { return }
                         self.userList.remove(at: row)
                         self.tableNode.deleteRows(at: [IndexPath(row: row, section: 0)], with: .automatic)
                         showNote(text: "Remove followed!")
                     }
                     
                 case .failure(_):
-                    DispatchQueue.main.async {
+                    DispatchQueue.main.async { [weak self] in
+                        guard let self = self else { return }
                         showNote(text: "Unable to remove follow!")
                     }
                     
@@ -274,6 +276,7 @@ extension FollowerVC: ASTableDataSource {
 
 extension FollowerVC {
     
+    
     func retrieveNextPageWithCompletion(block: @escaping ([[String: Any]]) -> Void) {
         
         APIManager.shared.getFollowers(userId: userId, page: currPage) { [weak self] result in
@@ -281,67 +284,56 @@ extension FollowerVC {
             
             switch result {
             case .success(let apiResponse):
-                
-                guard let data = apiResponse.body?["data"] as? [[String: Any]] else {
-                    let item = [[String: Any]]()
-                    DispatchQueue.main.async {
-                        block(item)
-                    }
-                    return
-                }
-                
-                
-                if !data.isEmpty {
+                if let data = apiResponse.body?["data"] as? [[String: Any]], !data.isEmpty {
+                    print("Successfully retrieved \(data.count) posts.")
                     self.currPage += 1
-                    
-                    print("Successfully retrieved \(data.count) followers.")
-                    let items = data
                     DispatchQueue.main.async {
-                        block(items)
+                        block(data)
                     }
                 } else {
-                    
-                    let item = [[String: Any]]()
-                    DispatchQueue.main.async {
-                        block(item)
-                    }
+                    self.completeWithEmptyData(block)
                 }
-                
             case .failure(let error):
                 print(error)
-                let item = [[String: Any]]()
-                DispatchQueue.main.async {
-                    block(item)
-                }
+                self.completeWithEmptyData(block)
             }
         }
+    }
+
+    private func completeWithEmptyData(_ block: @escaping ([[String: Any]]) -> Void) {
+        DispatchQueue.main.async {
+            block([])
+        }
+    }
+
+    func insertNewRowsInTableNode(newFollowers: [[String: Any]]) {
+        guard newFollowers.count > 0 else { return }
         
+        if refresh_request {
+            clearExistingPosts()
+            refresh_request = false
+        }
+
+        let items = newFollowers.compactMap { FollowModel(JSON: $0) }.filter { !self.userList.contains($0) }
+        self.userList.append(contentsOf: items)
+        
+        if !items.isEmpty {
+            let indexPaths = generateIndexPaths(for: items)
+            tableNode.insertRows(at: indexPaths, with: .automatic)
+        }
+    }
+
+    private func clearExistingPosts() {
+        let deleteIndexPaths = userList.enumerated().map { IndexPath(row: $0.offset, section: 0) }
+        userList.removeAll()
+        tableNode.deleteRows(at: deleteIndexPaths, with: .automatic)
+    }
+
+    private func generateIndexPaths(for items: [FollowModel]) -> [IndexPath] {
+        let startIndex = self.userList.count - items.count
+        return (startIndex..<self.userList.count).map { IndexPath(row: $0, section: 0) }
     }
     
-    func insertNewRowsInTableNode(newFollowers: [[String: Any]]) {
-        // Check if there are new posts to insert
-        guard !newFollowers.isEmpty else { return }
-        
-        
-        // Calculate the range of new rows
-        let startIndex = userList.count
-        let endIndex = startIndex + newFollowers.count
-        
-        // Create an array of PostModel objects
-        let newItems = newFollowers.compactMap { FollowModel(JSON: $0) }
-        
-        // Append the new items to the existing array
-        userList.append(contentsOf: newItems)
-        
-        // Create an array of index paths for the new rows
-        let insertIndexPaths = (startIndex..<endIndex).map { IndexPath(row: $0, section: 0) }
-        
-        // Insert the new rows
-        tableNode.insertRows(at: insertIndexPaths, with: .automatic)
-        
-        
-        
-    }
     
 }
 
@@ -366,47 +358,28 @@ extension FollowerVC {
         
     }
     
-    
     func updateData() {
         self.retrieveNextPageWithCompletion { [weak self] (newFollowers) in
             guard let self = self else { return }
-           
-            
-            if newFollowers.count > 0 {
-                
-                self.userList.removeAll()
-                self.tableNode.reloadData()
-                
-                self.insertNewRowsInTableNode(newFollowers: newFollowers)
-                
-            } else {
-                
-                self.refresh_request = false
-                self.userList.removeAll()
-                self.tableNode.reloadData()
-                
-                if self.userList.isEmpty == true {
-                    
-                    self.tableNode.view.setEmptyMessage("No follower")
-                    
-                } else {
-                    
-                    self.tableNode.view.restore()
-                    
-                }
-                
-            }
-            
-            if self.pullControl.isRefreshing == true {
+
+            if self.pullControl.isRefreshing {
                 self.pullControl.endRefreshing()
             }
             
-           
-            
+            if newFollowers.isEmpty {
+                self.refresh_request = false
+                self.userList.removeAll()
+                self.tableNode.reloadData()
+                if self.userList.isEmpty {
+                    self.tableNode.view.setEmptyMessage("No follower!")
+                } else {
+                    self.tableNode.view.restore()
+                }
+            } else {
+                self.insertNewRowsInTableNode(newFollowers: newFollowers)
+            }
         }
-        
-        
     }
-    
+
     
 }

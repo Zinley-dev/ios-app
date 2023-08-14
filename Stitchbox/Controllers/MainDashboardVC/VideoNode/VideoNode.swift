@@ -75,7 +75,6 @@ class VideoNode: ASCellNode, ASVideoNodeDelegate {
     override func didLoad() {
         super.didLoad()
     
-        
         addPinchGestureRecognizer()
         addPanGestureRecognizer()
         
@@ -784,7 +783,7 @@ extension VideoNode: UIGestureRecognizerDelegate {
        
         self.label.hashtagColor = UIColor(red: 0.0/255, green: 204.0/255, blue: 255.0/255, alpha: 1)
 
-        self.label.URLColor = UIColor(red: 30/255, green: 85/255, blue: 150/255, alpha: 1)
+        self.label.URLColor = UIColor(red: 60/255, green: 115/255, blue: 180/255, alpha: 1)
 
         
         self.label.handleCustomTap(for: customType) { [weak self] element in
@@ -842,7 +841,7 @@ extension VideoNode: UIGestureRecognizerDelegate {
         saveCount = post.totalSave
         
         self.headerView.likeCountLbl.text = "\(formatPoints(num: Double(post.totalLikes)))"
-        self.headerView.saveCountLbl.text = "\(formatPoints(num: Double(post.totalShares)))"
+        self.headerView.saveCountLbl.text = "\(formatPoints(num: Double(post.totalSave)))"
         self.headerView.commentCountLbl.text = "\(formatPoints(num: Double(post.totalComments)))"
         self.headerView.shareCountLbl.text = "\(formatPoints(num: Double(post.totalShares)))"
         
@@ -1413,7 +1412,7 @@ extension VideoNode {
             global_presetingRate = 0.35
         }
 
-        if post.id == _AppCoreData.userDataSource.value?.userID {
+        if post.owner?.id == _AppCoreData.userDataSource.value?.userID {
             
             presentVC(vc, using: PostSettingVC())
             
@@ -1711,6 +1710,7 @@ extension VideoNode {
 
             switch result {
             case .success(let apiResponse):
+                print(apiResponse)
                 guard let message = apiResponse.body?["message"] as? String,
                       message == "success",
                       let data = apiResponse.body?["data"] as? [String: Any],
@@ -1760,9 +1760,12 @@ extension VideoNode {
     }
     
     func processStitchStatus(isFollowingMe: Bool) {
+        
+        
+        print(post.userSettings?.publicStitch,post.setting?.allowStitch, isFollowingMe)
 
         // If user has a public stitch, or if the post allows stitching and the user is following me
-        let shouldShowStitch = (post.userSettings?.publicStitch == true) ||
+        let shouldShowStitch = (post.userSettings?.publicStitch == true && post.setting?.allowStitch == true) ||
                               (post.setting?.allowStitch == true && isFollowingMe)
 
         if shouldShowStitch {
@@ -1796,5 +1799,26 @@ extension VideoNode {
             
         }
     }
+    
+    func disableTouching() {
+        
+        if headerView != nil {
+            headerView.createStitchView.isHidden = true
+            headerView.followBtn.isHidden = true
+            headerView.isUserInteractionEnabled = false
+            headerView.stackView.isHidden = true
+            headerView.contentLbl.isUserInteractionEnabled = false
+        }
+        
+        if sideButtonsView != nil {
+            
+            sideButtonsView.isHidden = true
+            
+        }
+        
+    }
+    
+    
+    
     
 }
