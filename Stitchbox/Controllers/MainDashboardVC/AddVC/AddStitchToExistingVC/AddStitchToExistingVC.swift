@@ -204,7 +204,7 @@ extension AddStitchToExistingVC: ASCollectionDataSource {
             let node = OwnerPostSearchNode(with: post, isSave: false)
             node.neverShowPlaceholders = true
             node.debugName = "Node \(indexPath.row)"
-            
+            node.FontSize = 10
             //
             return node
         }

@@ -6,11 +6,9 @@
 //
 
 import Foundation
-
 import UIKit
 import AsyncDisplayKit
 
-fileprivate let FontSize: CGFloat = 13
 
 class OwnerPostSearchNode: ASCellNode {
     
@@ -18,7 +16,7 @@ class OwnerPostSearchNode: ASCellNode {
     var isSave: Bool!
     var nameNode: ASTextNode!
     var imageNode: ASNetworkImageNode!
-    
+    var FontSize: CGFloat = 13
     let paragraphStyles = NSMutableParagraphStyle()
     
     private lazy var stitchSignNode: ASImageNode = {

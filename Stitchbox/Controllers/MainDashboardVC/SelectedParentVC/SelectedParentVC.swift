@@ -52,6 +52,7 @@ class SelectedParentVC: UIViewController, UIScrollViewDelegate {
     var keepLoading = false
     var page = 0
     var selectedLoadingMode = loadingMode.none
+    var completedLoading = false
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -102,7 +103,7 @@ class SelectedParentVC: UIViewController, UIScrollViewDelegate {
             selectedRootPostVC.addAnimatedLabelToTop()
             selectedRootPostVC.loadPosts()
             selectedRootPostVC.hideLoading()
-            
+            completedLoading = true
             
             
             
@@ -122,7 +123,10 @@ class SelectedParentVC: UIViewController, UIScrollViewDelegate {
         setupNavBar()
         hasViewAppeared = true
         setupObservation()
-
+        if completedLoading {
+            resumeVideo()
+        }
+       
     }
 
     override func viewWillDisappear(_ animated: Bool) {
