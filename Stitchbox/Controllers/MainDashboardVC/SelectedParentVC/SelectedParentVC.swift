@@ -492,8 +492,8 @@ extension SelectedParentVC {
                 switch result {
                 case .success(_):
                     needReloadPost = true
-                    SwiftLoader.hide()
                     Dispatch.main.async { [weak self] in
+                        SwiftLoader.hide()
                         guard let self = self else { return }
                         if self.isRoot {
                             self.removePostOnRequest(from: self.selectedRootPostVC)

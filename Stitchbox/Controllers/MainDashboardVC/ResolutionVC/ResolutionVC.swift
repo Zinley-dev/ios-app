@@ -8,6 +8,7 @@
 import UIKit
 import AsyncDisplayKit
 import FLAnimatedImage
+import ObjectMapper
 
 class ResolutionVC: UIViewController {
     
@@ -16,10 +17,12 @@ class ResolutionVC: UIViewController {
     }
     
     let backButton: UIButton = UIButton(type: .custom)
-    var UserActivityList = [UserActivityModel]()
+    var issueLists = [VideoIssueModel]()
     
     @IBOutlet weak var contentView: UIView!
     
+    @IBOutlet weak var alertHeight: NSLayoutConstraint!
+    @IBOutlet weak var alertLbl: UILabel!
     var page = 1
     private var pullControl = UIRefreshControl()
     
@@ -180,7 +183,7 @@ extension ResolutionVC: ASTableDelegate {
         let width = UIScreen.main.bounds.size.width;
         
         let min = CGSize(width: width, height: 30);
-        let max = CGSize(width: width, height: 120);
+        let max = CGSize(width: width, height: 500);
         return ASSizeRangeMake(min, max);
         
     }
@@ -196,9 +199,9 @@ extension ResolutionVC: ASTableDelegate {
         
         if refresh_request == false {
             
-            self.retrieveNextPageWithCompletion { (newActivities) in
+            self.retrieveNextPageWithCompletion { (newIssues) in
                 
-                self.insertNewRowsInTableNode(newActivities: newActivities)
+                self.insertNewRowsInTableNode(newIssues: newIssues)
                 
                 context.completeBatchFetching(true)
                 
@@ -210,6 +213,19 @@ extension ResolutionVC: ASTableDelegate {
             
         }
         
+        
+    }
+    
+    func tableNode(_ tableNode: ASTableNode, didSelectRowAt indexPath: IndexPath) {
+        
+        let issue = issueLists[indexPath.row]
+        
+        if let RDVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "ResolutionDetailVC") as? ResolutionDetailVC {
+            
+            RDVC.detailIssue = issue
+            self.navigationController?.pushViewController(RDVC, animated: true)
+
+        }
         
     }
     
@@ -226,17 +242,13 @@ extension ResolutionVC {
             
             switch result {
             case .success(let apiResponse):
-                
-                print(apiResponse)
-                
+        
                 if let data = apiResponse.body?["data"] as? [[String: Any]], !data.isEmpty {
                     print("Successfully retrieved \(data.count) posts.")
                     
-                    for item in data {
-                        print(item)
-                    }
-                    
                     DispatchQueue.main.async {
+                        self.alertLbl.isHidden = false
+                        self.alertHeight.constant = 100
                         block(data)
                     }
                 } else {
@@ -252,20 +264,23 @@ extension ResolutionVC {
 
     private func completeWithEmptyData(_ block: @escaping ([[String: Any]]) -> Void) {
         DispatchQueue.main.async {
+            self.alertLbl.isHidden = true
+            self.alertHeight.constant = 0
             block([])
         }
     }
 
-    func insertNewRowsInTableNode(newActivities: [[String: Any]]) {
-        guard newActivities.count > 0 else { return }
+    func insertNewRowsInTableNode(newIssues: [[String: Any]]) {
+        guard newIssues.count > 0 else { return }
         
         if refresh_request {
             clearExistingPosts()
             refresh_request = false
         }
 
-        let items = newActivities.compactMap { UserActivityModel(userActivityModel: $0) }.filter { !self.UserActivityList.contains($0) }
-        self.UserActivityList.append(contentsOf: items)
+        let items = newIssues.compactMap { VideoIssueModel(JSON: $0) }.filter { !self.issueLists.contains($0) }
+
+        self.issueLists.append(contentsOf: items)
         
         if !items.isEmpty {
             let indexPaths = generateIndexPaths(for: items)
@@ -274,35 +289,35 @@ extension ResolutionVC {
     }
 
     private func clearExistingPosts() {
-        let deleteIndexPaths = UserActivityList.enumerated().map { IndexPath(row: $0.offset, section: 0) }
-        UserActivityList.removeAll()
+        let deleteIndexPaths = issueLists.enumerated().map { IndexPath(row: $0.offset, section: 0) }
+        issueLists.removeAll()
         tableNode.deleteRows(at: deleteIndexPaths, with: .automatic)
     }
 
-    private func generateIndexPaths(for items: [UserActivityModel]) -> [IndexPath] {
-        let startIndex = self.UserActivityList.count - items.count
-        return (startIndex..<self.UserActivityList.count).map { IndexPath(row: $0, section: 0) }
+    private func generateIndexPaths(for items: [VideoIssueModel]) -> [IndexPath] {
+        let startIndex = self.issueLists.count - items.count
+        return (startIndex..<self.issueLists.count).map { IndexPath(row: $0, section: 0) }
     }
 
     func updateData() {
-        self.retrieveNextPageWithCompletion { [weak self] (newActivities) in
+        self.retrieveNextPageWithCompletion { [weak self] (newIssues) in
             guard let self = self else { return }
 
             if self.pullControl.isRefreshing {
                 self.pullControl.endRefreshing()
             }
             
-            if newActivities.isEmpty {
+            if newIssues.isEmpty {
                 self.refresh_request = false
-                self.UserActivityList.removeAll()
+                self.issueLists.removeAll()
                 self.tableNode.reloadData()
-                if self.UserActivityList.isEmpty {
+                if self.issueLists.isEmpty {
                     self.tableNode.view.setEmptyMessage("No issue found!")
                 } else {
                     self.tableNode.view.restore()
                 }
             } else {
-                self.insertNewRowsInTableNode(newActivities: newActivities)
+                self.insertNewRowsInTableNode(newIssues: newIssues)
             }
         }
     }
@@ -314,7 +329,7 @@ extension ResolutionVC: ASTableDataSource {
     
     func tableNode(_ tableNode: ASTableNode, numberOfRowsInSection section: Int) -> Int {
         
-        if self.UserActivityList.count == 0 {
+        if self.issueLists.count == 0 {
             
             tableNode.view.setEmptyMessage("No issue found!")
             
@@ -322,17 +337,17 @@ extension ResolutionVC: ASTableDataSource {
             tableNode.view.restore()
         }
         
-        return self.UserActivityList.count
+        return self.issueLists.count
         
     }
     
     func tableNode(_ tableNode: ASTableNode, nodeBlockForRowAt indexPath: IndexPath) -> ASCellNodeBlock {
         
-        let activity = self.UserActivityList[indexPath.row]
+        let newIssues = self.issueLists[indexPath.row]
         
         return {
             
-            let node = AccountActivityNode(with: activity)
+            let node = VideoIssueNode(with: newIssues)
             node.neverShowPlaceholders = true
             node.debugName = "Node \(indexPath.row)"
             

@@ -9,54 +9,107 @@ import Foundation
 import ObjectMapper
 
 class VideoIssueModel: Mappable {
+    
+    private(set) var setting: Setting?
+    private(set) var updatedAt: Date?
+    private(set) var video: Video?
+    private(set) var status: Int = 0
+    private(set) var content: String?
+    private(set) var mux: Mux?
+    private(set) var streamLink: String?
+    private(set) var contentModerationMessage: String?
+    private(set) var algoliaObjectId: Int64?
     private(set) var id: String = ""
+    private(set) var metadata: Metadata?
+    private(set) var createdAt: Date?
+    private(set) var contentModeration: Int?
+    private(set) var commentThreshold: Int?
+    private(set) var likeThreshold: Int?
+    private(set) var moderationLog: ModerationLog?
+    private(set) var estimatedCount: EstimatedCount?
+    private(set) var viewThreshold: Int?
     private(set) var userId: String = ""
-    private(set) var videoUrl: String = ""
-    private(set) var description: String = ""
-    private(set) var status: IssueStatus = .pending
-    private(set) var reportedAt: Date?
-    private(set) var resolvedAt: Date?
-    private(set) var reason: IssueReason?
-    private(set) var actionTaken: IssueAction?
 
     required init?(map: ObjectMapper.Map) {}
 
     func mapping(map: ObjectMapper.Map) {
-        id <- map["_id"]
-        userId <- map["userId"]
-        videoUrl <- map["videoUrl"]
-        description <- map["description"]
+        setting <- map["setting"]
+        updatedAt <- (map["updatedAt"], ISODateTransform())
+        video <- map["video"]
         status <- map["status"]
-        reportedAt <- (map["reportedAt"], ISODateTransform())
-        resolvedAt <- (map["resolvedAt"], ISODateTransform())
-        reason <- map["reason"]
-        actionTaken <- map["actionTaken"]
+        content <- map["content"]
+        mux <- map["mux"]
+        streamLink <- map["streamLink"]
+        contentModerationMessage <- map["contentModerationMessage"]
+        algoliaObjectId <- map["algoliaObjectId"]
+        id <- map["_id"]
+        metadata <- map["metadata"]
+        createdAt <- (map["createdAt"], ISODateTransform())
+        contentModeration <- map["contentModeration"]
+        commentThreshold <- map["commentThreshold"]
+        likeThreshold <- map["likeThreshold"]
+        moderationLog <- map["moderationLog"]
+        estimatedCount <- map["estimatedCount"]
+        viewThreshold <- map["viewThreshold"]
+        userId <- map["userId"]
     }
 }
 
-enum IssueStatus: String {
-    case pending = "pending"
-    case resolved = "resolved"
-    // Add other statuses as needed
+
+class Video: Mappable {
+    var rawUrl: String?
+    
+    required init?(map: ObjectMapper.Map) {}
+    func mapping(map: ObjectMapper.Map) {
+        rawUrl <- map["rawUrl"]
+    }
 }
 
-enum IssueReason: String {
-    case copyright = "copyright"
-    case explicitContent = "explicit content"
-    // Add other reasons as needed
+class Mux: Mappable {
+    var assetId: String?
+    var playbackId: String?
+    
+    required init?(map: ObjectMapper.Map) {}
+    func mapping(map: ObjectMapper.Map) {
+        assetId <- map["assetId"]
+        playbackId <- map["playbackId"]
+    }
 }
 
-enum IssueAction: String {
-    case deleted = "deleted"
-    case suspended = "suspended"
-    // Add other actions as needed
+class Metadata: Mappable {
+    var contentMode: Int?
+    var height: Int?
+    var length: String?
+    var width: Int?
+    
+    required init?(map: ObjectMapper.Map) {}
+    func mapping(map: ObjectMapper.Map) {
+        contentMode <- map["contentMode"]
+        height <- map["height"]
+        length <- map["length"]
+        width <- map["width"]
+    }
+}
+
+class ModerationLog: Mappable {
+    var actionTaken: String?
+    var actionTime: Date?
+    var performBy: String?
+    
+    required init?(map: ObjectMapper.Map) {}
+    func mapping(map: ObjectMapper.Map) {
+        actionTaken <- map["actionTaken"]
+        actionTime <- (map["actionTime"], ISODateTransform())
+        performBy <- map["performBy"]
+    }
 }
 
 extension VideoIssueModel: Hashable {
+    
     static func == (lhs: VideoIssueModel, rhs: VideoIssueModel) -> Bool {
         return lhs.id == rhs.id
     }
-
+    
     func hash(into hasher: inout Hasher) {
         hasher.combine(id)
     }

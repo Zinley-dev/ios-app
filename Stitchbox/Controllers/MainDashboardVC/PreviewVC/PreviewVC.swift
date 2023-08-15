@@ -332,13 +332,14 @@ extension PreviewVC: ASCollectionDataSource {
         let post = self.posts[indexPath.row]
         
         return {
-            let node = VideoNode(with: post, at: indexPath.row)
+            let node = VideoNode(with: post, at: indexPath.row, isPreview: true)
             //node.collectionNode = self.collectionNode
             node.neverShowPlaceholders = true
             node.debugName = "Node \(indexPath.row)"
             node.isOriginal = true
             node.automaticallyManagesSubnodes = true
             //
+            
             return node
         }
         

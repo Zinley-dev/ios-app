@@ -64,7 +64,7 @@ class SubcriptionVC: UIViewController, ZSWTappableLabelTapDelegate {
                   .tappableHighlightedForegroundColor: UIColor.black,
                   .foregroundColor: UIColor.black,
                   .underlineStyle: NSUnderlineStyle.single.rawValue,
-                  StartViewController.URLAttributeName: type.URL
+                  SubcriptionVC.URLAttributeName: type.URL
               ]
           })
           
@@ -229,7 +229,5 @@ extension SubcriptionVC {
             break
         }
     }
-
-    //...
-
+    
 }

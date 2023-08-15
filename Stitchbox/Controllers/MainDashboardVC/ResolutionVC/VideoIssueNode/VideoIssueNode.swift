@@ -12,10 +12,11 @@ import AsyncDisplayKit
 class VideoIssueNode: ASCellNode {
     
     var videoIssue: VideoIssueModel
-    var descriptionNode: ASTextNode!
-    var actionTakenNode: ASTextNode!
-    var timeNode: ASTextNode!
-    let paragraphStyles = NSMutableParagraphStyle()
+    private var descriptionNode: ASTextNode!
+    private var reasonNode: ASTextNode!
+    private var actionTakenNode: ASTextNode!
+    private var timeNode: ASTextNode!
+    private let paragraphStyles = NSMutableParagraphStyle()
     
     deinit {
         print("VideoIssueNode is being deallocated.")
@@ -25,6 +26,7 @@ class VideoIssueNode: ASCellNode {
         
         self.videoIssue = videoIssue
         self.descriptionNode = ASTextNode()
+        self.reasonNode = ASTextNode()
         self.actionTakenNode = ASTextNode()
         self.timeNode = ASTextNode()
         
@@ -32,53 +34,80 @@ class VideoIssueNode: ASCellNode {
         
         self.backgroundColor = UIColor.clear
         self.selectionStyle = .none
+        
         descriptionNode.isLayerBacked = true
+        reasonNode.isLayerBacked = true
         actionTakenNode.isLayerBacked = true
-        paragraphStyles.alignment = .left
-
-        descriptionNode.backgroundColor = UIColor.clear
-        actionTakenNode.backgroundColor = UIColor.clear
-        timeNode.backgroundColor = UIColor.clear
+        timeNode.isLayerBacked = true
         
         automaticallyManagesSubnodes = true
         
-        let date = self.videoIssue.reportedAt
+        paragraphStyles.alignment = .left
         
-        let textAttributes: [NSAttributedString.Key: Any] = [
-            NSAttributedString.Key.font: UIFont.systemFont(ofSize: 16),  // Replace with your FontManager if required
+        let keyAttributes: [NSAttributedString.Key: Any] = [
+            NSAttributedString.Key.font: FontManager.shared.roboto(.Medium, size: 14),
             NSAttributedString.Key.foregroundColor: UIColor.black,
             NSAttributedString.Key.paragraphStyle: paragraphStyles
         ]
         
-        let timeAttributes: [NSAttributedString.Key: Any] = [
-            NSAttributedString.Key.font: UIFont.systemFont(ofSize: 14),  // Replace with your FontManager if required
+        let valueAttributes: [NSAttributedString.Key: Any] = [
+            NSAttributedString.Key.font: FontManager.shared.roboto(.Medium, size: 14),
             NSAttributedString.Key.foregroundColor: UIColor.darkGray,
             NSAttributedString.Key.paragraphStyle: paragraphStyles
         ]
         
-        let time = NSAttributedString(string: "\(timeAgoSinceDate(date!, numericDates: true))", attributes: timeAttributes)
-    
-        timeNode.attributedText = time
+        let timeAttributes: [NSAttributedString.Key: Any] = [
+            NSAttributedString.Key.font: FontManager.shared.roboto(.Medium, size: 14),
+            NSAttributedString.Key.foregroundColor: UIColor.darkGray,
+            NSAttributedString.Key.paragraphStyle: paragraphStyles
+        ]
         
-        if let reason = videoIssue.reason {
-            descriptionNode.attributedText = NSAttributedString(string: "Your video was detected for \(reason.rawValue).", attributes: textAttributes)
+        if let date = self.videoIssue.moderationLog?.actionTime {
+            let time = NSAttributedString(string: "\(timeAgoSinceDate(date, numericDates: true))", attributes: timeAttributes)
+            timeNode.attributedText = time
         }
-        if let actionTaken = videoIssue.actionTaken {
-            actionTakenNode.attributedText = NSAttributedString(string: "Action taken: \(actionTaken.rawValue).", attributes: textAttributes)
+        
+        descriptionNode.attributedText = NSAttributedString(string: "Issue for your video:", attributes: keyAttributes)
+        
+        if let reason = videoIssue.contentModerationMessage {
+            reasonNode.attributedText = NSAttributedString(string: "\(reason).", attributes: valueAttributes)
         }
+        
+        if let actionTaken = videoIssue.moderationLog?.actionTaken {
+            let actionAttributes: [NSAttributedString.Key: Any]
+           
+            if actionTaken.lowercased() == "delete" {
+                actionAttributes = [
+                    NSAttributedString.Key.font: FontManager.shared.roboto(.Regular, size: 14),
+                    NSAttributedString.Key.foregroundColor: UIColor.red,
+                    NSAttributedString.Key.paragraphStyle: paragraphStyles
+                ]
+            } else {
+                actionAttributes = valueAttributes
+            }
+            
+            // Create two separate attributed strings
+            let actionLabel = NSAttributedString(string: "Action taken: ", attributes: keyAttributes)
+            let actionValue = NSAttributedString(string: "deleted", attributes: actionAttributes)
+            
+            // Combine them into a single string
+            let combinedAttributedString = NSMutableAttributedString()
+            combinedAttributedString.append(actionLabel)
+            combinedAttributedString.append(actionValue)
+            
+            actionTakenNode.attributedText = combinedAttributedString
+        }
+
     }
     
     override func layoutSpecThatFits(_ constrainedSize: ASSizeRange) -> ASLayoutSpec {
         
         let issueSubStack = ASStackLayoutSpec.vertical()
-        issueSubStack.spacing = 8.0
-        issueSubStack.children = [descriptionNode, actionTakenNode, timeNode]
-      
-        let issueStack = ASStackLayoutSpec.horizontal()
-        issueStack.spacing = 10
-        issueStack.justifyContent = ASStackLayoutJustifyContent.start
-        issueStack.children = [issueSubStack]
+        issueSubStack.spacing = 12.0
+        issueSubStack.children = [descriptionNode, reasonNode, actionTakenNode, timeNode]
         
-        return ASInsetLayoutSpec(insets: UIEdgeInsets(top: 16.0, left: 16, bottom: 16, right: 16), child: issueStack)
+        return ASInsetLayoutSpec(insets: UIEdgeInsets(top: 16.0, left: 16, bottom: 16, right: 16), child: issueSubStack)
     }
 }
+
+// Note: The VideoIssueModel and the `timeAgoSinceDate` function are assumed to be elsewhere in your code.

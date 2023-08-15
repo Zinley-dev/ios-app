@@ -56,14 +56,15 @@ class VideoNode: ASCellNode, ASVideoNodeDelegate {
     fileprivate let FontSize: CGFloat = 13
     fileprivate let OrganizerImageSize: CGFloat = 30
     private var index: Int!
+    private var isPreview: Bool!
     
-    init(with post: PostModel, at: Int) {
+    init(with post: PostModel, at: Int, isPreview: Bool) {
         print("VideoNode \(at) is loading post: \(post.id)")
         self.post = post
         self.index = at
         self.gradientNode = GradienView()
         self.cellVideoNode = ASVideoNode()
-      
+        self.isPreview = isPreview
         
         super.init()
 
@@ -828,7 +829,10 @@ extension VideoNode: UIGestureRecognizerDelegate {
         self.headerView.saveBtn.setImage(unsaveImage, for: .normal)
         self.headerView.commentBtn.setImage(cmtImage, for: .normal)
         
-        
+        if isPreview {
+            self.headerView.stackView.isHidden = true
+            self.headerView.stackConstant.constant = 0
+        }
         // Gesture Recognizers
         setupGestureRecognizers()
         fillStats()
@@ -1403,20 +1407,16 @@ extension VideoNode {
 
         global_cornerRadius = 45
         
-        if headerView.isHidden {
-            
-            global_presetingRate = 0.36
-            
-        } else {
-            
-            global_presetingRate = 0.35
-        }
 
         if post.owner?.id == _AppCoreData.userDataSource.value?.userID {
             
             presentVC(vc, using: PostSettingVC())
             
+            global_presetingRate = 0.40
+            
         } else {
+            
+            global_presetingRate = 0.36
             
             let newsFeedSettingVC = NewsFeedSettingVC()
             newsFeedSettingVC.modalPresentationStyle = .custom
@@ -1710,7 +1710,6 @@ extension VideoNode {
 
             switch result {
             case .success(let apiResponse):
-                print(apiResponse)
                 guard let message = apiResponse.body?["message"] as? String,
                       message == "success",
                       let data = apiResponse.body?["data"] as? [String: Any],
@@ -1731,10 +1730,7 @@ extension VideoNode {
     
     func handleReaction(isFollower: Bool, isFollowing: Bool, isLiked: Bool, isSaved: Bool) {
        
-        
-        processStitchStatus(isFollowingMe: isFollower)
-
-        if isFollowing {
+        if isFollower {
             self.hideFollowBtn()
         } else {
             self.setupFollowBtn()
@@ -1760,10 +1756,7 @@ extension VideoNode {
     }
     
     func processStitchStatus(isFollowingMe: Bool) {
-        
-        
-        print(post.userSettings?.publicStitch,post.setting?.allowStitch, isFollowingMe)
-
+    
         // If user has a public stitch, or if the post allows stitching and the user is following me
         let shouldShowStitch = (post.userSettings?.publicStitch == true && post.setting?.allowStitch == true) ||
                               (post.setting?.allowStitch == true && isFollowingMe)

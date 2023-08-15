@@ -106,6 +106,7 @@
 		6A286B6329C980F000C72718 /* customizedMap.json in Resources */ = {isa = PBXBuildFile; fileRef = 6A286B6229C980F000C72718 /* customizedMap.json */; };
 		6A286B6729CD5EB200C72718 /* UserSettingVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A286B6529CD5EB200C72718 /* UserSettingVC.swift */; };
 		6A286B6829CD5EB200C72718 /* UserSettingVC.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6A286B6629CD5EB200C72718 /* UserSettingVC.xib */; };
+		6A2A16012A8B2C9100E607EA /* ResolutionDetailVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A2A16002A8B2C9100E607EA /* ResolutionDetailVC.swift */; };
 		6A2B9A8129D26ACE00C2D9CD /* ViewVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A2B9A8029D26ACE00C2D9CD /* ViewVC.swift */; };
 		6A2B9A8429D26AE500C2D9CD /* ViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A2B9A8329D26AE400C2D9CD /* ViewCell.swift */; };
 		6A307CC129ADB18500A89529 /* CommentSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A307CBF29ADB18400A89529 /* CommentSettings.swift */; };
@@ -606,6 +607,7 @@
 		6A286B6229C980F000C72718 /* customizedMap.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = customizedMap.json; sourceTree = "<group>"; };
 		6A286B6529CD5EB200C72718 /* UserSettingVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserSettingVC.swift; sourceTree = "<group>"; };
 		6A286B6629CD5EB200C72718 /* UserSettingVC.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = UserSettingVC.xib; sourceTree = "<group>"; };
+		6A2A16002A8B2C9100E607EA /* ResolutionDetailVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResolutionDetailVC.swift; sourceTree = "<group>"; };
 		6A2B9A8029D26ACE00C2D9CD /* ViewVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ViewVC.swift; sourceTree = "<group>"; };
 		6A2B9A8329D26AE400C2D9CD /* ViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ViewCell.swift; sourceTree = "<group>"; };
 		6A307CBF29ADB18400A89529 /* CommentSettings.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CommentSettings.swift; sourceTree = "<group>"; };
@@ -1677,6 +1679,14 @@
 			path = UserSettingVC;
 			sourceTree = "<group>";
 		};
+		6A2A15FF2A8B2C7D00E607EA /* ResolutionDetailVC */ = {
+			isa = PBXGroup;
+			children = (
+				6A2A16002A8B2C9100E607EA /* ResolutionDetailVC.swift */,
+			);
+			path = ResolutionDetailVC;
+			sourceTree = "<group>";
+		};
 		6A2B9A7F29D26AC100C2D9CD /* ViewVC */ = {
 			isa = PBXGroup;
 			children = (
@@ -1946,6 +1956,7 @@
 		6A40311A2A872D4E0038B655 /* ResolutionVC */ = {
 			isa = PBXGroup;
 			children = (
+				6A2A15FF2A8B2C7D00E607EA /* ResolutionDetailVC */,
 				6A4031202A89B5950038B655 /* VideoIssueNode */,
 				6A40311B2A872D600038B655 /* ResolutionVC.swift */,
 			);
@@ -4247,6 +4258,7 @@
 				6AE3BEEA2A69AE5900AAA5DD /* TrendingHashtagNode.swift in Sources */,
 				6A9A26932A801EC400F4D45A /* VideoNode.swift in Sources */,
 				6AB929D32A3D514D003E109E /* AddView.swift in Sources */,
+				6A2A16012A8B2C9100E607EA /* ResolutionDetailVC.swift in Sources */,
 				6AE3BEDE2A68831900AAA5DD /* SuggestFollowVC.swift in Sources */,
 				6A0D54482974EDE30059530C /* ProfileHeaderData.swift in Sources */,
 				6A80F1B429C7B5560047595A /* CommentNotificationVC.swift in Sources */,
