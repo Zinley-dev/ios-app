@@ -35,6 +35,7 @@
                 <outlet property="saveCountLbl" destination="bBg-kT-vRZ" id="AFT-Z0-xRi"/>
                 <outlet property="shareBtn" destination="E7v-CO-rN3" id="ss6-bB-SLv"/>
                 <outlet property="shareCountLbl" destination="wXa-hL-foz" id="ehm-cv-GJW"/>
+                <outlet property="stackConstant" destination="Y2f-lr-onW" id="whI-Yg-Dny"/>
                 <outlet property="stackView" destination="Lru-gO-4Tt" id="gnQ-YY-MTA"/>
                 <outlet property="stichBtn" destination="al0-EY-6tL" id="qo1-Wf-htW"/>
                 <outlet property="stitchLbl" destination="ntp-fA-FBJ" id="ysa-F9-2ry"/>
@@ -244,6 +245,9 @@
                         </stackView>
                     </subviews>
                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="50" id="Y2f-lr-onW"/>
+                    </constraints>
                 </stackView>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="hJk-x8-wRN">
                     <rect key="frame" x="0.0" y="48" width="689" height="422.5"/>

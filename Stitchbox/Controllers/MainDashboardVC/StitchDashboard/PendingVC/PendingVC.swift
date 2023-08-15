@@ -701,11 +701,11 @@ extension PendingVC {
             
             // If the video is stuck, reset the buffer by seeking to the current playback time.
             if let currentIndex = currentIndex, let cell = waitCollectionNode.nodeForItem(at: IndexPath(row: currentIndex, section: 0)) as? PendingNode {
-                if let playerItem = cell.videoNode.currentItem, !playerItem.isPlaybackLikelyToKeepUp {
-                    if let currentTime = cell.videoNode.currentItem?.currentTime() {
-                        cell.videoNode.player?.seek(to: currentTime)
+                if let playerItem = cell.cellVideoNode.currentItem, !playerItem.isPlaybackLikelyToKeepUp {
+                    if let currentTime = cell.cellVideoNode.currentItem?.currentTime() {
+                        cell.cellVideoNode.player?.seek(to: currentTime)
                     } else {
-                        cell.videoNode.player?.seek(to: CMTime.zero)
+                        cell.cellVideoNode.player?.seek(to: CMTime.zero)
                     }
                 }
             }
@@ -723,10 +723,10 @@ extension PendingVC {
         if let cell = self.waitCollectionNode.nodeForItem(at: IndexPath(row: index, section: 0)) as? PendingNode {
             
             // Seek to the beginning of the video
-            cell.videoNode.player?.seek(to: CMTime(seconds: 0, preferredTimescale: 1))
+            cell.cellVideoNode.player?.seek(to: CMTime(seconds: 0, preferredTimescale: 1))
              
             // Pause the video
-            cell.videoNode.pause()
+            cell.cellVideoNode.pause()
             
         }
         
@@ -738,7 +738,7 @@ extension PendingVC {
         
         if let cell = self.waitCollectionNode.nodeForItem(at: IndexPath(row: index, section: 0)) as? PendingNode {
             
-            cell.videoNode.player?.seek(to: time)
+            cell.cellVideoNode.player?.seek(to: time)
             
         }
         
@@ -749,8 +749,8 @@ extension PendingVC {
         
         if let cell = self.waitCollectionNode.nodeForItem(at: IndexPath(row: index, section: 0)) as? PendingNode {
             
-            cell.videoNode.muted = shouldMute ?? !globalIsSound
-            cell.videoNode.play()
+            cell.cellVideoNode.muted = shouldMute ?? !globalIsSound
+            cell.cellVideoNode.play()
             
         }
         

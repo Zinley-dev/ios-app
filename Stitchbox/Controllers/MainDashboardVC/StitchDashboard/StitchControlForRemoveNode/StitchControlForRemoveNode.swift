@@ -14,7 +14,6 @@ import AVFoundation
 import AVKit
 import ActiveLabel
 
-
 fileprivate let FontSize: CGFloat = 12
 fileprivate let OrganizerImageSize: CGFloat = 30
 fileprivate let HorizontalBuffer: CGFloat = 10
@@ -25,293 +24,192 @@ class StitchControlForRemoveNode: ASCellNode, ASVideoNodeDelegate {
         print("StitchControlForRemoveNode is being deallocated.")
     }
     
+    var allowProcess = true
+    var isFollowingUser = false
+    var isSave = false
     
+    var buttonNode: ASDisplayNode!
     var post: PostModel!
-    var videoNode: ASVideoNode
-    var contentNode: ASTextNode
-    var headerNode: ASDisplayNode
+    var cellVideoNode: ASVideoNode
     var headerView: PostHeader!
    
     var gradientNode: GradienView
     var label: ActiveLabel!
-    var buttonNode: ASDisplayNode
     var stitchView: UnStitchView!
-   
+    var infoNode: ASTextNode!
     let maximumShowing = 100
     
     var unstitchBtn : ((ASCellNode) -> Void)?
     var stitchTo: Bool
-    var isFollowingUser = false
-    var allowProcess = false
-    private lazy var infoNode: ASTextNode = {
-        let textNode = ASTextNode()
-        //textNode.style.preferredSize.width = 70
-        let paragraphStyle = NSMutableParagraphStyle()
-        paragraphStyle.alignment = .center
-        textNode.attributedText = NSAttributedString(
-            string: "",
-            attributes: [
-                NSAttributedString.Key.font: FontManager.shared.roboto(.Bold, size: FontSize), // Using the Roboto Bold style
-                NSAttributedString.Key.foregroundColor: UIColor.white,
-                NSAttributedString.Key.paragraphStyle: paragraphStyle
-            ]
-        )
-
-        textNode.backgroundColor = .black // set the background color to dark gray
-        textNode.maximumNumberOfLines = 1
-
-        DispatchQueue.main.async {
-            textNode.view.cornerRadius = 3
-        }
-        
-        return textNode
-    }()
     
     init(with post: PostModel, stitchTo: Bool) {
         self.post = post
         self.stitchTo = stitchTo
-        self.contentNode = ASTextNode()
-        self.headerNode = ASDisplayNode()
-      
-        self.videoNode = ASVideoNode()
+        self.cellVideoNode = ASVideoNode()
         self.gradientNode = GradienView()
         self.buttonNode = ASDisplayNode()
-    
-       
+        self.infoNode = ASTextNode()
         super.init()
         
-        self.gradientNode.isLayerBacked = true
-        self.gradientNode.isOpaque = false
+        configureGradientNode()
+        configureVideoNode(with: post)
     
-        
         automaticallyManagesSubnodes = true
     
-        if post.muxPlaybackId != "" {
-            self.videoNode.url = self.getThumbnailBackgroundVideoNodeURL(post: post)
-            self.videoNode.player?.automaticallyWaitsToMinimizeStalling = true
-            self.videoNode.shouldAutoplay = false
-            self.videoNode.shouldAutorepeat = true
-            
-            self.videoNode.muted = false
-          
-            
-            
-            if let width = self.post.metadata?.width, let height = self.post.metadata?.height, width != 0, height != 0 {
-                // Calculate aspect ratio
-                let aspectRatio = Float(width) / Float(height)
-             
-                // Set contentMode based on aspect ratio
-                if aspectRatio >= 0.5 && aspectRatio <= 0.7 { // Close to 9:16 aspect ratio (vertical)
-                    self.videoNode.contentMode = .scaleAspectFill
-                    self.videoNode.gravity = AVLayerVideoGravity.resizeAspectFill.rawValue
-                } else if aspectRatio >= 1.7 && aspectRatio <= 1.9 { // Close to 16:9 aspect ratio (landscape)
-                    self.videoNode.contentMode = .scaleAspectFit
-                    self.videoNode.gravity = AVLayerVideoGravity.resizeAspect.rawValue
-                    //self.backgroundImage.setGradientImage(with: self.getThumbnailVideoNodeURL(post: post)!)
-                } else {
-                    // Default contentMode, adjust as needed
-                    self.videoNode.contentMode = .scaleAspectFit
-                    self.videoNode.gravity = AVLayerVideoGravity.resizeAspect.rawValue
-                    //self.backgroundImage.setGradientImage(with: self.getThumbnailVideoNodeURL(post: post)!)
-                }
-            } else {
-                // Default contentMode, adjust as needed
-                self.videoNode.contentMode = .scaleAspectFill
-                self.videoNode.gravity = AVLayerVideoGravity.resizeAspectFill.rawValue
-                //self.backgroundImage.setGradientImage(with: self.getThumbnailVideoNodeURL(post: post)!)
-            }
-
-            
-            DispatchQueue.main.async { [weak self] in
-                guard let self = self else { return }
-                self.videoNode.asset = AVAsset(url: self.getVideoURLForRedundant_stream(post: post)!)
-                self.videoNode.view.layer.cornerRadius = 25
-                self.videoNode.view.clipsToBounds = true
-            }
-            
-            if stitchTo {
-                infoNode.cornerRadius = 3
-                let paragraphStyle = NSMutableParagraphStyle()
-                paragraphStyle.alignment = .center
-                
-                if post.isApproved {
-                    
-                    infoNode.attributedText = NSAttributedString(
-                        string: "Approved",
-                        attributes: [
-                            NSAttributedString.Key.font: FontManager.shared.roboto(.Bold, size: FontSize), // Using the Roboto Bold style
-                            NSAttributedString.Key.foregroundColor: UIColor.white,
-                            NSAttributedString.Key.paragraphStyle: paragraphStyle
-                        ]
-                    )
-                    
-                } else {
-                    
-                    infoNode.attributedText = NSAttributedString(
-                        string: "Pending",
-                        attributes: [
-                            NSAttributedString.Key.font: FontManager.shared.roboto(.Bold, size: FontSize), // Using the Roboto Bold style
-                            NSAttributedString.Key.foregroundColor: UIColor.white,
-                            NSAttributedString.Key.paragraphStyle: paragraphStyle
-                        ]
-                    )
-                    
-                }
-                
-                
-            }
-            
-        }
-        
-       
     }
     
     override func didLoad() {
         super.didLoad()
         
-        self.gradientNode.cornerRadius = 25
+        setupViews()
+        setupLabel()
+        configureInfoNode(for: post, stitchTo: stitchTo, fontSize: FontSize)
+        
+        self.cellVideoNode.view.layer.cornerRadius = 10
+        self.cellVideoNode.view.clipsToBounds = true
+        
+        self.gradientNode.cornerRadius = 10
         self.gradientNode.clipsToBounds = true
         
-        self.label = ActiveLabel()
-        self.contentNode.view.addSubview(label)
-        self.label.backgroundColor = .clear
-        self.contentNode.view.isUserInteractionEnabled = true
-    
-        self.label.setContentHuggingPriority(.defaultLow, for: .horizontal)
-        self.label.setContentHuggingPriority(.defaultLow, for: .vertical)
-        self.label.setContentCompressionResistancePriority(.defaultHigh, for: .horizontal)
-        self.label.setContentCompressionResistancePriority(.defaultHigh, for: .vertical)
-
         
+    }
+    
 
+    override func layout() {
+        super.layout()
+        if self.label != nil, self.headerView != nil {
+            self.label.frame = self.headerView.contentLbl.bounds
+            self.label.numberOfLines = Int(self.headerView.contentLbl.numberOfLines)
+        }
+        
+    }
+    
+    private func configureGradientNode() {
+        gradientNode.isLayerBacked = true
+        gradientNode.isOpaque = false
+    }
+    
+    
+    func configureInfoNode(for post: PostModel, stitchTo: Bool, fontSize: CGFloat) {
+        if stitchTo {
+            let paragraphStyle = NSMutableParagraphStyle()
+            paragraphStyle.alignment = .center
+            
+            let statusText = post.isApproved ? "Approved" : "Pending"
+            
+            infoNode.attributedText = NSAttributedString(
+                string: statusText,
+                attributes: [
+                    .font: FontManager.shared.roboto(.Bold, size: fontSize),
+                    .foregroundColor: UIColor.white,
+                    .paragraphStyle: paragraphStyle
+                ]
+            )
+            infoNode.cornerRadius = 3
+        }
+    }
+
+
+    private func configureVideoNode(with post: PostModel) {
+        
+        cellVideoNode.url = getThumbnailURL(post: post)
+        cellVideoNode.player?.automaticallyWaitsToMinimizeStalling = true
+        cellVideoNode.shouldAutoplay = false
+        cellVideoNode.shouldAutorepeat = true
+        cellVideoNode.delegate = self
+        
+        if let width = post.metadata?.width, let height = post.metadata?.height, width != 0, height != 0 {
+            // Calculate aspect ratio
+            let aspectRatio = Float(width) / Float(height)
+            
+            if aspectRatio >= 0.5 && aspectRatio <= 0.7 { // Close to 9:16 aspect ratio (vertical)
+                cellVideoNode.contentMode = .scaleAspectFill
+                cellVideoNode.gravity = AVLayerVideoGravity.resizeAspectFill.rawValue
+            } else if aspectRatio >= 1.7 && aspectRatio <= 1.9 { // Close to 16:9 aspect ratio (landscape)
+                cellVideoNode.contentMode = .scaleAspectFit
+                cellVideoNode.gravity = AVLayerVideoGravity.resizeAspect.rawValue
+                
+            } else {
+                // Default contentMode, adjust as needed
+                cellVideoNode.contentMode = .scaleAspectFit
+                cellVideoNode.gravity = AVLayerVideoGravity.resizeAspectFill.rawValue
+                
+            }
+        } else {
+            // Default contentMode, adjust as needed
+            cellVideoNode.contentMode = .scaleAspectFill
+            cellVideoNode.gravity = AVLayerVideoGravity.resizeAspectFill.rawValue
+            
+        }
+        
+        DispatchQueue.main.async { [weak self] in
+            guard let self = self else { return }
+            self.cellVideoNode.asset = AVAsset(url: self.getVideoURL(post: post)!)
+        }
+        
+    }
+
+    
+    func setupLabel() {
+        self.label = ActiveLabel()
+    
+        self.label.backgroundColor = .clear
+        self.headerView.contentLbl.addSubview(self.label)
+        self.headerView.contentLbl.isUserInteractionEnabled = true
+        
+      
         let customType = ActiveType.custom(pattern: "\\*more\\b|\\*hide\\b")
         self.label.customColor[customType] = .lightGray
-        self.label.numberOfLines = Int(self.contentNode.lineCount)
         self.label.enabledTypes = [.hashtag, .url, customType]
-        self.label.attributedText = self.contentNode.attributedText
-        
-        
-            //self.label.mentionColor = .secondary
-        
-        self.label.hashtagColor = UIColor(red: 85.0/255, green: 172.0/255, blue: 238.0/255, alpha: 1)
-        self.label.URLColor = UIColor(red: 135/255, green: 206/255, blue: 250/255, alpha: 1)
+       
+        self.label.hashtagColor = UIColor(red: 0.0/255, green: 204.0/255, blue: 255.0/255, alpha: 1)
+
+        self.label.URLColor = UIColor(red: 60/255, green: 115/255, blue: 180/255, alpha: 1)
+
         
         self.label.handleCustomTap(for: customType) { [weak self] element in
             guard let self = self else { return }
-            if element == "*more" {
-                self.seeMore()
-            } else if element == "*hide" {
-                self.hideContent()
-            }
+            element == "*more" ? self.seeMore() : self.hideContent()
         }
-
-        self.label.handleHashtagTap { hashtag in
-            
-            var selectedHashtag = hashtag
-            selectedHashtag.insert("#", at: selectedHashtag.startIndex)
-            
         
-            if let PLHVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "PostListWithHashtagVC") as? PostListWithHashtagVC {
-                
-                if let vc = UIViewController.currentViewController() {
-                    
-                    let nav = UINavigationController(rootViewController: PLHVC)
-
-                    // Set the user ID, nickname, and onPresent properties of UPVC
-                    PLHVC.searchHashtag = selectedHashtag
-                    PLHVC.onPresent = true
-
-                    // Customize the navigation bar appearance
-                    nav.navigationBar.barTintColor = .background
-                    nav.navigationBar.tintColor = .white
-                    nav.navigationBar.titleTextAttributes = [.foregroundColor: UIColor.white]
-
-                    nav.modalPresentationStyle = .fullScreen
-                    vc.present(nav, animated: true, completion: nil)
-           
-                }
-            }
-            
-            
+        self.label.handleHashtagTap { [weak self] hashtag in
+            guard let self = self else { return }
+            self.presentPostListWithHashtagVC(for: "#" + hashtag)
         }
 
         self.label.handleURLTap { [weak self] string in
             guard let self = self else { return }
-            let url = string.absoluteString
-            
-            if url.contains("https://stitchbox.gg/app/account/") {
-                
-                if let id = self.getUIDParameter(from: url) {
-                    self.moveToUserProfileVC(id: id)
-                }
-    
-            } else if url.contains("https://stitchbox.gg/app/post/") {
-            
-                if let id = self.getUIDParameter(from: url) {
-                    self.openPost(id: id)
-                }
-
-            } else {
-                
-                guard let requestUrl = URL(string: url) else {
-                    return
-                }
-
-                if UIApplication.shared.canOpenURL(requestUrl) {
-                     UIApplication.shared.open(requestUrl, options: [:], completionHandler: nil)
-                }
-            }
-            
+            self.handleURLTap(url: string.absoluteString)
         }
+    
         
+    
+        setupDefaultContent()
         
-        self.setupDefaultContent()
-        
-        self.contentNode.backgroundColor = .clear
+    }
+    
+    func setupViews() {
+        // Header View Setup
         
         self.headerView = PostHeader()
-        self.headerNode.view.addSubview(self.headerView)
+        self.view.addSubview(self.headerView)
+        
+        addConstraints(to: self.headerView, within: self.view)
+    
+        self.headerView.contentLbl.numberOfLines = 0
+        self.headerView.contentLbl.lineBreakMode = .byWordWrapping
+        
+        self.headerView.contentLbl.setContentHuggingPriority(.defaultHigh, for: .vertical)
+        self.headerView.contentLbl.setContentCompressionResistancePriority(.defaultHigh, for: .vertical)
 
-        self.headerView.translatesAutoresizingMaskIntoConstraints = false
-        self.headerView.topAnchor.constraint(equalTo: self.headerNode.view.topAnchor, constant: 0).isActive = true
-        self.headerView.bottomAnchor.constraint(equalTo: self.headerNode.view.bottomAnchor, constant: 0).isActive = true
-        self.headerView.leadingAnchor.constraint(equalTo: self.headerNode.view.leadingAnchor, constant: 0).isActive = true
-        self.headerView.trailingAnchor.constraint(equalTo: self.headerNode.view.trailingAnchor, constant: 0).isActive = true
-        
-        self.headerView.createStitchView.isHidden = true
-        self.headerView.createStitchStack.isHidden = true
-        self.headerView.stichBtn.isHidden = true
-        
-        if _AppCoreData.userDataSource.value?.userID == self.post.owner?.id {
-            
-            self.headerView.followBtn.isHidden = true
-            
-        } else {
-            
-            self.checkIfFollow()
-           
-        }
 
-        
-        let avatarTap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(StitchControlForRemoveNode.userTapped))
-        avatarTap.numberOfTapsRequired = 1
-      
-        let usernameTap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(StitchControlForRemoveNode.userTapped))
-        usernameTap.numberOfTapsRequired = 1
-        self.headerView.usernameLbl.isUserInteractionEnabled = true
-        self.headerView.usernameLbl.addGestureRecognizer(usernameTap)
-        self.headerView.usernameLbl.font = FontManager.shared.roboto(.Bold, size: 12)
-
-        
-        let username2Tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(StitchControlForRemoveNode.userTapped))
-        username2Tap.numberOfTapsRequired = 1
-
-        
-        
         self.headerView.usernameLbl.text = "@\(post.owner?.username ?? "")"
+        self.headerView.stackView.isHidden = true
+        self.headerView.stackConstant.constant = 0
         
-        
+        //
         self.stitchView = UnStitchView()
+        self.stitchView.backgroundColor = .clear
         self.buttonNode.view.addSubview(self.stitchView)
         self.stitchView.translatesAutoresizingMaskIntoConstraints = false
         self.stitchView.topAnchor.constraint(equalTo: self.buttonNode.view.topAnchor, constant: 0).isActive = true
@@ -319,118 +217,159 @@ class StitchControlForRemoveNode: ASCellNode, ASVideoNodeDelegate {
         self.stitchView.leadingAnchor.constraint(equalTo: self.buttonNode.view.leadingAnchor, constant: 0).isActive = true
         self.stitchView.trailingAnchor.constraint(equalTo: self.buttonNode.view.trailingAnchor, constant: 0).isActive = true
         
-        
-        //
-        
         let unstitchTap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(StitchControlForRemoveNode.unstitchBtnTapped))
         unstitchTap.numberOfTapsRequired = 1
         self.stitchView.unstitchBtn.addGestureRecognizer(unstitchTap)
         
         
-    }
-    
-    override func layout() {
-        super.layout()
-        if label != nil {
-            label.frame = self.contentNode.view.bounds
-        }
+        // Gesture Recognizers
+        setupGestureRecognizers()
         
     }
 
-    func navigateToHashtag(_ hashtag: String) {
-        if let PLHVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "PostListWithHashtagVC") as? PostListWithHashtagVC {
-                           
-            if let vc = UIViewController.currentViewController() {
-                               
-                let nav = UINavigationController(rootViewController: PLHVC)
+    func addConstraints(to childView: UIView, within parentView: UIView, constant: CGFloat = 0) {
+        
+        let change = self.view.frame.width - ( self.view.frame.height * 9 / 16)
+        let padding = change / 2
+        
+        childView.translatesAutoresizingMaskIntoConstraints = false
+        childView.topAnchor.constraint(equalTo: parentView.topAnchor, constant: constant).isActive = true
+        childView.bottomAnchor.constraint(equalTo: parentView.bottomAnchor, constant: -60).isActive = true
+        childView.leadingAnchor.constraint(equalTo: parentView.leadingAnchor, constant: padding).isActive = true
+        childView.trailingAnchor.constraint(equalTo: parentView.trailingAnchor, constant: padding).isActive = true
+    }
+    
+    func setupGestureRecognizers() {
+        
+        let vidTap = createTapGestureRecognizer(target: self, action: #selector(StitchControlForRemoveNode.tapProcess))
+        self.headerView.restView.isUserInteractionEnabled = true
+        self.headerView.restView.addGestureRecognizer(vidTap)
+     
+        let usernameTap = createTapGestureRecognizer(target: self, action: #selector(StitchControlForRemoveNode.userTapped))
+        self.headerView.usernameLbl.isUserInteractionEnabled = true
+        self.headerView.usernameLbl.addGestureRecognizer(usernameTap)
 
-                // Set the user ID, nickname, and onPresent properties of UPVC
-                PLHVC.searchHashtag = hashtag
-                PLHVC.onPresent = true
+        
+    }
+    
+    func createTapGestureRecognizer(target: Any, action: Selector, taps: Int = 1) -> UITapGestureRecognizer {
+        let tap = UITapGestureRecognizer(target: target, action: action)
+        tap.numberOfTapsRequired = taps
+        return tap
+    }
+   
 
-                // Customize the navigation bar appearance
-                nav.navigationBar.barTintColor = .background
-                nav.navigationBar.tintColor = .white
-                nav.navigationBar.titleTextAttributes = [.foregroundColor: UIColor.white]
-
-                nav.modalPresentationStyle = .fullScreen
-                vc.present(nav, animated: true, completion: nil)
-                      
+    func handleURLTap(url: String) {
+        if url.contains("https://stitchbox.net/app/account/") || url.contains("https://stitchbox.net/app/post/") {
+            if let id = self.getUIDParameter(from: url) {
+                url.contains("account") ? self.moveToUserProfileVC(id: id) : self.openPost(id: id)
             }
+        } else if let requestUrl = URL(string: url), UIApplication.shared.canOpenURL(requestUrl) {
+            UIApplication.shared.open(requestUrl, options: [:], completionHandler: nil)
         }
     }
 
-    func navigateToURL(url: String) {
-        guard let url = URL(string: url), UIApplication.shared.canOpenURL(url) else {
-            return
-        }
+    func presentPostListWithHashtagVC(for selectedHashtag: String) {
+        guard let PLHVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "PostListWithHashtagVC") as? PostListWithHashtagVC,
+              let vc = UIViewController.currentViewController() else { return }
         
-        UIApplication.shared.open(url, options: [:], completionHandler: nil)
+        let nav = UINavigationController(rootViewController: PLHVC)
+        PLHVC.searchHashtag = selectedHashtag
+        PLHVC.onPresent = true
+        nav.navigationBar.barTintColor = .background
+        nav.navigationBar.tintColor = .white
+        nav.navigationBar.titleTextAttributes = [.foregroundColor: UIColor.white]
+        nav.modalPresentationStyle = .fullScreen
+        vc.present(nav, animated: true, completion: nil)
     }
     
-    private func setNodeContentMode(for post: PostModel, node: ASNetworkImageNode, defaultContentMode: UIView.ContentMode) {
-        if let width = post.metadata?.width, let height = post.metadata?.height, width != 0, height != 0 {
-            let aspectRatio = Float(width) / Float(height)
-            
-            if aspectRatio >= 0.5 && aspectRatio <= 0.7 {
-                node.contentMode = .scaleAspectFill
-            } else if aspectRatio >= 1.7 && aspectRatio <= 1.9 {
-                node.contentMode = .scaleAspectFit
-            } else {
-                node.contentMode = defaultContentMode
-            }
-        } else {
-            node.contentMode = defaultContentMode
-        }
+    func seeMore() {
+        
+        setupHideContent()
+        setNeedsLayout()
+        
     }
-
     
-    private func configureVideoNode(for post: PostModel) {
-       // self.videoNode.url = self.getThumbnailBackgroundVideoNodeURL(post: post)
-        self.videoNode.player?.automaticallyWaitsToMinimizeStalling = true
-        self.videoNode.shouldAutoplay = false
-        self.videoNode.shouldAutorepeat = true
-        self.videoNode.muted = false
-        self.videoNode.delegate = self
+    func hideContent() {
         
-        setNodeContentMode(for: post, node: self.videoNode, defaultContentMode: .scaleAspectFill)
-        
-        DispatchQueue.main.async { [weak self] in
-            guard let self = self else { return }
-            self.videoNode.asset = AVAsset(url: self.getVideoURLForRedundant_stream(post: post)!)
-        }
+        setupDefaultContent()
+        setNeedsLayout()
     }
 
     func setupDefaultContent() {
 
-        headerNode.backgroundColor = UIColor.clear
+        headerView.backgroundColor = UIColor.clear
 
         let hashtagsText = post.hashtags?.joined(separator: " ")
         let finalText = post.content + " " + (hashtagsText ?? "")
         var truncatedText: String
-        
+            
         if post.content == "" {
             truncatedText = truncateTextIfNeeded(hashtagsText ?? "")
         } else {
             truncatedText = truncateTextIfNeeded(finalText)
         }
-        
+            
         let attr1 = NSAttributedString(string: truncatedText, attributes: [
             NSAttributedString.Key.font: FontManager.shared.roboto(.Regular, size: FontSize), // Using the Roboto Regular style as an example
             NSAttributedString.Key.foregroundColor: UIColor.clear
         ])
-            
+
         let attr2 = NSAttributedString(string: truncatedText, attributes: [
             NSAttributedString.Key.font: FontManager.shared.roboto(.Regular, size: FontSize), // Using the Roboto Regular style as an example
             NSAttributedString.Key.foregroundColor: UIColor.white
         ])
+            
+        self.headerView.contentLbl.attributedText = attr1
+        label.attributedText = attr2
+          
+        self.headerView.setNeedsLayout()
+        self.headerView.layoutIfNeeded()
+            
+            
+            
+        }
         
-        self.contentNode.attributedText = attr1
-        self.label.attributedText = attr2
-        
-        setNeedsLayout()
-        layoutIfNeeded()
+    func setupHideContent() {
+            
+        headerView.backgroundColor = UIColor.clear
+            
+        let hashtagsText = post.hashtags?.joined(separator: " ")
+        let finalText = post.content + " " + (hashtagsText ?? "")
+        var contentText: String
 
+        if post.content == "" {
+            contentText = processTextForHiding(hashtagsText ?? "")
+        } else {
+            contentText = processTextForHiding(finalText)
+        }
+            
+        let attr1 = NSAttributedString(string: contentText, attributes: [
+            NSAttributedString.Key.font: FontManager.shared.roboto(.Regular, size: FontSize), // Using the Roboto Regular style as an example
+            NSAttributedString.Key.foregroundColor: UIColor.clear
+        ])
+            
+        let attr2 = NSAttributedString(string: contentText, attributes: [
+            NSAttributedString.Key.font: FontManager.shared.roboto(.Regular, size: FontSize), // Using the Roboto Regular style as an example
+            NSAttributedString.Key.foregroundColor: UIColor.white
+        ])
+            
+            
+        self.headerView.contentLbl.attributedText = attr1
+        label.attributedText = attr2
+            
+        self.headerView.setNeedsLayout()
+        self.headerView.layoutIfNeeded()
+
+           
+    }
+        
+    private func processTextForHiding(_ text: String) -> String {
+        if text.count > maximumShowing {
+            return text + " *hide"
+        } else {
+            return text
+        }
     }
 
     private func truncateTextIfNeeded(_ text: String) -> String {
@@ -441,232 +380,107 @@ class StitchControlForRemoveNode: ASCellNode, ASVideoNodeDelegate {
         }
     }
 
-    
-    func checkIfFollow() {
+
+    func getThumbnailURL(post: PostModel) -> URL? {
+        if post.muxPlaybackId != "" {
+                
+            let urlString = "https://image.mux.com/\(post.muxPlaybackId)/thumbnail.jpg?time=0"
+                
+            return URL(string: urlString)
+                
+        } else {
+            return nil
+        }
+    }
         
-        APIManager.shared.isFollowing(uid: post.owner?.id ?? "") { [weak self] result in
-            guard let self = self else { return }
-            
+    func getVideoURL(post: PostModel) -> URL? {
+        if post.muxPlaybackId != "" {
+                
+            let urlString = "https://stream.mux.com/\(post.muxPlaybackId).m3u8"
+            return URL(string: urlString)
+                
+        } else {
+                
+            return nil
+        }
+    }
+    
+    func moveToUserProfileVC(id: String) {
+        guard let UPVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "UserProfileVC") as? UserProfileVC,
+              let vc = UIViewController.currentViewController() else { return }
+
+        if general_vc != nil {
+            general_vc.viewWillDisappear(true)
+            general_vc.viewDidDisappear(true)
+        }
+
+        let nav = UINavigationController(rootViewController: UPVC)
+        UPVC.userId = id
+        UPVC.onPresent = true
+        nav.navigationBar.barTintColor = .background
+        nav.navigationBar.tintColor = .white
+        nav.navigationBar.titleTextAttributes = [.foregroundColor: UIColor.white]
+        nav.modalPresentationStyle = .fullScreen
+        vc.present(nav, animated: true, completion: nil)
+    }
+
+    
+    func openPost(id: String) {
+        presentSwiftLoader()
+
+        APIManager.shared.getPostDetail(postId: id) { result in
+            DispatchQueue.main.async {
+                SwiftLoader.hide()
+            }
+
             switch result {
             case .success(let apiResponse):
-                
-                guard let isFollowing = apiResponse.body?["data"] as? Bool else {
-                    hideFollowBtn()
+                guard let data = apiResponse.body, !data.isEmpty, let post = PostModel(JSON: data) else {
                     return
                 }
                 
-                if isFollowing {
-                    hideFollowBtn()
-                   
-                    
-                } else {
-                    
-                    setupFollowBtn()
-                    
+                DispatchQueue.main.async { [weak self] in
+                    self?.presentSelectedPostVC(with: [post])
                 }
                 
             case .failure(let error):
                 print(error)
-                hideFollowBtn()
-                
             }
-        }
-        
-    }
-    
-    func setupFollowBtn() {
-        Dispatch.main.async { [weak self] in
-            guard let self = self else { return }
-            self.headerView.followBtn.isHidden = false
-            self.headerView.followBtn.titleLabel?.font = FontManager.shared.roboto(.Regular, size: 12.0)
-            self.isFollowingUser = false
-            let followTap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(StitchControlForRemoveNode.followTap))
-            followTap.numberOfTapsRequired = 1
-            self.headerView.followBtn.addGestureRecognizer(followTap)
-            
-        }
-    }
-    
-    func followUser() {
-        
-        if let userId = post.owner?.id {
-            
-            DispatchQueue.main.async { [weak self] in
-                guard let self = self else { return }
-                self.headerView.followBtn.setTitle("Following", for: .normal)
-            }
-            
-            
-            APIManager.shared.insertFollows(params: ["FollowId": userId]) { [weak self] result in
-                guard let self = self else { return }
-                
-                switch result {
-                case .success(_):
-                    
-                    
-                    self.isFollowingUser = true
-                    self.allowProcess = true
-                    
-                    
-                case .failure(_):
-                    
-                    DispatchQueue.main.async {
-                        self.allowProcess = true
-                        showNote(text: "Something happened!")
-                    }
-                    
-                    
-                    DispatchQueue.main.async {
-                        self.headerView.followBtn.setTitle("Follow", for: .normal)
-                    }
-                }
-                
-            }
-            
-        }
-        
-        
-        
-        
-    }
-    
-    func unfollowUser() {
-        
-        if let userId = post.owner?.id {
-            
-            DispatchQueue.main.async { [weak self] in
-                guard let self = self else { return }
-                self.headerView.followBtn.setTitle("Follow", for: .normal)
-            }
-
-            APIManager.shared.unFollow(params: ["FollowId":userId]) { [weak self] result in
-                guard let self = self else { return }
-                
-                switch result {
-                case .success(_):
-                    self.isFollowingUser = false
-                    needRecount = true
-                    self.allowProcess = true
-                case .failure(_):
-                    DispatchQueue.main.async {
-                        self.allowProcess = true
-                        showNote(text: "Something happened!")
-                    }
-                    
-                    DispatchQueue.main.async {
-                        self.headerView.followBtn.setTitle("Following", for: .normal)
-                    }
-                    
-                    
-                    
-                }
-            }
-            
-        }
-        
-    }
-    
-    
-    func hideFollowBtn() {
-        Dispatch.main.async { [weak self] in
-            guard let self = self else { return }
-            self.headerView.followBtn.isHidden = true
-            self.isFollowingUser = true
-        }
-        
-    }
-    
-    func setupHideContent() {
-        
-        headerNode.backgroundColor = UIColor.clear
-        
-        let hashtagsText = post.hashtags?.joined(separator: " ")
-        let finalText = post.content + " " + (hashtagsText ?? "")
-        var contentText: String
-
-        if post.content == "" {
-            contentText = processTextForHiding(hashtagsText ?? "")
-        } else {
-            contentText = processTextForHiding(finalText)
-        }
-        
-        
-        let attr1 = NSAttributedString(string: contentText, attributes: [
-            NSAttributedString.Key.font: FontManager.shared.roboto(.Regular, size: FontSize), // Using the Roboto Regular style as an example
-            NSAttributedString.Key.foregroundColor: UIColor.clear
-        ])
-            
-        let attr2 = NSAttributedString(string: contentText, attributes: [
-            NSAttributedString.Key.font: FontManager.shared.roboto(.Regular, size: FontSize), // Using the Roboto Regular style as an example
-            NSAttributedString.Key.foregroundColor: UIColor.white
-        ])
-        
-        self.contentNode.attributedText = attr1
-        self.label.attributedText = attr2
-        
-        setNeedsLayout()
-        layoutIfNeeded()
-    }
-
-    private func processTextForHiding(_ text: String) -> String {
-        if text.count > maximumShowing {
-            return text + " *hide"
-        } else {
-            return text
         }
     }
 
+    func presentSelectedPostVC(with posts: [PostModel]) {
+        guard let RVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "SelectedPostVC") as? SelectedParentVC,
+              let vc = UIViewController.currentViewController() else { return }
 
-    func getThumbnailBackgroundVideoNodeURL(post: PostModel) -> URL? {
+        if general_vc != nil {
+            general_vc.viewWillDisappear(true)
+            general_vc.viewDidDisappear(true)
+        }
+
+        RVC.onPresent = true
+        RVC.posts = posts
+        RVC.startIndex = 0
         
-        if post.muxPlaybackId != "" {
-            
-            let urlString = "https://image.mux.com/\(post.muxPlaybackId)/thumbnail.jpg?time=0"
-            
-            return URL(string: urlString)
-            
+        let nav = UINavigationController(rootViewController: RVC)
+
+
+        vc.present(nav, animated: true, completion: nil)
+    }
+
+    func getUIDParameter(from urlString: String) -> String? {
+        if let url = URL(string: urlString) {
+            let components = URLComponents(url: url, resolvingAgainstBaseURL: false)
+            return components?.queryItems?.first(where: { $0.name == "uid" })?.value
         } else {
             return nil
         }
-        
     }
-
-    func getThumbnailVideoNodeURL(post: PostModel) -> URL? {
-        
-        if post.muxPlaybackId != "" {
-            
-            let urlString = "https://image.mux.com/\(post.muxPlaybackId)/thumbnail.jpg?time=0"
-            
-            return URL(string: urlString)
-            
-        } else {
-            return nil
-        }
-        
-    }
-    
-    func getVideoURLForRedundant_stream(post: PostModel) -> URL? {
-    
-        if post.muxPlaybackId != "" {
-            
-            let urlString = "https://stream.mux.com/\(post.muxPlaybackId).m3u8"
-            return URL(string: urlString)
-            
-        } else {
-            
-            return nil
-        }
-
-    }
-    
-
 
 }
 
 
-
 extension StitchControlForRemoveNode {
-    
     
     @objc func userTapped() {
         
@@ -705,23 +519,7 @@ extension StitchControlForRemoveNode {
         
     }
 
-    @objc func followTap() {
-        
-        if allowProcess {
-            self.allowProcess = false
-            if isFollowingUser {
-                
-                unfollowUser()
-                
-            } else {
-                
-                followUser()
-            }
-            
-        }
-         
-    }
-
+    
 
 }
 
@@ -734,203 +532,88 @@ extension StitchControlForRemoveNode {
         let padding = change / 2
         
         buttonNode.style.preferredSize = CGSize(width: constrainedSize.max.width, height: 55)
-        let buttonsInset = UIEdgeInsets(top: 10, left: padding, bottom: -10, right: padding)
+        let buttonsInset = UIEdgeInsets(top: 10, left: padding - 1, bottom: -10, right: padding - 1)
         return ASInsetLayoutSpec(insets: buttonsInset, child: buttonNode)
     }
     
-    
     override func layoutSpecThatFits(_ constrainedSize: ASSizeRange) -> ASLayoutSpec {
-            
+        
         let change = constrainedSize.max.width - ( constrainedSize.max.height * 9 / 16)
         let padding = change / 2
         
-        headerNode.style.preferredSize = CGSize(width: constrainedSize.max.width, height: 80)
-        contentNode.maximumNumberOfLines = 0
-        contentNode.truncationMode = .byWordWrapping
-        contentNode.style.flexShrink = 1
-      
-        
-        let headerInset = UIEdgeInsets(top: 0, left: padding, bottom: 2, right: 8 + padding)
-        let headerInsetSpec = ASInsetLayoutSpec(insets: headerInset, child: headerNode)
-        
-        let contentInset = UIEdgeInsets(top: 2, left: 20 + padding, bottom: 2, right: 70 + padding)
-        let contentInsetSpec = ASInsetLayoutSpec(insets: contentInset, child: contentNode)
-        
-        let verticalStack = ASStackLayoutSpec.vertical()
-        
-        let buttonsInsetSpec = createButtonsInsetSpec(constrainedSize: constrainedSize)
-        verticalStack.children = [headerInsetSpec]
-        
-        if !post.content.isEmpty || ((post.hashtags?.contains(where: { !$0.isEmpty })) != nil) {
-            verticalStack.children?.append(contentInsetSpec)
-        }
-
-        verticalStack.children?.append(buttonsInsetSpec)
-        
-        let verticalStackInset = UIEdgeInsets(top: 8, left: 0, bottom: 8, right: 0)
-        let verticalStackInsetSpec = ASInsetLayoutSpec(insets: verticalStackInset, child: verticalStack)
-
         let inset = UIEdgeInsets(top: 0, left: padding, bottom: 0, right: padding)
         let gradientInsetSpec = ASInsetLayoutSpec(insets: inset, child: gradientNode)
-
-        let videoInsetSpec = ASInsetLayoutSpec(insets: inset, child: videoNode)
-
-        var overlay = ASOverlayLayoutSpec(child: videoInsetSpec, overlay: gradientInsetSpec)
-
+        let videoInsetSpec = ASInsetLayoutSpec(insets: inset, child: cellVideoNode)
+        let overlay = ASOverlayLayoutSpec(child: videoInsetSpec, overlay: gradientInsetSpec)
+        
+        let buttonsInsetSpec = createButtonsInsetSpec(constrainedSize: constrainedSize)
+        let verticalStackInset = UIEdgeInsets(top: .infinity, left: 0, bottom: 8, right: 0)
+        let verticalStackInsetSpec = ASInsetLayoutSpec(insets: verticalStackInset, child: buttonsInsetSpec)
+        let finalOverlay = ASOverlayLayoutSpec(child: overlay, overlay: verticalStackInsetSpec)
+        
         if stitchTo {
             infoNode.style.preferredSize = CGSize(width: 75, height: 15)
             let stitchCountInsets = UIEdgeInsets(top: 8, left: 8 + padding, bottom: .infinity, right: .infinity)
             let stitchCountInsetSpec = ASInsetLayoutSpec(insets: stitchCountInsets, child: infoNode)
-            let overlay2 = ASOverlayLayoutSpec(child: overlay, overlay: stitchCountInsetSpec)
-            overlay = overlay2
-        }
-        
-        let relativeSpec = ASRelativeLayoutSpec(horizontalPosition: .start, verticalPosition: .end, sizingOption: [], child: verticalStackInsetSpec)
-        let finalOverlay = ASOverlayLayoutSpec(child: overlay, overlay: relativeSpec)
-
-        return finalOverlay
-    }
-
-}
-
-extension StitchControlForRemoveNode {
-
-    func getUIDParameter(from urlString: String) -> String? {
-        if let url = URL(string: urlString) {
-            let components = URLComponents(url: url, resolvingAgainstBaseURL: false)
-            return components?.queryItems?.first(where: { $0.name == "uid" })?.value
+            let overlay2 = ASOverlayLayoutSpec(child: finalOverlay, overlay: stitchCountInsetSpec)
+            return overlay2
         } else {
-            return nil
+            return finalOverlay
         }
     }
-
-    func moveToUserProfileVC(id: String) {
-        
-        if let UPVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "UserProfileVC") as? UserProfileVC {
-            
-            if let vc = UIViewController.currentViewController() {
-                
-
-                if general_vc != nil {
-                    general_vc.viewWillDisappear(true)
-                    general_vc.viewDidDisappear(true)
-                }
-                
-              
-                
-                let nav = UINavigationController(rootViewController: UPVC)
-
-                // Set the user ID, nickname, and onPresent properties of UPVC
-                UPVC.userId = id
-                UPVC.onPresent = true
-
-                // Customize the navigation bar appearance
-                nav.navigationBar.barTintColor = .background
-                nav.navigationBar.tintColor = .white
-                nav.navigationBar.titleTextAttributes = [.foregroundColor: UIColor.white]
-
-                nav.modalPresentationStyle = .fullScreen
-                vc.present(nav, animated: true, completion: nil)
-
-
-            }
-        }
-        
-    }
     
-    
-    func openPost(id: String) {
-      
-        presentSwiftLoader()
-
-        APIManager.shared.getPostDetail(postId: id) { result in
-         
-            switch result {
-            case .success(let apiResponse):
-                guard let data = apiResponse.body else {
-                    Dispatch.main.async {
-                        SwiftLoader.hide()
-                    }
-                  return
-                }
-               
-                if !data.isEmpty {
-                    Dispatch.main.async {
-                        SwiftLoader.hide()
-                        
-                        if let post = PostModel(JSON: data) {
-                            
-                            if let RVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "SelectedParentVC") as? SelectedParentVC {
-                                
-                                if let vc = UIViewController.currentViewController() {
-                                
-
-                                    if general_vc != nil {
-                                        general_vc.viewWillDisappear(true)
-                                        general_vc.viewDidDisappear(true)
-                                    }
-                                    
-                               
-                                    
-                                    RVC.onPresent = true
-                                    
-                                    let nav = UINavigationController(rootViewController: RVC)
-
-                                    // Set the user ID, nickname, and onPresent properties of UPVC
-                                    RVC.posts = [post]
-                                    RVC.startIndex = 0
-                                    
-                                 
-                                    nav.modalPresentationStyle = .fullScreen
-                                    
-                                    vc.present(nav, animated: true, completion: nil)
-                                    
-                                }
-                            }
-                            
-                        }
-                        
-                    }
-                    
-                } else {
-                    Dispatch.main.async {
-                        SwiftLoader.hide()
-                    }
-                }
-
-            case .failure(let error):
-                print(error)
-                Dispatch.main.async {
-                    SwiftLoader.hide()
-                }
-                
-            }
-        }
-        
-    }
-    
+  
 }
 
 extension StitchControlForRemoveNode {
-    
-    func seeMore() {
+
+    @objc func tapProcess() {
         
-        setupHideContent()
-        setNeedsLayout()
+        if let vc = UIViewController.currentViewController() {
+            switch vc {
+            case let dashboard as StitchDashboardVC:
+                
+                if dashboard.StitchToVC.view.isHidden != true || dashboard.ApprovedStitchVC.view.isHidden != true {
+                    playProcess()
+                }
+            
+            default:
+                break
+            }
+        }
         
     }
     
-    func hideContent() {
+    func playProcess() {
         
-        setupDefaultContent()
-        setNeedsLayout()
+        if cellVideoNode.isPlaying() {
+            cellVideoNode.pause()
+        } else {
+            cellVideoNode.play()
+        }
+        
     }
+
+  
+    func didTap(_ videoNode: ASVideoNode) {
+        tapProcess()
+    }
+
     
     @objc func unstitchBtnTapped() {
-        
+            
         unstitchBtn?(self)
-        
+            
     }
     
-   
+    
 }
+
+
+
+
+
+
+
+
+

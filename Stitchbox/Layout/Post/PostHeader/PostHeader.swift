@@ -27,7 +27,7 @@ class PostHeader: UIView {
     @IBOutlet weak var shareCountLbl: UILabel!
     @IBOutlet weak var saveBtn: UIButton!
     @IBOutlet weak var saveCountLbl: UILabel!
-    
+    @IBOutlet weak var stackConstant: NSLayoutConstraint!
     @IBOutlet weak var contentLbl: UILabel!
 
     let kCONTENT_XIB_NAME = "PostHeader"
