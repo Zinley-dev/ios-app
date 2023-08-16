@@ -11,6 +11,10 @@ import FLAnimatedImage
 
 
 class StitchStatVC: UIViewController {
+    
+    deinit {
+        print("StitchStatVC is being deallocated.")
+    }
 
   @IBOutlet weak var avgLbl: UILabel!
   @IBOutlet weak var totalWeekLbl: UILabel!
@@ -22,10 +26,6 @@ class StitchStatVC: UIViewController {
   @IBOutlet weak var percentAvgLbl: UILabel!
   @IBOutlet weak var fromLbl: UILabel!
   
-    
-  @IBOutlet weak var loadingImage: FLAnimatedImageView!
-  @IBOutlet weak var loadingView: UIView!
-    
   var insightData: InsightModel!
   
     let backButton: UIButton = UIButton(type: .custom)
@@ -41,22 +41,6 @@ class StitchStatVC: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
       super.viewWillAppear(animated)
         
-        
-        do {
-            
-            let path = Bundle.main.path(forResource: "fox2", ofType: "gif")!
-            let gifData = try NSData(contentsOfFile: path) as Data
-            let image = FLAnimatedImage(animatedGIFData: gifData)
-            
-            
-            self.loadingImage.animatedImage = image
-            
-        } catch {
-            print(error.localizedDescription)
-        }
-        
-        loadingView.backgroundColor = self.view.backgroundColor
-      
       loadInsightData()
       
       let formatter = DateFormatter()
@@ -95,7 +79,6 @@ extension StitchStatVC {
                 
                 DispatchQueue.main {
                   self.processDefaultData()
-                  self.hideView()
                 }
                 
               case .failure(let error):
@@ -104,34 +87,12 @@ extension StitchStatVC {
              
                 
                 DispatchQueue.main {
-                  self.hideView()
+                
                   self.showErrorAlert("Oops!", msg: "Unable to retrieve your setting \(error.localizedDescription)")
                 }
                 
             }
       }
-    }
-    
-    func hideView() {
-        
-        UIView.animate(withDuration: 0.5) {
-            
-            self.loadingView.alpha = 0
-            
-        }
-        
-        
-        DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
-            
-            if self.loadingView.alpha == 0 {
-                
-                self.loadingView.isHidden = true
-                
-            }
-            
-        }
-        
-        
     }
     
     

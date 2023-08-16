@@ -16,7 +16,6 @@ import MarqueeLabel
 class StitchViewController: UIViewController, UICollectionViewDelegateFlowLayout, UIAdaptivePresentationControllerDelegate {
     
     var lastContentOffset: CGFloat = 0
-    @IBOutlet weak var progressBar: ProgressBar!
     @IBOutlet weak var contentView: UIView!
     @IBOutlet weak var bottomConstraint: NSLayoutConstraint!
     var lastContentOffsetY: CGFloat = 0
@@ -50,7 +49,7 @@ class StitchViewController: UIViewController, UICollectionViewDelegateFlowLayout
     var editeddPost: PostModel?
     var refresh_request = false
     var startIndex: Int!
-
+    var selectedStitch = false
     var imageTimerWorkItem: DispatchWorkItem?
     let backButton: UIButton = UIButton(type: .custom)
     lazy var delayItem = workItem()
@@ -418,14 +417,17 @@ extension StitchViewController: ASCollectionDataSource {
                    
         } else {
             
-            return {
-              
-                let node = VideoNode(with: post, at: indexPath.row, isPreview: false)
+            return { [weak self] in
+                guard let self = self else {
+                    return ASCellNode()
+                }
+                
+                let node = VideoNode(with: post, at: indexPath.row, isPreview: false, vcType: "stitch", selectedStitch: selectedStitch)
                 node.neverShowPlaceholders = true
                 node.debugName = "Node \(indexPath.row)"
                 
                 node.automaticallyManagesSubnodes = true
-                 
+                
                 return node
             }
             
@@ -448,14 +450,12 @@ extension StitchViewController: ASCollectionDataSource {
         } else {
             
             context.completeBatchFetching(true)
-            
+
         }
-        
         
     }
     
 
-    
 }
 
 
@@ -516,8 +516,6 @@ extension StitchViewController {
         
     }
     
-    
-    
     func applyStyle() {
         
         self.collectionNode.view.isPagingEnabled = true
@@ -528,12 +526,10 @@ extension StitchViewController {
         
         
     }
-    
-    
+        
 }
 
 extension StitchViewController {
-    
     
     func retrieveNextPageWithCompletion(block: @escaping ([[String: Any]]) -> Void) {
         
@@ -577,7 +573,7 @@ extension StitchViewController {
             refresh_request = false
         }
 
-        var items = newPosts.compactMap { PostModel(JSON: $0) }.filter { !self.posts.contains($0) }
+        let items = newPosts.compactMap { PostModel(JSON: $0) }.filter { !self.posts.contains($0) }
         self.posts.append(contentsOf: items)
         
         if !items.isEmpty {
@@ -588,10 +584,9 @@ extension StitchViewController {
     }
 
     private func clearExistingPosts() {
-        let deleteIndexPaths = posts.enumerated().map { IndexPath(row: $0.offset, section: 0) }
         posts.removeAll()
-        collectionNode.deleteItems(at: deleteIndexPaths)
-        galleryCollectionNode.deleteItems(at: deleteIndexPaths)
+        collectionNode.reloadData()
+        galleryCollectionNode.reloadData()
     }
 
     private func generateIndexPaths(for items: [PostModel]) -> [IndexPath] {
@@ -608,6 +603,7 @@ extension StitchViewController {
                 self.posts.removeAll()
                 self.collectionNode.reloadData()
                 self.galleryCollectionNode.reloadData()
+                
                 if self.posts.isEmpty {
                     self.collectionNode.view.setEmptyMessage("No stitch found!", color: .white)
                 } else {

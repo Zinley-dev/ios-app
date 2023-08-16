@@ -238,6 +238,8 @@ class SelectedParentVC: UIViewController, UIScrollViewDelegate {
         add(childViewController: stitchViewController, at: 1)
 
         containerView.widthAnchor.constraint(equalTo: view.widthAnchor, multiplier: 2).isActive = true
+        
+        stitchViewController.selectedStitch = true
     }
 
     private func add(childViewController: UIViewController, at index: Int) {

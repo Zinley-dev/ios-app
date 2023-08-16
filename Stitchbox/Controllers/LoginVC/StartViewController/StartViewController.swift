@@ -21,10 +21,10 @@ class StartViewController: UIViewController, ControllerType, ZSWTappableLabelTap
     
     
     deinit {
+        print("StartViewController is being deallocated.")
         NotificationCenter.default.removeObserver(self)
     }
 
-    
     
     func presentationAnchor(for controller: ASAuthorizationController) -> ASPresentationAnchor {
         return self.view.window!

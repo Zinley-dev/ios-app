@@ -331,8 +331,11 @@ extension PreviewVC: ASCollectionDataSource {
     func collectionNode(_ collectionNode: ASCollectionNode, nodeBlockForItemAt indexPath: IndexPath) -> ASCellNodeBlock {
         let post = self.posts[indexPath.row]
         
-        return {
-            let node = VideoNode(with: post, at: indexPath.row, isPreview: true)
+        return { [weak self] in
+            guard let self = self else {
+                return ASCellNode()
+            }
+            let node = VideoNode(with: post, at: indexPath.row, isPreview: true, vcType: "preview", selectedStitch: false)
             //node.collectionNode = self.collectionNode
             node.neverShowPlaceholders = true
             node.debugName = "Node \(indexPath.row)"

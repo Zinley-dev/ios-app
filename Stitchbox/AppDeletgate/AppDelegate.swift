@@ -20,7 +20,6 @@ import SwipeTransition
 import SwipeTransitionAutoSwipeBack
 import SwipeTransitionAutoSwipeToDismiss
 
-
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterDelegate, SBDChannelDelegate {
     
@@ -48,7 +47,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         setupOneSignal(launchOptions: launchOptions)
         activeSpeaker()
         setupVolumeObserver()
-        //sentrySetup()
+        sentrySetup()
         CacheManager.shared.asyncRemoveExpiredObjects()
         metricsManager = AppMetrics()
         

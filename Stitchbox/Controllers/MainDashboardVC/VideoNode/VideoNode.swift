@@ -17,8 +17,6 @@ import ActiveLabel
 class VideoNode: ASCellNode, ASVideoNodeDelegate {
 
     deinit {
-        //view.gestureRecognizers?.forEach(view.removeGestureRecognizer)
-        cellVideoNode.delegate = nil
         print("VideoNode is being deallocated.")
     }
     
@@ -32,12 +30,13 @@ class VideoNode: ASCellNode, ASVideoNodeDelegate {
     var shouldCountView = true
     var isViewed = false
     var isOriginal = false
+    var vcType = ""
     //------------------------------------------//
 
     var isFirstItem = false
     var pinchGestureRecognizer: UIPinchGestureRecognizer!
     var panGestureRecognizer: UIPanGestureRecognizer!
-    
+    var selectedStitch = false
     private let fireworkController = FountainFireworkController()
     private let fireworkController2 = ClassicFireworkController()
     
@@ -59,13 +58,15 @@ class VideoNode: ASCellNode, ASVideoNodeDelegate {
     private var index: Int!
     private var isPreview: Bool!
     
-    init(with post: PostModel, at: Int, isPreview: Bool) {
+    init(with post: PostModel, at: Int, isPreview: Bool, vcType: String, selectedStitch: Bool) {
         print("VideoNode \(at) is loading post: \(post.id)")
         self.post = post
         self.index = at
         self.gradientNode = GradienView()
         self.cellVideoNode = ASVideoNode()
         self.isPreview = isPreview
+        self.vcType = vcType
+        self.selectedStitch = selectedStitch
         
         super.init()
 
@@ -149,10 +150,7 @@ class VideoNode: ASCellNode, ASVideoNodeDelegate {
             buttonsView.stackView.spacing = spacing
         }
     }
-    
-    override func didExitVisibleState() {
-        cellVideoNode.pause()
-    }
+
 
     private func addSideButtons(isOwned: Bool, total: Int? = 0) {
         setupSideButtonsView()
@@ -452,7 +450,7 @@ extension VideoNode {
 
 
 
-
+/*
     func videoNode(_ videoNode: ASVideoNode, didPlayToTimeInterval timeInterval: TimeInterval) {
         
         
@@ -470,8 +468,8 @@ extension VideoNode {
         }
         previousTimeStamp = timeInterval
 
-        //setVideoProgress(rate: Float(timeInterval/(videoNode.currentItem?.duration.seconds)!), currentTime: timeInterval, maxDuration: videoNode.currentItem!.duration)
-
+        setVideoProgress(rate: Float(timeInterval/(videoNode.currentItem?.duration.seconds)!), currentTime: timeInterval, maxDuration: videoNode.currentItem!.duration)
+        
         let watchedPercentage = totalWatchedTime/videoDuration
         let minimumWatchedPercentage: Double
 
@@ -500,7 +498,7 @@ extension VideoNode {
         
         
      
-    }
+    }*/
     
     func videoDidPlay(toEnd videoNode: ASVideoNode) {
     
@@ -530,25 +528,13 @@ extension VideoNode {
     func setVideoProgress(rate: Float, currentTime: TimeInterval, maxDuration: CMTime) {
         
         /*
-        if let vc = UIViewController.currentViewController() {
-            if let update1 = vc as? ParentViewController {
-                
-                if update1.isFeed {
-                    updateSlider(currentTime: currentTime, maxDuration: maxDuration, playTimeBar: update1.feedViewController.playTimeBar)
-                } else {
-                    updateSlider(currentTime: currentTime, maxDuration: maxDuration, playTimeBar: update1.stitchViewController.playTimeBar)
-                }
-                
-            } else if let update1 = vc as? SelectedParentVC {
-                if update1.isRoot {
-                    updateSlider(currentTime: currentTime, maxDuration: maxDuration, playTimeBar: update1.selectedRootPostVC.playTimeBar)
-                } else {
-                    updateSlider(currentTime: currentTime, maxDuration: maxDuration, playTimeBar: update1.stitchViewController.playTimeBar)
-                }
-            } else if let update1 = vc as? PreviewVC {
-                updateSlider(currentTime: currentTime, maxDuration: maxDuration, playTimeBar: update1.playTimeBar)
-            }
-        } */
+        if vcType == "mainFeed" {
+            print("mainFeed")
+        } else if vcType == "stitch" {
+            print("stitch \(selectedStitch)")
+        } else if vcType == "selectedRoot" {
+            print("selectedRoot")
+        }*/
         
     }
     

@@ -4,8 +4,6 @@
 //
 //  Created by Khoi Nguyen on 8/7/23.
 //
-
-
 import Foundation
 import UIKit
 import AsyncDisplayKit
@@ -13,6 +11,10 @@ import AsyncDisplayKit
 fileprivate let FontSize: CGFloat = 13
 
 class StitchGalleryNode: ASCellNode {
+    
+    deinit {
+        print("StitchGalleryNode is being deallocated.")
+    }
     
     var post: PostModel!
     private var imageNode: ASNetworkImageNode!

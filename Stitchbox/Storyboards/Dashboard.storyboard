@@ -1550,24 +1550,6 @@
                                 <rect key="frame" x="1" y="66" width="373" height="712"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             </view>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="FMR-fk-naX">
-                                <rect key="frame" x="1" y="66" width="373" height="712"/>
-                                <subviews>
-                                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="Jpr-oQ-0L2" customClass="FLAnimatedImageView">
-                                        <rect key="frame" x="149" y="318.66666666666669" width="75" height="75"/>
-                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                        <constraints>
-                                            <constraint firstAttribute="height" constant="75" id="6zF-3s-SLn"/>
-                                            <constraint firstAttribute="width" constant="75" id="Opo-vU-N31"/>
-                                        </constraints>
-                                    </imageView>
-                                </subviews>
-                                <color key="backgroundColor" red="0.15877044200000001" green="0.1632023454" blue="0.18738254900000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                <constraints>
-                                    <constraint firstItem="Jpr-oQ-0L2" firstAttribute="centerX" secondItem="FMR-fk-naX" secondAttribute="centerX" id="WOK-7s-PN3"/>
-                                    <constraint firstItem="Jpr-oQ-0L2" firstAttribute="centerY" secondItem="FMR-fk-naX" secondAttribute="centerY" id="oBF-0q-9ve"/>
-                                </constraints>
-                            </view>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="tCK-Pi-RTu"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -1575,17 +1557,11 @@
                             <constraint firstItem="rcX-09-ci2" firstAttribute="leading" secondItem="MUY-1D-lYB" secondAttribute="leading" constant="1" id="9IB-vj-lpp"/>
                             <constraint firstItem="rcX-09-ci2" firstAttribute="top" secondItem="tCK-Pi-RTu" secondAttribute="top" constant="16" id="9sn-mV-EQ2"/>
                             <constraint firstItem="tCK-Pi-RTu" firstAttribute="bottom" secondItem="rcX-09-ci2" secondAttribute="bottom" id="FUI-Z2-rjS"/>
-                            <constraint firstItem="FMR-fk-naX" firstAttribute="centerY" secondItem="rcX-09-ci2" secondAttribute="centerY" id="FWT-M9-MaH"/>
-                            <constraint firstItem="FMR-fk-naX" firstAttribute="centerX" secondItem="rcX-09-ci2" secondAttribute="centerX" id="c26-d6-Oep"/>
-                            <constraint firstItem="FMR-fk-naX" firstAttribute="height" secondItem="rcX-09-ci2" secondAttribute="height" id="fZt-pp-9Gs"/>
                             <constraint firstAttribute="trailing" secondItem="rcX-09-ci2" secondAttribute="trailing" constant="1" id="ji8-Nj-iGs"/>
-                            <constraint firstItem="FMR-fk-naX" firstAttribute="width" secondItem="rcX-09-ci2" secondAttribute="width" id="xUL-T3-K3v"/>
                         </constraints>
                     </view>
                     <connections>
                         <outlet property="contentView" destination="rcX-09-ci2" id="WYC-ja-xEs"/>
-                        <outlet property="loadingImage" destination="Jpr-oQ-0L2" id="5Mu-of-KWK"/>
-                        <outlet property="loadingView" destination="FMR-fk-naX" id="MBm-OZ-kmB"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="SSE-G1-xIw" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
@@ -2230,42 +2206,18 @@
                                 <rect key="frame" x="1" y="66" width="373" height="712"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             </view>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="FB9-s1-bOa">
-                                <rect key="frame" x="1" y="66" width="373" height="712"/>
-                                <subviews>
-                                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="3xb-Kx-0bn" customClass="FLAnimatedImageView">
-                                        <rect key="frame" x="149" y="318.66666666666669" width="75" height="75"/>
-                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                        <constraints>
-                                            <constraint firstAttribute="height" constant="75" id="K2y-UX-l1O"/>
-                                            <constraint firstAttribute="width" constant="75" id="zyc-D6-d2L"/>
-                                        </constraints>
-                                    </imageView>
-                                </subviews>
-                                <color key="backgroundColor" red="0.15877044200000001" green="0.1632023454" blue="0.18738254900000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                <constraints>
-                                    <constraint firstItem="3xb-Kx-0bn" firstAttribute="centerX" secondItem="FB9-s1-bOa" secondAttribute="centerX" id="2vJ-fg-vsb"/>
-                                    <constraint firstItem="3xb-Kx-0bn" firstAttribute="centerY" secondItem="FB9-s1-bOa" secondAttribute="centerY" id="qkW-bE-8yU"/>
-                                </constraints>
-                            </view>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="Adt-xN-LEd"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
-                            <constraint firstItem="FB9-s1-bOa" firstAttribute="centerX" secondItem="vxo-nb-Nfw" secondAttribute="centerX" id="4jh-3q-1K1"/>
                             <constraint firstItem="Adt-xN-LEd" firstAttribute="bottom" secondItem="vxo-nb-Nfw" secondAttribute="bottom" id="HTy-r6-zT0"/>
                             <constraint firstItem="vxo-nb-Nfw" firstAttribute="leading" secondItem="4QE-f9-eEd" secondAttribute="leading" constant="1" id="QO9-xM-I5K"/>
-                            <constraint firstItem="FB9-s1-bOa" firstAttribute="height" secondItem="vxo-nb-Nfw" secondAttribute="height" id="RHC-vF-K3J"/>
-                            <constraint firstItem="FB9-s1-bOa" firstAttribute="centerY" secondItem="vxo-nb-Nfw" secondAttribute="centerY" id="Yl2-Dw-Ada"/>
                             <constraint firstItem="Adt-xN-LEd" firstAttribute="trailing" secondItem="vxo-nb-Nfw" secondAttribute="trailing" constant="1" id="epJ-Tu-kDk"/>
                             <constraint firstItem="vxo-nb-Nfw" firstAttribute="top" secondItem="Adt-xN-LEd" secondAttribute="top" constant="16" id="jR3-3J-hUR"/>
-                            <constraint firstItem="FB9-s1-bOa" firstAttribute="width" secondItem="vxo-nb-Nfw" secondAttribute="width" id="qwo-5t-1bu"/>
                         </constraints>
                     </view>
                     <connections>
                         <outlet property="contentView" destination="vxo-nb-Nfw" id="nZC-ip-fQv"/>
-                        <outlet property="loadingImage" destination="3xb-Kx-0bn" id="744-CT-tvE"/>
-                        <outlet property="loadingView" destination="FB9-s1-bOa" id="3a1-Vj-Pbe"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="BXd-dE-5tJ" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>

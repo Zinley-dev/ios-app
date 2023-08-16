@@ -327,8 +327,7 @@ extension FeedViewController: ASCollectionDataSource {
         return self.posts.count
         
     }
-    
-    
+
     
     func collectionNode(_ collectionNode: ASCollectionNode, nodeBlockForItemAt indexPath: IndexPath) -> ASCellNodeBlock {
         let post = self.posts[indexPath.row]
@@ -338,7 +337,7 @@ extension FeedViewController: ASCollectionDataSource {
                 return ASCellNode()
             }
             
-            let node = VideoNode(with: post, at: indexPath.row, isPreview: false)
+            let node = VideoNode(with: post, at: indexPath.row, isPreview: false, vcType: "mainFeed", selectedStitch: false)
             node.neverShowPlaceholders = true
             node.debugName = "Node \(indexPath.row)"
            

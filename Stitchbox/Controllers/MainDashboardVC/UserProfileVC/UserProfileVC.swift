@@ -47,8 +47,6 @@ class UserProfileVC: UIViewController {
     
     @IBOutlet weak var collectionView: UICollectionView!
     
-    @IBOutlet weak var loadingImage: FLAnimatedImageView!
-    @IBOutlet weak var loadingView: UIView!
     var get_username = ""
     var get_bio = ""
     
@@ -117,8 +115,6 @@ class UserProfileVC: UIViewController {
         NotificationCenter.default.addObserver(self, selector: #selector(UserProfileVC.report), name: (NSNotification.Name(rawValue: "report_user")), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(UserProfileVC.block), name: (NSNotification.Name(rawValue: "block_user")), object: nil)
         
-        
-        self.loadingView.isHidden = true
         
         let navigationBarAppearance = UINavigationBarAppearance()
         navigationBarAppearance.configureWithOpaqueBackground()
@@ -880,7 +876,6 @@ extension UserProfileVC {
                 
                 Dispatch.main.async { [weak self] in
                     guard let self = self else { return }
-                    self.hideAnimation()
                     self.NoticeBlockAndDismiss()
                 }
                 
@@ -1302,40 +1297,7 @@ extension UserProfileVC {
         
     }
     
-    
-    func hideAnimation() {
-        
-        if firstAnimated {
-            
-            firstAnimated = false
-            
-            delay(1) {
-                
-                UIView.animate(withDuration: 0.5) {
-                    
-                    Dispatch.main.async {
-                        self.loadingView.alpha = 0
-                    }
-                    
-                }
-                
-                
-                DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
-                    
-                    if self.loadingView.alpha == 0 {
-                        
-                        self.loadingView.isHidden = true
-                        
-                    }
-                    
-                }
-                
-                
-            }
-            
-        }
-        
-    }
+
     
     func addfireWork(imgView: UIImageView) {
         self.fireworkController.addFirework(sparks: 10, above: imgView)

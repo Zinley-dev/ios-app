@@ -33,7 +33,7 @@ class ParentViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        
+        setupObservation()
         syncSendbirdAccount()
         IAPManager.shared.configure()
 
@@ -64,22 +64,7 @@ class ParentViewController: UIViewController {
             requestTrackingAuthorization(userId: _AppCoreData.userDataSource.value?.userID ?? "")
         }
      
-        NotificationCenter.default.addObserver(self, selector: #selector(ParentViewController.observeRootChange), name: (NSNotification.Name(rawValue: "observeRootChangeForFeed")), object: nil)
        
-        NotificationCenter.default.addObserver(self, selector: #selector(ParentViewController.copyProfile), name: (NSNotification.Name(rawValue: "copy_profile")), object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(ParentViewController.copyPost), name: (NSNotification.Name(rawValue: "copy_post")), object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(ParentViewController.reportPost), name: (NSNotification.Name(rawValue: "report_post")), object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(ParentViewController.removePost), name: (NSNotification.Name(rawValue: "remove_post")), object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(ParentViewController.sharePost), name: (NSNotification.Name(rawValue: "share_post")), object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(ParentViewController.createPostForStitch), name: (NSNotification.Name(rawValue: "create_new_for_stitch")), object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(ParentViewController.stitchToExistingPost), name: (NSNotification.Name(rawValue: "stitch_to_exist_one")), object: nil)
-        
-        NotificationCenter.default.addObserver(self, selector: #selector(ParentViewController.onClickDelete), name: (NSNotification.Name(rawValue: "delete")), object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(ParentViewController.onClickEdit), name: (NSNotification.Name(rawValue: "edit")), object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(ParentViewController.onClickDownload), name: (NSNotification.Name(rawValue: "download")), object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(ParentViewController.onClickStats), name: (NSNotification.Name(rawValue: "stats")), object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(ParentViewController.onClickShowInfo), name: (NSNotification.Name(rawValue: "showInfo")), object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(ParentViewController.onClickHideInfo), name: (NSNotification.Name(rawValue: "hideInfo")), object: nil)
         
         firstLoadDone = true
         
@@ -129,6 +114,27 @@ class ParentViewController: UIViewController {
         
     }
 
+    
+    private func setupObservation() {
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(ParentViewController.observeRootChange), name: (NSNotification.Name(rawValue: "observeRootChangeForFeed")), object: nil)
+       
+        NotificationCenter.default.addObserver(self, selector: #selector(ParentViewController.copyProfile), name: (NSNotification.Name(rawValue: "copy_profile")), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(ParentViewController.copyPost), name: (NSNotification.Name(rawValue: "copy_post")), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(ParentViewController.reportPost), name: (NSNotification.Name(rawValue: "report_post")), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(ParentViewController.removePost), name: (NSNotification.Name(rawValue: "remove_post")), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(ParentViewController.sharePost), name: (NSNotification.Name(rawValue: "share_post")), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(ParentViewController.createPostForStitch), name: (NSNotification.Name(rawValue: "create_new_for_stitch")), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(ParentViewController.stitchToExistingPost), name: (NSNotification.Name(rawValue: "stitch_to_exist_one")), object: nil)
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(ParentViewController.onClickDelete), name: (NSNotification.Name(rawValue: "delete")), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(ParentViewController.onClickEdit), name: (NSNotification.Name(rawValue: "edit")), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(ParentViewController.onClickDownload), name: (NSNotification.Name(rawValue: "download")), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(ParentViewController.onClickStats), name: (NSNotification.Name(rawValue: "stats")), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(ParentViewController.onClickShowInfo), name: (NSNotification.Name(rawValue: "showInfo")), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(ParentViewController.onClickHideInfo), name: (NSNotification.Name(rawValue: "hideInfo")), object: nil)
+        
+    }
     private func setupScrollView() {
         scrollView = UIScrollView()
         scrollView.delegate = self

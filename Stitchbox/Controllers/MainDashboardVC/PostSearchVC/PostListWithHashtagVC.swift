@@ -89,52 +89,6 @@ class PostListWithHashtagVC: UIViewController, UICollectionViewDelegateFlowLayou
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
-        DispatchQueue.global(qos: .userInitiated).async {
-            do {
-                if let path = Bundle.main.path(forResource: "fox2", ofType: "gif") {
-                    let gifData = try Data(contentsOf: URL(fileURLWithPath: path))
-                    let image = FLAnimatedImage(animatedGIFData: gifData)
-
-                    DispatchQueue.main.async { [weak self] in
-                        guard let self = self else { return }
-
-                        self.loadingImage.animatedImage = image
-                        self.loadingView.backgroundColor = self.view.backgroundColor
-                    }
-                }
-            } catch {
-                print(error.localizedDescription)
-            }
-        }
-        
-        loadingView.backgroundColor = self.view.backgroundColor
-        navigationController?.setNavigationBarHidden(false, animated: true)
-       
-        delay(1.25) { [weak self] in
-            
-            UIView.animate(withDuration: 0.5) {
-                
-                self?.loadingView.alpha = 0
-                
-            }
-            
-            
-            DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) { [weak self] in
-                
-                if self?.loadingView.alpha == 0 {
-                    
-                    self?.loadingView.isHidden = true
-                    self?.loadingImage.stopAnimating()
-                    self?.loadingImage.animatedImage = nil
-                    self?.loadingImage.image = nil
-                    self?.loadingImage.removeFromSuperview()
-                    
-                }
-                
-            }
-            
-        }
-        
         
         setupNavBar()
         

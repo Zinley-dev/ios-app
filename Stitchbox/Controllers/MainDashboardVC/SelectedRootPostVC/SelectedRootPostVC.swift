@@ -362,7 +362,7 @@ extension SelectedRootPostVC: ASCollectionDataSource {
                 return ASCellNode()
             }
             
-            let node = VideoNode(with: post, at: indexPath.row, isPreview: false)
+            let node = VideoNode(with: post, at: indexPath.row, isPreview: false, vcType: "selectedRoot", selectedStitch: false)
             node.neverShowPlaceholders = true
             node.debugName = "Node \(indexPath.row)"
            
