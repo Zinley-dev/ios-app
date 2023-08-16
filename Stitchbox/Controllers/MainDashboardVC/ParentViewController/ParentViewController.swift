@@ -712,13 +712,13 @@ extension ParentViewController {
             
             
         } else {
+          
             
             let offset = CGFloat(0) * scrollView.bounds.width
 
             // Scroll to the next page
             scrollView.setContentOffset(CGPoint(x: offset, y: 0), animated: true)
-            feedViewController.currentIndex = 0
-            feedViewController.newPlayingIndex = 0
+            
             showFeed()
             
             
