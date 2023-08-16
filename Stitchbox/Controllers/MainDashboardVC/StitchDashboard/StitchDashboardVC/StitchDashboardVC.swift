@@ -136,7 +136,10 @@ class StitchDashboardVC: UIViewController {
                 if self.loadingView.alpha == 0 {
                     
                     self.loadingView.isHidden = true
-                    
+                    self.loadingImage.stopAnimating()
+                    self.loadingImage.animatedImage = nil
+                    self.loadingImage.image = nil
+                    self.loadingImage.removeFromSuperview()
                 }
                 
             }

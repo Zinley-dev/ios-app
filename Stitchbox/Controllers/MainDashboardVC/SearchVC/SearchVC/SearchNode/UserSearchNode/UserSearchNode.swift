@@ -23,7 +23,6 @@ class UserSearchNode: ASCellNode {
     var user: UserSearchModel!
 
     var userNameNode: ASTextNode!
-    var gameNode: ASDisplayNode!
     var nameNode: ASTextNode!
     var imageNode: ASNetworkImageNode!
     
@@ -33,7 +32,7 @@ class UserSearchNode: ASCellNode {
         self.userNameNode = ASTextNode()
         self.imageNode = ASNetworkImageNode()
         self.nameNode = ASTextNode()
-        self.gameNode = ASDisplayNode()
+
         super.init()
         
         self.backgroundColor = UIColor.clear
@@ -88,7 +87,7 @@ class UserSearchNode: ASCellNode {
             
             if user.avatarUrl != "" {
                 self.imageNode.url = URL(string: user.avatarUrl)
-                self.cacheUrlIfNeed(url: user.avatarUrl)
+                //self.cacheUrlIfNeed(url: user.avatarUrl)
             } else {
                 self.imageNode.image = UIImage.init(named: "defaultuser")
             }
@@ -97,21 +96,7 @@ class UserSearchNode: ASCellNode {
         
     }
     
-    func cacheUrlIfNeed(url: String) {
-        CacheManager.shared.hasImage(forKey: url) { exists in
-            if !exists {
-                // If the image does not exist in the cache, fetch it
-                AF.request(url).responseImage { response in
-                    switch response.result {
-                    case let .success(value):
-                        CacheManager.shared.storeImage(forKey: url, image: value)
-                    case let .failure(error):
-                        print("Error fetching image: \(error)")
-                    }
-                }
-            }
-        }
-    }
+
 
     override func layoutSpecThatFits(_ constrainedSize: ASSizeRange) -> ASLayoutSpec {
         
@@ -120,8 +105,7 @@ class UserSearchNode: ASCellNode {
         
         
         imageNode.style.preferredSize = CGSize(width: OrganizerImageSize, height: OrganizerImageSize)
-        gameNode.style.preferredSize = CGSize(width: 150, height: 50)
-        
+       
         headerSubStack.style.flexShrink = 16.0
         headerSubStack.style.flexGrow = 16.0
         headerSubStack.spacing = 7.0
@@ -135,7 +119,7 @@ class UserSearchNode: ASCellNode {
         headerStack.spacing = 10
         headerStack.justifyContent = ASStackLayoutJustifyContent.start
         headerStack.alignItems = .center
-        headerStack.children = [imageNode, headerSubStack, gameNode]
+        headerStack.children = [imageNode, headerSubStack]
         
         return ASInsetLayoutSpec(insets: UIEdgeInsets(top: 16.0, left: 16, bottom: 16, right: 16), child: headerStack)
             

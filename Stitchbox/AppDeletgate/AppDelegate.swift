@@ -20,6 +20,7 @@ import SwipeTransition
 import SwipeTransitionAutoSwipeBack
 import SwipeTransitionAutoSwipeToDismiss
 
+
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterDelegate, SBDChannelDelegate {
     
@@ -27,7 +28,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
     var voipRegistry: PKPushRegistry?
     var volumeOutputList = [Float]()
     static let sharedInstance = UIApplication.shared.delegate as! AppDelegate
-    
+    var metricsManager: AppMetrics?
     private var audioLevel : Float = 0.0
     
     private var previousVolume: Float = 0.0
@@ -47,7 +48,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         setupOneSignal(launchOptions: launchOptions)
         activeSpeaker()
         setupVolumeObserver()
-        sentrySetup()
+        //sentrySetup()
+        CacheManager.shared.asyncRemoveExpiredObjects()
+        metricsManager = AppMetrics()
+        
         
         return true
         

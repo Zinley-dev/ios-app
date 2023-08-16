@@ -15,6 +15,7 @@ class SearchViewController: UIViewController, UINavigationControllerDelegate, UI
     deinit {
         print("SearchViewController is being deallocated.")
     }
+
     
     struct SearchRecord {
         let keyWord: String

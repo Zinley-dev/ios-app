@@ -27,10 +27,10 @@ class PostSearchNode: ASCellNode {
     private var countNode: ASTextNode!
    
     let paragraphStyles = NSMutableParagraphStyle()
-
+    var keyword = ""
 
     init(with post: PostModel, keyword: String) {
-        
+        self.keyword = keyword
         self.post = post
         self.nameNode = ASTextNode()
         self.stitchCountNode = ASTextNode()
@@ -44,6 +44,17 @@ class PostSearchNode: ASCellNode {
         
         super.init()
         
+
+        imageNode.shouldRenderProgressImages = true
+        imageNode.url = post.imageUrl
+        
+     
+        
+        automaticallyManagesSubnodes = true
+    }
+    
+    override func didLoad() {
+        super.didLoad()
         self.backgroundColor = .clear // set background to clear
         paragraphStyles.alignment = .center
         
@@ -69,17 +80,8 @@ class PostSearchNode: ASCellNode {
         self.nameNode.attributedText = attributedString
         
         self.imageNode.backgroundColor = .clear
-       
-        imageNode.url = post.imageUrl
-        imageNode.contentMode = .scaleAspectFill
         imageNode.cornerRadius = 10 // set corner radius of imageNode to 15
-        
-        automaticallyManagesSubnodes = true
-    }
-    
-    override func didLoad() {
-        super.didLoad()
-        
+        imageNode.contentMode = .scaleAspectFill
         setupUsername()
         setupStitchCount()
         setupViewCount()

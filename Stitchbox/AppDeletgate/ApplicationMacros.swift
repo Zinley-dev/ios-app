@@ -10,7 +10,7 @@ import Foundation
 // MARK: Header
 let _AppDelegate                    = AppDelegate.sharedInstance
 let _NavController                  = AppNavigationController.sharedInstance
-let _AppCoreData                    = ApplicationCoreData.sharedInstance
+let _AppCoreData                    = ApplicationCoreData.shared
 
 // Define key
 let kEnvironment = "currentEnvironment"

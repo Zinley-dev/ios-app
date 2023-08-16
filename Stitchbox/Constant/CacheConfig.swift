@@ -13,7 +13,7 @@ final class CacheManager {
     private var imageStorage: Storage<UIImage>?
     static let shared = CacheManager()
 
-    private let defaultExpiry: Expiry = .date(Date().addingTimeInterval(2 * 3600)) // 2 hours
+    private let defaultExpiry: Expiry = .date(Date().addingTimeInterval(1800))
     
     private init() {
         do {
@@ -48,7 +48,7 @@ final class CacheManager {
     }
 
     func fetchData(forKey key: String, completion: @escaping (Data?) -> Void) {
-        dataStorage?.async.object(forKey: key, completion: { result in
+        dataStorage?.async.object(forKey: key, completion: { [weak self] result in
             switch result {
             case .value(let data):
                 completion(data)
@@ -124,7 +124,7 @@ final class CacheManager {
             
         }
         
-        imageStorage?.async.removeAll { result in
+        imageStorage?.async.removeAll { [weak self] result in
             switch result {
             case .value:
                 print("All image cache cleared.")

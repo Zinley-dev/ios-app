@@ -20,6 +20,12 @@ import ObjectMapper
 class StartViewController: UIViewController, ControllerType, ZSWTappableLabelTapDelegate, ASAuthorizationControllerDelegate, ASAuthorizationControllerPresentationContextProviding {
     
     
+    deinit {
+        NotificationCenter.default.removeObserver(self)
+    }
+
+    
+    
     func presentationAnchor(for controller: ASAuthorizationController) -> ASPresentationAnchor {
         return self.view.window!
     }

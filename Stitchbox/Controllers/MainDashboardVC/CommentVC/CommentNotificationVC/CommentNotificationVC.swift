@@ -1478,6 +1478,10 @@ extension CommentNotificationVC {
                 Dispatch.main.async { [weak self] in
                     guard let self = self else { return }
                     self.loadingView.alpha = 0
+                    self.loadingImage.stopAnimating()
+                    self.loadingImage.animatedImage = nil
+                    self.loadingImage.image = nil
+                    self.loadingImage.removeFromSuperview()
                 }
                 
             }
@@ -1489,6 +1493,10 @@ extension CommentNotificationVC {
                 if self.loadingView.alpha == 0 {
                     
                     self.loadingView.isHidden = true
+                    self.loadingImage.stopAnimating()
+                    self.loadingImage.animatedImage = nil
+                    self.loadingImage.image = nil
+                    self.loadingImage.removeFromSuperview()
                     
                 }
                 

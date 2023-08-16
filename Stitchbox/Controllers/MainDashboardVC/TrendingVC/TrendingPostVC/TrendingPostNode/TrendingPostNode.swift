@@ -26,9 +26,10 @@ class TrendingPostNode: ASCellNode {
     var videoSignNode: ASImageNode!
     var stitchSignNode: ASImageNode!
     var countNode: ASTextNode!
+    var ranking = 0
 
     init(with post: PostModel, ranking: Int) {
-        
+        self.ranking = ranking
         self.post = post
         self.imageNode = ASNetworkImageNode()
         self.nameNode = ASTextNode()
@@ -44,15 +45,22 @@ class TrendingPostNode: ASCellNode {
         
         
         super.init()
+       
+        imageNode.shouldRenderProgressImages = true
+        imageNode.url = post.imageUrl
+        
+        
+        automaticallyManagesSubnodes = true
+        
+    }
+    
+    override func didLoad() {
+        super.didLoad()
         
         self.backgroundColor = .clear // set background to clear
-
-      
         self.imageNode.backgroundColor = .clear
-       
-        imageNode.url = post.imageUrl
-        imageNode.contentMode = .scaleAspectFill
         imageNode.cornerRadius = 10 // set corner radius of imageNode to 15
+        imageNode.contentMode = .scaleAspectFill
         
         if let username = post.owner?.username {
             
@@ -116,8 +124,6 @@ class TrendingPostNode: ASCellNode {
         )
 
         rankingNode.maximumNumberOfLines = 1
-        
-        automaticallyManagesSubnodes = true
         
     }
     

@@ -103,7 +103,7 @@ class SelectedRootPostVC: UIViewController, UICollectionViewDelegateFlowLayout {
     
     func hideLoading() {
         
-        delay(1) {
+        delay(1) { [weak self] in
             
             UIView.animate(withDuration: 0.5) { [weak self] in
                 
@@ -117,7 +117,10 @@ class SelectedRootPostVC: UIViewController, UICollectionViewDelegateFlowLayout {
                 if self?.loadingView.alpha == 0 {
                     
                     self?.loadingView.isHidden = true
-                    
+                    self?.loadingImage.stopAnimating()
+                    self?.loadingImage.animatedImage = nil
+                    self?.loadingImage.image = nil
+                    self?.loadingImage.removeFromSuperview()
                 }
                 
             }

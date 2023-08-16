@@ -29,11 +29,14 @@ class ParentViewController: UIViewController {
 
     lazy var delayItem = workItem()
     var count = 0
+    var firstLoadDone = false
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        
         syncSendbirdAccount()
         IAPManager.shared.configure()
+
         setupButtons()
         
         //----------------------------//
@@ -78,6 +81,8 @@ class ParentViewController: UIViewController {
         NotificationCenter.default.addObserver(self, selector: #selector(ParentViewController.onClickShowInfo), name: (NSNotification.Name(rawValue: "showInfo")), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(ParentViewController.onClickHideInfo), name: (NSNotification.Name(rawValue: "hideInfo")), object: nil)
         
+        firstLoadDone = true
+        
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -87,7 +92,11 @@ class ParentViewController: UIViewController {
         setupNavBar()
         checkNotification()
         showMiddleBtn(vc: self)
-        loadFeed()
+        
+        if firstLoadDone {
+            loadFeed()
+        }
+    
         hasViewAppeared = true
         
 
@@ -95,6 +104,8 @@ class ParentViewController: UIViewController {
         delay(1.25) {
             NotificationCenter.default.addObserver(self, selector: #selector(ParentViewController.shouldScrollToTop), name: (NSNotification.Name(rawValue: "scrollToTop")), object: nil)
         }
+        
+        
         
     }
     
@@ -1052,47 +1063,39 @@ extension ParentViewController {
     
     func loadFeed() {
         
-        let now = Date()
-        let thirtyMinutesAgo = now.addingTimeInterval(-1800) // 1800 seconds = 30 minutes
-
-        if feedViewController.lastLoadTime != nil, feedViewController.lastLoadTime! < thirtyMinutesAgo, !feedViewController.posts.isEmpty {
+        if feedViewController != nil {
             
-            feedViewController.clearAllData()
+            let now = Date()
+            let thirtyMinutesAgo = now.addingTimeInterval(-1800) // 1800 seconds = 30 minutes
             
-            if isFeed {
+            if let lastLoadTime = feedViewController.lastLoadTime, lastLoadTime < thirtyMinutesAgo, !feedViewController.posts.isEmpty {
                 feedViewController.clearAllData()
+                
+                if !isFeed {
+                    let offset = CGFloat(0) * scrollView.bounds.width
+                    scrollView.setContentOffset(CGPoint(x: offset, y: 0), animated: true)
+                }
             } else {
-                
-                let offset = CGFloat(0) * scrollView.bounds.width
+                resumeVideo()
+            }
+            
+        }
+        
+        
+    }
 
-                // Scroll to the next page
-                scrollView.setContentOffset(CGPoint(x: offset, y: 0), animated: true)
-                
-                feedViewController.clearAllData()
-            
-            }
-            
-        } else {
-            
-            resumeVideo()
-            
-        }
-        
-    }
-    
     func resumeVideo() {
-        
         if isFeed {
-            if feedViewController.currentIndex != nil {
-                feedViewController.playVideo(index: feedViewController.currentIndex!)
+            if let currentIndex = feedViewController.currentIndex {
+                feedViewController.playVideo(index: currentIndex)
             }
         } else {
-            if stitchViewController.currentIndex != nil {
-                stitchViewController.playVideo(index: stitchViewController.currentIndex!)
+            if let currentIndex = stitchViewController.currentIndex {
+                stitchViewController.playVideo(index: currentIndex)
             }
         }
-        
     }
+
 
     
 }

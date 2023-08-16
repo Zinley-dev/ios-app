@@ -55,8 +55,8 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     func sceneDidBecomeActive(_ scene: UIScene) {
         // Called when the scene has moved from an inactive state to an active state.
         // Use this method to restart any tasks that were paused (or not yet started) when the scene was inactive.
+        CacheManager.shared.asyncRemoveExpiredObjects()
         guard let currentVC = UIViewController.currentViewController() else { return }
-        
         
         if let currentStartVC = currentVC as? StartViewController {
             if currentStartVC.player != nil {
@@ -68,7 +68,9 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         
         
         if let currentFeedVC = currentVC as? ParentViewController {
-            currentFeedVC.loadFeed()
+            if currentFeedVC.firstLoadDone {
+                currentFeedVC.loadFeed()
+            }
         } else if  let currentFeedVC = currentVC as? SelectedParentVC {
             currentFeedVC.resumeVideo()
         }
@@ -77,7 +79,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         UIApplication.shared.applicationIconBadgeNumber = 0
         requestAppleReview()
         
-        CacheManager.shared.asyncRemoveExpiredObjects()
+        
      
     }
 

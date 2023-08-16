@@ -999,6 +999,11 @@ extension CommentVC {
                         
                         self.loadingView.isHidden = true
                         
+                        self.loadingImage.stopAnimating()
+                        self.loadingImage.animatedImage = nil
+                        self.loadingImage.image = nil
+                        self.loadingImage.removeFromSuperview()
+                        
                     }
                     
                 }
@@ -1011,6 +1016,12 @@ extension CommentVC {
                     if self.loadingView.alpha == 0 {
                         
                         self.loadingView.isHidden = true
+                        
+                        
+                        self.loadingImage.stopAnimating()
+                        self.loadingImage.animatedImage = nil
+                        self.loadingImage.image = nil
+                        self.loadingImage.removeFromSuperview()
                         
                     }
                     

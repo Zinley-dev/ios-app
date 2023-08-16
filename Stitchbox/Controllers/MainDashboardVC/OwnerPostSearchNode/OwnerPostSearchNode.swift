@@ -122,12 +122,20 @@ class OwnerPostSearchNode: ASCellNode {
         self.nameNode = ASTextNode()
         super.init()
         
+        imageNode.shouldRenderProgressImages = true
+        imageNode.url = post.imageUrl
+     
+        automaticallyManagesSubnodes = true
+        
+    }
+    
+    override func didLoad() {
+        super.didLoad()
+        
         self.backgroundColor = .clear // set background to clear
 
       
         self.imageNode.backgroundColor = .clear
-       
-        imageNode.url = post.imageUrl
         imageNode.contentMode = .scaleAspectFill
         imageNode.cornerRadius = 10 // set corner radius of imageNode to 15
         
@@ -183,16 +191,8 @@ class OwnerPostSearchNode: ASCellNode {
 
 
             
-        } else {
-            
         }
-     
-        automaticallyManagesSubnodes = true
         
-    }
-    
-    override func didLoad() {
-        super.didLoad()
         
         setupUsername()
         setupStitchCount()

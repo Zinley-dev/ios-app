@@ -18,6 +18,7 @@ class VideoNode: ASCellNode, ASVideoNodeDelegate {
 
     deinit {
         //view.gestureRecognizers?.forEach(view.removeGestureRecognizer)
+        cellVideoNode.delegate = nil
         print("VideoNode is being deallocated.")
     }
     
@@ -294,6 +295,8 @@ class VideoNode: ASCellNode, ASVideoNodeDelegate {
                 
         }
         
+        cellVideoNode.shouldRenderProgressImages = true
+        cellVideoNode.shouldAggressivelyRecoverFromStall = true
     
         DispatchQueue.main.async { [weak self] in
             guard let self = self else { return }
@@ -452,6 +455,7 @@ extension VideoNode {
 
     func videoNode(_ videoNode: ASVideoNode, didPlayToTimeInterval timeInterval: TimeInterval) {
         
+        
         let videoDuration = videoNode.currentItem?.duration.seconds ?? 0
 
         // Compute the time the user has spent actually watching the video
@@ -459,8 +463,14 @@ extension VideoNode {
             totalWatchedTime += timeInterval - previousTimeStamp
         }
         previousTimeStamp = timeInterval
+        
+        // Compute the time the user has spent actually watching the video
+        if timeInterval >= previousTimeStamp {
+            totalWatchedTime += timeInterval - previousTimeStamp
+        }
+        previousTimeStamp = timeInterval
 
-        setVideoProgress(rate: Float(timeInterval/(videoNode.currentItem?.duration.seconds)!), currentTime: timeInterval, maxDuration: videoNode.currentItem!.duration)
+        //setVideoProgress(rate: Float(timeInterval/(videoNode.currentItem?.duration.seconds)!), currentTime: timeInterval, maxDuration: videoNode.currentItem!.duration)
 
         let watchedPercentage = totalWatchedTime/videoDuration
         let minimumWatchedPercentage: Double
@@ -487,6 +497,8 @@ extension VideoNode {
             shouldCountView = false
             endVideo(watchTime: Double(totalWatchedTime))
         }
+        
+        
      
     }
     
@@ -516,6 +528,8 @@ extension VideoNode {
 
 
     func setVideoProgress(rate: Float, currentTime: TimeInterval, maxDuration: CMTime) {
+        
+        /*
         if let vc = UIViewController.currentViewController() {
             if let update1 = vc as? ParentViewController {
                 
@@ -534,7 +548,8 @@ extension VideoNode {
             } else if let update1 = vc as? PreviewVC {
                 updateSlider(currentTime: currentTime, maxDuration: maxDuration, playTimeBar: update1.playTimeBar)
             }
-        }
+        } */
+        
     }
     
     func updateSlider(currentTime: TimeInterval, maxDuration: CMTime, playTimeBar: UISlider?) {

@@ -144,7 +144,7 @@
                                 <color key="thumbTintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             </slider>
                             <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="00:00 / 00:00" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="AYU-5k-6kG">
-                                <rect key="frame" x="142" y="666" width="91" height="18"/>
+                                <rect key="frame" x="142.33333333333334" y="666" width="90.666666666666657" height="18"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <fontDescription key="fontDescription" name="Roboto-Bold" family="Roboto" pointSize="15"/>
                                 <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -249,7 +249,7 @@
                                 <color key="thumbTintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             </slider>
                             <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="00:00 / 00:00" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="dD1-hr-nJj">
-                                <rect key="frame" x="142" y="700" width="91" height="18"/>
+                                <rect key="frame" x="142.33333333333334" y="700" width="90.666666666666657" height="18"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <fontDescription key="fontDescription" name="Roboto-Bold" family="Roboto" pointSize="15"/>
                                 <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -1592,6 +1592,21 @@
             </objects>
             <point key="canvasLocation" x="-2415" y="3813"/>
         </scene>
+        <!--View Controller-->
+        <scene sceneID="NRS-tb-8ze">
+            <objects>
+                <viewController id="Dn3-ks-NFn" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="RKY-jH-i3T">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <viewLayoutGuide key="safeArea" id="lpX-vP-Ur7"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="lY7-s2-5tP" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-6409" y="4154"/>
+        </scene>
         <!--Trending PostVC-->
         <scene sceneID="iyO-za-QN0">
             <objects>
@@ -2019,39 +2034,17 @@
                                     <constraint firstItem="RKL-n5-X2A" firstAttribute="top" secondItem="bEV-Lz-L9X" secondAttribute="top" constant="16" id="IDL-Hw-HzA"/>
                                 </constraints>
                             </view>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="NiJ-tS-7Pn">
-                                <rect key="frame" x="0.0" y="0.0" width="375" height="778"/>
-                                <subviews>
-                                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="csr-ud-TsF" customClass="FLAnimatedImageView">
-                                        <rect key="frame" x="150" y="351.66666666666669" width="75" height="75"/>
-                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                        <constraints>
-                                            <constraint firstAttribute="width" constant="75" id="b7n-Vc-7F6"/>
-                                            <constraint firstAttribute="height" constant="75" id="qNg-db-U4A"/>
-                                        </constraints>
-                                    </imageView>
-                                </subviews>
-                                <color key="backgroundColor" red="0.15877044200000001" green="0.1632023454" blue="0.18738254900000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                <constraints>
-                                    <constraint firstItem="csr-ud-TsF" firstAttribute="centerY" secondItem="NiJ-tS-7Pn" secondAttribute="centerY" id="GXe-Pd-cCj"/>
-                                    <constraint firstItem="csr-ud-TsF" firstAttribute="centerX" secondItem="NiJ-tS-7Pn" secondAttribute="centerX" id="awU-3k-WH5"/>
-                                </constraints>
-                            </view>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="wUQ-Px-qwd"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
-                            <constraint firstItem="wUQ-Px-qwd" firstAttribute="bottom" secondItem="NiJ-tS-7Pn" secondAttribute="bottom" id="5wb-Y8-21C"/>
                             <constraint firstItem="pNe-4L-970" firstAttribute="top" secondItem="wUQ-Px-qwd" secondAttribute="top" constant="32" id="7LC-wj-cYE"/>
                             <constraint firstItem="wUQ-Px-qwd" firstAttribute="bottom" secondItem="bEV-Lz-L9X" secondAttribute="bottom" constant="8" id="LBc-2I-P5v"/>
                             <constraint firstItem="28q-vx-hjE" firstAttribute="top" secondItem="pNe-4L-970" secondAttribute="bottom" constant="16" id="Lbe-uC-PCn"/>
                             <constraint firstItem="bEV-Lz-L9X" firstAttribute="leading" secondItem="wUQ-Px-qwd" secondAttribute="leading" constant="8" id="Q6J-Ba-f4m"/>
                             <constraint firstItem="28q-vx-hjE" firstAttribute="top" secondItem="pNe-4L-970" secondAttribute="bottom" constant="16" id="QZq-Xc-0Ut"/>
-                            <constraint firstItem="NiJ-tS-7Pn" firstAttribute="top" secondItem="cIA-Nw-icc" secondAttribute="top" id="ZXa-4E-Z7V"/>
                             <constraint firstItem="28q-vx-hjE" firstAttribute="centerX" secondItem="cIA-Nw-icc" secondAttribute="centerX" id="cGQ-p4-drI"/>
                             <constraint firstItem="pNe-4L-970" firstAttribute="leading" secondItem="wUQ-Px-qwd" secondAttribute="leading" constant="32" id="d6K-aY-lTx"/>
-                            <constraint firstItem="NiJ-tS-7Pn" firstAttribute="trailing" secondItem="wUQ-Px-qwd" secondAttribute="trailing" id="qUh-v3-Ynf"/>
-                            <constraint firstItem="NiJ-tS-7Pn" firstAttribute="leading" secondItem="wUQ-Px-qwd" secondAttribute="leading" id="vYA-e4-cBh"/>
                             <constraint firstItem="bEV-Lz-L9X" firstAttribute="top" secondItem="28q-vx-hjE" secondAttribute="bottom" constant="16" id="wxM-DN-fdr"/>
                             <constraint firstItem="wUQ-Px-qwd" firstAttribute="trailing" secondItem="bEV-Lz-L9X" secondAttribute="trailing" constant="8" id="xXL-Vb-as9"/>
                             <constraint firstItem="wUQ-Px-qwd" firstAttribute="trailing" secondItem="pNe-4L-970" secondAttribute="trailing" constant="32" id="ymU-cR-XKH"/>
@@ -2060,8 +2053,6 @@
                     <connections>
                         <outlet property="avgLbl" destination="bZh-cW-jX1" id="aCI-AP-sO0"/>
                         <outlet property="fromLbl" destination="gdX-Nj-udb" id="0bn-Eu-eHJ"/>
-                        <outlet property="loadingImage" destination="csr-ud-TsF" id="A40-aG-FDw"/>
-                        <outlet property="loadingView" destination="NiJ-tS-7Pn" id="7eL-vb-eqz"/>
                         <outlet property="percent3DayLbl" destination="Wen-3z-5mv" id="s5U-8M-ctL"/>
                         <outlet property="percentAvgLbl" destination="6dT-Qj-bD1" id="DOP-bv-TUT"/>
                         <outlet property="percentDay" destination="zva-v1-4uR" id="iRT-2E-j2h"/>
@@ -4127,7 +4118,7 @@
                                 <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             </view>
                             <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="00:00 / 00:00" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="hQJ-lv-q0b">
-                                <rect key="frame" x="142" y="656" width="91" height="18"/>
+                                <rect key="frame" x="142.33333333333334" y="656" width="90.666666666666657" height="18"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <fontDescription key="fontDescription" name="Roboto-Bold" family="Roboto" pointSize="15"/>
                                 <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -4904,7 +4895,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="YuY-1r-idl" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2218" y="870"/>
+            <point key="canvasLocation" x="2260" y="876"/>
         </scene>
         <!--My Referral CodeVC-->
         <scene sceneID="ghT-tI-fUw">
@@ -5046,7 +5037,7 @@
                                         </connections>
                                     </button>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Connect with your friends!" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="S4w-7Q-aa7">
-                                        <rect key="frame" x="81" y="314" width="213" height="21"/>
+                                        <rect key="frame" x="81.333333333333329" y="314" width="212.66666666666669" height="21"/>
                                         <fontDescription key="fontDescription" name="Roboto-Bold" family="Roboto" pointSize="18"/>
                                         <color key="textColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <nil key="highlightedColor"/>
@@ -7388,42 +7379,18 @@
                                 <rect key="frame" x="0.0" y="50" width="375" height="728"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             </view>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Z7r-fe-bLl">
-                                <rect key="frame" x="0.0" y="50" width="375" height="728"/>
-                                <subviews>
-                                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="7Xl-mP-p9a" customClass="FLAnimatedImageView">
-                                        <rect key="frame" x="150" y="326.66666666666669" width="75" height="75"/>
-                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                        <constraints>
-                                            <constraint firstAttribute="height" constant="75" id="as0-Zl-BH7"/>
-                                            <constraint firstAttribute="width" constant="75" id="oO3-9c-iT5"/>
-                                        </constraints>
-                                    </imageView>
-                                </subviews>
-                                <color key="backgroundColor" red="0.15877044200000001" green="0.1632023454" blue="0.18738254900000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                <constraints>
-                                    <constraint firstItem="7Xl-mP-p9a" firstAttribute="centerY" secondItem="Z7r-fe-bLl" secondAttribute="centerY" id="AHz-Ho-Ozn"/>
-                                    <constraint firstItem="7Xl-mP-p9a" firstAttribute="centerX" secondItem="Z7r-fe-bLl" secondAttribute="centerX" id="hsB-LL-sUd"/>
-                                </constraints>
-                            </view>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="z58-vZ-DcV"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
-                            <constraint firstItem="Z7r-fe-bLl" firstAttribute="top" secondItem="z58-vZ-DcV" secondAttribute="top" id="4Zq-mM-9iJ"/>
-                            <constraint firstItem="Z7r-fe-bLl" firstAttribute="leading" secondItem="z58-vZ-DcV" secondAttribute="leading" id="4uO-Bf-EAL"/>
                             <constraint firstItem="sHB-Y3-eWd" firstAttribute="leading" secondItem="z58-vZ-DcV" secondAttribute="leading" id="5dm-Tt-eU7"/>
                             <constraint firstItem="z58-vZ-DcV" firstAttribute="trailing" secondItem="sHB-Y3-eWd" secondAttribute="trailing" id="IRk-gk-kCq"/>
-                            <constraint firstItem="z58-vZ-DcV" firstAttribute="bottom" secondItem="Z7r-fe-bLl" secondAttribute="bottom" id="K6T-Rp-3Zk"/>
-                            <constraint firstItem="z58-vZ-DcV" firstAttribute="trailing" secondItem="Z7r-fe-bLl" secondAttribute="trailing" id="P8Z-2Z-ybm"/>
                             <constraint firstItem="sHB-Y3-eWd" firstAttribute="top" secondItem="z58-vZ-DcV" secondAttribute="top" id="bht-Ef-UXp"/>
                             <constraint firstItem="z58-vZ-DcV" firstAttribute="bottom" secondItem="sHB-Y3-eWd" secondAttribute="bottom" id="lIH-YN-JVp"/>
                         </constraints>
                     </view>
                     <connections>
                         <outlet property="contentView" destination="sHB-Y3-eWd" id="nvO-Eu-BfU"/>
-                        <outlet property="loadingImage" destination="7Xl-mP-p9a" id="Bx5-bp-ROh"/>
-                        <outlet property="loadingView" destination="Z7r-fe-bLl" id="3Kt-HB-nuE"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="7Bk-wy-07u" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
@@ -7439,7 +7406,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Report issue" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="eyh-UM-gfd">
-                                <rect key="frame" x="32" y="82" width="97" height="20"/>
+                                <rect key="frame" x="32" y="82" width="96" height="20"/>
                                 <fontDescription key="fontDescription" name="Roboto-Bold" family="Roboto" pointSize="17"/>
                                 <color key="textColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <nil key="highlightedColor"/>
@@ -7674,7 +7641,7 @@
                                 <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             </view>
                             <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="00:00 / 00:00" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="tf5-cM-Vth">
-                                <rect key="frame" x="142" y="666" width="91" height="18"/>
+                                <rect key="frame" x="142.33333333333334" y="666" width="90.666666666666657" height="18"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <fontDescription key="fontDescription" name="Roboto-Bold" family="Roboto" pointSize="15"/>
                                 <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -7989,42 +7956,18 @@
                                     </collectionViewCell>
                                 </cells>
                             </collectionView>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Bdo-Jv-s3a">
-                                <rect key="frame" x="0.0" y="50" width="375" height="762"/>
-                                <subviews>
-                                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="gxt-fk-ntm" customClass="FLAnimatedImageView">
-                                        <rect key="frame" x="150" y="343.66666666666669" width="75" height="75"/>
-                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                        <constraints>
-                                            <constraint firstAttribute="height" constant="75" id="KfS-vi-zgR"/>
-                                            <constraint firstAttribute="width" constant="75" id="Z1s-OY-SUT"/>
-                                        </constraints>
-                                    </imageView>
-                                </subviews>
-                                <color key="backgroundColor" red="0.15877044200000001" green="0.1632023454" blue="0.18738254900000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                <constraints>
-                                    <constraint firstItem="gxt-fk-ntm" firstAttribute="centerX" secondItem="Bdo-Jv-s3a" secondAttribute="centerX" id="B3O-dt-pmE"/>
-                                    <constraint firstItem="gxt-fk-ntm" firstAttribute="centerY" secondItem="Bdo-Jv-s3a" secondAttribute="centerY" id="MZl-NV-OaD"/>
-                                </constraints>
-                            </view>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="PRm-gE-N59"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
                             <constraint firstAttribute="bottom" secondItem="ThJ-0F-4Nr" secondAttribute="bottom" id="3Vu-3j-gmS"/>
                             <constraint firstItem="ThJ-0F-4Nr" firstAttribute="top" secondItem="2uS-hU-8EQ" secondAttribute="top" id="Dyg-ko-by7"/>
-                            <constraint firstItem="Bdo-Jv-s3a" firstAttribute="leading" secondItem="PRm-gE-N59" secondAttribute="leading" id="K2F-h1-rjN"/>
                             <constraint firstItem="ThJ-0F-4Nr" firstAttribute="leading" secondItem="2uS-hU-8EQ" secondAttribute="leading" id="NGK-7j-QUi"/>
-                            <constraint firstItem="Bdo-Jv-s3a" firstAttribute="trailing" secondItem="PRm-gE-N59" secondAttribute="trailing" id="YiP-YY-wxQ"/>
-                            <constraint firstItem="Bdo-Jv-s3a" firstAttribute="top" secondItem="PRm-gE-N59" secondAttribute="top" id="dJj-cF-qOU"/>
-                            <constraint firstAttribute="bottom" secondItem="Bdo-Jv-s3a" secondAttribute="bottom" id="nai-HM-B3e"/>
                             <constraint firstAttribute="trailing" secondItem="ThJ-0F-4Nr" secondAttribute="trailing" id="vm2-hq-zLa"/>
                         </constraints>
                     </view>
                     <connections>
                         <outlet property="collectionView" destination="ThJ-0F-4Nr" id="kdp-3Q-9vR"/>
-                        <outlet property="loadingImage" destination="gxt-fk-ntm" id="jnt-kg-cne"/>
-                        <outlet property="loadingView" destination="Bdo-Jv-s3a" id="qLf-Di-Dck"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="5qK-3t-hXy" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
@@ -9680,7 +9623,7 @@
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Total views" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Nol-cz-oM6">
-                                                    <rect key="frame" x="28.000000000000007" y="18" width="75.666666666666686" height="18"/>
+                                                    <rect key="frame" x="27.999999999999993" y="18" width="75.333333333333314" height="18"/>
                                                     <fontDescription key="fontDescription" name="Roboto-Regular" family="Roboto" pointSize="15"/>
                                                     <color key="textColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                     <nil key="highlightedColor"/>
