@@ -17,7 +17,8 @@ import ActiveLabel
 class VideoNode: ASCellNode, ASVideoNodeDelegate {
 
     deinit {
-        print("VideoNode is being deallocated.")
+        print("VideoNode \(deallocatedCount) \(vcType) \(post.id) is being deallocated.")
+        deallocatedCount += 1
     }
     
     var post: PostModel
@@ -1762,12 +1763,13 @@ extension VideoNode {
         let shouldShowStitch = (post.userSettings?.publicStitch == true && post.setting?.allowStitch == true) ||
                               (post.setting?.allowStitch == true && isFollowingMe)
 
-        if shouldShowStitch {
-            showStitchViews()
-            self.allowStitch = true
-        } else {
+        
+        if post.owner?.id == _AppCoreData.userDataSource.value?.userID || !shouldShowStitch {
             hideStitchViews()
             self.allowStitch = false
+        } else {
+            showStitchViews()
+            self.allowStitch = true
         }
     }
 

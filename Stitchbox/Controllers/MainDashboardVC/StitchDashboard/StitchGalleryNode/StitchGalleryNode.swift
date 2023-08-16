@@ -36,24 +36,30 @@ class StitchGalleryNode: ASCellNode {
         self.stitchSignNode = ASImageNode()
         
         super.init()
-        
-        self.backgroundColor = .clear // set background to clear
-        self.imageNode.backgroundColor = .clear
+    
        
         imageNode.url = post.imageUrl
-        imageNode.contentMode = .scaleAspectFill
-        imageNode.cornerRadius = 10 // set corner radius of imageNode to 15
+        
 
       
     }
     
+    
     override func didLoad() {
         super.didLoad()
+        
+        
+        self.backgroundColor = .clear // set background to clear
+        self.imageNode.backgroundColor = .clear
+        
+        imageNode.contentMode = .scaleAspectFill
+        imageNode.cornerRadius = 10 // set corner radius of imageNode to 15
         
         setupnode()
         setupUsername()
         setupStitchCount()
         setupViewCount()
+        
         
     }
     

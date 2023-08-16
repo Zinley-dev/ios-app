@@ -18,7 +18,7 @@ import AppTrackingTransparency
 import AdSupport
 import AsyncDisplayKit
 
-
+var deallocatedCount = 0
 let incomingCallGreen = UIColor(red: 76.0/255.0, green: 217.0/255.0, blue: 100.0/255.0, alpha: 1.0)
 let hashtagPurple = UIColor(red: 88.0/255.0, green: 86.0/255.0, blue: 214.0/255.0, alpha: 1.0)
 let alertColor = UIColor(red: 0.8, green: 0.2, blue: 0.2, alpha: 1.0)
@@ -511,7 +511,7 @@ func reloadGlobalSettings() {
 
 func unmuteVideoIfNeed() {
   
-    /*
+    
     if let vc = UIViewController.currentViewController() {
          
         if vc is ParentViewController {
@@ -527,7 +527,7 @@ func unmuteVideoIfNeed() {
                     
                     if let cell2 = update1.feedViewController.collectionNode.nodeForItem(at: IndexPath(row: update1.feedViewController.currentIndex!, section: 0)) as? VideoNode {
                         
-                        cell2.videoNode.muted = false
+                        cell2.cellVideoNode.muted = false
                         shouldMute = false
                     }
                     
@@ -539,7 +539,7 @@ func unmuteVideoIfNeed() {
                     
                     if let cell2 = update1.stitchViewController.collectionNode.nodeForItem(at: IndexPath(row: update1.stitchViewController.currentIndex!, section: 0)) as? VideoNode {
                         
-                        cell2.videoNode.muted = false
+                        cell2.cellVideoNode.muted = false
                         shouldMute = false
                     }
                     
@@ -551,20 +551,36 @@ func unmuteVideoIfNeed() {
                 
             }
             
-        } else if vc is SelectedPostVC {
+        } else if vc is SelectedParentVC {
             
-            if let update1 = vc as? SelectedPostVC {
+            if let update1 = vc as? SelectedParentVC {
                 
-                if update1.currentIndex != nil {
+                
+                if update1.isRoot {
                     
-                    if let cell2 = update1.collectionNode.nodeForItem(at: IndexPath(row: update1.currentIndex!, section: 0)) as? VideoNode {
+                    if update1.selectedRootPostVC.currentIndex == nil {
+                        update1.selectedRootPostVC.currentIndex = 0
+                    }
+                    
+                    if let cell2 = update1.selectedRootPostVC.collectionNode.nodeForItem(at: IndexPath(row: update1.selectedRootPostVC.currentIndex!, section: 0)) as? VideoNode {
                         
-                        cell2.videoNode.muted = false
+                        cell2.cellVideoNode.muted = false
                         shouldMute = false
                     }
+                    
+                } else {
+                    
+                    if update1.stitchViewController.currentIndex == nil {
+                        update1.stitchViewController.currentIndex = 0
+                    }
+                    
+                    if let cell2 = update1.stitchViewController.collectionNode.nodeForItem(at: IndexPath(row: update1.stitchViewController.currentIndex!, section: 0)) as? VideoNode {
+                        
+                        cell2.cellVideoNode.muted = false
+                        shouldMute = false
+                    }
+                    
                 }
-                
-               
                 
             }
             
@@ -576,7 +592,7 @@ func unmuteVideoIfNeed() {
                     
                     if let cell2 = update1.collectionNode.nodeForItem(at: IndexPath(row: update1.currentIndex!, section: 0)) as? VideoNode {
                         
-                        cell2.videoNode.muted = false
+                        cell2.cellVideoNode.muted = false
                         shouldMute = false
                     }
                     
@@ -598,7 +614,7 @@ func unmuteVideoIfNeed() {
                         
                         if let cell = update1.PendingVC.waitCollectionNode.nodeForItem(at: IndexPath(row: update1.PendingVC.currentIndex!, section: 0)) as? PendingNode {
                             
-                            cell.videoNode.muted = false
+                            cell.cellVideoNode.muted = false
                             shouldMute = false
                         }
                         
@@ -610,7 +626,7 @@ func unmuteVideoIfNeed() {
                         
                         if let cell = update1.StitchToVC.waitCollectionNode.nodeForItem(at: IndexPath(row: update1.StitchToVC.currentIndex!, section: 0)) as? StitchControlForRemoveNode {
                             
-                            cell.videoNode.muted = false
+                            cell.cellVideoNode.muted = false
                             shouldMute = false
                         }
                         
@@ -623,7 +639,7 @@ func unmuteVideoIfNeed() {
                         
                         if let cell = update1.ApprovedStitchVC.waitCollectionNode.nodeForItem(at: IndexPath(row: update1.ApprovedStitchVC.currentIndex!, section: 0)) as? StitchControlForRemoveNode {
                             
-                            cell.videoNode.muted = false
+                            cell.cellVideoNode.muted = false
                             shouldMute = false
                         }
                         
@@ -636,7 +652,7 @@ func unmuteVideoIfNeed() {
         }
              
         
-    }*/
+    }
     
 }
 

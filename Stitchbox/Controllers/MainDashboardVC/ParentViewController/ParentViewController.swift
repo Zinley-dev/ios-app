@@ -26,7 +26,7 @@ class ParentViewController: UIViewController {
     
     var isFeed = true
     var rootId = ""
-
+    var allowLoading = true
     lazy var delayItem = workItem()
     var count = 0
     var firstLoadDone = false
@@ -636,7 +636,7 @@ extension ParentViewController {
             stitchViewController.rootId = rootId
             count += 1
             
-            delayItem.perform(after: 1.05) { [weak self] in
+            delayItem.perform(after: 1.25) { [weak self] in
                 guard let self = self else { return }
                 print("Loading stitches: \(self.count) - \(self.stitchViewController.rootId)")
                 self.stitchViewController.clearAllData()
@@ -656,6 +656,7 @@ extension ParentViewController {
                 }
             }
         }
+         
     }
 
     
@@ -702,7 +703,9 @@ extension ParentViewController {
                 
                 feedViewController.delayItem3.perform(after: 0.25) { [weak self] in
                     guard let self = self else { return }
-                    feedViewController.clearAllData()
+                    self.rootId = ""
+                    self.feedViewController.clearAllData()
+
                 }
                 
             }
@@ -1075,12 +1078,14 @@ extension ParentViewController {
             let thirtyMinutesAgo = now.addingTimeInterval(-1800) // 1800 seconds = 30 minutes
             
             if let lastLoadTime = feedViewController.lastLoadTime, lastLoadTime < thirtyMinutesAgo, !feedViewController.posts.isEmpty {
-                feedViewController.clearAllData()
-                
                 if !isFeed {
                     let offset = CGFloat(0) * scrollView.bounds.width
                     scrollView.setContentOffset(CGPoint(x: offset, y: 0), animated: true)
                 }
+                
+                rootId = ""
+                feedViewController.clearAllData()
+
             } else {
                 resumeVideo()
             }

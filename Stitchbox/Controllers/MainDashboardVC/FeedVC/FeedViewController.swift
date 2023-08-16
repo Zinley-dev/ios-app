@@ -433,7 +433,6 @@ extension FeedViewController {
         refresh_request = true
         currentIndex = 0
         isfirstLoad = true
-        shouldMute = nil
         updateData()
     }
 
@@ -447,9 +446,6 @@ extension FeedViewController {
                 self.pullControl.endRefreshing()
             }
 
-            self.delayItem.perform(after: 0.75) { [weak self] in
-                self?.collectionNode.scrollToItem(at: IndexPath(row: 0, section: 0), at: .centeredVertically, animated: true)
-            }
         }
     }
 
@@ -478,7 +474,6 @@ extension FeedViewController {
 
         if refresh_request {
             clearExistingPosts()
-            refresh_request = false
         }
 
         let uniquePosts = Set(self.posts)
@@ -511,16 +506,16 @@ extension FeedViewController {
 
         collectionNode.insertItems(at: indexPaths)
         
+        if refresh_request {
+            refresh_request = false
+        }
     }
 
 
     private func clearExistingPosts() {
-        let deleteIndexPaths = posts.enumerated().map { IndexPath(row: $0.offset, section: 0) }
         posts.removeAll()
-        collectionNode.deleteItems(at: deleteIndexPaths)
+        collectionNode.reloadData()
     }
-
-    
     
 }
 
@@ -532,7 +527,6 @@ extension FeedViewController {
         self.tabBarController?.selectedViewController = self.tabBarController?.viewControllers![4]
         
     }
-    
     
     func handleAnimationTextAndImage(post: PostModel) {
         
@@ -586,7 +580,7 @@ extension FeedViewController {
     
     
     func playVideo(index: Int) {
-        
+        print("VideoNode: \(posts.count)")
         if let cell = self.collectionNode.nodeForItem(at: IndexPath(row: index, section: 0)) as? VideoNode {
             
             if !cell.cellVideoNode.isPlaying() {

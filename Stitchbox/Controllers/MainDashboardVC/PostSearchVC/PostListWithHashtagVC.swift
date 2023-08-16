@@ -413,22 +413,24 @@ extension PostListWithHashtagVC {
         
         if refresh_request {
             clearExistingPosts()
-            refresh_request = false
         }
 
-        var items = newPosts.compactMap { PostModel(JSON: $0) }.filter { !self.posts.contains($0) }
+        let items = newPosts.compactMap { PostModel(JSON: $0) }.filter { !self.posts.contains($0) }
         self.posts.append(contentsOf: items)
         
         if !items.isEmpty {
             let indexPaths = generateIndexPaths(for: items)
             collectionNode.insertItems(at: indexPaths)
         }
+        
+        if refresh_request {
+            refresh_request = false
+        }
     }
 
     private func clearExistingPosts() {
-        let deleteIndexPaths = posts.enumerated().map { IndexPath(row: $0.offset, section: 0) }
         posts.removeAll()
-        collectionNode.deleteItems(at: deleteIndexPaths)
+        collectionNode.reloadData()
     }
 
     private func generateIndexPaths(for items: [PostModel]) -> [IndexPath] {

@@ -35,12 +35,10 @@ class StitchViewController: UIViewController, UICollectionViewDelegateFlowLayout
     var hasViewAppeared = false
     var isVideoPlaying = false
     var curPage = 1
-    //let promotionButton = UIButton(type: .custom)
+  
     let homeButton: UIButton = UIButton(type: .custom)
    
-    var isfirstLoad = true
-    var didScroll = false
-    var imageIndex: Int?
+    
     var posts = [PostModel]()
     var selectedIndexPath = 0
     var selected_item: PostModel!
@@ -234,11 +232,7 @@ extension StitchViewController {
                     
                     if !posts[newPlayingIndex!].muxPlaybackId.isEmpty {
                         foundVisibleVideo = true
-                        //playTimeBar.isHidden = false
-                        imageIndex = nil
-                    } else {
-                        //playTimeBar.isHidden = true
-                        imageIndex = newPlayingIndex
+                       
                     }
                     
                 }
@@ -360,7 +354,6 @@ extension StitchViewController: ASCollectionDelegate {
         }
         
         return true
-        
 
     }
     
@@ -384,17 +377,27 @@ extension StitchViewController: ASCollectionDataSource {
                 self.collectionNode.view.setEmptyMessage("No stitch found!", color: .white)
                 playTimeBar.isHidden = true
                 
+                return 0
+                
             } else {
                 
                 self.collectionNode.view.restore()
                 playTimeBar.isHidden = false
                 
+                return self.posts.count
             }
             
+        } else {
+            
+            if self.posts.isEmpty {
+                
+                return 0
+            } else {
+                return self.posts.count
+            }
+          
         }
-        
     
-        return self.posts.count
         
     }
     
@@ -438,7 +441,7 @@ extension StitchViewController: ASCollectionDataSource {
     
     func collectionNode(_ collectionNode: ASCollectionNode, willBeginBatchFetchWith context: ASBatchContext) {
         
-        if rootId != "" {
+        if rootId != "", !refresh_request {
          
             retrieveNextPageWithCompletion { [weak self] (newPosts) in
                 guard let self = self else { return }
@@ -502,7 +505,7 @@ extension StitchViewController {
         galleryCollectionNode.view.leadingAnchor.constraint(equalTo: galleryView.leadingAnchor, constant: 0).isActive = true
         galleryCollectionNode.view.trailingAnchor.constraint(equalTo: galleryView.trailingAnchor, constant: 0).isActive = true
         galleryCollectionNode.view.bottomAnchor.constraint(equalTo: galleryView.bottomAnchor, constant: 0).isActive = true
-        galleryCollectionNode.backgroundColor = .red
+        galleryCollectionNode.backgroundColor = .clear
         
         galleryCollectionNode.view.isPagingEnabled = false
         galleryCollectionNode.view.backgroundColor = UIColor.clear
@@ -570,7 +573,6 @@ extension StitchViewController {
         
         if refresh_request {
             clearExistingPosts()
-            refresh_request = false
         }
 
         let items = newPosts.compactMap { PostModel(JSON: $0) }.filter { !self.posts.contains($0) }
@@ -580,6 +582,10 @@ extension StitchViewController {
             let indexPaths = generateIndexPaths(for: items)
             collectionNode.insertItems(at: indexPaths)
             galleryCollectionNode.insertItems(at: indexPaths)
+        }
+        
+        if refresh_request {
+            refresh_request = false
         }
     }
 
@@ -595,9 +601,8 @@ extension StitchViewController {
     }
 
     func updateData() {
-        self.retrieveNextPageWithCompletion { [weak self] (newPosts) in
-            guard let self = self else { return }
-
+        self.retrieveNextPageWithCompletion {  (newPosts) in
+        
             if newPosts.isEmpty {
                 self.refresh_request = false
                 self.posts.removeAll()
@@ -622,14 +627,11 @@ extension StitchViewController {
         refresh_request = true
         currentIndex = 0
         curPage = 1
-        isfirstLoad = true
-        didScroll = false
-        imageIndex = nil
+       
         updateData()
     }
 
-
-    
+  
     func collectionNode(_ collectionNode: ASCollectionNode, didSelectItemAt indexPath: IndexPath) {
         
         if collectionNode == galleryCollectionNode {
