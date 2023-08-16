@@ -37,7 +37,11 @@ class StitchGalleryNode: ASCellNode {
         
         super.init()
     
-       
+        countNode.isLayerBacked = true
+        stitchSignNode.isLayerBacked = true
+        videoSignNode.isLayerBacked = true
+        infoNode.isLayerBacked = true
+        imageNode.isLayerBacked = true
         imageNode.url = post.imageUrl
         
 
@@ -102,7 +106,7 @@ class StitchGalleryNode: ASCellNode {
 
         DispatchQueue.main.async { [weak self] in
             guard let self = self else { return }
-            self.infoNode.view.cornerRadius = 3
+            //self.infoNode.view.cornerRadius = 3
         }
         
     }

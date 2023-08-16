@@ -29,7 +29,7 @@ class StitchControlNode: ASCellNode {
         
         self.backgroundColor = .clear // set background to clear
 
-      
+        imageNode.isLayerBacked = true
         self.imageNode.backgroundColor = .clear
         
         imageNode.url = post.imageUrl

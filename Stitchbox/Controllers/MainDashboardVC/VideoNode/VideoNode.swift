@@ -353,7 +353,6 @@ class VideoNode: ASCellNode, ASVideoNodeDelegate {
         let gradientOverlaySpec = ASOverlayLayoutSpec(child:ratioSpec, overlay:self.gradientNode)
         return gradientOverlaySpec
     }
-   
  
 }
 
@@ -451,7 +450,7 @@ extension VideoNode {
 
 
 
-/*
+
     func videoNode(_ videoNode: ASVideoNode, didPlayToTimeInterval timeInterval: TimeInterval) {
         
         
@@ -469,8 +468,7 @@ extension VideoNode {
         }
         previousTimeStamp = timeInterval
 
-        setVideoProgress(rate: Float(timeInterval/(videoNode.currentItem?.duration.seconds)!), currentTime: timeInterval, maxDuration: videoNode.currentItem!.duration)
-        
+      
         let watchedPercentage = totalWatchedTime/videoDuration
         let minimumWatchedPercentage: Double
 
@@ -499,7 +497,7 @@ extension VideoNode {
         
         
      
-    }*/
+    }
     
     func videoDidPlay(toEnd videoNode: ASVideoNode) {
     

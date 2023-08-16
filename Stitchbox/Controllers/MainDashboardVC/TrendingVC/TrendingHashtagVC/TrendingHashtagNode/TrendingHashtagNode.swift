@@ -40,6 +40,8 @@ class TrendingHashtagNode: ASCellNode {
         
         self.selectionStyle = .none
 
+        rankNode.isLayerBacked = true
+        viewsNode.isLayerBacked = true
         hashtagTextNode.isLayerBacked = true
         hashtagTextNode.backgroundColor = UIColor.clear
         

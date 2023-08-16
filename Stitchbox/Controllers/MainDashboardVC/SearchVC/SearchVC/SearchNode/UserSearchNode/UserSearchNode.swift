@@ -43,7 +43,7 @@ class UserSearchNode: ASCellNode {
         userNameNode.isLayerBacked = true
         imageNode.shouldRenderProgressImages = true
         imageNode.isLayerBacked = true
-
+        nameNode.isLayerBacked = true
    
         userNameNode.backgroundColor = UIColor.clear
         nameNode.backgroundColor = UIColor.clear

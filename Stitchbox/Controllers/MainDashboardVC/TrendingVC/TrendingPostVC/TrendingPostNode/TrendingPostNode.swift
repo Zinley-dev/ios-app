@@ -45,7 +45,12 @@ class TrendingPostNode: ASCellNode {
         
         
         super.init()
-       
+        
+        videoSignNode.isLayerBacked = true
+        stitchSignNode.isLayerBacked = true
+        stitchCountNode.isLayerBacked = true
+        countNode.isLayerBacked = true
+        imageNode.isLayerBacked = true
         imageNode.shouldRenderProgressImages = true
         imageNode.url = post.imageUrl
         
@@ -222,7 +227,7 @@ class TrendingPostNode: ASCellNode {
 
         DispatchQueue.main.async { [weak self] in
             guard let self = self else { return }
-            self.infoNode.view.cornerRadius = 3
+            //self.infoNode.view.cornerRadius = 3
         }
         
     }

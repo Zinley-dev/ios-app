@@ -107,10 +107,7 @@ class OwnerPostSearchNode: ASCellNode {
         textNode.backgroundColor = .black // set the background color to dark gray
         textNode.maximumNumberOfLines = 1
 
-        DispatchQueue.main.async {
-            textNode.view.cornerRadius = 3
-        }
-        
+       
         return textNode
     }()
 
@@ -122,6 +119,13 @@ class OwnerPostSearchNode: ASCellNode {
         self.nameNode = ASTextNode()
         super.init()
         
+        stitchSignNode.isLayerBacked = true
+        stitchCountNode.isLayerBacked = true
+        videoSignNode.isLayerBacked = true
+        countNode.isLayerBacked = true
+        infoNode.isLayerBacked = true
+        nameNode.isLayerBacked = true
+        imageNode.isLayerBacked = true
         imageNode.shouldRenderProgressImages = true
         imageNode.url = post.imageUrl
      

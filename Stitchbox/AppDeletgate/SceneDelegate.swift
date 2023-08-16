@@ -86,6 +86,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     func sceneWillResignActive(_ scene: UIScene) {
         // Called when the scene will move from an active state to an inactive state.
         // This may occur due to temporary interruptions (ex. an incoming phone call).
+        clearTmpDirectory()
         guard let currentVC = UIViewController.currentViewController() else { return }
         
         if let currentFeedVC = currentVC as? ParentViewController {
@@ -117,6 +118,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
                
             }
         }
+        
     }
 
     func sceneWillEnterForeground(_ scene: UIScene) {
@@ -129,6 +131,25 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         // Use this method to save data, release shared resources, and store enough scene-specific state information
         // to restore the scene back to its current state.
     }
+    
+    func clearTmpDirectory() {
+        let tmpDirectory = NSTemporaryDirectory()
+        let fileManager = FileManager.default
+        
+        do {
+            let tmpFiles = try fileManager.contentsOfDirectory(atPath: tmpDirectory)
+            
+            for file in tmpFiles {
+                let filePath = "\(tmpDirectory)/\(file)"
+                try fileManager.removeItem(atPath: filePath)
+            }
+            
+            print("Successfully cleared tmp directory.")
+        } catch {
+            print("Error clearing tmp directory: \(error)")
+        }
+    }
+
 
 }
 

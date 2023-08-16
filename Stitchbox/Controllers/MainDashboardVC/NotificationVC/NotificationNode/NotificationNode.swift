@@ -45,6 +45,10 @@ class NotificationNode: ASCellNode {
             
         }
         
+        upperTextNode.isLayerBacked = true
+        imageNode.isLayerBacked = true
+        timeNode.isLayerBacked = true
+        
         let textAttributes: [NSAttributedString.Key: Any] = [
             NSAttributedString.Key.font: FontManager.shared.roboto(.Medium, size: FontSize), // Using the Roboto Medium style
             NSAttributedString.Key.foregroundColor: UIColor.black,

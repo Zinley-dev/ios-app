@@ -25,7 +25,7 @@ class HashTagSearchNode: ASCellNode {
 
     var hashtagTextNode: ASTextNode!
     var hashtagSymbolImg: ASTextNode!
-    var coutNode: ASTextNode!
+    var countNode: ASTextNode!
    
     
     init(with hashtag: HashtagsModel) {
@@ -33,7 +33,7 @@ class HashTagSearchNode: ASCellNode {
         self.hashtag = hashtag
         self.hashtagTextNode = ASTextNode()
         self.hashtagSymbolImg = ASTextNode()
-        self.coutNode = ASTextNode()
+        self.countNode = ASTextNode()
         super.init()
         
         self.backgroundColor = UIColor.clear
@@ -41,6 +41,8 @@ class HashTagSearchNode: ASCellNode {
         self.selectionStyle = .none
 
         hashtagTextNode.isLayerBacked = true
+        hashtagSymbolImg.isLayerBacked = true
+        countNode.isLayerBacked = true
         hashtagTextNode.backgroundColor = UIColor.clear
         hashtagTextNode.maximumNumberOfLines = 2
         
@@ -77,7 +79,7 @@ class HashTagSearchNode: ASCellNode {
                 ]
             )
             
-            self.coutNode.attributedText = NSAttributedString(
+            self.countNode.attributedText = NSAttributedString(
                 string: "\(formatPoints(num: Double(hashtag.count))) posts",
                 attributes: [
                     NSAttributedString.Key.font:  FontManager.shared.roboto(.Medium, size: FontSize + 1),
@@ -88,7 +90,7 @@ class HashTagSearchNode: ASCellNode {
         }
 
         
-        coutNode.backgroundColor = UIColor.clear
+        countNode.backgroundColor = UIColor.clear
         
     }
     
@@ -96,7 +98,7 @@ class HashTagSearchNode: ASCellNode {
         
         
         
-        coutNode.style.preferredSize = CGSize(width: 100.0, height: 15.0)
+        countNode.style.preferredSize = CGSize(width: 100.0, height: 15.0)
     
         //
       
@@ -125,7 +127,7 @@ class HashTagSearchNode: ASCellNode {
         headerStack.spacing = 10
         headerStack.justifyContent = ASStackLayoutJustifyContent.start
         headerStack.alignItems = .center
-        headerStack.children = [verticalStack, coutNode]
+        headerStack.children = [verticalStack, countNode]
 
 
         return ASInsetLayoutSpec(insets: UIEdgeInsets(top: 16.0, left: 16, bottom: 16, right: 20), child: headerStack)

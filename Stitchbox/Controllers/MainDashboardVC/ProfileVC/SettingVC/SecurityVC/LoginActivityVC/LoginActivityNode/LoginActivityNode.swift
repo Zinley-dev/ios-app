@@ -44,7 +44,7 @@ class LoginActivityNode: ASCellNode {
         
         AvatarNode.shouldRenderProgressImages = true
         AvatarNode.isLayerBacked = true
-        
+        timeNode.isLayerBacked = true
         //
         paragraphStyles.alignment = .left
 

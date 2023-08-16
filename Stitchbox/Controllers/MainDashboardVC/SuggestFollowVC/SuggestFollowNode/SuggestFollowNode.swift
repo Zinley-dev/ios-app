@@ -48,10 +48,10 @@ class SuggestFollowNode: ASCellNode {
         self.selectionStyle = .none
         avatarNode.cornerRadius = OrganizerImageSize/2
         avatarNode.clipsToBounds = true
+        nameNode.isLayerBacked = true
         userNameNode.isLayerBacked = true
         avatarNode.shouldRenderProgressImages = true
         avatarNode.isLayerBacked = true
-
         userNameNode.backgroundColor = UIColor.clear
         nameNode.backgroundColor = UIColor.clear
         followBtnNode.backgroundColor = .secondary
@@ -61,6 +61,12 @@ class SuggestFollowNode: ASCellNode {
 
         automaticallyManagesSubnodes = true
 
+
+    }
+    
+    override func didLoad() {
+        super.didLoad()
+        
         if let user = user.userId {
             if user == _AppCoreData.userDataSource.value?.userID {
                 denyBtn = true
@@ -91,11 +97,6 @@ class SuggestFollowNode: ASCellNode {
         } else {
             avatarNode.image = UIImage.init(named: "defaultuser")
         }
-    }
-    
-    override func didLoad() {
-        super.didLoad()
-        
         
         self.checkIfFollow()
         

@@ -39,9 +39,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?)
     -> Bool {
     
+        
         setupPixelSDK()
-        //sendbird_authentication()
-        //syncSendbirdAccount()
+        sendbird_authentication()
+        syncSendbirdAccount()
         attemptRegisterForNotifications(application: application)
         setupStyle()
         setupOneSignal(launchOptions: launchOptions)
@@ -50,6 +51,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         sentrySetup()
         CacheManager.shared.asyncRemoveExpiredObjects()
         metricsManager = AppMetrics()
+        clearTmpDirectory()
         
         
         return true
@@ -699,9 +701,28 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
     func applicationDidBecomeActive(_ application: UIApplication) {
         UIApplication.shared.applicationIconBadgeNumber = 0
         requestAppleReview()
-        
+        clearTmpDirectory()
     }
     
+    
+    
+    func clearTmpDirectory() {
+        let tmpDirectory = NSTemporaryDirectory()
+        let fileManager = FileManager.default
+        
+        do {
+            let tmpFiles = try fileManager.contentsOfDirectory(atPath: tmpDirectory)
+            
+            for file in tmpFiles {
+                let filePath = "\(tmpDirectory)/\(file)"
+                try fileManager.removeItem(atPath: filePath)
+            }
+            
+            print("Successfully cleared tmp directory.")
+        } catch {
+            print("Error clearing tmp directory: \(error)")
+        }
+    }
     
 }
 

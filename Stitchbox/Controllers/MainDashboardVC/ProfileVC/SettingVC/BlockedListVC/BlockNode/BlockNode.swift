@@ -51,6 +51,8 @@ class BlockNode: ASCellNode {
         avatarNode.cornerRadius = OrganizerImageSize/2
         avatarNode.clipsToBounds = true
         userNameNode.isLayerBacked = true
+        avatarNode.isLayerBacked = true
+        nameNode.isLayerBacked = true
         
         userNameNode.backgroundColor = UIColor.clear
         nameNode.backgroundColor = UIColor.clear

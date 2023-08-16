@@ -41,8 +41,8 @@ class RecentNode: ASCellNode {
         
         self.selectionStyle = .none
         upperNameNode.isLayerBacked = true
-        
-
+        belowNameNode.isLayerBacked = true
+        imageNode.isLayerBacked = true
         upperNameNode.backgroundColor = UIColor.clear
         belowNameNode.backgroundColor = UIColor.clear
         

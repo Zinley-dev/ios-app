@@ -44,7 +44,11 @@ class PostSearchNode: ASCellNode {
         
         super.init()
         
-
+        
+        nameNode.isLayerBacked = true
+        infoNode.isLayerBacked = true
+        imageNode.isLayerBacked = true
+        countNode.isLayerBacked = true
         imageNode.shouldRenderProgressImages = true
         imageNode.url = post.imageUrl
         
@@ -226,7 +230,7 @@ class PostSearchNode: ASCellNode {
 
         DispatchQueue.main.async { [weak self] in
             guard let self = self else { return }
-            self.infoNode.view.cornerRadius = 3
+            //self.infoNode.view.cornerRadius = 3
         }
         
     }

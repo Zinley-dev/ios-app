@@ -51,6 +51,7 @@ class FindFriendsNode: ASCellNode {
         userNameNode.isLayerBacked = true
         AvatarNode.shouldRenderProgressImages = true
         AvatarNode.isLayerBacked = true
+        NameNode.isLayerBacked = true
 
         //self.backgroundColor = UIColor.red
         userNameNode.backgroundColor = UIColor.clear

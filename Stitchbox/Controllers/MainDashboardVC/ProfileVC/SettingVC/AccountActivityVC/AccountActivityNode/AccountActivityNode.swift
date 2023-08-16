@@ -43,6 +43,8 @@ class AccountActivityNode: ASCellNode {
         AvatarNode.clipsToBounds = true
         AvatarNode.contentMode = .scaleAspectFill
         descriptionNode.isLayerBacked = true
+        timeNode.isLayerBacked = true
+        AvatarNode.isLayerBacked = true
         
         AvatarNode.shouldRenderProgressImages = true
         AvatarNode.isLayerBacked = true

@@ -42,6 +42,9 @@ class FollowNode: ASCellNode {
 
         super.init()
 
+        self.nameNode.isLayerBacked = true
+        self.avatarNode.isLayerBacked = true
+        self.userNameNode.isLayerBacked = true
         self.backgroundColor = UIColor.clear
         self.selectionStyle = .none
         avatarNode.cornerRadius = OrganizerImageSize/2

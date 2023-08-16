@@ -194,42 +194,39 @@ extension FeedViewController {
 
  
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        
-        if !posts.isEmpty, scrollView == collectionNode.view {
-            
+
+        if !posts.isEmpty, scrollView == collectionNode.view, !refresh_request {
+
             // Get the visible rect of the collection view.
             let visibleRect = CGRect(origin: scrollView.contentOffset, size: scrollView.bounds.size)
-            
+
             // Calculate the visible cells.
             let visibleCells = collectionNode.visibleNodes.compactMap { $0 as? VideoNode }
-            
+
             // Find the index of the visible video that is closest to the center of the screen.
             var minDistanceFromCenter = CGFloat.infinity
-            
             var foundVisibleVideo = false
-            
+            var newPlayingIndex: Int?
+
             for cell in visibleCells {
-                
-                let cellRect = cell.view.convert(cell.bounds, to: collectionNode.view)
-                let cellCenter = CGPoint(x: cellRect.midX, y: cellRect.midY)
-                let distanceFromCenter = abs(cellCenter.y - visibleRect.midY)
-                if distanceFromCenter < minDistanceFromCenter {
-                    newPlayingIndex = cell.indexPath!.row
-                    minDistanceFromCenter = distanceFromCenter
+                if let indexPath = cell.indexPath {
+                    let cellRect = cell.view.convert(cell.bounds, to: collectionNode.view)
+                    let cellCenter = CGPoint(x: cellRect.midX, y: cellRect.midY)
+                    let distanceFromCenter = abs(cellCenter.y - visibleRect.midY)
+                    
+                    if distanceFromCenter < minDistanceFromCenter {
+                        newPlayingIndex = indexPath.row
+                        minDistanceFromCenter = distanceFromCenter
+                    }
                 }
             }
-            
-            
-            if !posts[newPlayingIndex!].muxPlaybackId.isEmpty {
-                
+
+            if let index = newPlayingIndex, !posts[index].muxPlaybackId.isEmpty {
                 foundVisibleVideo = true
                 playTimeBar.isHidden = false
-               
             }
-            
-            
+
             if foundVisibleVideo {
-                
                 // Start playing the new video if it's different from the current playing video.
                 if let newPlayingIndex = newPlayingIndex, currentIndex != newPlayingIndex {
                     // Pause the current video, if any.
@@ -242,27 +239,18 @@ extension FeedViewController {
                     isVideoPlaying = true
                     
                     if let node = collectionNode.nodeForItem(at: IndexPath(item: currentIndex!, section: 0)) as? VideoNode {
-                        
                         resetView(cell: node)
-                        
                     }
-                    
                 }
-                
             } else {
-                
                 if let currentIndex = currentIndex {
                     pauseVideo(index: currentIndex)
                 }
 
-                
-                
                 // Reset the current playing index.
                 currentIndex = nil
-                
             }
-            
-            
+
             // If the video is stuck, reset the buffer by seeking to the current playback time.
             if let currentIndex = currentIndex, let cell = collectionNode.nodeForItem(at: IndexPath(row: currentIndex, section: 0)) as? VideoNode {
                 if let playerItem = cell.cellVideoNode.currentItem, !playerItem.isPlaybackLikelyToKeepUp {
@@ -273,17 +261,15 @@ extension FeedViewController {
                     }
                 }
             }
-            
+
             // If there's no current playing video and no visible video, pause the last playing video, if any.
             if !isVideoPlaying && currentIndex != nil {
                 pauseVideo(index: currentIndex!)
                 currentIndex = nil
             }
-            
         }
-        
-        
     }
+
 
  
 }
