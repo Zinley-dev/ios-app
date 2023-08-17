@@ -456,7 +456,7 @@ extension SelectedRootPostVC {
         self.applyStyle()
         
         // Reload the data on the collection node
-        self.collectionNode.reloadData()
+        
     }
     
     
