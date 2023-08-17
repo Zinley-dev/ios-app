@@ -818,7 +818,7 @@ class CustomSlider: UISlider {
     @IBInspectable var highlightedTrackHeight: CGFloat = 7.0
     @IBInspectable var thumbRadius: CGFloat = 2
     @IBInspectable var highlightedThumbRadius: CGFloat = 10
-    @IBInspectable var hitBoxSize: CGFloat = 100 // Size of hit box area
+    @IBInspectable var hitBoxSize: CGFloat = 40 // Size of hit box area
     private var thumbImageCache: [CGFloat: UIImage] = [:]
 
     
