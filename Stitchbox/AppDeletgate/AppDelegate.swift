@@ -40,9 +40,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
     -> Bool {
     
         
-        //setupPixelSDK()
-        //sendbird_authentication()
-        //syncSendbirdAccount()
+        setupPixelSDK()
+        sendbird_authentication()
+        syncSendbirdAccount()
         attemptRegisterForNotifications(application: application)
         setupStyle()
         setupOneSignal(launchOptions: launchOptions)

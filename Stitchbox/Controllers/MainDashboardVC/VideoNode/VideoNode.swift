@@ -352,7 +352,7 @@ class VideoNode: ASCellNode, ASVideoNodeDelegate {
     func getVideoURL(post: PostModel) -> URL? {
         if post.muxPlaybackId != "" {
             
-            let urlString = "https://stream.mux.com/\(post.muxPlaybackId).m3u8"
+            let urlString = "https://stream.mux.com/\(post.muxPlaybackId).m3u8?redundant_streams=true"
             return URL(string: urlString)
             
         } else {

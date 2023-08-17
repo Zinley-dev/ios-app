@@ -7,13 +7,15 @@
 
 import UIKit
 import AsyncDisplayKit
-import FLAnimatedImage
 import Alamofire
 
 class CommentNotificationVC: UIViewController, UITextViewDelegate, UIGestureRecognizerDelegate {
     
-    @IBOutlet weak var loadingImage: FLAnimatedImageView!
-    @IBOutlet weak var loadingView: UIView!
+    deinit {
+        print("CommentNotificationVC is being deallocated.")
+        NotificationCenter.default.removeObserver(self)
+    }
+    
     @IBOutlet weak var commentBottomConstraint: NSLayoutConstraint!
     @IBOutlet weak var commentBtn: UIButton!
     var isSending = false
@@ -303,20 +305,6 @@ class CommentNotificationVC: UIViewController, UITextViewDelegate, UIGestureReco
         NotificationCenter.default.addObserver(self, selector: #selector(handleKeyboardHide),
                                                name: UIResponder.keyboardWillHideNotification, object: nil)
         
-        do {
-            
-            let path = Bundle.main.path(forResource: "fox2", ofType: "gif")!
-            let gifData = try NSData(contentsOfFile: path) as Data
-            let image = FLAnimatedImage(animatedGIFData: gifData)
-            
-            
-            self.loadingImage.animatedImage = image
-            
-        } catch {
-            print(error.localizedDescription)
-        }
-        
-        loadingView.backgroundColor = .white
     }
     
     override func viewDidDisappear(_ animated: Bool) {
@@ -331,8 +319,7 @@ class CommentNotificationVC: UIViewController, UITextViewDelegate, UIGestureReco
         NotificationCenter.default.removeObserver(self, name: (NSNotification.Name(rawValue: "notification_delete_cmt")), object: nil)
         
     
-        delay(0.001) { [weak self] in
-            guard let self = self else { return }
+        delay(0.001) {
             
             if let vc = UIViewController.currentViewController() {
                 
@@ -439,7 +426,7 @@ class CommentNotificationVC: UIViewController, UITextViewDelegate, UIGestureReco
                 guard let data = apiResponse.body else {
                     DispatchQueue.main.async { [weak self] in
                         guard let self = self else { return }
-                        self.hideAnimation()
+                        
                     }
                     return
                 }
@@ -475,7 +462,7 @@ class CommentNotificationVC: UIViewController, UITextViewDelegate, UIGestureReco
                             guard let self = self else { return }
                             
                             self.tableNode.insertRows(at: self.LoadPath, with: .automatic)
-                            self.hideAnimation()
+                           
                         }
                         
                     }
@@ -496,7 +483,7 @@ class CommentNotificationVC: UIViewController, UITextViewDelegate, UIGestureReco
                             guard let self = self else { return }
                             
                             self.tableNode.insertRows(at: self.LoadPath, with: .automatic)
-                            self.hideAnimation()
+                           
                             
                         }
                         
@@ -520,7 +507,7 @@ class CommentNotificationVC: UIViewController, UITextViewDelegate, UIGestureReco
                         guard let self = self else { return }
                          
                         self.tableNode.insertRows(at: self.LoadPath, with: .automatic)
-                        self.hideAnimation()
+                        
                         
                     }
                     
@@ -1466,45 +1453,6 @@ extension CommentNotificationVC {
         
     }
     
-    func hideAnimation() {
-        
-        if firstAnimated {
-            
-            firstAnimated = false
-            
-            UIView.animate(withDuration: 0.5) { [weak self] in
-                guard let self = self else { return }
-                
-                Dispatch.main.async { [weak self] in
-                    guard let self = self else { return }
-                    self.loadingView.alpha = 0
-                    self.loadingImage.stopAnimating()
-                    self.loadingImage.animatedImage = nil
-                    self.loadingImage.image = nil
-                    self.loadingImage.removeFromSuperview()
-                }
-                
-            }
-            
-            
-            DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) { [weak self] in
-                guard let self = self else { return }
-                
-                if self.loadingView.alpha == 0 {
-                    
-                    self.loadingView.isHidden = true
-                    self.loadingImage.stopAnimating()
-                    self.loadingImage.animatedImage = nil
-                    self.loadingImage.image = nil
-                    self.loadingImage.removeFromSuperview()
-                    
-                }
-                
-            }
-            
-            
-        }
-        
-    }
+   
     
 }
