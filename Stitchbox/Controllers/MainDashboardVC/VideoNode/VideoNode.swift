@@ -88,7 +88,7 @@ class VideoNode: ASCellNode, ASVideoNodeDelegate {
     
         addPinchGestureRecognizer()
         addPanGestureRecognizer()
-        
+        setupViews()
         if UIViewController.currentViewController() is ParentViewController {
             if isOriginal {
                 // Handle count stitch if not then hide
@@ -105,8 +105,6 @@ class VideoNode: ASCellNode, ASVideoNodeDelegate {
             }
         }
         
-        setupViews()
-        setupTimeView()
         if !isPreview {
             setupTimeView()
             setupFunction()
