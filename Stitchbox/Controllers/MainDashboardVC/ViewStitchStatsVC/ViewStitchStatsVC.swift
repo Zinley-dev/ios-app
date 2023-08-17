@@ -10,11 +10,7 @@ import ObjectMapper
 import FLAnimatedImage
 
 
-class StitchStatVC: UIViewController {
-    
-    deinit {
-        print("StitchStatVC is being deallocated.")
-    }
+class ViewStitchStatsVC: UIViewController {
 
   @IBOutlet weak var avgLbl: UILabel!
   @IBOutlet weak var totalWeekLbl: UILabel!
@@ -25,7 +21,8 @@ class StitchStatVC: UIViewController {
   @IBOutlet weak var percentWeekLbl: UILabel!
   @IBOutlet weak var percentAvgLbl: UILabel!
   @IBOutlet weak var fromLbl: UILabel!
-  
+ 
+    
   var insightData: InsightModel!
   
     let backButton: UIButton = UIButton(type: .custom)
@@ -40,7 +37,8 @@ class StitchStatVC: UIViewController {
     }
     override func viewWillAppear(_ animated: Bool) {
       super.viewWillAppear(animated)
-        
+    
+      
       loadInsightData()
       
       let formatter = DateFormatter()
@@ -55,7 +53,7 @@ class StitchStatVC: UIViewController {
 
 }
 
-extension StitchStatVC {
+extension ViewStitchStatsVC {
     
     func setupButtons() {
         setupBackButton()
@@ -77,8 +75,8 @@ extension StitchStatVC {
               
                 self.insightData =  Mapper<InsightModel>().map(JSONObject: data)
                 
-                DispatchQueue.main {
-                  self.processDefaultData()
+                DispatchQueue.main { [weak self]  in
+                  self?.processDefaultData()
                 }
                 
               case .failure(let error):
@@ -86,16 +84,15 @@ extension StitchStatVC {
                 print(error)
              
                 
-                DispatchQueue.main {
-                
-                  self.showErrorAlert("Oops!", msg: "Unable to retrieve your setting \(error.localizedDescription)")
+                DispatchQueue.main { [weak self]  in
+                  self?.showErrorAlert("Oops!", msg: "Unable to retrieve your setting \(error.localizedDescription)")
                 }
                 
             }
-      }
+        }
     }
     
-    
+
   
     func processDefaultData() {
       if let insightData = self.insightData {

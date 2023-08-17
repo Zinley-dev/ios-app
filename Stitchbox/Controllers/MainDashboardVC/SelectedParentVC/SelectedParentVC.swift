@@ -467,7 +467,7 @@ extension SelectedParentVC {
             stitchViewController.rootId = rootId
             count += 1
             
-            delayItem.perform(after: 1.25) { [weak self] in
+            delayItem.perform(after: 1.05) { [weak self] in
                 guard let self = self else { return }
                 print("Loading stitches: \(self.count) - \(self.stitchViewController.rootId)")
                 self.stitchViewController.clearAllData()

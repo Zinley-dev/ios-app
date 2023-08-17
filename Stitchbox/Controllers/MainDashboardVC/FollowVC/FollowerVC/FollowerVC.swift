@@ -324,9 +324,8 @@ extension FollowerVC {
     }
 
     private func clearExistingPosts() {
-        let deleteIndexPaths = userList.enumerated().map { IndexPath(row: $0.offset, section: 0) }
         userList.removeAll()
-        tableNode.deleteRows(at: deleteIndexPaths, with: .automatic)
+        tableNode.reloadData()
     }
 
     private func generateIndexPaths(for items: [FollowModel]) -> [IndexPath] {

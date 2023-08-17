@@ -471,9 +471,8 @@ extension NotificationVC {
     }
 
     private func clearExistingPosts() {
-        let deleteIndexPaths = UserNotificationList.enumerated().map { IndexPath(row: $0.offset, section: 0) }
         UserNotificationList.removeAll()
-        tableNode.deleteRows(at: deleteIndexPaths, with: .automatic)
+        tableNode.reloadData()
     }
 
     private func generateIndexPaths(for items: [UserNotificationModel]) -> [IndexPath] {

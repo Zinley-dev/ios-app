@@ -267,9 +267,8 @@ extension AccountActivityVC {
     }
 
     private func clearExistingPosts() {
-        let deleteIndexPaths = UserActivityList.enumerated().map { IndexPath(row: $0.offset, section: 0) }
         UserActivityList.removeAll()
-        tableNode.deleteRows(at: deleteIndexPaths, with: .automatic)
+        tableNode.reloadData()
     }
 
     private func generateIndexPaths(for items: [UserActivityModel]) -> [IndexPath] {

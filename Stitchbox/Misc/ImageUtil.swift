@@ -91,22 +91,22 @@ extension UIImageView {
             guard let self = self else { return }
             
             if let image = cachedImage {
-                DispatchQueue.main.async {
-                    self.image = image
+                DispatchQueue.main.async { [weak self] in
+                    self?.image = image
                 }
             } else {
                 AF.request(url).responseImage { [weak self] response in
                     guard let self = self else { return }
                     switch response.result {
                     case .success(let value):
-                        DispatchQueue.main.async {
-                            self.image = value
+                        DispatchQueue.main.async { [weak self] in
+                            self?.image = value
                         }
                         CacheManager.shared.storeImage(forKey: str, image: value)
                     case .failure(let error):
                         print("Error fetching image: \(error)")
-                        DispatchQueue.main.async {
-                            self.image = UIImage(named: "defaultuser")
+                        DispatchQueue.main.async { [weak self] in
+                            self?.image = UIImage(named: "defaultuser")
                         }
                     }
                 }
@@ -119,8 +119,8 @@ extension UIImageView {
             guard let self = self else { return }
             
             if let image = cachedImage {
-                DispatchQueue.main.async {
-                    self.image = image
+                DispatchQueue.main.async { [weak self] in
+                    self?.image = image
                 }
             } else {
                 self.fetchImageFromServer(url: url, cacheKey: str)
@@ -133,14 +133,16 @@ extension UIImageView {
             guard let self = self else { return }
             switch response.result {
             case .success(let value):
-                DispatchQueue.main.async {
-                    self.image = value
+                
+                DispatchQueue.main.async { [weak self] in
+                    self?.image = value
                 }
+                
                 CacheManager.shared.storeImage(forKey: cacheKey, image: value)
             case .failure(let error):
                 print(error)
-                DispatchQueue.main.async {
-                    self.image = UIImage(named: "empty")
+                DispatchQueue.main.async { [weak self] in
+                    self?.image = UIImage(named: "empty")
                 }
             }
         }

@@ -6,7 +6,6 @@
 //
 
 import UIKit
-import FLAnimatedImage
 
 class MainFollowVC: UIViewController, UINavigationBarDelegate, UINavigationControllerDelegate, UISearchBarDelegate {
     
@@ -23,7 +22,6 @@ class MainFollowVC: UIViewController, UINavigationBarDelegate, UINavigationContr
     @IBOutlet weak var contentViewTopConstant: NSLayoutConstraint!
     @IBOutlet weak var buttonStackView: UIStackView!
     
-    
     var followerBorder = CALayer()
     var followingBorder = CALayer()
     
@@ -37,9 +35,7 @@ class MainFollowVC: UIViewController, UINavigationBarDelegate, UINavigationContr
     var followingCount = 0
     var userId: String?
     
-    @IBOutlet weak var loadingImage: FLAnimatedImageView!
-    @IBOutlet weak var loadingView: UIView!
-    
+
     // to override search task
     lazy var delayItem = workItem()
     
@@ -123,9 +119,7 @@ class MainFollowVC: UIViewController, UINavigationBarDelegate, UINavigationContr
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        self.loadingView.isHidden = true
-
-        
+       
         let navigationBarAppearance = UINavigationBarAppearance()
         navigationBarAppearance.configureWithOpaqueBackground()
         navigationBarAppearance.backgroundColor = .white
@@ -471,16 +465,16 @@ extension MainFollowVC {
             
             if !FollowerVC.view.isHidden {
                 
-                delayItem.perform(after: 0.35) {
+                delayItem.perform(after: 0.35) { [weak self] in
                     print("Search followers using api")
-                    self.searchFollowers(for: searchText)
+                    self?.searchFollowers(for: searchText)
                 }
                 
             } else {
                 
-                delayItem.perform(after: 0.35) {
+                delayItem.perform(after: 0.35) { [weak self] in
                     print("Search following using api")
-                    self.searchFollowings(for: searchText)
+                    self?.searchFollowings(for: searchText)
                 }
             }
             
@@ -570,9 +564,9 @@ extension MainFollowVC {
             buttonStackView.isHidden = true
             navigationItem.searchController = searchController
             searchController?.searchBar.isHidden = false
-            
-            delay(0.025) {
-                self.searchController?.searchBar.becomeFirstResponder()
+             
+            delay(0.025) { [weak self] in
+                self?.searchController?.searchBar.becomeFirstResponder()
             }
             
         } else {

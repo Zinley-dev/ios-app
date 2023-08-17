@@ -22,10 +22,6 @@ class TrendingVC: UIViewController {
     @IBOutlet weak var hashtagBtn: UIButton!
     @IBOutlet weak var friendRecBtn: UIButton!
     
-    @IBOutlet weak var loadingImage: FLAnimatedImageView!
-    @IBOutlet weak var loadingView: UIView!
-    
-    
     var friendBorder = CALayer()
     var postBorder = CALayer()
     var hashTagBorder = CALayer()
@@ -97,43 +93,7 @@ class TrendingVC: UIViewController {
         super.viewWillAppear(animated)
         setupNavBar()
         showMiddleBtn(vc: self)
-        do {
-            
-            let path = Bundle.main.path(forResource: "fox2", ofType: "gif")!
-            let gifData = try NSData(contentsOfFile: path) as Data
-            let image = FLAnimatedImage(animatedGIFData: gifData)
-            
-            
-            self.loadingImage.animatedImage = image
-            
-        } catch {
-            print(error.localizedDescription)
-        }
-        
-        loadingView.backgroundColor = self.view.backgroundColor
-        navigationController?.setNavigationBarHidden(false, animated: true)
-  
-        
-        delay(1.25) {
-            
-            UIView.animate(withDuration: 0.5) {
-                
-                self.loadingView.alpha = 0
-                
-            }
-            
-            
-            DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
-                
-                if self.loadingView.alpha == 0 {
-                    
-                    self.loadingView.isHidden = true
-                    
-                }
-                
-            }
-            
-        }
+
     }
     
     func setupNavBar() {

@@ -126,7 +126,7 @@ extension TrendingHashtagVC: ASTableDelegate {
             context.completeBatchFetching(true)
             
         }
-        
+    
     }
     
     func tableNode(_ tableNode: ASTableNode, didSelectRowAt indexPath: IndexPath) {
@@ -240,9 +240,9 @@ extension TrendingHashtagVC {
     }
 
     private func clearExistingPosts() {
-        let deleteIndexPaths = hashtagList.enumerated().map { IndexPath(row: $0.offset, section: 0) }
+        //let deleteIndexPaths = hashtagList.enumerated().map { IndexPath(row: $0.offset, section: 0) }
         hashtagList.removeAll()
-        tableNode.deleteRows(at: deleteIndexPaths, with: .automatic)
+        tableNode.reloadData()
     }
 
     private func generateIndexPaths(for items: [TrendingHashtag]) -> [IndexPath] {

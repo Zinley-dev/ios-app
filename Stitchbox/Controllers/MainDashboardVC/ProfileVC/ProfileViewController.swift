@@ -58,6 +58,7 @@ class ProfileViewController: UIViewController {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
         
+        
         NotificationCenter.default.addObserver(self, selector: #selector(ProfileViewController.refreshData), name: (NSNotification.Name(rawValue: "refreshData")), object: nil)
         
         //refreshFollow
@@ -76,28 +77,20 @@ class ProfileViewController: UIViewController {
         collectionView.setCollectionViewLayout(createLayout(), animated: true)
         collectionView.register(ProfilePostsHeaderView.nib, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: ProfilePostsHeaderView.reuseIdentifier)
         collectionView.register(ImageViewCell.self, forCellWithReuseIdentifier: ImageViewCell.reuseIdentifier)
-       
-    
         configureDatasource()
-        wireDelegate()
-        setupSettingButton()
-        fetchDataAndUpdateUI()
-        
-        self.getMyPost { [weak self] (newPosts) in
-            guard let self = self else { return }
-            self.insertNewRowsInCollectionNode(newPosts: newPosts)
-        }
 
-        
-        delay(2) {
-            self.hasLoaded = true
-        }
-        
+       
+       
+        setupSettingButton()
+        reloadRequest()
+
+  
         
         if let navigationController = self.navigationController {
             navigationController.navigationBar.prefersLargeTitles = false
             navigationController.navigationBar.isTranslucent = false
         }
+        
         
         
         
@@ -118,9 +111,10 @@ class ProfileViewController: UIViewController {
         super.viewWillAppear(animated)
         // Hide the Navigation Bar
         
-       // self.navigationController?.setNavigationBarHidden(true, animated: animated)
+       
         
         // tabbar
+        
         showMiddleBtn(vc: self)
 
         // check if need to refresh somethings
@@ -138,7 +132,7 @@ class ProfileViewController: UIViewController {
             refreshPost()
             
         }
-        
+         
         
         let navigationBarAppearance = UINavigationBarAppearance()
         navigationBarAppearance.configureWithOpaqueBackground()
@@ -149,16 +143,9 @@ class ProfileViewController: UIViewController {
         self.navigationController?.navigationBar.standardAppearance = navigationBarAppearance
         self.navigationController?.navigationBar.scrollEdgeAppearance = navigationBarAppearance
         
-    }
-    
-    override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
-        // Show the Navigation Bar
         
-        //self.navigationController?.setNavigationBarHidden(false, animated: animated)
         
     }
-    
 
     func setupSettingButton() {
         
@@ -312,6 +299,11 @@ extension ProfileViewController {
     
     @objc func refreshListData(_ sender: Any) {
         
+        reloadRequest()
+
+    }
+    
+    func reloadRequest() {
         reload = true
         
         var snapshot = self.datasource.snapshot()
@@ -326,9 +318,8 @@ extension ProfileViewController {
             self.insertNewRowsInCollectionNode(newPosts: newPosts)
             
         }
-        
+        self.hasLoaded = true
         refetchDataAndUpdateUI()
-
     }
     
     func refetchDataAndUpdateUI() {
@@ -430,13 +421,12 @@ extension ProfileViewController {
     
     @objc func insightTapped(_ sender: UIButton) {
         
-  
-        
-        if let SSVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "StitchStatVC") as? StitchStatVC {
+
+        if let VSSTVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "ViewStitchStatsVC") as? ViewStitchStatsVC {
             
-            SSVC.hidesBottomBarWhenPushed = true
+            VSSTVC.hidesBottomBarWhenPushed = true
             hideMiddleBtn(vc: self)
-            self.navigationController?.pushViewController(SSVC, animated: true)
+            self.navigationController?.pushViewController(VSSTVC, animated: true)
             
         }
         

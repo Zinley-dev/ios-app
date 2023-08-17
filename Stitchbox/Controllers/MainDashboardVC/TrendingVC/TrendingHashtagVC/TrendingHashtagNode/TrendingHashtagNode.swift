@@ -19,7 +19,7 @@ class TrendingHashtagNode: ASCellNode {
         print("TrendingHashtagNode is being deallocated.")
     }
     
-    var trendingHashtag: TrendingHashtag!
+    private var trendingHashtag: TrendingHashtag!
     var rank: Int!
 
     var rankNode: ASTextNode!
@@ -47,11 +47,17 @@ class TrendingHashtagNode: ASCellNode {
         
         automaticallyManagesSubnodes = true
         
+
+    }
+    
+    override func didLoad() {
+        super.didLoad()
+        
         let paragraphStyles = NSMutableParagraphStyle()
         paragraphStyles.alignment = .left
 
         rankNode.attributedText = NSAttributedString(
-            string: "\(rank).",
+            string: "\(rank ?? 0).",
             attributes: [
                 NSAttributedString.Key.font: FontManager.shared.roboto(.Bold, size: FontSize + 5),
                 NSAttributedString.Key.foregroundColor: UIColor.black,
@@ -78,6 +84,7 @@ class TrendingHashtagNode: ASCellNode {
         )
 
         viewsNode.backgroundColor = UIColor.clear
+        
     }
     
     
@@ -107,6 +114,5 @@ class TrendingHashtagNode: ASCellNode {
 
         return ASInsetLayoutSpec(insets: UIEdgeInsets(top: 16.0, left: 16, bottom: 16, right: 20), child: headerStack)
     }
-
 
 }

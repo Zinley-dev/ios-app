@@ -17,11 +17,12 @@ import ActiveLabel
 class VideoNode: ASCellNode, ASVideoNodeDelegate {
 
     deinit {
-        print("VideoNode \(deallocatedCount) \(vcType) \(post.id) is being deallocated.")
-        deallocatedCount += 1
+        print("VideoNode is being deallocated.")
     }
     
-    var post: PostModel
+    private var lastSliderUpdate: TimeInterval = 0
+    weak var post: PostModel!
+   
     var last_view_timestamp =  NSDate().timeIntervalSince1970
     var totalWatchedTime: TimeInterval = 0.0
     var previousTimeStamp: TimeInterval = 0.0
@@ -32,12 +33,17 @@ class VideoNode: ASCellNode, ASVideoNodeDelegate {
     var isViewed = false
     var isOriginal = false
     var vcType = ""
+    var didSlideEnd = true
+    var setupMaxVal = false
     //------------------------------------------//
 
     var isFirstItem = false
     var pinchGestureRecognizer: UIPinchGestureRecognizer!
     var panGestureRecognizer: UIPanGestureRecognizer!
     var selectedStitch = false
+ 
+    private var timeLbl: UILabel!
+    private var blurView: UIView!
     private let fireworkController = FountainFireworkController()
     private let fireworkController2 = ClassicFireworkController()
     
@@ -58,6 +64,7 @@ class VideoNode: ASCellNode, ASVideoNodeDelegate {
     fileprivate let OrganizerImageSize: CGFloat = 30
     private var index: Int!
     private var isPreview: Bool!
+    private var playTimeBar: CustomSlider!
     
     init(with post: PostModel, at: Int, isPreview: Bool, vcType: String, selectedStitch: Bool) {
         print("VideoNode \(at) is loading post: \(post.id)")
@@ -82,10 +89,6 @@ class VideoNode: ASCellNode, ASVideoNodeDelegate {
         addPinchGestureRecognizer()
         addPanGestureRecognizer()
         
-        setupViews()
-        setupLabel()
-        setupSpace(width: UIScreen.main.bounds.width)
-        
         if UIViewController.currentViewController() is ParentViewController {
             if isOriginal {
                 // Handle count stitch if not then hide
@@ -101,6 +104,16 @@ class VideoNode: ASCellNode, ASVideoNodeDelegate {
                 addSideButtons(isOwned: false)
             }
         }
+        
+        setupViews()
+        setupTimeView()
+        if !isPreview {
+            setupTimeView()
+            setupFunction()
+        }
+        setupLabel()
+        setupSpace(width: UIScreen.main.bounds.width)
+        
 
         clearMode()
 
@@ -172,7 +185,7 @@ class VideoNode: ASCellNode, ASVideoNodeDelegate {
         
         NSLayoutConstraint.activate([
             sideButtonsView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -8),
-            sideButtonsView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -55),
+            sideButtonsView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -63),
             sideButtonsView.widthAnchor.constraint(equalToConstant: 55),
             sideButtonsView.heightAnchor.constraint(equalTo: view.heightAnchor)
         ])
@@ -268,7 +281,11 @@ class VideoNode: ASCellNode, ASVideoNodeDelegate {
         cellVideoNode.player?.automaticallyWaitsToMinimizeStalling = true
         cellVideoNode.shouldAutoplay = false
         cellVideoNode.shouldAutorepeat = true
-        cellVideoNode.delegate = self
+        
+        if !isPreview {
+            cellVideoNode.delegate = self
+        }
+     
 
         if let width = post.metadata?.width, let height = post.metadata?.height, width != 0, height != 0 {
                 // Calculate aspect ratio
@@ -349,10 +366,19 @@ class VideoNode: ASCellNode, ASVideoNodeDelegate {
     override func layoutSpecThatFits(_ constrainedSize: ASSizeRange) -> ASLayoutSpec {
         
         let ratio = UIScreen.main.bounds.height / UIScreen.main.bounds.width
-        let ratioSpec = ASRatioLayoutSpec(ratio:ratio, child:self.cellVideoNode);
-        let gradientOverlaySpec = ASOverlayLayoutSpec(child:ratioSpec, overlay:self.gradientNode)
-        return gradientOverlaySpec
+        let ratioSpec = ASRatioLayoutSpec(ratio:ratio, child: cellVideoNode)
+     
+        let gradientOverlaySpec = ASOverlayLayoutSpec(child:ratioSpec, overlay: gradientNode)
+        
+        
+        
+         
+        // Add 16 points of inset to the bottom
+        let insetSpec = ASInsetLayoutSpec(insets: UIEdgeInsets(top: 0, left: 0, bottom: 8, right: 0), child: gradientOverlaySpec)
+
+        return insetSpec
     }
+
  
 }
 
@@ -452,51 +478,61 @@ extension VideoNode {
 
 
     func videoNode(_ videoNode: ASVideoNode, didPlayToTimeInterval timeInterval: TimeInterval) {
-        
-        
-        let videoDuration = videoNode.currentItem?.duration.seconds ?? 0
+    
+        if didSlideEnd, !isPreview, blurView != nil {
+            
+            let videoDuration = videoNode.currentItem?.duration.seconds ?? 0
 
-        // Compute the time the user has spent actually watching the video
-        if timeInterval >= previousTimeStamp {
-            totalWatchedTime += timeInterval - previousTimeStamp
-        }
-        previousTimeStamp = timeInterval
-        
-        // Compute the time the user has spent actually watching the video
-        if timeInterval >= previousTimeStamp {
-            totalWatchedTime += timeInterval - previousTimeStamp
-        }
-        previousTimeStamp = timeInterval
+            // Compute the time the user has spent actually watching the video
+            if timeInterval >= previousTimeStamp {
+                totalWatchedTime += timeInterval - previousTimeStamp
+            }
+            previousTimeStamp = timeInterval
+            
+            // Compute the time the user has spent actually watching the video
+            if timeInterval >= previousTimeStamp {
+                totalWatchedTime += timeInterval - previousTimeStamp
+            }
+            previousTimeStamp = timeInterval
 
-      
-        let watchedPercentage = totalWatchedTime/videoDuration
-        let minimumWatchedPercentage: Double
+          
+            let watchedPercentage = totalWatchedTime/videoDuration
+            let minimumWatchedPercentage: Double
 
-        // Setting different thresholds based on video length
-        switch videoDuration {
-        case 0..<15:
-            minimumWatchedPercentage = 0.8
-        case 15..<30:
-            minimumWatchedPercentage = 0.7
-        case 30..<60:
-            minimumWatchedPercentage = 0.6
-        case 60..<90:
-            minimumWatchedPercentage = 0.5
-        case 90..<120:
-            minimumWatchedPercentage = 0.4
-        default:
-            minimumWatchedPercentage = 0.5
+            // Setting different thresholds based on video length
+            switch videoDuration {
+            case 0..<15:
+                minimumWatchedPercentage = 0.8
+            case 15..<30:
+                minimumWatchedPercentage = 0.7
+            case 30..<60:
+                minimumWatchedPercentage = 0.6
+            case 60..<90:
+                minimumWatchedPercentage = 0.5
+            case 90..<120:
+                minimumWatchedPercentage = 0.4
+            default:
+                minimumWatchedPercentage = 0.5
+            }
+            
+            // Check if user has watched a certain minimum amount of time (e.g. 5 seconds)
+            let minimumWatchedTime = 5.0
+            if shouldCountView && totalWatchedTime >= minimumWatchedTime && watchedPercentage >= minimumWatchedPercentage {
+                shouldCountView = false
+                endVideo(watchTime: Double(totalWatchedTime))
+            }
+            
+        
+            updateSlider(currentTime: timeInterval)
+            
+            if !blurView.isHidden  {
+                blurView.isHidden = true
+                timeLbl.isHidden = true
+            }
+            
         }
         
-        // Check if user has watched a certain minimum amount of time (e.g. 5 seconds)
-        let minimumWatchedTime = 5.0
-        if shouldCountView && totalWatchedTime >= minimumWatchedTime && watchedPercentage >= minimumWatchedPercentage {
-            shouldCountView = false
-            endVideo(watchTime: Double(totalWatchedTime))
-        }
         
-        
-     
     }
     
     func videoDidPlay(toEnd videoNode: ASVideoNode) {
@@ -523,34 +559,22 @@ extension VideoNode {
         }
     }
 
-
-    func setVideoProgress(rate: Float, currentTime: TimeInterval, maxDuration: CMTime) {
-        
-        /*
-        if vcType == "mainFeed" {
-            print("mainFeed")
-        } else if vcType == "stitch" {
-            print("stitch \(selectedStitch)")
-        } else if vcType == "selectedRoot" {
-            print("selectedRoot")
-        }*/
-        
-    }
     
-    func updateSlider(currentTime: TimeInterval, maxDuration: CMTime, playTimeBar: UISlider?) {
+    func updateSlider(currentTime: TimeInterval) {
         guard let playTimeBar = playTimeBar else { return }
 
-        let maxDurationSeconds = CMTimeGetSeconds(maxDuration)
-
-        // Check if maxDurationSeconds is not NaN and more than 0
-        if maxDurationSeconds.isNaN || maxDurationSeconds <= 0 {
-            print("Invalid maxDurationSeconds: \(maxDurationSeconds)")
-            return
+        if !setupMaxVal, let max = cellVideoNode.currentItem?.duration {
+            let maxDurationSeconds = CMTimeGetSeconds(max)
+            if !maxDurationSeconds.isNaN {
+                playTimeBar.maximumValue = Float(maxDurationSeconds)
+                setupMaxVal = true
+            }
         }
-
-        playTimeBar.maximumValue = Float(maxDurationSeconds)
-        playTimeBar.setValue(Float(currentTime), animated: true)
+        
+       playTimeBar.setValue(Float(currentTime), animated: false)
+        
     }
+
     
 }
 
@@ -808,6 +832,53 @@ extension VideoNode: UIGestureRecognizerDelegate {
         
     }
     
+    func setupTimeView() {
+        
+        // Initialization and Configuration
+        timeLbl = UILabel()
+        timeLbl.isHidden = true
+        timeLbl.textColor = .white
+        timeLbl.font = FontManager.shared.roboto(.Bold, size: 17)
+        timeLbl.translatesAutoresizingMaskIntoConstraints = false
+
+        blurView = UIView()
+        blurView.isHidden = true
+        blurView.backgroundColor = .black
+        blurView.alpha = 0.6
+        blurView.translatesAutoresizingMaskIntoConstraints = false
+
+        playTimeBar = CustomSlider()
+        playTimeBar.translatesAutoresizingMaskIntoConstraints = false
+
+        // Adding subviews
+        self.view.addSubview(blurView)
+        self.view.addSubview(timeLbl)
+        self.view.addSubview(playTimeBar)
+
+        // Activating constraints in a batch
+        NSLayoutConstraint.activate([
+            // BlurView constraints
+            blurView.bottomAnchor.constraint(equalTo: self.view.bottomAnchor),
+            blurView.leadingAnchor.constraint(equalTo: self.view.leadingAnchor),
+            blurView.trailingAnchor.constraint(equalTo: self.view.trailingAnchor),
+            blurView.topAnchor.constraint(equalTo: self.view.topAnchor),
+            
+            // PlayTimeBar constraints
+            playTimeBar.bottomAnchor.constraint(equalTo: self.view.bottomAnchor),
+            playTimeBar.leadingAnchor.constraint(equalTo: self.view.leadingAnchor),
+            playTimeBar.trailingAnchor.constraint(equalTo: self.view.trailingAnchor),
+            playTimeBar.heightAnchor.constraint(equalToConstant: 1),
+            
+            // TimeLbl constraints
+            timeLbl.bottomAnchor.constraint(equalTo: self.view.bottomAnchor, constant: -100),
+            timeLbl.centerXAnchor.constraint(equalTo: self.view.centerXAnchor)
+        ])
+        
+    }
+
+
+
+    
     func setupViews() {
         // Header View Setup
         self.headerView = PostHeader()
@@ -854,7 +925,7 @@ extension VideoNode: UIGestureRecognizerDelegate {
     func addConstraints(to childView: UIView, within parentView: UIView, constant: CGFloat = 0) {
         childView.translatesAutoresizingMaskIntoConstraints = false
         childView.topAnchor.constraint(equalTo: parentView.topAnchor, constant: constant).isActive = true
-        childView.bottomAnchor.constraint(equalTo: parentView.bottomAnchor, constant: constant).isActive = true
+        childView.bottomAnchor.constraint(equalTo: parentView.bottomAnchor, constant: -8).isActive = true
         childView.leadingAnchor.constraint(equalTo: parentView.leadingAnchor, constant: constant).isActive = true
         childView.trailingAnchor.constraint(equalTo: parentView.trailingAnchor, constant: constant).isActive = true
     }
@@ -906,6 +977,8 @@ extension VideoNode: UIGestureRecognizerDelegate {
         let doubleTap = createTapGestureRecognizer(target: self, action: #selector(VideoNode.likeHandle), taps: 2)
         doubleTap.delaysTouchesBegan = true
         self.view.addGestureRecognizer(doubleTap)
+        
+        vidTap.require(toFail: doubleTap)
 
         let longPress = UILongPressGestureRecognizer(target: self, action: #selector(VideoNode.settingTapped))
         longPress.minimumPressDuration = 0.35
@@ -1813,6 +1886,81 @@ extension VideoNode {
     }
     
     
+}
+
+extension VideoNode {
+    
+    private func setupFunction() {
+        
+        playTimeBar.addTarget(self, action: #selector(VideoNode.sliderDidStartSliding), for: .touchDown)
+        playTimeBar.addTarget(self, action: #selector(VideoNode.sliderDidEndSliding), for: [.touchUpInside, .touchUpOutside])
+        playTimeBar.addTarget(self, action: #selector(VideoNode.sliderValueDidChange), for: .valueChanged)
+        
+    }
+
+    
+    @objc func sliderDidStartSliding() {
+        processOnSliding()
+        playTimeBar.startLayout()
+        didSlideEnd = false
+    }
+    
+    @objc func sliderDidEndSliding() {
+        processEndedSliding()
+        playTimeBar.endLayout()
+        didSlideEnd = true
+    }
+    
+    
+    @objc func sliderValueDidChange() {
+        // Get the new video time
+    
+        timeLbl.text = processTime()
+        
+        let newVideoTime = CMTimeMakeWithSeconds(Float64(playTimeBar.value), preferredTimescale: Int32(NSEC_PER_SEC))
+        cellVideoNode.player?.seek(to: newVideoTime)
+        
+    }
+
+    
+    func processTime() -> String {
+        
+        let newVideoTime = CMTimeMakeWithSeconds(Float64(playTimeBar.value), preferredTimescale: Int32(NSEC_PER_SEC))
+
+        // Calculate the minutes and seconds
+        let totalSeconds = Int(CMTimeGetSeconds(newVideoTime))
+        let seconds = totalSeconds % 60
+        let minutes = totalSeconds / 60
+
+        // Calculate total duration minutes and seconds
+        let totalDurationSeconds = Int(playTimeBar.maximumValue)
+        let durationSeconds = totalDurationSeconds % 60
+        let durationMinutes = totalDurationSeconds / 60
+
+        // Print the time in the format 00:00 / 00:00
+        return String(format: "%02d:%02d / %02d:%02d", minutes, seconds, durationMinutes, durationSeconds)
+        
+    }
+    
+    func processOnSliding() {
+        
+        
+        cellVideoNode.pause()
+        timeLbl.text = processTime()
+        timeLbl.isHidden = false
+        blurView.isHidden = false
+        
+    }
+
+    func processEndedSliding() {
+        
+        
+        cellVideoNode.play()
+        timeLbl.isHidden = true
+        blurView.isHidden = true
+        
+    }
+
     
     
 }

@@ -6,7 +6,6 @@
 //
 
 import Foundation
-
 import UIKit
 import AsyncDisplayKit
 import Alamofire
@@ -20,28 +19,30 @@ class SuggestFollowNode: ASCellNode {
     
     deinit {
         print("SuggestFollowNode is being deallocated.")
+        
+        userNameNode.attributedText = nil
+        nameNode.attributedText = nil
+        avatarNode.url = nil
     }
     
-    var user: FriendSuggestionModel!
-    var followAction : ((SuggestFollowNode) -> Void)?
-    lazy var delayItem = workItem()
-    var attemptCount = 0
-    var userNameNode: ASTextNode!
-    var nameNode: ASTextNode!
-    var avatarNode: ASNetworkImageNode!
-    var followBtnNode: ASButtonNode!
-    var selectedColor = UIColor(red: 53, green: 46, blue: 113, alpha: 0.4)
+    private weak var user: FriendSuggestionModel!
+
+    let userNameNode = ASTextNode()
+    let nameNode = ASTextNode()
+  
+    let avatarNode = ASNetworkImageNode()
+    let followBtnNode = ASButtonNode()
+
     var isFollowingUser = false
     var denyBtn = false
     var allowProcess = true
     
-    init(with user: FriendSuggestionModel) {
-        self.user = user
-        self.userNameNode = ASTextNode()
-        self.avatarNode = ASNetworkImageNode()
-        self.followBtnNode = ASButtonNode()
-        self.nameNode = ASTextNode()
-
+    let font = FontManager.shared.roboto(.Medium, size: FontSize + 1)
+    let textColor = UIColor.black
+    
+    init(with users: FriendSuggestionModel) {
+        user = users
+    
         super.init()
 
         self.backgroundColor = UIColor.clear
@@ -58,56 +59,62 @@ class SuggestFollowNode: ASCellNode {
        
 
         followBtnNode.addTarget(self, action: #selector(FollowNode.followBtnPressed), forControlEvents: .touchUpInside)
-
+        
+        
+        if user.avatar != "" {
+            avatarNode.url = URL(string: user.avatar)
+        } else {
+            avatarNode.image = UIImage.init(named: "defaultuser")
+        }
+        
+        let commonAttributes = textAttributes(withFont: font)
+    
+        if user.username != "" {
+            userNameNode.attributedText = NSAttributedString.init(attributedString: NSAttributedString(string: user.username, attributes: commonAttributes))
+        }
+        
+        if user.name != "" {
+            nameNode.attributedText = NSAttributedString.init(attributedString: NSAttributedString(string: user.name, attributes: commonAttributes))
+        } else {
+            nameNode.attributedText = NSAttributedString.init(attributedString: NSAttributedString(string: "None", attributes: commonAttributes))
+        }
+        
+      
         automaticallyManagesSubnodes = true
 
-
+    }
+    
+    
+    func textAttributes(withFont font: UIFont) -> [NSAttributedString.Key: Any] {
+        let paragraphStyles = NSMutableParagraphStyle()
+        paragraphStyles.alignment = .left
+        
+        return [
+            NSAttributedString.Key.font: font,
+            NSAttributedString.Key.foregroundColor: textColor,
+            NSAttributedString.Key.paragraphStyle: paragraphStyles
+        ]
     }
     
     override func didLoad() {
         super.didLoad()
         
-        if let user = user.userId {
-            if user == _AppCoreData.userDataSource.value?.userID {
-                denyBtn = true
-            }
+        
+        if user.userId == _AppCoreData.userDataSource.value?.userID {
+            denyBtn = true
         }
 
-        
-        let paragraphStyles = NSMutableParagraphStyle()
-        paragraphStyles.alignment = .left
-        self.userNameNode.attributedText = NSAttributedString(string: "@\(user.username ?? "@")" , attributes: [NSAttributedString.Key.font: FontManager.shared.roboto(.Medium, size: FontSize + 1), NSAttributedString.Key.foregroundColor: UIColor.black, NSAttributedString.Key.paragraphStyle: paragraphStyles])
-        
-        
-        if user.name != " " {
-            
-         
-            self.nameNode.attributedText = NSAttributedString(string: user.name ?? "None", attributes: [NSAttributedString.Key.font: FontManager.shared.roboto(.Medium, size: FontSize + 1), NSAttributedString.Key.foregroundColor: UIColor.black, NSAttributedString.Key.paragraphStyle: paragraphStyles])
-            
-        } else {
-            
-            self.nameNode.attributedText = NSAttributedString(string: "None", attributes: [NSAttributedString.Key.font: FontManager.shared.roboto(.Medium, size: FontSize + 1), NSAttributedString.Key.foregroundColor: UIColor.black, NSAttributedString.Key.paragraphStyle: paragraphStyles])
-            
-        }
-        
-        
-
-        if let userAvatar = user.avatar, userAvatar != "" {
-            avatarNode.url = URL(string: userAvatar)
-        } else {
-            avatarNode.image = UIImage.init(named: "defaultuser")
-        }
-        
         self.checkIfFollow()
+        
         
     }
 
     
     func checkIfFollow() {
         
-        if let userId = user.userId {
+        if user.userId != "" {
             
-            APIManager.shared.isFollowing(uid: userId) { [weak self] result in
+            APIManager.shared.isFollowing(uid: user.userId) { [weak self] result in
                 guard let self = self else { return }
                 
                 switch result {
@@ -131,7 +138,8 @@ class SuggestFollowNode: ASCellNode {
                         
                     } else {
                         
-                        DispatchQueue.main.async {
+                        DispatchQueue.main.async { [weak self] in
+                            guard let self = self else { return }
                             self.isFollowingUser = false
                             self.followBtnNode.backgroundColor = .secondary
                             self.followBtnNode.layer.cornerRadius = 10.0
@@ -176,9 +184,10 @@ class SuggestFollowNode: ASCellNode {
     
     func followUser() {
         
-        if let userId = user.userId {
+        if  user.userId != "" {
             
-            DispatchQueue.main.async {
+            DispatchQueue.main.async { [weak self] in
+                guard let self = self else { return }
                 self.isFollowingUser = true
                 self.followBtnNode.backgroundColor = .normalButtonBackground
                 self.followBtnNode.layer.cornerRadius = 10.0
@@ -189,7 +198,7 @@ class SuggestFollowNode: ASCellNode {
             
           
             
-            APIManager.shared.insertFollows(params: ["FollowId": userId]) { [weak self] result in
+            APIManager.shared.insertFollows(params: ["FollowId": user.userId]) { [weak self] result in
                 guard let self = self else { return }
                 
                 switch result {
@@ -203,13 +212,15 @@ class SuggestFollowNode: ASCellNode {
                     
                 case .failure(_):
                     
-                    DispatchQueue.main.async {
+                    DispatchQueue.main.async { [weak self] in
+                        guard let self = self else { return }
                         self.allowProcess = true
                         showNote(text: "Something happened!")
                     }
                     
                     
-                    DispatchQueue.main.async {
+                    DispatchQueue.main.async { [weak self] in
+                        guard let self = self else { return }
                         self.isFollowingUser = false
                         self.followBtnNode.backgroundColor = .secondary
                         self.followBtnNode.layer.cornerRadius = 10.0
@@ -231,9 +242,10 @@ class SuggestFollowNode: ASCellNode {
     
     func unfollowUser() {
         
-        if let userId = user.userId {
+        if user.userId != "" {
             
-            DispatchQueue.main.async {
+            DispatchQueue.main.async { [weak self] in
+                guard let self = self else { return }
                 
                 self.followBtnNode.backgroundColor = .secondary
                 self.followBtnNode.layer.cornerRadius = 10.0
@@ -243,7 +255,7 @@ class SuggestFollowNode: ASCellNode {
             }
          
             
-            APIManager.shared.unFollow(params: ["FollowId":userId]) { [weak self] result in
+            APIManager.shared.unFollow(params: ["FollowId": user.userId]) { [weak self] result in
                 guard let self = self else { return }
                 
                 switch result {
@@ -257,7 +269,8 @@ class SuggestFollowNode: ASCellNode {
                         showNote(text: "Something happened!")
                     }
                     
-                    DispatchQueue.main.async {
+                    DispatchQueue.main.async { [weak self] in
+                        guard let self = self else { return }
                         self.followBtnNode.backgroundColor = .normalButtonBackground
                         self.followBtnNode.layer.cornerRadius = 10.0
                         self.followBtnNode.clipsToBounds = true

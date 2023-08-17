@@ -40,9 +40,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
     -> Bool {
     
         
-        setupPixelSDK()
-        sendbird_authentication()
-        syncSendbirdAccount()
+        //setupPixelSDK()
+        //sendbird_authentication()
+        //syncSendbirdAccount()
         attemptRegisterForNotifications(application: application)
         setupStyle()
         setupOneSignal(launchOptions: launchOptions)
@@ -71,7 +71,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
                 options.attachViewHierarchy = true
                 options.enablePreWarmedAppStartTracing = true
                 options.enableMetricKit = true
-                options.enableTimeToFullDisplay = true
+               
                
             }
 

@@ -99,7 +99,7 @@ class SettingVC: UIViewController {
     }
     
     @IBAction func securityBtnPressed(_ sender: Any) {
-        
+         
         if let SVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "SecurityVC") as? SecurityVC {
             self.navigationController?.pushViewController(SVC, animated: true)
             

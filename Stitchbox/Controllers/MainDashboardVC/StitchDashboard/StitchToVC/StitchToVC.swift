@@ -567,17 +567,9 @@ extension StitchToVC {
         if refresh_request {
 
             refresh_request = false
-
-            if !self.waitPost.isEmpty {
-                var delete_indexPaths: [IndexPath] = []
-                for row in 0..<self.waitPost.count {
-                    let path = IndexPath(row: row, section: 0) // single indexpath
-                    delete_indexPaths.append(path) // append
-                }
-
-                self.waitPost.removeAll()
-                self.waitCollectionNode.deleteItems(at: delete_indexPaths)
-            }
+            self.waitPost.removeAll()
+            self.waitCollectionNode.reloadData()
+            
         }
         
         

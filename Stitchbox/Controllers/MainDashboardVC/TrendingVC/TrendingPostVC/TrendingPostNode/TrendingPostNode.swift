@@ -13,7 +13,13 @@ fileprivate let FontSize: CGFloat = 13
 
 class TrendingPostNode: ASCellNode {
     
-    var post: PostModel!
+    
+    deinit {
+        print("TrendingPostNode is being deallocated.")
+      
+    }
+    
+    private weak var post: PostModel!
     var nameNode: ASTextNode!
     var imageNode: ASNetworkImageNode!
     var rankingNode: ASTextNode!
@@ -34,12 +40,9 @@ class TrendingPostNode: ASCellNode {
         self.imageNode = ASNetworkImageNode()
         self.nameNode = ASTextNode()
         self.rankingNode = ASTextNode() // initialize the ranking node
-        
-        
         self.stitchCountNode = ASTextNode()
         self.countNode = ASTextNode()
         self.infoNode = ASTextNode()
-        
         self.videoSignNode = ASImageNode()
         self.stitchSignNode = ASImageNode()
         
@@ -53,84 +56,92 @@ class TrendingPostNode: ASCellNode {
         imageNode.isLayerBacked = true
         imageNode.shouldRenderProgressImages = true
         imageNode.url = post.imageUrl
-        
-        
         automaticallyManagesSubnodes = true
+        
+        let paragraphStyle = NSMutableParagraphStyle()
+        paragraphStyle.alignment = .center
+        
+        
         
     }
     
     override func didLoad() {
         super.didLoad()
-        
-        self.backgroundColor = .clear // set background to clear
+
+        // Basic setup
+        self.backgroundColor = .clear
         self.imageNode.backgroundColor = .clear
-        imageNode.cornerRadius = 10 // set corner radius of imageNode to 15
+        imageNode.cornerRadius = 10
         imageNode.contentMode = .scaleAspectFill
-        
+
+        let paragraphStyle = NSMutableParagraphStyle()
+        paragraphStyle.alignment = .center
+
+        // Setup for the owner's username
         if let username = post.owner?.username {
-            
-            let paragraphStyle = NSMutableParagraphStyle()
-            paragraphStyle.alignment = .center
             infoNode.attributedText = NSAttributedString(
                 string: "@\(username)",
                 attributes: [
-                    NSAttributedString.Key.font: FontManager.shared.roboto(.Bold, size: FontSize), // Using the Roboto Bold style
-                    NSAttributedString.Key.foregroundColor: UIColor.white,
-                    NSAttributedString.Key.paragraphStyle: paragraphStyle
+                    .font: FontManager.shared.roboto(.Bold, size: FontSize),
+                    .foregroundColor: UIColor.white,
+                    .paragraphStyle: paragraphStyle
                 ]
             )
-
-            
         }
-        
-        paragraphStyles.alignment = .center
-        
+
+        // Setup for the post content and hashtags
         let title = post.content
-        let hashtags = post.hashtags?.joined(separator: " ")
-        let combinedString = "\(title) \(hashtags ?? "")"
-        let textToDisplay = String(combinedString.prefix(60))
+        let hashtags = post.hashtags?.joined(separator: " ") ?? ""
+        let combinedString = "\(title) \(hashtags)".prefix(60)
+        let attributedString = NSMutableAttributedString(string: String(combinedString), attributes: [
+            .font: FontManager.shared.roboto(.Medium, size: FontSize),
+            .foregroundColor: UIColor.black,
+            .paragraphStyle: paragraphStyle
+        ])
 
-        let textAttributes: [NSAttributedString.Key: Any] = [
-            NSAttributedString.Key.font: FontManager.shared.roboto(.Medium, size: FontSize), // Using the Roboto Medium style
-            NSAttributedString.Key.foregroundColor: UIColor.black,
-            NSAttributedString.Key.paragraphStyle: paragraphStyles
-        ]
-
-
-        let attributedString = NSMutableAttributedString(string: textToDisplay, attributes: textAttributes)
-
-        // Hashtag color
+        // Color for hashtags
         let hashtagColor = UIColor(red: 85.0/255, green: 172.0/255, blue: 238.0/255, alpha: 1)
-
-        // Iterate over all words in the string
-        for word in textToDisplay.split(separator: " ") {
-            // Check if the word is a hashtag
-            if word.hasPrefix("#") {
-                // Find the range of the hashtag
-                if let range = textToDisplay.range(of: String(word)) {
-                    // Apply the color to the hashtag
-                    attributedString.addAttribute(.foregroundColor, value: hashtagColor, range: NSRange(range, in: textToDisplay))
-                }
+        for word in combinedString.split(separator: " ") {
+            if word.hasPrefix("#"), let range = String(combinedString).range(of: String(word)) {
+                attributedString.addAttribute(.foregroundColor, value: hashtagColor, range: NSRange(range, in: combinedString))
             }
         }
-
         self.nameNode.attributedText = attributedString
-        
-        let paragraphStyle = NSMutableParagraphStyle()
-        paragraphStyle.alignment = .center
+
+        // Setup for the ranking node
         rankingNode.backgroundColor = .black
         rankingNode.attributedText = NSAttributedString(
             string: "#\(ranking)",
             attributes: [
-                NSAttributedString.Key.font: FontManager.shared.roboto(.Bold, size: FontSize), // Using the Roboto Medium style,
+                .font: FontManager.shared.roboto(.Bold, size: FontSize),
+                .foregroundColor: UIColor.white,
+                .paragraphStyle: paragraphStyle
+            ]
+        )
+        rankingNode.maximumNumberOfLines = 1
+
+        // Additional setup
+        setupnode()
+
+        self.countNode.attributedText = NSAttributedString(
+            string: "\(formatPoints(num: Double(post.estimatedCount?.sizeViews ?? 0)))",
+            attributes: [
+                NSAttributedString.Key.font: FontManager.shared.roboto(.Regular, size: FontSize - 3), // Using the Roboto Regular style
                 NSAttributedString.Key.foregroundColor: UIColor.white,
                 NSAttributedString.Key.paragraphStyle: paragraphStyle
             ]
         )
-
-        rankingNode.maximumNumberOfLines = 1
         
+        self.stitchCountNode.attributedText = NSAttributedString(
+            string: "\(formatPoints(num: Double(post.totalStitchTo + post.totalMemberStitch)))",
+            attributes: [
+                    NSAttributedString.Key.font: FontManager.shared.roboto(.Regular, size: FontSize - 3), // Using the Roboto Regular style
+                    NSAttributedString.Key.foregroundColor: UIColor.white,
+                    NSAttributedString.Key.paragraphStyle: paragraphStyle
+                ]
+        )
     }
+
     
     
     override func layoutSpecThatFits(_ constrainedSize: ASSizeRange) -> ASLayoutSpec {
@@ -195,14 +206,7 @@ class TrendingPostNode: ASCellNode {
         stitchSignNode.style.preferredSize = CGSize(width: 25, height: 25) // set the size here
         stitchSignNode.clipsToBounds = true
 
-        // Add shadow to layer
-        stitchSignNode.shadowColor = UIColor.black.cgColor
-        stitchSignNode.shadowOpacity = 0.5
-        stitchSignNode.shadowOffset = CGSize(width: 0, height: 2)
-        stitchSignNode.shadowRadius = 2
-        
-        
-        
+     
         let paragraphStyle = NSMutableParagraphStyle()
         //textNode.style.preferredSize = CGSize(width: 100, height: 25) // set the size here
         paragraphStyle.alignment = .center
@@ -213,102 +217,11 @@ class TrendingPostNode: ASCellNode {
         videoSignNode.style.preferredSize = CGSize(width: 25, height: 25) // set the size here
         videoSignNode.clipsToBounds = true
 
-        // Add shadow to layer
-        videoSignNode.shadowColor = UIColor.black.cgColor
-        videoSignNode.shadowOpacity = 0.5
-        videoSignNode.shadowOffset = CGSize(width: 0, height: 2)
-        videoSignNode.shadowRadius = 2
-        
-    
         countNode.maximumNumberOfLines = 1
        
         infoNode.backgroundColor = .black // set the background color to dark gray
         infoNode.maximumNumberOfLines = 1
 
-        DispatchQueue.main.async { [weak self] in
-            guard let self = self else { return }
-            //self.infoNode.view.cornerRadius = 3
-        }
         
     }
-
-
-    func countView() {
-        
-        APIManager.shared.getPostStats(postId: post.id) { [weak self] result in
-            guard let self = self else { return }
-
-            switch result {
-            case .success(let apiResponse):
-
-                guard let dataDictionary = apiResponse.body?["data"] as? [String: Any] else {
-                    print("Couldn't cast")
-                    return
-                }
-            
-                do {
-                    let data = try JSONSerialization.data(withJSONObject: dataDictionary, options: .fragmentsAllowed)
-                    let decoder = JSONDecoder()
-                    let stats = try decoder.decode(Stats.self, from: data)
-                    
-                    DispatchQueue.main.async { [weak self]  in
-                        guard let self = self else { return }
-                        let paragraphStyle = NSMutableParagraphStyle()
-                        paragraphStyle.alignment = .center
-                        self.countNode.attributedText = NSAttributedString(
-                            string: "\(formatPoints(num: Double(stats.view.total)))",
-                            attributes: [
-                                NSAttributedString.Key.font: FontManager.shared.roboto(.Regular, size: FontSize - 3), // Using the Roboto Regular style
-                                NSAttributedString.Key.foregroundColor: UIColor.white,
-                                NSAttributedString.Key.paragraphStyle: paragraphStyle
-                            ]
-                        )
-
-                    }
-                } catch {
-                    print("Error decoding JSON: \(error)")
-                }
-            case .failure(let error):
-                print(error)
-            }
-        }
-        
-    }
-    
-    func countViewStitch() {
-        
-        APIManager.shared.countPostStitch(pid: post.id) { [weak self] result in
-            guard let self = self else { return }
-
-            switch result {
-            case .success(let apiResponse):
-                print(apiResponse)
-
-                guard let total = apiResponse.body?["total"] as? Int else {
-                    print("Couldn't find the 'total' key")
-                    return
-                }
-
-                DispatchQueue.main.async { [weak self]  in
-                    guard let self = self else { return }
-                    let paragraphStyle = NSMutableParagraphStyle()
-                    paragraphStyle.alignment = .center
-                    self.stitchCountNode.attributedText = NSAttributedString(
-                        string: "\(formatPoints(num: Double(total)))",
-                        attributes: [
-                            NSAttributedString.Key.font: FontManager.shared.roboto(.Regular, size: FontSize - 3), // Using the Roboto Regular style
-                            NSAttributedString.Key.foregroundColor: UIColor.white,
-                            NSAttributedString.Key.paragraphStyle: paragraphStyle
-                        ]
-                    )
-
-                }
-                
-            case .failure(let error):
-                print(error)
-            }
-        }
-        
-    }
-
 }

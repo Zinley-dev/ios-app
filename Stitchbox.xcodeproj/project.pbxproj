@@ -30,9 +30,6 @@
 		14FADBC6297A000000E0A741 /* SettingModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14FADBC5297A000000E0A741 /* SettingModel.swift */; };
 		14FADBC8297A420800E0A741 /* UIImageViewExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14FADBC7297A420800E0A741 /* UIImageViewExtension.swift */; };
 		14FADBCA297A538400E0A741 /* TwoWayBinding.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14FADBC9297A538400E0A741 /* TwoWayBinding.swift */; };
-		14FADBCD297B072100E0A741 /* ChangePasswordViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14FADBCC297B072100E0A741 /* ChangePasswordViewModel.swift */; };
-		14FADBCF297C44E800E0A741 /* BlockAccountViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14FADBCE297C44E800E0A741 /* BlockAccountViewModel.swift */; };
-		14FADBD1297FBA4800E0A741 /* ContactUsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14FADBD0297FBA4800E0A741 /* ContactUsViewModel.swift */; };
 		14FFF78229857C860086E2D9 /* CountryPickerView in Frameworks */ = {isa = PBXBuildFile; productRef = 14FFF78129857C860086E2D9 /* CountryPickerView */; };
 		14FFF78829881EA40086E2D9 /* ListDisplayDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14FFF78729881EA40086E2D9 /* ListDisplayDataSource.swift */; };
 		390FD7382909264D0068B883 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 390FD7372909264D0068B883 /* AppDelegate.swift */; };
@@ -65,6 +62,12 @@
 		39E80470299A9A10002F13A5 /* OneSignalNotificationServiceExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 39E80469299A9A10002F13A5 /* OneSignalNotificationServiceExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		598A1E63994BC90BE0C4A0FC /* Pods_Stitchbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A22C3D0FF2AC700511198F9D /* Pods_Stitchbox.framework */; };
 		6A0B8B6C2996DC2D00E724B7 /* EditBirthdayVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A0B8B6B2996DC2D00E724B7 /* EditBirthdayVC.swift */; };
+		6A0BC81A2A8DE0DA00F9A2EA /* ContactUsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A0BC8172A8DE0DA00F9A2EA /* ContactUsViewModel.swift */; };
+		6A0BC81B2A8DE0DA00F9A2EA /* BlockAccountViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A0BC8182A8DE0DA00F9A2EA /* BlockAccountViewModel.swift */; };
+		6A0BC81C2A8DE0DA00F9A2EA /* ChangePasswordViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A0BC8192A8DE0DA00F9A2EA /* ChangePasswordViewModel.swift */; };
+		6A0BC81F2A8DE17900F9A2EA /* ViewStitchStatsVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A0BC81E2A8DE17900F9A2EA /* ViewStitchStatsVC.swift */; };
+		6A0BC8222A8DE29100F9A2EA /* AccountActivityVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A0BC8212A8DE29100F9A2EA /* AccountActivityVC.swift */; };
+		6A0BC8242A8DE29C00F9A2EA /* AccountActivityNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A0BC8232A8DE29C00F9A2EA /* AccountActivityNode.swift */; };
 		6A0C324B2A5F165900D2DE18 /* bg.mp4 in Resources */ = {isa = PBXBuildFile; fileRef = 6A0C324A2A5F165900D2DE18 /* bg.mp4 */; };
 		6A0C324F2A5F545000D2DE18 /* StitchSettingVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A0C324D2A5F544F00D2DE18 /* StitchSettingVC.swift */; };
 		6A0C32502A5F545000D2DE18 /* StitchSettingVC.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6A0C324E2A5F545000D2DE18 /* StitchSettingVC.xib */; };
@@ -126,7 +129,6 @@
 		6A3F0A5C297CB83F00366665 /* AddVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A3F0A5B297CB83F00366665 /* AddVC.swift */; };
 		6A3F0A5F297CBA5600366665 /* PostVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A3F0A5E297CBA5600366665 /* PostVC.swift */; };
 		6A3F0A63297F71B900366665 /* badgeThumbnail.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A3F0A62297F71B800366665 /* badgeThumbnail.swift */; };
-		6A3F0A65297F74D400366665 /* StitchStatVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A3F0A64297F74D400366665 /* StitchStatVC.swift */; };
 		6A3F0A69297F900900366665 /* PostNavVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A3F0A68297F900900366665 /* PostNavVC.swift */; };
 		6A3F0A6C297FA44200366665 /* HashtagVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A3F0A6B297FA44200366665 /* HashtagVC.swift */; };
 		6A3F0A6F297FA91200366665 /* HashtagsModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A3F0A6E297FA91200366665 /* HashtagsModel.swift */; };
@@ -265,12 +267,10 @@
 		6A9E4C6B29768BA100B59176 /* FindFriendsModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A9E4C6A29768BA100B59176 /* FindFriendsModel.swift */; };
 		6A9E4C6E29768BE100B59176 /* FindFriendsNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A9E4C6D29768BE100B59176 /* FindFriendsNode.swift */; };
 		6A9E4C742977AF2700B59176 /* BlockedListVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A9E4C732977AF2700B59176 /* BlockedListVC.swift */; };
-		6A9E4C762977AF3700B59176 /* AccountActivityVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A9E4C752977AF3700B59176 /* AccountActivityVC.swift */; };
 		6A9E4C782977AF4500B59176 /* ContactUsVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A9E4C772977AF4500B59176 /* ContactUsVC.swift */; };
 		6A9E4C7A2977AF5400B59176 /* SecurityVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A9E4C792977AF5400B59176 /* SecurityVC.swift */; };
 		6A9E4C7D2977B2E100B59176 /* BlockUserModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A9E4C7C2977B2E100B59176 /* BlockUserModel.swift */; };
 		6A9E4C802977B34500B59176 /* UserActivityModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A9E4C7F2977B34500B59176 /* UserActivityModel.swift */; };
-		6A9E4C832977B3C100B59176 /* AccountActivityNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A9E4C822977B3C100B59176 /* AccountActivityNode.swift */; };
 		6A9E4C862977B8F000B59176 /* BlockNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A9E4C852977B8F000B59176 /* BlockNode.swift */; };
 		6A9E4C8B2977C4FC00B59176 /* ContactUsImageCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A9E4C8A2977C4FC00B59176 /* ContactUsImageCell.swift */; };
 		6AA276E52A832E4B0001D69A /* PresentationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AA276E42A832E4B0001D69A /* PresentationController.swift */; };
@@ -510,9 +510,6 @@
 		14FADBC5297A000000E0A741 /* SettingModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingModel.swift; sourceTree = "<group>"; };
 		14FADBC7297A420800E0A741 /* UIImageViewExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIImageViewExtension.swift; sourceTree = "<group>"; };
 		14FADBC9297A538400E0A741 /* TwoWayBinding.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TwoWayBinding.swift; sourceTree = "<group>"; };
-		14FADBCC297B072100E0A741 /* ChangePasswordViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChangePasswordViewModel.swift; sourceTree = "<group>"; };
-		14FADBCE297C44E800E0A741 /* BlockAccountViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlockAccountViewModel.swift; sourceTree = "<group>"; };
-		14FADBD0297FBA4800E0A741 /* ContactUsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactUsViewModel.swift; sourceTree = "<group>"; };
 		14FFF78429857CAA0086E2D9 /* CountryPickerView-master */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = "CountryPickerView-master"; path = "Stitchbox/CountryPickerView-master"; sourceTree = "<group>"; };
 		14FFF78729881EA40086E2D9 /* ListDisplayDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListDisplayDataSource.swift; sourceTree = "<group>"; };
 		18960355CEB029836AD8CEB1 /* Pods-StitchboxTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-StitchboxTests.release.xcconfig"; path = "Target Support Files/Pods-StitchboxTests/Pods-StitchboxTests.release.xcconfig"; sourceTree = "<group>"; };
@@ -559,6 +556,12 @@
 		440F29CEF73B0978DCFC355E /* Pods-OneSignalNotificationServiceExtension.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-OneSignalNotificationServiceExtension.release.xcconfig"; path = "Target Support Files/Pods-OneSignalNotificationServiceExtension/Pods-OneSignalNotificationServiceExtension.release.xcconfig"; sourceTree = "<group>"; };
 		59DF8799EB14D76FEFB2DD9E /* Pods-OneSignalNotificationServiceExtension.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-OneSignalNotificationServiceExtension.debug.xcconfig"; path = "Target Support Files/Pods-OneSignalNotificationServiceExtension/Pods-OneSignalNotificationServiceExtension.debug.xcconfig"; sourceTree = "<group>"; };
 		6A0B8B6B2996DC2D00E724B7 /* EditBirthdayVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditBirthdayVC.swift; sourceTree = "<group>"; };
+		6A0BC8172A8DE0DA00F9A2EA /* ContactUsViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ContactUsViewModel.swift; sourceTree = "<group>"; };
+		6A0BC8182A8DE0DA00F9A2EA /* BlockAccountViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BlockAccountViewModel.swift; sourceTree = "<group>"; };
+		6A0BC8192A8DE0DA00F9A2EA /* ChangePasswordViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChangePasswordViewModel.swift; sourceTree = "<group>"; };
+		6A0BC81E2A8DE17900F9A2EA /* ViewStitchStatsVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ViewStitchStatsVC.swift; sourceTree = "<group>"; };
+		6A0BC8212A8DE29100F9A2EA /* AccountActivityVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AccountActivityVC.swift; sourceTree = "<group>"; };
+		6A0BC8232A8DE29C00F9A2EA /* AccountActivityNode.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AccountActivityNode.swift; sourceTree = "<group>"; };
 		6A0C324A2A5F165900D2DE18 /* bg.mp4 */ = {isa = PBXFileReference; lastKnownFileType = file; path = bg.mp4; sourceTree = "<group>"; };
 		6A0C324D2A5F544F00D2DE18 /* StitchSettingVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StitchSettingVC.swift; sourceTree = "<group>"; };
 		6A0C324E2A5F545000D2DE18 /* StitchSettingVC.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = StitchSettingVC.xib; sourceTree = "<group>"; };
@@ -620,7 +623,6 @@
 		6A3F0A5B297CB83F00366665 /* AddVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddVC.swift; sourceTree = "<group>"; };
 		6A3F0A5E297CBA5600366665 /* PostVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostVC.swift; sourceTree = "<group>"; };
 		6A3F0A62297F71B800366665 /* badgeThumbnail.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = badgeThumbnail.swift; sourceTree = "<group>"; };
-		6A3F0A64297F74D400366665 /* StitchStatVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StitchStatVC.swift; sourceTree = "<group>"; };
 		6A3F0A68297F900900366665 /* PostNavVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostNavVC.swift; sourceTree = "<group>"; };
 		6A3F0A6B297FA44200366665 /* HashtagVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HashtagVC.swift; sourceTree = "<group>"; };
 		6A3F0A6E297FA91200366665 /* HashtagsModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HashtagsModel.swift; sourceTree = "<group>"; };
@@ -767,12 +769,10 @@
 		6A9E4C6A29768BA100B59176 /* FindFriendsModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FindFriendsModel.swift; sourceTree = "<group>"; };
 		6A9E4C6D29768BE100B59176 /* FindFriendsNode.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FindFriendsNode.swift; sourceTree = "<group>"; };
 		6A9E4C732977AF2700B59176 /* BlockedListVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlockedListVC.swift; sourceTree = "<group>"; };
-		6A9E4C752977AF3700B59176 /* AccountActivityVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountActivityVC.swift; sourceTree = "<group>"; };
 		6A9E4C772977AF4500B59176 /* ContactUsVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactUsVC.swift; sourceTree = "<group>"; };
 		6A9E4C792977AF5400B59176 /* SecurityVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SecurityVC.swift; sourceTree = "<group>"; };
 		6A9E4C7C2977B2E100B59176 /* BlockUserModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlockUserModel.swift; sourceTree = "<group>"; };
 		6A9E4C7F2977B34500B59176 /* UserActivityModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserActivityModel.swift; sourceTree = "<group>"; };
-		6A9E4C822977B3C100B59176 /* AccountActivityNode.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AccountActivityNode.swift; sourceTree = "<group>"; };
 		6A9E4C852977B8F000B59176 /* BlockNode.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BlockNode.swift; sourceTree = "<group>"; };
 		6A9E4C8A2977C4FC00B59176 /* ContactUsImageCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ContactUsImageCell.swift; sourceTree = "<group>"; };
 		6AA276E42A832E4B0001D69A /* PresentationController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PresentationController.swift; sourceTree = "<group>"; };
@@ -1088,9 +1088,9 @@
 		14FADBCB297B06AC00E0A741 /* SettingViewModels */ = {
 			isa = PBXGroup;
 			children = (
-				14FADBCC297B072100E0A741 /* ChangePasswordViewModel.swift */,
-				14FADBCE297C44E800E0A741 /* BlockAccountViewModel.swift */,
-				14FADBD0297FBA4800E0A741 /* ContactUsViewModel.swift */,
+				6A0BC8182A8DE0DA00F9A2EA /* BlockAccountViewModel.swift */,
+				6A0BC8192A8DE0DA00F9A2EA /* ChangePasswordViewModel.swift */,
+				6A0BC8172A8DE0DA00F9A2EA /* ContactUsViewModel.swift */,
 			);
 			path = SettingViewModels;
 			sourceTree = "<group>";
@@ -1369,6 +1369,23 @@
 				6A0B8B6B2996DC2D00E724B7 /* EditBirthdayVC.swift */,
 			);
 			path = EditBirthdayVC;
+			sourceTree = "<group>";
+		};
+		6A0BC81D2A8DE10200F9A2EA /* ViewStitchStatsVC */ = {
+			isa = PBXGroup;
+			children = (
+				6A0BC81E2A8DE17900F9A2EA /* ViewStitchStatsVC.swift */,
+			);
+			path = ViewStitchStatsVC;
+			sourceTree = "<group>";
+		};
+		6A0BC8202A8DE22F00F9A2EA /* AccountActivity */ = {
+			isa = PBXGroup;
+			children = (
+				6A0BC8232A8DE29C00F9A2EA /* AccountActivityNode.swift */,
+				6A0BC8212A8DE29100F9A2EA /* AccountActivityVC.swift */,
+			);
+			path = AccountActivity;
 			sourceTree = "<group>";
 		};
 		6A0C324C2A5F541E00D2DE18 /* StitchSettingVC */ = {
@@ -2094,9 +2111,9 @@
 		6A495E392976596E001895C3 /* SettingVC */ = {
 			isa = PBXGroup;
 			children = (
+				6A0BC8202A8DE22F00F9A2EA /* AccountActivity */,
 				6A495E3C297666EA001895C3 /* SettingVC.swift */,
 				6A9E4C722977AD7B00B59176 /* BlockedListVC */,
-				6A9E4C712977AD5500B59176 /* AccountActivityVC */,
 				6A9E4C702977AD4800B59176 /* ContactUsVC */,
 				6A9E4C6F2977AD3D00B59176 /* SecurityVC */,
 				6A9E4C6029767EAE00B59176 /* PushNotificationVC */,
@@ -2600,6 +2617,7 @@
 		6A9E4C6829767FDC00B59176 /* MainDashboardVC */ = {
 			isa = PBXGroup;
 			children = (
+				6A0BC81D2A8DE10200F9A2EA /* ViewStitchStatsVC */,
 				6A2A16022A8C545B00E607EA /* AppMetrics */,
 				6A40311D2A8739920038B655 /* SelectedParentVC */,
 				6A40311A2A872D4E0038B655 /* ResolutionVC */,
@@ -2671,15 +2689,6 @@
 			path = ContactUsVC;
 			sourceTree = "<group>";
 		};
-		6A9E4C712977AD5500B59176 /* AccountActivityVC */ = {
-			isa = PBXGroup;
-			children = (
-				6A9E4C812977B3B900B59176 /* AccountActivityNode */,
-				6A9E4C752977AF3700B59176 /* AccountActivityVC.swift */,
-			);
-			path = AccountActivityVC;
-			sourceTree = "<group>";
-		};
 		6A9E4C722977AD7B00B59176 /* BlockedListVC */ = {
 			isa = PBXGroup;
 			children = (
@@ -2703,14 +2712,6 @@
 				6A9E4C7F2977B34500B59176 /* UserActivityModel.swift */,
 			);
 			path = UserActivityModel;
-			sourceTree = "<group>";
-		};
-		6A9E4C812977B3B900B59176 /* AccountActivityNode */ = {
-			isa = PBXGroup;
-			children = (
-				6A9E4C822977B3C100B59176 /* AccountActivityNode.swift */,
-			);
-			path = AccountActivityNode;
 			sourceTree = "<group>";
 		};
 		6A9E4C842977B8E300B59176 /* BlockNode */ = {
@@ -3389,7 +3390,6 @@
 				6AF6C4972997053200DD8D37 /* EditEmailVC */,
 				6AF6C4952997050F00DD8D37 /* EditPhoneVC */,
 				6A0B8B6A2996DC1200E724B7 /* EditBirthdayVC */,
-				6AF9733C297A320C00C76814 /* StitchStatVC */,
 				6AF973392978FD9500C76814 /* EditBioVC */,
 				6AF973362978F97900C76814 /* EditGeneralInformationVC */,
 				6AF973332978E4D000C76814 /* MorePersonalInfoVC */,
@@ -3512,14 +3512,6 @@
 				6AF9733A2978FDAC00C76814 /* EditBioVC.swift */,
 			);
 			path = EditBioVC;
-			sourceTree = "<group>";
-		};
-		6AF9733C297A320C00C76814 /* StitchStatVC */ = {
-			isa = PBXGroup;
-			children = (
-				6A3F0A64297F74D400366665 /* StitchStatVC.swift */,
-			);
-			path = StitchStatVC;
 			sourceTree = "<group>";
 		};
 		7314760A83549794B5D020AC /* Pods */ = {
@@ -4027,9 +4019,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				6A3F0A65297F74D400366665 /* StitchStatVC.swift in Sources */,
-				6A9E4C832977B3C100B59176 /* AccountActivityNode.swift in Sources */,
-				14FADBD1297FBA4800E0A741 /* ContactUsViewModel.swift in Sources */,
 				6AAD7A17294C65DD003E3AB6 /* AppDelegate+VoIPPush.swift in Sources */,
 				6AE3BEF52A6C726700AAA5DD /* ApprovedStitchVC.swift in Sources */,
 				6A0C32782A621EED00D2DE18 /* PreviewVC.swift in Sources */,
@@ -4080,6 +4069,7 @@
 				395477BF294D714F008EED97 /* CreateAccountViewModel.swift in Sources */,
 				6A9E4C7A2977AF5400B59176 /* SecurityVC.swift in Sources */,
 				6A4031162A86C9040038B655 /* ShowCleanModeVC.swift in Sources */,
+				6A0BC81F2A8DE17900F9A2EA /* ViewStitchStatsVC.swift in Sources */,
 				6AAD7A4A294C664D003E3AB6 /* StartCallConvertible.swift in Sources */,
 				6ABA611E2977CB29003BFB5B /* PhotoVC.swift in Sources */,
 				6A47AAAF2A1867E600E3E1FF /* CircleColorSparkViewFactory.swift in Sources */,
@@ -4115,6 +4105,7 @@
 				6A7ED4A52A0895C900C8204E /* InfoDetailVC.swift in Sources */,
 				6A6C30F529640F780070167A /* ModActionView.swift in Sources */,
 				6A40311C2A872D600038B655 /* ResolutionVC.swift in Sources */,
+				6A0BC81C2A8DE0DA00F9A2EA /* ChangePasswordViewModel.swift in Sources */,
 				6A307CC129ADB18500A89529 /* CommentSettings.swift in Sources */,
 				6A9289C62A2454100092FD58 /* SlideAnimator.swift in Sources */,
 				6AAD7A02294C4D1C003E3AB6 /* MainMessageVC.swift in Sources */,
@@ -4195,11 +4186,11 @@
 				6A58E1852A087B0F0002E5C8 /* ChatGPTTokenManager.swift in Sources */,
 				6A839B4029A03C4A00BD0A9A /* GameList.swift in Sources */,
 				6A47AA962A1867D200E3E1FF /* FountainFirework.swift in Sources */,
-				14FADBCD297B072100E0A741 /* ChangePasswordViewModel.swift in Sources */,
 				141BB195293BA4F0004F4ED7 /* CountryPicker.swift in Sources */,
 				6A58EA51294EB280005FA3CD /* ImageUtil.swift in Sources */,
 				6A3F0A63297F71B900366665 /* badgeThumbnail.swift in Sources */,
 				6AEA3402298DDA04005A4C5D /* PostSettingVC.swift in Sources */,
+				6A0BC81A2A8DE0DA00F9A2EA /* ContactUsViewModel.swift in Sources */,
 				6AAD7A45294C6642003E3AB6 /* Bundle+QuickStart.swift in Sources */,
 				A5F2510729A76AB600373554 /* OwnerModel.swift in Sources */,
 				A5346488294B09B300FB6A94 /* ProfileViewController.swift in Sources */,
@@ -4244,6 +4235,7 @@
 				390FD7382909264D0068B883 /* AppDelegate.swift in Sources */,
 				6AAD7A19294C65DD003E3AB6 /* UIColor+QuickStart.swift in Sources */,
 				6AC6DA0429A5DA2100B18139 /* CommentModel.swift in Sources */,
+				6A0BC8242A8DE29C00F9A2EA /* AccountActivityNode.swift in Sources */,
 				A5A5E40D29386D37004E9207 /* UnderlineTextField.swift in Sources */,
 				1429CD032950119100CDBCC8 /* SNavigationItem.swift in Sources */,
 				6A7ED4BD2A0E067D00C8204E /* SubcriptionVC.swift in Sources */,
@@ -4257,6 +4249,7 @@
 				6AAD7A41294C6642003E3AB6 /* Data+QuickStart.swift in Sources */,
 				6A0D54442974E8A00059530C /* ProfileHeaderCell.swift in Sources */,
 				6A839B4329A0424700BD0A9A /* GameStatsDomainModel.swift in Sources */,
+				6A0BC8222A8DE29100F9A2EA /* AccountActivityVC.swift in Sources */,
 				6A7ED4C32A1707C800C8204E /* PromoteModel.swift in Sources */,
 				390FD788290A856B0068B883 /* RedirectionHelper.swift in Sources */,
 				6A286B5D29C90E1800C72718 /* LoginActivityNode.swift in Sources */,
@@ -4305,7 +4298,6 @@
 				6AB8E9372956EB1900BFF169 /* SendBirdUserModel.swift in Sources */,
 				6AAD79FF294C4C68003E3AB6 /* NavigationVC.swift in Sources */,
 				6AAD7A62294C699E003E3AB6 /* Array_compare.swift in Sources */,
-				14FADBCF297C44E800E0A741 /* BlockAccountViewModel.swift in Sources */,
 				6AAD7A60294C699E003E3AB6 /* UIViewController+Utils.swift in Sources */,
 				6A0CF63D296AAC2C00155889 /* EmailResetVC.swift in Sources */,
 				6A136362299AE3F500E70507 /* HalfSheetPresentationControllerHeightProtocol.swift in Sources */,
@@ -4353,6 +4345,7 @@
 				6A6071FF2A647E3E003538EF /* PendingNode.swift in Sources */,
 				396F520429DB261700BF78BE /* ProfileDeeplinkHandler.swift in Sources */,
 				6A58EA56294ECAE6005FA3CD /* ChannelViewController.swift in Sources */,
+				6A0BC81B2A8DE0DA00F9A2EA /* BlockAccountViewModel.swift in Sources */,
 				6AE3BF022A6DBC4100AAA5DD /* UnStitchView.swift in Sources */,
 				6A5C556B29E8F7CA006F51DD /* RegionModel.swift in Sources */,
 				14FADBC6297A000000E0A741 /* SettingModel.swift in Sources */,
@@ -4365,7 +4358,6 @@
 				6AE3BEE42A688DE700AAA5DD /* FriendSuggestionModel.swift in Sources */,
 				6A47AAA62A1867DC00E3E1FF /* Firework.swift in Sources */,
 				396F520029DB25DE00BF78BE /* DeeplinkCoordinator.swift in Sources */,
-				6A9E4C762977AF3700B59176 /* AccountActivityVC.swift in Sources */,
 				6AAD7A18294C65DD003E3AB6 /* AppDelegate+SoundEffects.swift in Sources */,
 				6A80F1AC29BA78E70047595A /* GameListView.swift in Sources */,
 				6A1235AC2950351C004B612E /* GroupNode.swift in Sources */,

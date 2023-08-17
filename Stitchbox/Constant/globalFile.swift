@@ -18,7 +18,7 @@ import AppTrackingTransparency
 import AdSupport
 import AsyncDisplayKit
 
-var deallocatedCount = 0
+
 let incomingCallGreen = UIColor(red: 76.0/255.0, green: 217.0/255.0, blue: 100.0/255.0, alpha: 1.0)
 let hashtagPurple = UIColor(red: 88.0/255.0, green: 86.0/255.0, blue: 214.0/255.0, alpha: 1.0)
 let alertColor = UIColor(red: 0.8, green: 0.2, blue: 0.2, alpha: 1.0)
@@ -818,69 +818,63 @@ class CustomSlider: UISlider {
     @IBInspectable var highlightedTrackHeight: CGFloat = 7.0
     @IBInspectable var thumbRadius: CGFloat = 2
     @IBInspectable var highlightedThumbRadius: CGFloat = 10
-    @IBInspectable var hitBoxSize: CGFloat = 50 // Size of hit box area
+    @IBInspectable var hitBoxSize: CGFloat = 100 // Size of hit box area
+    private var thumbImageCache: [CGFloat: UIImage] = [:]
+
     
-    private lazy var thumbView: UIView = {
+    lazy var thumbView: UIView = {
         let thumb = UIView()
         thumb.backgroundColor = .clear
         return thumb
     }()
     
-    override func awakeFromNib() {
-        super.awakeFromNib()
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        setupSlider()
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+        super.init(coder: aDecoder)
+      
+    }
+    
+    private func setupSlider() {
         let thumb = thumbImage(radius: thumbRadius)
         setThumbImage(thumb, for: .normal)
         
-        addTarget(self, action: #selector(sliderDidStartSliding), for: .touchDown)
-        addTarget(self, action: #selector(sliderDidEndSliding), for: [.touchUpInside, .touchUpOutside])
-        addTarget(self, action: #selector(sliderValueDidChange), for: .valueChanged)
+        self.maximumTrackTintColor = .darkGray
+        self.minimumTrackTintColor = .secondary
+        
     }
     
+    func thumbImage(radius: CGFloat) -> UIImage {
+        // Check for a cached image for the given radius
+        if let cachedImage = thumbImageCache[radius] {
+            return cachedImage
+        }
+        
+        // If there's no cached image, generate a new one
+        thumbView.frame = CGRect(x: 0, y: 0, width: radius * 2, height: radius * 2)
+        thumbView.layer.cornerRadius = radius
+        thumbView.layer.masksToBounds = true
+        
+        let renderer = UIGraphicsImageRenderer(bounds: thumbView.bounds)
+        let generatedImage = renderer.image { rendererContext in
+            thumbView.layer.render(in: rendererContext.cgContext)
+        }
+        
+        // Cache the generated image for the current radius
+        thumbImageCache[radius] = generatedImage
+        
+        return generatedImage
+    }
+
     
     // Override hit test to expand touch area
     override func point(inside point: CGPoint, with event: UIEvent?) -> Bool {
         let expandedBounds = bounds.insetBy(dx: -(hitBoxSize / 2 - thumbRadius), dy: -(hitBoxSize / 2 - thumbRadius))
         return expandedBounds.contains(point)
     }
-
-    
-    private func thumbImage(radius: CGFloat) -> UIImage {
-            thumbView.frame = CGRect(x: 0, y: radius / 2, width: radius * 2, height: radius * 2)
-            thumbView.layer.cornerRadius = radius
-            
-            let renderer = UIGraphicsImageRenderer(bounds: thumbView.bounds)
-            return renderer.image { rendererContext in
-                thumbView.layer.render(in: rendererContext.cgContext)
-            }
-        }
-
-    
-    @objc func sliderDidStartSliding() {
-        processOnSliding()
-        startLayout()
-    }
-    
-    @objc func sliderDidEndSliding() {
-        processEndedSliding()
-        endLayout()
-    }
-    
-    func startLayout() {
-        let thumb = thumbImage(radius: highlightedThumbRadius)
-        setThumbImage(thumb, for: .normal)
-        trackHeight = highlightedTrackHeight
-        hitBoxSize = highlightedThumbRadius * 2 + 40 // You might want to adjust this value
-        setNeedsDisplay()
-    }
-
-    func endLayout() {
-        let thumb = thumbImage(radius: thumbRadius)
-        setThumbImage(thumb, for: .normal)
-        trackHeight = 1
-        hitBoxSize = thumbRadius * 2 + 40 // You might want to adjust this value
-        setNeedsDisplay()
-    }
-
     
     override func trackRect(forBounds bounds: CGRect) -> CGRect {
         var newRect = super.trackRect(forBounds: bounds)
@@ -888,279 +882,22 @@ class CustomSlider: UISlider {
         return newRect
     }
     
-    @objc func sliderValueDidChange() {
-        // Get the new video time
-        
-        if let vc = UIViewController.currentViewController() {
-            
-            if let update1 = vc as? ParentViewController {
-                
-                if update1.isFeed {
-                    update1.feedViewController.timeLbl.text = processTime()
-                } else {
-                    update1.stitchViewController.timeLbl.text = processTime()
-                }
-                
-            } else if let update1 = vc as? SelectedParentVC {
-                
-                if update1.isRoot {
-                    update1.selectedRootPostVC.timeLbl.text = processTime()
-                } else {
-                    update1.stitchViewController.timeLbl.text = processTime()
-                }
-             
-            }
-            
+    func startLayout() {
+            let thumb = thumbImage(radius: highlightedThumbRadius)
+            setThumbImage(thumb, for: .normal)
+            trackHeight = highlightedTrackHeight
+            hitBoxSize = highlightedThumbRadius * 2 + 40 // You might want to adjust this value
+            setNeedsDisplay()
         }
-        
-    }
 
+        func endLayout() {
+            let thumb = thumbImage(radius: thumbRadius)
+            setThumbImage(thumb, for: .normal)
+            trackHeight = 1
+            hitBoxSize = thumbRadius * 2 + 40 // You might want to adjust this value
+            setNeedsDisplay()
+        }
     
-    func processTime() -> String {
-        
-        let newVideoTime = CMTimeMakeWithSeconds(Float64(self.value), preferredTimescale: Int32(NSEC_PER_SEC))
-
-        // Calculate the minutes and seconds
-        let totalSeconds = Int(CMTimeGetSeconds(newVideoTime))
-        let seconds = totalSeconds % 60
-        let minutes = totalSeconds / 60
-
-        // Calculate total duration minutes and seconds
-        let totalDurationSeconds = Int(self.maximumValue)
-        let durationSeconds = totalDurationSeconds % 60
-        let durationMinutes = totalDurationSeconds / 60
-
-        // Print the time in the format 00:00 / 00:00
-        return String(format: "%02d:%02d / %02d:%02d", minutes, seconds, durationMinutes, durationSeconds)
-        
-    }
-    
-    func processOnSliding() {
-        
-        if let vc = UIViewController.currentViewController() {
-            
-            if let update1 = vc as? ParentViewController {
-                
-                update1.scrollView.isScrollEnabled = false
-                
-                if update1.isFeed {
-                    
-                    if update1.tabBarController?.tabBar.isTranslucent == false {
-                        update1.feedViewController.bottomConstraint.constant = 10
-                    }
-                    
-                    if update1.feedViewController.currentIndex != nil {
-                        //update1.pauseVideo(index: update1.currentIndex!)
-                        
-                        update1.feedViewController.pauseVideo(index: update1.feedViewController.currentIndex!)
-                        
-                    }
-                    
-                    update1.feedViewController.timeLbl.text = processTime()
-                    update1.feedViewController.timeLbl.isHidden = false
-                    update1.feedViewController.blurView.isHidden = false
-                    
-                } else {
-                    
-                    if update1.tabBarController?.tabBar.isTranslucent == false {
-                        update1.stitchViewController.bottomConstraint.constant = 10
-                    }
-                    
-                    if update1.stitchViewController.currentIndex != nil {
-                        //update1.pauseVideo(index: update1.currentIndex!)
-                        
-                        update1.stitchViewController.pauseVideo(index: update1.stitchViewController.currentIndex!)
-                        
-                    }
-                    
-                    update1.stitchViewController.timeLbl.text = processTime()
-                    update1.stitchViewController.timeLbl.isHidden = false
-                    update1.stitchViewController.blurView.isHidden = false
-                    
-                    
-                }
-                
-                
-                
-                
-                
-                
-                
-            }  else if let update1 = vc as? SelectedParentVC {
-                
-               
-                update1.scrollView.isScrollEnabled = false
-                
-                if update1.isRoot {
-                    
-                   
-                    if update1.selectedRootPostVC.currentIndex != nil {
-                        //update1.pauseVideo(index: update1.currentIndex!)
-                        
-                        update1.selectedRootPostVC.pauseVideo(index: update1.selectedRootPostVC.currentIndex!)
-                        
-                    }
-                    
-                    update1.selectedRootPostVC.timeLbl.text = processTime()
-                    update1.selectedRootPostVC.timeLbl.isHidden = false
-                    update1.selectedRootPostVC.blurView.isHidden = false
-                    
-                } else {
-                
-                    if update1.stitchViewController.currentIndex != nil {
-                        //update1.pauseVideo(index: update1.currentIndex!)
-                        
-                        update1.stitchViewController.pauseVideo(index: update1.stitchViewController.currentIndex!)
-                        
-                    }
-                    
-                    update1.stitchViewController.timeLbl.text = processTime()
-                    update1.stitchViewController.timeLbl.isHidden = false
-                    update1.stitchViewController.blurView.isHidden = false
-                    
-                    
-                }
-                
-            } else if let update1 = vc as? PreviewVC {
-                
-                if update1.currentIndex != nil {
-                    update1.pauseVideo(index: update1.currentIndex!)
-                }
-                
-                update1.timeLbl.text = processTime()
-                update1.timeLbl.isHidden = false
-                update1.blurView.isHidden = false
-                
-                
-            }
-            
-        }
-        
-    }
-
-    func processEndedSliding() {
-        
-        if let vc = UIViewController.currentViewController() {
-            
-            if let update1 = vc as? ParentViewController {
-                
-                update1.scrollView.isScrollEnabled = true
-                
-                if update1.isFeed {
-                    
-                    if update1.tabBarController?.tabBar.isTranslucent == false {
-                        update1.feedViewController.bottomConstraint.constant = bottomValueNoHide
-                    } else {
-                        update1.feedViewController.bottomConstraint.constant = bottomValue
-                    }
-                    
-                  
-                    if update1.feedViewController.currentIndex != nil {
-                        //newPlayingIndex
-                        
-                        let newVideoTime = CMTimeMakeWithSeconds(Float64(self.value), preferredTimescale: Int32(NSEC_PER_SEC))
-                        
-                        update1.feedViewController.seekVideo(index: update1.feedViewController.currentIndex!, time: newVideoTime)
-                        update1.feedViewController.playVideo(index: update1.feedViewController.currentIndex!)
-                        
-
-
-                    }
-                    
-                    update1.feedViewController.timeLbl.isHidden = true
-                    update1.feedViewController.blurView.isHidden = true
-                    
-                } else {
-                    
-                    if update1.tabBarController?.tabBar.isTranslucent == false {
-                        update1.stitchViewController.bottomConstraint.constant = bottomValueNoHide
-                    } else {
-                        update1.stitchViewController.bottomConstraint.constant = bottomValue
-                    }
-                    
-                  
-                    if update1.stitchViewController.currentIndex != nil {
-                        //newPlayingIndex
-                        
-                        let newVideoTime = CMTimeMakeWithSeconds(Float64(self.value), preferredTimescale: Int32(NSEC_PER_SEC))
-                        
-                        update1.stitchViewController.seekVideo(index: update1.stitchViewController.currentIndex!, time: newVideoTime)
-                        update1.stitchViewController.playVideo(index: update1.stitchViewController.currentIndex!)
-                        
-                    }
-                    
-                    update1.stitchViewController.timeLbl.isHidden = true
-                    update1.stitchViewController.blurView.isHidden = true
-                    
-                }
-                
-                
-                
-                
-                
-            } else if let update1 = vc as? SelectedParentVC {
-                
-               
-                update1.scrollView.isScrollEnabled = true
-                
-                if update1.isRoot {
-                    
-                   
-                    if update1.selectedRootPostVC.currentIndex != nil {
-                        //newPlayingIndex
-                        
-                        let newVideoTime = CMTimeMakeWithSeconds(Float64(self.value), preferredTimescale: Int32(NSEC_PER_SEC))
-                        
-                        update1.selectedRootPostVC.seekVideo(index: update1.selectedRootPostVC.currentIndex!, time: newVideoTime)
-                        update1.selectedRootPostVC.playVideo(index: update1.selectedRootPostVC.currentIndex!)
-                        
-
-
-                    }
-                    
-                    update1.selectedRootPostVC.timeLbl.isHidden = true
-                    update1.selectedRootPostVC.blurView.isHidden = true
-                    
-                } else {
-                    
-                    if update1.stitchViewController.currentIndex != nil {
-                        //newPlayingIndex
-                        
-                        let newVideoTime = CMTimeMakeWithSeconds(Float64(self.value), preferredTimescale: Int32(NSEC_PER_SEC))
-                        
-                        update1.stitchViewController.seekVideo(index: update1.stitchViewController.currentIndex!, time: newVideoTime)
-                        update1.stitchViewController.playVideo(index: update1.stitchViewController.currentIndex!)
-                        
-                    }
-                    
-                    update1.stitchViewController.timeLbl.isHidden = true
-                    update1.stitchViewController.blurView.isHidden = true
-                    
-                }
-                
-            } else if let update1 = vc as? PreviewVC {
-                
-                if update1.currentIndex != nil {
-                    //newPlayingIndex
-                    
-                    let newVideoTime = CMTimeMakeWithSeconds(Float64(self.value), preferredTimescale: Int32(NSEC_PER_SEC))
-
-                    
-                    update1.seekVideo(index: update1.currentIndex!, time: newVideoTime)
-                    update1.playVideo(index: update1.currentIndex!)
-                    
-                }
-                
-                update1.timeLbl.isHidden = true
-                update1.blurView.isHidden = true
-                
-                
-            }
-            
-        }
-        
-    }
-
 }
 
 

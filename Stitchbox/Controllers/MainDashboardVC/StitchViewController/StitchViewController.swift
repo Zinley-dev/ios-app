@@ -17,14 +17,8 @@ class StitchViewController: UIViewController, UICollectionViewDelegateFlowLayout
     
     var lastContentOffset: CGFloat = 0
     @IBOutlet weak var contentView: UIView!
-    @IBOutlet weak var bottomConstraint: NSLayoutConstraint!
     var lastContentOffsetY: CGFloat = 0
-    //let threshold: CGFloat = 100 // Adjust this value as needed.
 
-    @IBOutlet weak var timeLbl: UILabel!
-    @IBOutlet weak var blurView: UIView!
-    @IBOutlet weak var playTimeBar: CustomSlider!
-    
     
     @IBOutlet weak var selectPostCollectionView: UIView!
     @IBOutlet weak var galleryView: UIView!
@@ -375,14 +369,14 @@ extension StitchViewController: ASCollectionDataSource {
             if self.posts.isEmpty {
                 
                 self.collectionNode.view.setEmptyMessage("No stitch found!", color: .white)
-                playTimeBar.isHidden = true
+                
                 
                 return 0
                 
             } else {
                 
                 self.collectionNode.view.restore()
-                playTimeBar.isHidden = false
+               
                 
                 return self.posts.count
             }

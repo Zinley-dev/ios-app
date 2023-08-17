@@ -277,9 +277,8 @@ extension LoginActivityVC {
     }
 
     private func clearExistingPosts() {
-        let deleteIndexPaths = userLoginActivityList.enumerated().map { IndexPath(row: $0.offset, section: 0) }
         userLoginActivityList.removeAll()
-        tableNode.deleteRows(at: deleteIndexPaths, with: .automatic)
+        tableNode.reloadData()
     }
 
     private func generateIndexPaths(for items: [UserLoginActivityModel]) -> [IndexPath] {

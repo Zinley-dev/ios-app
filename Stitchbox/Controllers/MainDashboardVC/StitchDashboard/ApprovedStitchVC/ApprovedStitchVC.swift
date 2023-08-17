@@ -580,6 +580,14 @@ extension ApprovedStitchVC {
         guard newPosts.count > 0 else {
             return
         }
+        
+        if refresh_request {
+
+            refresh_request = false
+            self.waitPost.removeAll()
+            self.waitCollectionNode.reloadData()
+            
+        }
 
         // Create new PostModel objects and append them to the current posts
         var items = [PostModel]()

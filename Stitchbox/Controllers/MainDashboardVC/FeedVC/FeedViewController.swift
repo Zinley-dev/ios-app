@@ -18,12 +18,7 @@ class FeedViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
     
     @IBOutlet weak var progressBar: ProgressBar!
     @IBOutlet weak var contentView: UIView!
-    @IBOutlet weak var bottomConstraint: NSLayoutConstraint!
     var lastContentOffsetY: CGFloat = 0
-
-    @IBOutlet weak var timeLbl: UILabel!
-    @IBOutlet weak var blurView: UIView!
-    @IBOutlet weak var playTimeBar: CustomSlider!
     @IBOutlet weak var loadingImage: FLAnimatedImageView!
     @IBOutlet weak var loadingView: UIView!
     var currentIndex: Int?
@@ -223,7 +218,6 @@ extension FeedViewController {
 
             if let index = newPlayingIndex, !posts[index].muxPlaybackId.isEmpty {
                 foundVisibleVideo = true
-                playTimeBar.isHidden = false
             }
 
             if foundVisibleVideo {

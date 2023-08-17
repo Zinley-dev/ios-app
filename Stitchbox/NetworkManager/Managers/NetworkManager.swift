@@ -28,6 +28,11 @@ class RequestDelegate: NSObject, URLSessionTaskDelegate {
 
 class Manager<EndPoint: EndPointType>: RequestManager {
     
+    deinit {
+        print("Manager is being deinitialized")
+    }
+
+    
     private var task: URLSessionDataTaskProtocol?
     private let session: URLSessionProtocol
     private let requestDelegate: RequestDelegate

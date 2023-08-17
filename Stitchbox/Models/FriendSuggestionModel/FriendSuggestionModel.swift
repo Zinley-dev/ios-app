@@ -12,12 +12,12 @@ import UIKit // Required for CGFloat
 
 class FriendSuggestionModel: Mappable {
     
-    private(set) var userId: String?
-    private(set) var avatar: String?
-    private(set) var username: String?
-    private(set) var name: String?
-    private(set) var bio: String?
-    private(set) var discordLink: String?
+    private(set) var userId: String = ""
+    private(set) var avatar: String = ""
+    private(set) var username: String = ""
+    private(set) var name: String = ""
+    private(set) var bio: String = ""
+    private(set) var discordLink: String = ""
     
     required init?(map: Map) {
         //

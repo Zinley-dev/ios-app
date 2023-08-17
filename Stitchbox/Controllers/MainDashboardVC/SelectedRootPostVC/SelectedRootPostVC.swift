@@ -31,9 +31,6 @@ class SelectedRootPostVC: UIViewController, UICollectionViewDelegateFlowLayout {
     
     @IBOutlet weak var topConstraint: NSLayoutConstraint!
     @IBOutlet weak var contentView: UIView!
-    @IBOutlet weak var timeLbl: UILabel!
-    @IBOutlet weak var blurView: UIView!
-    @IBOutlet weak var playTimeBar: CustomSlider!
  
     var posts = [PostModel]()
     var collectionNode: ASCollectionNode!
@@ -204,7 +201,6 @@ extension SelectedRootPostVC {
                if !posts[newPlayingIndex!].muxPlaybackId.isEmpty {
                    
                    foundVisibleVideo = true
-                   playTimeBar.isHidden = false
                    
                } 
                

@@ -179,7 +179,6 @@ extension SuggestFollowVC: ASTableDataSource {
         //let array = inSearchMode ? searchChannelList : channels
         let user = userList[indexPath.row]
         
- 
         return {
             var node: SuggestFollowNode!
             node = SuggestFollowNode(with: user)
@@ -245,9 +244,8 @@ extension SuggestFollowVC {
     }
 
     private func clearExistingPosts() {
-        let deleteIndexPaths = userList.enumerated().map { IndexPath(row: $0.offset, section: 0) }
         userList.removeAll()
-        tableNode.deleteRows(at: deleteIndexPaths, with: .automatic)
+        tableNode.reloadData()
     }
 
     private func generateIndexPaths(for items: [FriendSuggestionModel]) -> [IndexPath] {
@@ -276,6 +274,7 @@ extension SuggestFollowVC {
                 self.insertNewRowsInTableNode(newUsers: newNotis)
             }
         }
+        
     }
 
     @objc func clearAllData() {
