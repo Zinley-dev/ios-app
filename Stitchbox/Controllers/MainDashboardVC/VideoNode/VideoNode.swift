@@ -328,27 +328,9 @@ class VideoNode: ASCellNode, ASVideoNodeDelegate {
      
 
         if let width = post.metadata?.width, let height = post.metadata?.height, width != 0, height != 0 {
-                // Calculate aspect ratio
-            let aspectRatio = Float(width) / Float(height)
-
-            if aspectRatio >= 0.5 && aspectRatio <= 0.7 { // Close to 9:16 aspect ratio (vertical)
-                cellVideoNode.contentMode = .scaleAspectFill
-                cellVideoNode.gravity = AVLayerVideoGravity.resizeAspectFill.rawValue
-            } else if aspectRatio >= 1.7 && aspectRatio <= 1.9 { // Close to 16:9 aspect ratio (landscape)
-                cellVideoNode.contentMode = .scaleAspectFit
-                cellVideoNode.gravity = AVLayerVideoGravity.resizeAspect.rawValue
-                   
-            } else {
-                // Default contentMode, adjust as needed
-                cellVideoNode.contentMode = .scaleAspectFit
-                cellVideoNode.gravity = AVLayerVideoGravity.resizeAspectFill.rawValue
-                   
-            }
+            setVideoContentModeFor(width: width, height: height)
         } else {
-                // Default contentMode, adjust as needed
-            cellVideoNode.contentMode = .scaleAspectFill
-            cellVideoNode.gravity = AVLayerVideoGravity.resizeAspectFill.rawValue
-                
+            setDefaultVideoContentMode()
         }
         
         cellVideoNode.shouldRenderProgressImages = true
@@ -364,6 +346,28 @@ class VideoNode: ASCellNode, ASVideoNodeDelegate {
             
         }
         
+    }
+    
+    func setVideoContentModeFor(width: CGFloat, height: CGFloat) {
+        let aspectRatio = Float(width) / Float(height)
+
+        switch aspectRatio {
+        case 0.5...0.7: // Close to 9:16 aspect ratio (vertical)
+            cellVideoNode.contentMode = .scaleAspectFill
+            cellVideoNode.gravity = AVLayerVideoGravity.resizeAspectFill.rawValue
+
+        case 1.7...1.9: // Close to 16:9 aspect ratio (landscape)
+            cellVideoNode.contentMode = .scaleAspectFit
+            cellVideoNode.gravity = AVLayerVideoGravity.resizeAspect.rawValue
+
+        default:
+            setDefaultVideoContentMode()
+        }
+    }
+
+    func setDefaultVideoContentMode() {
+        cellVideoNode.contentMode = .scaleAspectFill
+        cellVideoNode.gravity = AVLayerVideoGravity.resizeAspectFill.rawValue
     }
     
 
@@ -2081,41 +2085,46 @@ extension VideoNode {
         
     }
     
-    func startVideo() {
     
-        if let status = cellVideoNode.currentItem?.status {
-            
-            if status == .failed {
-                print("startVideo: failed")
-            } else if status == .readyToPlay {
-                print("startVideo: readyToPlay")
-                cellVideoNode.play()
-            } else if status == .unknown {
-                print("startVideo: unknown \(cellVideoNode.currentItem?.isPlaybackBufferFull) \(cellVideoNode.currentItem?.isPlaybackBufferEmpty) \((cellVideoNode.currentItem?.isPlaybackLikelyToKeepUp))")
-            }
-            
-            
-        } else {
-            
-            delay(1) { [weak self] in
-                if let status = self?.cellVideoNode.currentItem?.status {
-                    
-                    if status == .readyToPlay {
-                        print("startVideo: readyToPlay after 1s delay")
-                        self?.cellVideoNode.play()
-                    }
-                    
-                    
-                }
+    func startVideo() {
+        guard let status = cellVideoNode.currentItem?.status else {
+            handleUnknownStatus(delayTime: 1)
+            return
+        }
+
+        switch status {
+        case .failed:
+            print("startVideo: failed")
+        case .readyToPlay:
+            print("startVideo: readyToPlay")
+            cellVideoNode.play()
+        case .unknown:
+            handleUnknownStatus(delayTime: 1)
+        default:
+            break
+        }
+    }
+
+    func handleUnknownStatus(delayTime: Double) {
+        delay(delayTime) { [weak self] in
+            if let status = self?.cellVideoNode.currentItem?.status, status == .readyToPlay {
+                print("startVideo: readyToPlay after \(delayTime)s delay")
+                self?.cellVideoNode.play()
+            } else {
+                let time = CMTime(seconds: 0.25, preferredTimescale: 1)
+                self?.cellVideoNode.player?.seek(to: time)
             }
         }
     }
+
+    func delay(_ delay: Double, closure: @escaping () -> Void) {
+        DispatchQueue.main.asyncAfter(deadline: .now() + delay, execute: closure)
+    }
+
     
     func startVideoOnForce() {
         
         cellVideoNode.play()
-        
-        
         
     }
 

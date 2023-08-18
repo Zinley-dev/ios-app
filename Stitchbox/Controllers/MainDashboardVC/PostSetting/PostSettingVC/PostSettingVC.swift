@@ -157,7 +157,7 @@ class PostSettingVC: UIViewController{
     @IBAction func copyLinkBtnPressed(_ sender: Any) {
         
         if isSelected {
-            NotificationCenter.default.post(name: (NSNotification.Name(rawValue: "copyLink_selected")), object: nil)
+            NotificationCenter.default.post(name: (NSNotification.Name(rawValue: "copy_post_selected")), object: nil)
         } else {
            
             NotificationCenter.default.post(name: (NSNotification.Name(rawValue: "copyLink")), object: nil)
@@ -173,7 +173,7 @@ class PostSettingVC: UIViewController{
     @IBAction func sendBtnPressed(_ sender: Any) {
         
         if isSelected {
-            NotificationCenter.default.post(name: (NSNotification.Name(rawValue: "share_selected")), object: nil)
+            NotificationCenter.default.post(name: (NSNotification.Name(rawValue: "share_post_selected")), object: nil)
         } else {
            
             NotificationCenter.default.post(name: (NSNotification.Name(rawValue: "share")), object: nil)

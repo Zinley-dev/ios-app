@@ -644,14 +644,21 @@ extension ProfileViewController: UICollectionViewDelegate {
                 let currentIndex = indexPath.row
 
                 // Determine the range of posts to include before and after the selected post
-                let beforeIndex = max(currentIndex - 5, 0)
-                let afterIndex = min(currentIndex + 5, selectedPosts.count - 1)
+                
 
                 // Include up to 5 posts before and after the selected post in the sliced array
-                SPVC.posts = Array(selectedPosts[beforeIndex...afterIndex])
+                if selectedPosts.count <= 12 {
+                    SPVC.startIndex = currentIndex
+                    SPVC.posts = selectedPosts
+                } else {
+                    let beforeIndex = max(currentIndex - 5, 0)
+                    let afterIndex = min(currentIndex + 5, selectedPosts.count - 1)
+                    SPVC.startIndex = currentIndex - beforeIndex
+                    SPVC.posts = Array(selectedPosts[beforeIndex...afterIndex])
+                }
 
                 // Set the startIndex to the position of the selected post within the sliced array
-                SPVC.startIndex = currentIndex - beforeIndex
+                
                 SPVC.page = currpage
                 SPVC.selectedLoadingMode = .myPost
                 SPVC.keepLoading = true

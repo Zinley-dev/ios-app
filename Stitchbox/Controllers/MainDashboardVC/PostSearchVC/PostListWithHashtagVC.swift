@@ -334,15 +334,15 @@ extension PostListWithHashtagVC {
                 // Find the index of the selected post
                 let currentIndex = indexPath.row
                 
-                // Determine the range of posts to include before and after the selected post
-                let beforeIndex = max(currentIndex - 5, 0)
-                let afterIndex = min(currentIndex + 5, posts.count - 1)
-
-                // Include up to 5 posts before and after the selected post in the sliced array
-                selectedPostVC.posts = Array(posts[beforeIndex...afterIndex])
-                
-                // Set the startIndex to the position of the selected post within the sliced array
-                selectedPostVC.startIndex = currentIndex - beforeIndex
+                if posts.count <= 12 {
+                    selectedPostVC.startIndex = currentIndex
+                    selectedPostVC.posts = posts
+                } else {
+                    let beforeIndex = max(currentIndex - 5, 0)
+                    let afterIndex = min(currentIndex + 5, posts.count - 1)
+                    selectedPostVC.startIndex = currentIndex - beforeIndex
+                    selectedPostVC.posts = Array(posts[beforeIndex...afterIndex])
+                }
                 
                 selectedPostVC.page = page
                 selectedPostVC.selectedLoadingMode = .hashTags
