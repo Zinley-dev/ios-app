@@ -527,8 +527,7 @@ func unmuteVideoIfNeed() {
                     
                     if let cell2 = update1.feedViewController.collectionNode.nodeForItem(at: IndexPath(row: update1.feedViewController.currentIndex!, section: 0)) as? VideoNode {
                         
-                        cell2.cellVideoNode.muted = false
-                        shouldMute = false
+                        cell2.unmuteVideo()
                     }
                     
                 } else {
@@ -539,8 +538,7 @@ func unmuteVideoIfNeed() {
                     
                     if let cell2 = update1.stitchViewController.collectionNode.nodeForItem(at: IndexPath(row: update1.stitchViewController.currentIndex!, section: 0)) as? VideoNode {
                         
-                        cell2.cellVideoNode.muted = false
-                        shouldMute = false
+                        cell2.unmuteVideo()
                     }
                     
                 }
@@ -564,8 +562,7 @@ func unmuteVideoIfNeed() {
                     
                     if let cell2 = update1.selectedRootPostVC.collectionNode.nodeForItem(at: IndexPath(row: update1.selectedRootPostVC.currentIndex!, section: 0)) as? VideoNode {
                         
-                        cell2.cellVideoNode.muted = false
-                        shouldMute = false
+                        cell2.unmuteVideo()
                     }
                     
                 } else {
@@ -576,8 +573,7 @@ func unmuteVideoIfNeed() {
                     
                     if let cell2 = update1.stitchViewController.collectionNode.nodeForItem(at: IndexPath(row: update1.stitchViewController.currentIndex!, section: 0)) as? VideoNode {
                         
-                        cell2.cellVideoNode.muted = false
-                        shouldMute = false
+                        cell2.unmuteVideo()
                     }
                     
                 }
@@ -592,8 +588,7 @@ func unmuteVideoIfNeed() {
                     
                     if let cell2 = update1.collectionNode.nodeForItem(at: IndexPath(row: update1.currentIndex!, section: 0)) as? VideoNode {
                         
-                        cell2.cellVideoNode.muted = false
-                        shouldMute = false
+                        cell2.unmuteVideo()
                     }
                     
                 }
@@ -658,7 +653,7 @@ func unmuteVideoIfNeed() {
 
 
 func resetView(cell: VideoNode) {
-    /*
+    
     if cell.isViewed == true {
         
         let currentTime = NSDate().timeIntervalSince1970
@@ -673,7 +668,7 @@ func resetView(cell: VideoNode) {
         }
         
     }
-    */
+    
     
 }
 

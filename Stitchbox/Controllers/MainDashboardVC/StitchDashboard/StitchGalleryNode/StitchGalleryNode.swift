@@ -37,13 +37,14 @@ class StitchGalleryNode: ASCellNode {
         
         super.init()
     
+        
         countNode.isLayerBacked = true
         stitchSignNode.isLayerBacked = true
         videoSignNode.isLayerBacked = true
         infoNode.isLayerBacked = true
         imageNode.isLayerBacked = true
         imageNode.url = post.imageUrl
-        
+
 
       
     }
@@ -104,11 +105,7 @@ class StitchGalleryNode: ASCellNode {
         infoNode.backgroundColor = .black // set the background color to dark gray
         infoNode.maximumNumberOfLines = 1
 
-        DispatchQueue.main.async { [weak self] in
-            guard let self = self else { return }
-            //self.infoNode.view.cornerRadius = 3
-        }
-        
+      
     }
     
 

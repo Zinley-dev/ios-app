@@ -66,34 +66,24 @@ class SelectedRootPostVC: UIViewController, UICollectionViewDelegateFlowLayout {
         super.viewWillAppear(animated)
         
         if firstAnimated {
+            loadingView.backgroundColor = .white
             firstAnimated = false
-            
-            DispatchQueue.global(qos: .userInitiated).async {
+            DispatchQueue.global(qos: .background).async {
                 do {
                     if let path = Bundle.main.path(forResource: "fox2", ofType: "gif") {
                         let gifData = try Data(contentsOf: URL(fileURLWithPath: path))
                         let image = FLAnimatedImage(animatedGIFData: gifData)
-
+                        
                         DispatchQueue.main.async { [weak self] in
-                            guard let self = self else { return }
-
-                            self.loadingImage.animatedImage = image
-                            self.loadingView.backgroundColor = .white
+                            self?.loadingImage.animatedImage = image
                         }
                     }
                 } catch {
                     print(error.localizedDescription)
                 }
             }
-
-
-            
-            loadingView.backgroundColor = .white
-            navigationController?.setNavigationBarHidden(false, animated: true)
-      
-            
-            
         }
+
         
         
     }
@@ -226,26 +216,8 @@ extension SelectedRootPostVC {
                        
                    }
                    
-               } else {
-                   
-                   if let currentIndex = currentIndex {
-                       pauseVideo(index: currentIndex)
-                   }
-
-                   
-                   
-                   // Reset the current playing index.
-                   currentIndex = nil
-                   
                }
-               
 
-               
-               // If there's no current playing video and no visible video, pause the last playing video, if any.
-               if !isVideoPlaying && currentIndex != nil {
-                   pauseVideo(index: currentIndex!)
-                   currentIndex = nil
-               }
                
            }
            
@@ -262,9 +234,17 @@ extension SelectedRootPostVC {
     func collectionNode(_ collectionNode: ASCollectionNode, willBeginBatchFetchWith context: ASBatchContext) {
         retrieveNextPageWithCompletion { [weak self] (newPosts) in
             guard let self = self else { return }
-            self.insertNewRowsInCollectionNode(newPosts: newPosts)
             
-            context.completeBatchFetching(true)
+            if posts.count <= 150 {
+                
+                self.insertNewRowsInCollectionNode(newPosts: newPosts)
+                context.completeBatchFetching(true)
+                
+            } else {
+                context.completeBatchFetching(true)
+                
+            }
+            
         }
     }
     
@@ -412,8 +392,7 @@ extension SelectedRootPostVC {
                     currentIndex = startIndex
                     newPlayingIndex = startIndex
                     isVideoPlaying = true
-                    node.cellVideoNode.muted = shouldMute ?? !globalIsSound
-                    node.cellVideoNode.play()
+                    node.playVideoOnForced()
                     NotificationCenter.default.post(name: (NSNotification.Name(rawValue: "observeRootChangeForSelected")), object: nil)
                     handleAnimationTextAndImage(post: node.post)
                     
@@ -455,8 +434,7 @@ extension SelectedRootPostVC {
         
         self.applyStyle()
         
-        // Reload the data on the collection node
-        
+      
     }
     
     
@@ -488,76 +466,25 @@ extension SelectedRootPostVC {
         
         if let cell = self.collectionNode.nodeForItem(at: IndexPath(row: index, section: 0)) as? VideoNode {
             
-            cell.cellVideoNode.pause()
-            
-            let time = CMTime(seconds: 0, preferredTimescale: 1)
-            cell.cellVideoNode.player?.seek(to: time)
-           // playTimeBar.setValue(Float(0), animated: false)
+            cell.pauseVideo()
             
         }
         
     }
 
-    
-    func seekVideo(index: Int, time: CMTime) {
-        
-        if let cell = self.collectionNode.nodeForItem(at: IndexPath(row: index, section: 0)) as? VideoNode {
-            
-           
-            cell.cellVideoNode.player?.seek(to: time)
-            
-        }
-        
-    }
-    
+
     
     func playVideo(index: Int) {
         
         if let cell = self.collectionNode.nodeForItem(at: IndexPath(row: index, section: 0)) as? VideoNode {
             
-            if !cell.cellVideoNode.isPlaying() {
+            handleAnimationTextAndImage(post: cell.post)
+            mainRootId = cell.post.id
+            
+            cell.playVideo()
 
-                handleAnimationTextAndImage(post: cell.post)
-                
-                if globalSetting.ClearMode == true {
-                    
-                    cell.hideAllInfo()
-                    
-                } else {
-                    
-                    cell.showAllInfo()
-                    
-                }
-                
-                if let muteStatus = shouldMute {
-                    
-                    
-                    if muteStatus {
-                        cell.cellVideoNode.muted = true
-                    } else {
-                        cell.cellVideoNode.muted = false
-                    }
-                    
-                    cell.cellVideoNode.play()
-                    
-                } else {
-                    
-                    if globalIsSound {
-                        cell.cellVideoNode.muted = false
-                    } else {
-                        cell.cellVideoNode.muted = true
-                    }
-                    
-                    cell.cellVideoNode.play()
-                    
-                }
-                
-                mainRootId = cell.post.id
-                
-                
-                NotificationCenter.default.post(name: (NSNotification.Name(rawValue: "observeRootChangeForSelected")), object: nil)
-                
-            }
+            NotificationCenter.default.post(name: (NSNotification.Name(rawValue: "observeRootChangeForSelected")), object: nil)
+            
             
         }
         

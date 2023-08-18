@@ -97,24 +97,21 @@ class StitchDashboardVC: UIViewController {
         setupNavBar()
         showMiddleBtn(vc: self)
         
-        DispatchQueue.global(qos: .userInitiated).async { [weak self] in
-            guard let self = self else { return }
-            do {
-                if let path = Bundle.main.path(forResource: "fox2", ofType: "gif") {
-                    let gifData = try Data(contentsOf: URL(fileURLWithPath: path))
-                    let image = FLAnimatedImage(animatedGIFData: gifData)
-
-                    DispatchQueue.main.async { [weak self] in
-                        guard let self = self else { return }
-
-                        self.loadingImage.animatedImage = image
-                        self.loadingView.backgroundColor = self.view.backgroundColor
+        DispatchQueue.global(qos: .background).async {
+                do {
+                    if let path = Bundle.main.path(forResource: "fox2", ofType: "gif") {
+                        let gifData = try Data(contentsOf: URL(fileURLWithPath: path))
+                        let image = FLAnimatedImage(animatedGIFData: gifData)
+                        
+                        DispatchQueue.main.async { [weak self] in
+                            self?.loadingImage.animatedImage = image
+                            self?.loadingView.backgroundColor = self?.view.backgroundColor
+                        }
                     }
+                } catch {
+                    print(error.localizedDescription)
                 }
-            } catch {
-                print(error.localizedDescription)
             }
-        }
         
         loadingView.backgroundColor = self.view.backgroundColor
         navigationController?.setNavigationBarHidden(false, animated: true)

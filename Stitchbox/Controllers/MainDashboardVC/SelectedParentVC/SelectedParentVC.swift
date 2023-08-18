@@ -530,6 +530,7 @@ extension SelectedParentVC {
     
     @objc func removePost(_ sender: AnyObject) {
         
+        
         if isRoot {
             
             if let deletingPost = selectedRootPostVC.editeddPost {
@@ -557,20 +558,22 @@ extension SelectedParentVC {
                     // check if there are no more posts
                     if stitchViewController.posts.isEmpty {
                         stitchViewController.collectionNode.reloadData()
-                        stitchViewController.galleryCollectionNode.reloadData()
+                       
                     } else {
                         stitchViewController.collectionNode.deleteItems(at: [IndexPath(item: indexPath, section: 0)])
-                        stitchViewController.galleryCollectionNode.deleteItems(at: [IndexPath(item: indexPath, section: 0)])
+                        
                         
                     }
                 }
             }
             
         }
+         
        
     }
 
     func manageCollectionView(in controller: UIViewController, for indexPath: Int) {
+        
         if let vc = controller as? FeedViewController {
             if vc.posts.isEmpty {
                 vc.collectionNode.reloadData()
@@ -580,12 +583,13 @@ extension SelectedParentVC {
         } else if let vc = controller as? StitchViewController {
             if vc.posts.isEmpty {
                 vc.collectionNode.reloadData()
-                vc.galleryCollectionNode.reloadData()
+                
             } else {
                 vc.collectionNode.deleteItems(at: [IndexPath(item: indexPath, section: 0)])
-                vc.galleryCollectionNode.deleteItems(at: [IndexPath(item: indexPath, section: 0)])
+                
             }
         }
+        
     }
 
     func showErrorAfterDelay(message: String) {

@@ -43,21 +43,13 @@
                                         <constraint firstAttribute="width" constant="30" id="z1T-NN-ync"/>
                                     </constraints>
                                 </imageView>
-                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="fG6-0W-DBk">
-                                    <rect key="frame" x="0.0" y="0.0" width="30" height="40"/>
-                                    <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
-                                </button>
                             </subviews>
                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             <constraints>
-                                <constraint firstAttribute="trailing" secondItem="fG6-0W-DBk" secondAttribute="trailing" id="3sp-Bm-W6f"/>
                                 <constraint firstAttribute="trailing" secondItem="MFl-7s-crM" secondAttribute="trailing" id="46P-j9-fXw"/>
-                                <constraint firstItem="fG6-0W-DBk" firstAttribute="top" secondItem="LXI-sT-PEN" secondAttribute="top" id="5C2-0u-oEf"/>
                                 <constraint firstItem="MFl-7s-crM" firstAttribute="top" secondItem="LXI-sT-PEN" secondAttribute="top" id="Wcs-fb-ubO"/>
                                 <constraint firstItem="MFl-7s-crM" firstAttribute="leading" secondItem="LXI-sT-PEN" secondAttribute="leading" id="Wqf-tf-ke9"/>
                                 <constraint firstAttribute="bottom" secondItem="MFl-7s-crM" secondAttribute="bottom" id="Ydm-VD-opI"/>
-                                <constraint firstAttribute="bottom" secondItem="fG6-0W-DBk" secondAttribute="bottom" id="ZXd-mZ-eFh"/>
-                                <constraint firstItem="fG6-0W-DBk" firstAttribute="leading" secondItem="LXI-sT-PEN" secondAttribute="leading" id="hQp-6c-G5D"/>
                                 <constraint firstAttribute="width" constant="30" id="hqx-2k-7mj"/>
                                 <constraint firstAttribute="height" constant="40" id="o6W-lT-5a5"/>
                             </constraints>
@@ -106,6 +98,10 @@
                         </view>
                     </subviews>
                 </stackView>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="fG6-0W-DBk">
+                    <rect key="frame" x="126" y="220" width="30" height="75"/>
+                    <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                </button>
                 <stackView hidden="YES" opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="center" spacing="5" translatesAutoresizingMaskIntoConstraints="NO" id="EBj-vO-J4L">
                     <rect key="frame" x="126" y="220" width="30" height="75"/>
                     <subviews>
@@ -147,9 +143,13 @@
             <viewLayoutGuide key="safeArea" id="vUN-kp-3ea"/>
             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
             <constraints>
+                <constraint firstItem="fG6-0W-DBk" firstAttribute="height" secondItem="3Ez-1G-1gB" secondAttribute="height" id="14Y-1z-p9B"/>
+                <constraint firstItem="fG6-0W-DBk" firstAttribute="width" secondItem="3Ez-1G-1gB" secondAttribute="width" id="47l-Lx-lJb"/>
                 <constraint firstItem="vUN-kp-3ea" firstAttribute="bottom" secondItem="3Ez-1G-1gB" secondAttribute="bottom" constant="8" id="9vb-ft-VKt"/>
+                <constraint firstItem="3Ez-1G-1gB" firstAttribute="centerY" secondItem="fG6-0W-DBk" secondAttribute="centerY" id="cYR-AH-cfc"/>
                 <constraint firstItem="3Ez-1G-1gB" firstAttribute="centerX" secondItem="EBj-vO-J4L" secondAttribute="centerX" id="iRX-HD-EZC"/>
                 <constraint firstItem="vUN-kp-3ea" firstAttribute="trailing" secondItem="3Ez-1G-1gB" secondAttribute="trailing" constant="2" id="lSU-Oq-PNB"/>
+                <constraint firstItem="3Ez-1G-1gB" firstAttribute="centerX" secondItem="fG6-0W-DBk" secondAttribute="centerX" id="mcz-Vf-lKF"/>
                 <constraint firstItem="vUN-kp-3ea" firstAttribute="bottom" secondItem="EBj-vO-J4L" secondAttribute="bottom" constant="8" id="uTd-M8-VOk"/>
                 <constraint firstItem="vUN-kp-3ea" firstAttribute="trailing" secondItem="EBj-vO-J4L" secondAttribute="trailing" constant="2" id="uc0-UR-2el"/>
             </constraints>

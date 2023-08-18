@@ -409,61 +409,21 @@ extension PreviewVC {
         if let cell = self.collectionNode.nodeForItem(at: IndexPath(row: index, section: 0)) as? VideoNode {
          
             
-            cell.cellVideoNode.pause()
+            cell.pauseVideo()
             
         }
         
     }
-    
-    func seekVideo(index: Int, time: CMTime) {
-        
-        if let cell = self.collectionNode.nodeForItem(at: IndexPath(row: index, section: 0)) as? VideoNode {
-            
-            cell.cellVideoNode.player?.seek(to: time)
-            
-        }
-        
-    }
-    
+
     
     func playVideo(index: Int) {
         
         if let cell = self.collectionNode.nodeForItem(at: IndexPath(row: index, section: 0)) as? VideoNode {
             
-            if !cell.cellVideoNode.isPlaying() {
-                
-                
-                cell.disableTouching()
-                
-                cell.setNeedsLayout()
-                
-
-                if let muteStatus = shouldMute {
-                    
-
-                    if muteStatus {
-                        cell.cellVideoNode.muted = true
-                    } else {
-                        cell.cellVideoNode.muted = false
-                    }
-                    
-                    cell.cellVideoNode.play()
-                    
-                } else {
-                    
-                    
-                    if globalIsSound {
-                        cell.cellVideoNode.muted = false
-                    } else {
-                        cell.cellVideoNode.muted = true
-                    }
-                    
-                    cell.cellVideoNode.play()
-                    
-                }
-                
-                
-            }
+            cell.disableTouching()
+            
+            cell.setNeedsLayout()
+            cell.playVideo()
             
         }
         

@@ -153,7 +153,7 @@ extension PostSearchVC: ASCollectionDataSource {
     
     func collectionNode(_ collectionNode: ASCollectionNode, willBeginBatchFetchWith context: ASBatchContext) {
         
-        if refresh_request == false {
+        if refresh_request == false, posts.count <= 150 {
             retrieveNextPageWithCompletion { [weak self] (newPosts) in
                 guard let self = self else { return }
                 self.insertNewRowsInCollectionNode(newPosts: newPosts)

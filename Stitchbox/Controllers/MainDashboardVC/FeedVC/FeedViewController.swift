@@ -15,14 +15,15 @@ import MarqueeLabel
 
 class FeedViewController: UIViewController, UICollectionViewDelegateFlowLayout, UIAdaptivePresentationControllerDelegate {
     
+    var timer: Timer?
     
     @IBOutlet weak var progressBar: ProgressBar!
     @IBOutlet weak var contentView: UIView!
     var lastContentOffsetY: CGFloat = 0
     @IBOutlet weak var loadingImage: FLAnimatedImageView!
     @IBOutlet weak var loadingView: UIView!
-    var currentIndex: Int?
-    var newPlayingIndex: Int?
+    var currentIndex: Int? = 0
+    var newPlayingIndex: Int? = 0
     var isVideoPlaying = false
     
     var isfirstLoad = true
@@ -61,13 +62,13 @@ class FeedViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
             collectionNode.view.addSubview(pullControl)
         }
         
-        //self.navigationController?.hidesBarsOnSwipe = true
         
         NotificationCenter.default.addObserver(self, selector: #selector(FeedViewController.updateProgressBar), name: (NSNotification.Name(rawValue: "updateProgressBar2")), object: nil)
         
         
     }
     
+   
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
@@ -75,20 +76,23 @@ class FeedViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
         
         if firstAnimated {
             
-            do {
-                if let path = Bundle.main.path(forResource: "fox2", ofType: "gif") {
-                    let gifData = try Data(contentsOf: URL(fileURLWithPath: path))
-                    let image = FLAnimatedImage(animatedGIFData: gifData)
-
-                    self.loadingImage.animatedImage = image
-                    self.loadingView.backgroundColor = self.view.backgroundColor
-                    
+            DispatchQueue.global(qos: .background).async {
+                do {
+                    if let path = Bundle.main.path(forResource: "fox2", ofType: "gif") {
+                        let gifData = try Data(contentsOf: URL(fileURLWithPath: path))
+                        let image = FLAnimatedImage(animatedGIFData: gifData)
+                        
+                        DispatchQueue.main.async { [weak self] in
+                            self?.loadingImage.animatedImage = image
+                            self?.loadingView.backgroundColor = self?.view.backgroundColor
+                        }
+                    }
+                } catch {
+                    print(error.localizedDescription)
                 }
-            } catch {
-                print(error.localizedDescription)
             }
-            
         }
+
    
         
     }
@@ -189,6 +193,7 @@ extension FeedViewController {
 
  
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        
 
         if !posts.isEmpty, scrollView == collectionNode.view, !refresh_request {
 
@@ -223,6 +228,7 @@ extension FeedViewController {
             if foundVisibleVideo {
                 // Start playing the new video if it's different from the current playing video.
                 if let newPlayingIndex = newPlayingIndex, currentIndex != newPlayingIndex {
+            
                     // Pause the current video, if any.
                     if let currentIndex = currentIndex {
                         pauseVideo(index: currentIndex)
@@ -236,20 +242,8 @@ extension FeedViewController {
                         resetView(cell: node)
                     }
                 }
-            } else {
-                if let currentIndex = currentIndex {
-                    pauseVideo(index: currentIndex)
-                }
-
-                // Reset the current playing index.
-                currentIndex = nil
             }
 
-            // If there's no current playing video and no visible video, pause the last playing video, if any.
-            if !isVideoPlaying && currentIndex != nil {
-                pauseVideo(index: currentIndex!)
-                currentIndex = nil
-            }
         }
     }
 
@@ -337,7 +331,7 @@ extension FeedViewController: ASCollectionDataSource {
     
     func collectionNode(_ collectionNode: ASCollectionNode, willBeginBatchFetchWith context: ASBatchContext) {
         
-        if refresh_request == false {
+        if refresh_request == false, posts.count <= 200 {
             retrieveNextPageWithCompletion { [weak self] (newPosts) in
                 guard let self = self else { return }
                 self.insertNewRowsInCollectionNode(newPosts: newPosts)
@@ -457,7 +451,7 @@ extension FeedViewController {
         
         if firstAnimated {
                 firstAnimated = false
-                delay(0.15) { [weak self] in
+                delayItem3.perform(after: 0.15) { [weak self] in
                     UIView.animate(withDuration: 0.5) {
                         self?.loadingView.alpha = 0
                     }
@@ -471,6 +465,7 @@ extension FeedViewController {
                         }
                     }
                 }
+                
             }
 
         collectionNode.insertItems(at: indexPaths)
@@ -525,76 +520,20 @@ extension FeedViewController {
         
         if let cell = self.collectionNode.nodeForItem(at: IndexPath(row: index, section: 0)) as? VideoNode {
             
-            cell.cellVideoNode.pause()
-            
-            let time = CMTime(seconds: 0, preferredTimescale: 1)
-            cell.cellVideoNode.player?.seek(to: time)
-           // playTimeBar.setValue(Float(0), animated: false)
+            cell.pauseVideo()
             
         }
         
     }
 
-    
-    func seekVideo(index: Int, time: CMTime) {
-        
-        if let cell = self.collectionNode.nodeForItem(at: IndexPath(row: index, section: 0)) as? VideoNode {
-            
-           
-            cell.cellVideoNode.player?.seek(to: time)
-            
-        }
-        
-    }
-    
     
     func playVideo(index: Int) {
         print("VideoNode: \(posts.count)")
         if let cell = self.collectionNode.nodeForItem(at: IndexPath(row: index, section: 0)) as? VideoNode {
-            
-            if !cell.cellVideoNode.isPlaying() {
-
-                handleAnimationTextAndImage(post: cell.post)
-                
-                if globalSetting.ClearMode == true {
-                    
-                    cell.hideAllInfo()
-                    
-                } else {
-                    
-                    cell.showAllInfo()
-                    
-                }
-                
-                if let muteStatus = shouldMute {
-                    
-                    
-                    if muteStatus {
-                        cell.cellVideoNode.muted = true
-                    } else {
-                        cell.cellVideoNode.muted = false
-                    }
-                    
-                    cell.cellVideoNode.play()
-                    
-                } else {
-                    
-                    if globalIsSound {
-                        cell.cellVideoNode.muted = false
-                    } else {
-                        cell.cellVideoNode.muted = true
-                    }
-                    
-                    cell.cellVideoNode.play()
-                    
-                }
-                
-                mainRootId = cell.post.id
-                
-                
-                NotificationCenter.default.post(name: (NSNotification.Name(rawValue: "observeRootChangeForFeed")), object: nil)
-                
-            }
+            handleAnimationTextAndImage(post: cell.post)
+            cell.playVideo()
+            mainRootId = cell.post.id
+            NotificationCenter.default.post(name: (NSNotification.Name(rawValue: "observeRootChangeForFeed")), object: nil)
             
         }
         
