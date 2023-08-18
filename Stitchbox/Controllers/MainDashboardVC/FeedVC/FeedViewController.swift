@@ -73,7 +73,7 @@ class FeedViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
        
-        
+        /*
         if firstAnimated {
             
             DispatchQueue.global(qos: .background).async {
@@ -91,7 +91,7 @@ class FeedViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
                     print(error.localizedDescription)
                 }
             }
-        }
+        } */
 
    
         
@@ -448,7 +448,7 @@ extension FeedViewController {
 
         let indexPaths = (posts.count - items.count..<posts.count).map { IndexPath(row: $0, section: 0) }
         
-        
+        /*
         if firstAnimated {
                 firstAnimated = false
                 delayItem3.perform(after: 0.15) { [weak self] in
@@ -466,7 +466,7 @@ extension FeedViewController {
                     }
                 }
                 
-            }
+            } */
 
         collectionNode.insertItems(at: indexPaths)
         

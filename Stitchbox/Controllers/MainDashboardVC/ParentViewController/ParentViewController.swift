@@ -206,21 +206,14 @@ extension ParentViewController: UIScrollViewDelegate {
     
     func setupTabBar() {
         
-        setupBlackTabbar()
-        
-    }
-    
-    func setupBlackTabbar() {
-        
         if let tabbar = self.tabBarController as? DashboardTabBarController {
             
             tabbar.setupBlackTabBar()
             
         }
         
-        
-        
     }
+
     
     func setupNavBar() {
         
