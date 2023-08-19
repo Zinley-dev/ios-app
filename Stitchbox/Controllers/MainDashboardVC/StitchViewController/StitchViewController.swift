@@ -53,10 +53,6 @@ class StitchViewController: UIViewController, UICollectionViewDelegateFlowLayout
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        
-        let height =  UIScreen.main.bounds.height * 1 / 4
-        
-        
         setupCollectionNode()
         addAnimatedLabelToTop()
         collectionNode.dataSource = self
@@ -105,11 +101,13 @@ class StitchViewController: UIViewController, UICollectionViewDelegateFlowLayout
     }
     
     func applyAnimationText(text: String) {
-        if text != "" {
+        if text == "Back to original!" {
+            animatedLabel.text = text + "                                 "
+            animatedLabel.restartLabel()
+        } else if text != ""  {
             animatedLabel.text = text + "                   "
             animatedLabel.restartLabel()
         } else {
-            //animatedLabel.pauseLabel()
             animatedLabel.text = text
         }
            
@@ -256,8 +254,8 @@ extension StitchViewController {
                 }
                
             }
-        } else {
-            self.applyAnimationText(text: "")
+        } else if nextIndex == self.posts.count {
+            self.applyAnimationText(text: "Back to original!")
         }
         
         
@@ -346,7 +344,7 @@ extension StitchViewController: ASCollectionDataSource {
             
             return node
         }
-        
+         
         
     }
     
@@ -570,6 +568,36 @@ extension StitchViewController {
             let indexPath = IndexPath(item: currentIndex! + 1, section: 0)
             collectionNode.scrollToItem(at: indexPath, at: .centeredVertically, animated: true)
                 
+        } else if currentIndex! + 1 == posts.count {
+            
+            if let vc = UIViewController.currentViewController() {
+                if vc is ParentViewController {
+                    if let update1 = vc as? ParentViewController {
+                        if !update1.isFeed {
+                            // Calculate the next page index
+                           
+                            let offset = CGFloat(0) * update1.scrollView.bounds.width
+                            
+                            // Scroll to the next page
+                            update1.scrollView.setContentOffset(CGPoint(x: offset, y: 0), animated: true)
+                            update1.showFeed()
+                          
+                        }
+                    } else if let update1 = vc as? SelectedParentVC {
+                        if !update1.isRoot {
+                            // Calculate the next page index
+                           
+                            let offset = CGFloat(0) * update1.scrollView.bounds.width
+                            
+                            // Scroll to the next page
+                            update1.scrollView.setContentOffset(CGPoint(x: offset, y: 0), animated: true)
+                            update1.showRoot()
+                          
+                        }
+                    }
+                }
+            }
+            
         }
     }
     

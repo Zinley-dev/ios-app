@@ -448,25 +448,6 @@ extension FeedViewController {
 
         let indexPaths = (posts.count - items.count..<posts.count).map { IndexPath(row: $0, section: 0) }
         
-        /*
-        if firstAnimated {
-                firstAnimated = false
-                delayItem3.perform(after: 0.15) { [weak self] in
-                    UIView.animate(withDuration: 0.5) {
-                        self?.loadingView.alpha = 0
-                    }
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) { [weak self] in
-                        if self?.loadingView.alpha == 0 {
-                            self?.loadingView.isHidden = true
-                            self?.loadingImage.stopAnimating()
-                            self?.loadingImage.animatedImage = nil
-                            self?.loadingImage.image = nil
-                            self?.loadingImage.removeFromSuperview()
-                        }
-                    }
-                }
-                
-            } */
 
         collectionNode.insertItems(at: indexPaths)
         

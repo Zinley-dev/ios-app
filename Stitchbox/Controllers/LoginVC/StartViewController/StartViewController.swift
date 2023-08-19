@@ -92,9 +92,52 @@ class StartViewController: UIViewController, ControllerType, ZSWTappableLabelTap
             
         }
         
-    buildUI()
+        startLayout()
         
+        
+    } else {
+        
+        self.loadNewestCoreData { [weak self] in
+            self?.loadSettings { [weak self] in
+                
+                
+                if globalSetting == nil {
+                    
+                    self?.logout()
+                    
+                } else {
+                    
+                    if !UserDefaults.standard.bool(forKey: "hasShowCleaned") {
+                        UserDefaults.standard.set(true, forKey: "hasShowCleaned")
+                        
+                        DispatchQueue.main.async { [weak self] in
+                            if let vc = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "ShowCleanModeVC") as? ShowCleanModeVC {
+                                vc.modalPresentationStyle = .fullScreen
+                                SwiftLoader.hide()
+                                self?.present(vc, animated: true)
+                            }
+                        }
+                        
+                        
+                    } else {
+                        RedirectionHelper.redirectToDashboard()
+                    }
+                    
+                }
+                
+               
+                
+            }
+        }
     
+    }
+      
+      setupNavBar()
+  }
+    
+    func startLayout() {
+        
+        buildUI()
         
       bindingUI()
       
@@ -121,37 +164,7 @@ class StartViewController: UIViewController, ControllerType, ZSWTappableLabelTap
         
       termOfUseLbl.attributedText = try? ZSWTaggedString(string: string).attributedString(with: options)
         
-        
-        
-        
-    } else {
-        
-        self.loadNewestCoreData {
-            self.loadSettings {
-                
-                if !UserDefaults.standard.bool(forKey: "hasShowCleaned") {
-                    UserDefaults.standard.set(true, forKey: "hasShowCleaned")
-                    
-                    DispatchQueue.main.async { [weak self] in
-                        if let vc = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "ShowCleanModeVC") as? ShowCleanModeVC {
-                            vc.modalPresentationStyle = .fullScreen
-                            SwiftLoader.hide()
-                            self?.present(vc, animated: true)
-                        }
-                    }
-                    
-                    
-                } else {
-                    RedirectionHelper.redirectToDashboard()
-                }
-                
-            }
-        }
-    
     }
-      
-      setupNavBar()
-  }
     
     func loadSettings(completed: @escaping DownloadComplete) {
         
@@ -175,12 +188,18 @@ class StartViewController: UIViewController, ControllerType, ZSWTappableLabelTap
                 
             case .failure(let error):
                 print(error)
+                
+                
+                
                 completed()
                
             }
         }
         
     }
+    
+    
+    
     
     
     func loadNewestCoreData(completed: @escaping DownloadComplete) {
@@ -470,6 +489,24 @@ class StartViewController: UIViewController, ControllerType, ZSWTappableLabelTap
         
                                                                                        
         present(alert, animated: true, completion: nil)
+        
+    }
+    
+    func logout() {
+        
+        sendbirdLogout()
+        IAPManager.shared.signout()
+        removeAllUserDefaults()
+        
+        delay(1) { [weak self] in
+        guard let self = self else { return }
+            
+            SwiftLoader.hide()
+            CacheManager.shared.clearAllCache()
+            _AppCoreData.signOut()
+            self.launchingView.isHidden = true
+        }
+        
         
     }
     

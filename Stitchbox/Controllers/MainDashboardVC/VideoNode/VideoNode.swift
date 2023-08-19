@@ -20,7 +20,6 @@ class VideoNode: ASCellNode, ASVideoNodeDelegate {
         NotificationCenter.default.removeObserver(self)
         print("VideoNode is being deallocated.")
     }
-    
    
     weak var post: PostModel!
     var videoDuration: Double = 0
@@ -89,37 +88,91 @@ class VideoNode: ASCellNode, ASVideoNodeDelegate {
     
     override func didLoad() {
         super.didLoad()
-    
         
         addPinchGestureRecognizer()
         addPanGestureRecognizer()
-        setupViews()
         
-        if UIViewController.currentViewController() is ParentViewController {
-            if isOriginal {
-                // Handle count stitch if not then hide
-                addSideButtons(isOwned: true, total: post.totalStitchTo + post.totalMemberStitch)
-            } else {
-                addSideButtons(isOwned: false)
-            }
-        } else if UIViewController.currentViewController() is SelectedParentVC {
-            if isOriginal {
-                // Handle count stitch if not then hide
-                addSideButtons(isOwned: true, total: post.totalStitchTo + post.totalMemberStitch)
-            } else {
-                addSideButtons(isOwned: false)
-            }
-        }
         
         if !isPreview {
             setupTimeView()
             setupFunction()
         }
+    
+    /*
+        addPinchGestureRecognizer()
+        addPanGestureRecognizer()
+        setupViews()
+        
+        if !isPreview {
+            setupTimeView()
+            setupFunction()
+            
+            
+            if isOriginal {
+                // Handle count stitch if not then hide
+                addSideButtons(isOwned: true, total: post.totalStitchTo + post.totalMemberStitch)
+            } else {
+                addSideButtons(isOwned: false)
+            }
+            
+        }
         setupLabel()
         setupSpace(width: UIScreen.main.bounds.width)
         clearMode()
-
+        */
+        
      }
+    
+    
+    // Called when the video player's state changes
+    func videoNode(_ videoNode: ASVideoNode, willChange state: ASVideoNodePlayerState, to toState: ASVideoNodePlayerState) {
+        let currentStateDescription: String
+        let nextStateDescription: String
+
+        switch state {
+        case .loading:
+            currentStateDescription = "loading/buffering"
+        case .playing:
+            currentStateDescription = "playing"
+        case .paused:
+            currentStateDescription = "paused"
+        case .finished:
+            currentStateDescription = "finished"
+        case .unknown:
+            currentStateDescription = "unknown"
+        default:
+            currentStateDescription = "unspecified"
+        }
+
+        switch toState {
+        case .loading:
+            nextStateDescription = "loading/buffering"
+        case .playing:
+            nextStateDescription = "playing"
+        case .paused:
+            nextStateDescription = "paused"
+        case .finished:
+            nextStateDescription = "finished"
+        case .unknown:
+            nextStateDescription = "unknown"
+        default:
+            nextStateDescription = "unspecified"
+        }
+
+        print("videonode log: Video is changing from \(currentStateDescription) to \(nextStateDescription)")
+
+        if let playerItem = videoNode.player?.currentItem, playerItem.isPlaybackBufferEmpty {
+            print("videonode log: Playback buffer is empty")
+        } else {
+            print("videonode log: Playback buffer is not empty")
+        }
+    }
+
+
+    // Called when there's an error loading a certain key for the video asset
+    func videoNode(_ videoNode: ASVideoNode, didFailToLoadValueForKey key: String, error: Error) {
+        print("videonode log: Failed to load value for key: \(key). Error: \(error.localizedDescription)")
+    }
     
     
     override func layout() {
@@ -134,11 +187,16 @@ class VideoNode: ASCellNode, ASVideoNodeDelegate {
     
     func clearMode() {
         
-        if globalSetting.ClearMode == true {
+        if globalSetting != nil {
             
-            hideAllInfo()
+            if globalSetting.ClearMode == true {
+                
+                hideAllInfo()
+                
+            }
             
         }
+        
         
     }
     
@@ -178,7 +236,7 @@ class VideoNode: ASCellNode, ASVideoNodeDelegate {
     }
 
     private func setupSideButtonsView() {
-        sideButtonsView = ButtonSideList()
+        let sideButtonsView = ButtonSideList()
         sideButtonsView.backgroundColor = .clear
         sideButtonsView.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(sideButtonsView)
@@ -218,84 +276,8 @@ class VideoNode: ASCellNode, ASVideoNodeDelegate {
         
         let backToOriginal = UITapGestureRecognizer(target: self, action: #selector(VideoNode.backToOriginal))
         sideButtonsView.backToOriginalBtn.addGestureRecognizer(backToOriginal)
-       
         
-        
-        if let vc = UIViewController.currentViewController() as? ParentViewController {
-                     
-            var index = 0
-            
-            if vc.feedViewController.currentIndex != nil {
-                index = vc.feedViewController.currentIndex!
-            }
-            
-            if !vc.feedViewController.posts.isEmpty {
-                
-                let feedPost = vc.feedViewController.posts[index]
-                
-                
-                if let stitchto = feedPost.stitchTo, !stitchto.isEmpty {
-                    
-                    if stitchto[0].rootId == post.id {
-                        
-                        sideButtonsView.statusImg.image = UIImage(named: "star white")
-                        
-                    } else {
-                        
-                        sideButtonsView.statusImg.image = UIImage(named: "partner white")
-                        
-                    }
-                    
-                } else {
-                    
-                    sideButtonsView.statusImg.image = UIImage(named: "partner white")
-                    
-                }
-                
-            } else {
-                sideButtonsView.statusImg.image = UIImage(named: "partner white")
-            }
-        
-            
-
-        } else if let vc = UIViewController.currentViewController() as? SelectedParentVC {
-            
-            var index = 0
-            
-            if vc.selectedRootPostVC.currentIndex != nil {
-                index = vc.selectedRootPostVC.currentIndex!
-            }
-            
-            if !vc.selectedRootPostVC.posts.isEmpty {
-                
-                let feedPost = vc.selectedRootPostVC.posts[index]
-                
-                
-                if let stitchto = feedPost.stitchTo, !stitchto.isEmpty {
-                    
-                    if stitchto[0].rootId == post.id {
-                        
-                        sideButtonsView.statusImg.image = UIImage(named: "star white")
-                        
-                    } else {
-                        
-                        sideButtonsView.statusImg.image = UIImage(named: "partner white")
-                        
-                    }
-                    
-                } else {
-                    
-                    sideButtonsView.statusImg.image = UIImage(named: "partner white")
-                    
-                }
-                
-            } else {
-                sideButtonsView.statusImg.image = UIImage(named: "partner white")
-            }
-        
-            
-
-        }
+        sideButtonsView.statusImg.image = UIImage(named: "partner white")
         
     }
 
@@ -318,7 +300,8 @@ class VideoNode: ASCellNode, ASVideoNodeDelegate {
     private func configureVideoNode(with post: PostModel) {
         
         cellVideoNode.url = getThumbnailURL(post: post)
-        cellVideoNode.player?.automaticallyWaitsToMinimizeStalling = true
+        
+        
         cellVideoNode.shouldAutoplay = false
         cellVideoNode.shouldAutorepeat = true
         
@@ -333,42 +316,40 @@ class VideoNode: ASCellNode, ASVideoNodeDelegate {
             setDefaultVideoContentMode()
         }
         
-        cellVideoNode.shouldRenderProgressImages = true
-        cellVideoNode.shouldAggressivelyRecoverFromStall = true
-    
         DispatchQueue.main.async() {
             
             self.cellVideoNode.asset = AVAsset(url: self.getVideoURL(post: post)!)
+            self.cellVideoNode.player?.automaticallyWaitsToMinimizeStalling = false
             
             if self.isFirstItem == true {
                 self.playVideo()
             }
-            
+             
         }
         
     }
     
     func setVideoContentModeFor(width: CGFloat, height: CGFloat) {
-        let aspectRatio = Float(width) / Float(height)
+        
+        // Calculate the aspect ratio with a higher precision
+        let aspectRatio = width / height
 
-        switch aspectRatio {
-        case 0.5...0.7: // Close to 9:16 aspect ratio (vertical)
+        // Check for exact 9:16 aspect ratio
+        if abs(aspectRatio - (9.0/16.0)) < 0.01 {
+            // The threshold (0.01) is to allow a tiny margin of error due to floating point precision.
             cellVideoNode.contentMode = .scaleAspectFill
             cellVideoNode.gravity = AVLayerVideoGravity.resizeAspectFill.rawValue
-
-        case 1.7...1.9: // Close to 16:9 aspect ratio (landscape)
-            cellVideoNode.contentMode = .scaleAspectFit
-            cellVideoNode.gravity = AVLayerVideoGravity.resizeAspect.rawValue
-
-        default:
+        } else {
             setDefaultVideoContentMode()
         }
+        
     }
 
     func setDefaultVideoContentMode() {
-        cellVideoNode.contentMode = .scaleAspectFill
-        cellVideoNode.gravity = AVLayerVideoGravity.resizeAspectFill.rawValue
+        cellVideoNode.contentMode = .scaleAspectFit
+        cellVideoNode.gravity = AVLayerVideoGravity.resizeAspect.rawValue
     }
+
     
 
     private func addPinchGestureRecognizer() {
@@ -399,7 +380,7 @@ class VideoNode: ASCellNode, ASVideoNodeDelegate {
     func getVideoURL(post: PostModel) -> URL? {
         if post.muxPlaybackId != "" {
             
-            let urlString = "https://stream.mux.com/\(post.muxPlaybackId).m3u8?max_resolution=1080p&redundant_streams=true"
+            let urlString = "https://stream.mux.com/\(post.muxPlaybackId).m3u8?redundant_streams=true"
             return URL(string: urlString)
             
         } else {
@@ -499,7 +480,7 @@ extension VideoNode {
 
     func videoNode(_ videoNode: ASVideoNode, didPlayToTimeInterval timeInterval: TimeInterval) {
     
-        if didSlideEnd, !isPreview, blurView != nil, playable {
+        if didSlideEnd, !isPreview, blurView != nil, videoNode.currentItem != nil {
             
             if videoDuration == 0 {
                 videoDuration = videoNode.currentItem?.duration.seconds ?? 0
@@ -1961,184 +1942,44 @@ extension VideoNode {
 extension VideoNode {
     
     func playVideo() {
-
-        if !cellVideoNode.isPlaying() {
-            
-            // Mute the video based on conditions
-            if let muteStatus = shouldMute {
-                cellVideoNode.muted = muteStatus
-            } else {
-                cellVideoNode.muted = !globalIsSound
-            }
-
-          
-            // Play the video if it's playable
-            guard !playable else {
-                print("Asset played with playable cached")
-                self.startVideo()
-                return
-            }
-
-            // If not playable, attempt to load asset and play
-            guard let asset = cellVideoNode.asset else {
-                self.playable = false
-                print("Asset is not playable: because asset is nil")
-                return
-            }
-
-            asset.loadValuesAsynchronously(forKeys: ["playable"]) { [weak self] in
-                var error: NSError? = nil
-                let status = asset.statusOfValue(forKey: "playable", error: &error)
-                
-                DispatchQueue.main.async { [weak self] in
-                    switch status {
-                    case .loaded:
-                        if asset.isPlayable {
-                            print("Asset is ready to play")
-                            self?.playable = true
-                            self?.startVideo()
-                            return
-                        }
-                        print("Asset is not playable")
-                        
-                    case .failed:
-                        print("Asset loading failed with error: \(error?.localizedDescription ?? "unknown reason")")
-                        self?.resetAsset()
-                        
-                    case .cancelled:
-                        print("Asset loading was cancelled")
-                        
-                    default:
-                        print("Other issues with asset loading")
-                        self?.resetAsset()
-                    }
-
-                    self?.playable = false
-                }
-            }
-            
-        }
-        
-        
-    }
-    
-    func playVideoOnForced() {
-        
-        if !cellVideoNode.isPlaying() {
-            
-            // Mute the video based on conditions
-            if let muteStatus = shouldMute {
-                cellVideoNode.muted = muteStatus
-            } else {
-                cellVideoNode.muted = !globalIsSound
-            }
-
-          
-            // Play the video if it's playable
-            guard !playable else {
-                print("Asset played with playable cached")
-                self.startVideoOnForce()
-                return
-            }
-
-            // If not playable, attempt to load asset and play
-            guard let asset = cellVideoNode.asset else {
-                self.playable = false
-                print("Asset is not playable: because asset is nil")
-                return
-            }
-
-            asset.loadValuesAsynchronously(forKeys: ["playable"]) { [weak self] in
-                var error: NSError? = nil
-                let status = asset.statusOfValue(forKey: "playable", error: &error)
-                
-                DispatchQueue.main.async { [weak self] in
-                    switch status {
-                    case .loaded:
-                        if asset.isPlayable {
-                            print("Asset is ready to play")
-                            self?.playable = true
-                            self?.startVideoOnForce()
-                            return
-                        }
-                        print("Asset is not playable")
-                        
-                    case .failed:
-                        print("Asset loading failed with error: \(error?.localizedDescription ?? "unknown reason")")
-                        self?.resetAsset()
-                        
-                    case .cancelled:
-                        print("Asset loading was cancelled")
-                        
-                    default:
-                        print("Other issues with asset loading")
-                        self?.resetAsset()
-                    }
-
-                    self?.playable = false
-                }
-            }
-            
-            
-        }
-        
-        
-    }
-    
-    
-    func startVideo() {
-        guard let status = cellVideoNode.currentItem?.status else {
-            handleUnknownStatus(delayTime: 1)
+        // Check if video is already playing
+        if cellVideoNode.isPlaying() {
             return
         }
 
-        switch status {
-        case .failed:
-            print("startVideo: failed")
-        case .readyToPlay:
-            print("startVideo: readyToPlay")
-            cellVideoNode.play()
-        case .unknown:
-            handleUnknownStatus(delayTime: 1)
-        default:
-            break
+        // Determine if the video should be muted
+        if let muteStatus = shouldMute {
+            cellVideoNode.muted = muteStatus
+        } else {
+            cellVideoNode.muted = !globalIsSound
         }
+
+        // If the current item is unavailable, handle the unknown status
+        guard let _ = cellVideoNode.currentItem else {
+            handleUnknownStatus(delayTime: 1.25)
+            return
+        }
+
+        startPlayback()
+    }
+
+    func startPlayback() {
+        cellVideoNode.player?.automaticallyWaitsToMinimizeStalling = false
+        cellVideoNode.currentItem?.preferredForwardBufferDuration = 10.0
+        cellVideoNode.play()
     }
 
     func handleUnknownStatus(delayTime: Double) {
-        delay(delayTime) { [weak self] in
-            if let status = self?.cellVideoNode.currentItem?.status, status == .readyToPlay {
-                print("startVideo: readyToPlay after \(delayTime)s delay")
-                self?.cellVideoNode.play()
-            } else {
-                let time = CMTime(seconds: 0.25, preferredTimescale: 1)
-                self?.cellVideoNode.player?.seek(to: time)
+        DispatchQueue.main.asyncAfter(deadline: .now() + delayTime) { [weak self] in
+            guard let self = self else { return }
+
+            if let status = self.cellVideoNode.currentItem?.status, status == .readyToPlay {
+                self.startPlayback()
             }
         }
     }
 
-    func delay(_ delay: Double, closure: @escaping () -> Void) {
-        DispatchQueue.main.asyncAfter(deadline: .now() + delay, execute: closure)
-    }
 
-    
-    func startVideoOnForce() {
-        
-        cellVideoNode.play()
-        
-    }
-
-   
-    func resetAsset() {
-        
-        
-        DispatchQueue.main.async { [weak self] in
-            self?.cellVideoNode.asset = nil
-            self?.cellVideoNode.asset = AVAsset(url: (self?.getVideoURL(post: (self?.post)!)!)!)
-            self?.playVideo()
-        }
-       
-    }
 
     func pauseVideo() {
         

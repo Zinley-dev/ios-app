@@ -392,7 +392,7 @@ extension SelectedRootPostVC {
                     currentIndex = startIndex
                     newPlayingIndex = startIndex
                     isVideoPlaying = true
-                    node.playVideoOnForced()
+                    node.playVideo()
                     NotificationCenter.default.post(name: (NSNotification.Name(rawValue: "observeRootChangeForSelected")), object: nil)
                     handleAnimationTextAndImage(post: node.post)
                     
