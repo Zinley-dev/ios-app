@@ -2126,3 +2126,42 @@ extension UserContactApi: EndPointType {
   }
   
 }
+
+public enum CategoryApi {
+  case getAll(page: Int)
+}
+extension CategoryApi: EndPointType {
+  var path: String {
+    switch self {
+      case .getAll(let page):
+        return "/?page=\(page)"
+    }
+  }
+  
+  var module: String {
+    return "/category"
+  }
+  
+  var httpMethod: HTTPMethod {
+    switch self {
+      case .getAll:
+        return .get
+    }
+  }
+  
+  var task: HTTPTask {
+    switch self {
+      case .getAll:
+        return .request
+    }
+  }
+  
+  var headers: [String : String]? {
+    var secondsFromGMT: Int { return TimeZone.current.secondsFromGMT() }
+    
+    return ["Authorization": _AppCoreData.userSession.value?.accessToken ?? "",
+            "X-User-Token": _AppCoreData.userSession.value?.accessToken ?? "",
+            "X-Client-Timezone": "\(secondsFromGMT)"]
+  }
+  
+}

@@ -59,7 +59,8 @@ struct APIManager {
     let openLinkManager = Manager<OpenLinkLogApi>()
     let postStitchManager = Manager<PostStitchApi>()
     let shareManager = Manager<ShareApi>()
-  let userContactManager = Manager<UserContactApi>()
+    let userContactManager = Manager<UserContactApi>()
+    let categoryManager = Manager<CategoryApi>()
     
     func normalLogin(username: String, password: String, completion: @escaping APICompletion) {
         let params = ["username": username,"password": password]
@@ -1098,6 +1099,11 @@ extension APIManager {
   }
   func getModeration(page: Int, completion: @escaping APICompletion) {
     postManager.request(.moderation(page: page)) { resut in
+      completion(resut)
+    }
+  }
+  func getCategory(page: Int, completion: @escaping APICompletion) {
+    categoryManager.request(.getAll(page: page)) { resut in
       completion(resut)
     }
   }
