@@ -394,6 +394,7 @@ public enum UserAPI {
     case updateGameChallengeCard(params: [String: Any])
     case updateFavoriteContent(params: [String: Any] )
     case deleteGameChallengeCard(params: [String: Any])
+    case addInterestCategory(params: [String: Any])
     
     
 }
@@ -458,7 +459,8 @@ extension UserAPI: EndPointType {
             return "/challenge-card"
           case .deleteGameChallengeCard:
             return "/challenge-card"
-            
+          case .addInterestCategory:
+            return "/category"
         }
     }
     
@@ -518,6 +520,8 @@ extension UserAPI: EndPointType {
             return .put
           case .deleteGameChallengeCard:
             return .delete
+          case .addInterestCategory:
+            return .post
          
         }
     }
@@ -577,6 +581,8 @@ extension UserAPI: EndPointType {
           case .updateGameChallengeCard(let params):
             return .requestParameters(parameters: params)
           case .deleteGameChallengeCard(let params):
+            return .requestParameters(parameters: params)
+          case .addInterestCategory(let params):
             return .requestParameters(parameters: params)
         }
     }
@@ -2128,13 +2134,13 @@ extension UserContactApi: EndPointType {
 }
 
 public enum CategoryApi {
-  case getAll(page: Int)
+  case getAll(page: Int, limit: Int)
 }
 extension CategoryApi: EndPointType {
   var path: String {
     switch self {
-      case .getAll(let page):
-        return "/?page=\(page)"
+      case .getAll(let page, let limit):
+        return "/?page=\(page)&limit=\(limit)"
     }
   }
   

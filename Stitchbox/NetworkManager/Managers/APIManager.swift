@@ -1102,8 +1102,14 @@ extension APIManager {
       completion(resut)
     }
   }
-  func getCategory(page: Int, completion: @escaping APICompletion) {
-    categoryManager.request(.getAll(page: page)) { resut in
+  func getCategory(page: Int, limit: Int, completion: @escaping APICompletion) {
+    categoryManager.request(.getAll(page: page, limit: limit)) { resut in
+      completion(resut)
+    }
+  }
+  func setCategory(cateIds: [String], completion: @escaping APICompletion) {
+    let params = ["cateId": cateIds]
+    userManager.request(.addInterestCategory(params: params)) { resut in
       completion(resut)
     }
   }
