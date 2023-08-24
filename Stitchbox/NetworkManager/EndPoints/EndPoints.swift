@@ -394,6 +394,7 @@ public enum UserAPI {
     case updateGameChallengeCard(params: [String: Any])
     case updateFavoriteContent(params: [String: Any] )
     case deleteGameChallengeCard(params: [String: Any])
+    case addInterestCategory(params: [String: Any])
     
     
 }
@@ -458,7 +459,8 @@ extension UserAPI: EndPointType {
             return "/challenge-card"
           case .deleteGameChallengeCard:
             return "/challenge-card"
-            
+          case .addInterestCategory:
+            return "/category"
         }
     }
     
@@ -518,6 +520,8 @@ extension UserAPI: EndPointType {
             return .put
           case .deleteGameChallengeCard:
             return .delete
+          case .addInterestCategory:
+            return .post
          
         }
     }
@@ -577,6 +581,8 @@ extension UserAPI: EndPointType {
           case .updateGameChallengeCard(let params):
             return .requestParameters(parameters: params)
           case .deleteGameChallengeCard(let params):
+            return .requestParameters(parameters: params)
+          case .addInterestCategory(let params):
             return .requestParameters(parameters: params)
         }
     }
@@ -638,7 +644,7 @@ public enum PostAPI {
     case deleteMyPost(pid: String)
     case stats(pid: String)
     case reaction(pid: String)
-    case moderation
+    case moderation(page: Int)
 }
 extension PostAPI: EndPointType {
     var module: String {
@@ -681,8 +687,8 @@ extension PostAPI: EndPointType {
             return "/stats/\(pid)"
           case .reaction(let pid):
             return "/reaction/\(pid)"
-          case .moderation:
-            return "/moderation"
+          case .moderation(let page):
+            return "/moderation?page=\(page)"
         }
     }
     
@@ -2114,6 +2120,45 @@ extension UserContactApi: EndPointType {
         return .requestParameters(parameters: body)
       case .createBulk(let body):
         return .requestParameters(parameters: body)
+    }
+  }
+  
+  var headers: [String : String]? {
+    var secondsFromGMT: Int { return TimeZone.current.secondsFromGMT() }
+    
+    return ["Authorization": _AppCoreData.userSession.value?.accessToken ?? "",
+            "X-User-Token": _AppCoreData.userSession.value?.accessToken ?? "",
+            "X-Client-Timezone": "\(secondsFromGMT)"]
+  }
+  
+}
+
+public enum CategoryApi {
+  case getAll(page: Int, limit: Int)
+}
+extension CategoryApi: EndPointType {
+  var path: String {
+    switch self {
+      case .getAll(let page, let limit):
+        return "/?page=\(page)&limit=\(limit)"
+    }
+  }
+  
+  var module: String {
+    return "/category"
+  }
+  
+  var httpMethod: HTTPMethod {
+    switch self {
+      case .getAll:
+        return .get
+    }
+  }
+  
+  var task: HTTPTask {
+    switch self {
+      case .getAll:
+        return .request
     }
   }
   
