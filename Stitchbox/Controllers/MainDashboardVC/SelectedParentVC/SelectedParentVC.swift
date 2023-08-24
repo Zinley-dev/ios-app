@@ -36,7 +36,7 @@ class SelectedParentVC: UIViewController, UIScrollViewDelegate {
     let homeButton: UIButton = UIButton(type: .custom)
     let notiButton = UIButton(type: .custom)
     let searchButton = UIButton(type: .custom)
-    
+    var currentPageIndex: Int = 0
     var hasViewAppeared = false
     var selectedRootPostVC: SelectedRootPostVC!
     var stitchViewController: StitchViewController!
@@ -384,24 +384,26 @@ extension SelectedParentVC {
 
 extension SelectedParentVC {
 
-    
     func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
-        let pageIndex = scrollView.contentOffset.x / view.frame.width
+        let newPageIndex = Int(scrollView.contentOffset.x / view.frame.width)
         
-        switch pageIndex {
+        guard newPageIndex != currentPageIndex else {
+            return
+        }
+
+        switch newPageIndex {
         case 0:
-            print("FeedViewController is fully shown")
+            print("selectedRootPostVC is fully shown")
             showRoot()
-            
-            
+                
         case 1:
             showStitch()
-            
-            
-            
+                
         default:
             print("Unknown page")
         }
+        
+        currentPageIndex = newPageIndex
     }
     
     func showRoot() {
@@ -467,7 +469,7 @@ extension SelectedParentVC {
             stitchViewController.rootId = rootId
             count += 1
             
-            delayItem.perform(after: 1.25) { [weak self] in
+            delayItem.perform(after: 1) { [weak self] in
                 guard let self = self else { return }
                 print("Loading stitches: \(self.count) - \(self.stitchViewController.rootId)")
                 self.stitchViewController.clearAllData()

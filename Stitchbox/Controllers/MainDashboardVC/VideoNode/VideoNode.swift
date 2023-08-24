@@ -13,7 +13,6 @@ import AVFoundation
 import AVKit
 import ActiveLabel
 
-
 class VideoNode: ASCellNode, ASVideoNodeDelegate {
 
     deinit {
@@ -319,7 +318,6 @@ class VideoNode: ASCellNode, ASVideoNodeDelegate {
         DispatchQueue.main.async() {
             
             self.cellVideoNode.asset = AVAsset(url: self.getVideoURL(post: post)!)
-            self.cellVideoNode.player?.automaticallyWaitsToMinimizeStalling = false
             
             if self.isFirstItem == true {
                 self.playVideo()
@@ -1940,7 +1938,7 @@ extension VideoNode {
 
 
 extension VideoNode {
-    
+
     func playVideo() {
         // Check if video is already playing
         if cellVideoNode.isPlaying() {
@@ -1954,34 +1952,79 @@ extension VideoNode {
             cellVideoNode.muted = !globalIsSound
         }
 
-        // If the current item is unavailable, handle the unknown status
-        guard let _ = cellVideoNode.currentItem else {
+        // Handle the video status
+        handleVideoStatus()
+    }
+
+    func handleVideoStatus() {
+        guard let status = cellVideoNode.currentItem?.status else {
             handleUnknownStatus(delayTime: 1.25)
             return
         }
+        
+        // Set player settings
+        cellVideoNode.player?.automaticallyWaitsToMinimizeStalling = false
+        cellVideoNode.currentItem?.preferredForwardBufferDuration = 60
+        
+        switch status {
+        case .readyToPlay:
+            startPlayback()
+        case .failed:
+            printStatusDetails(withPrefix: "FAILED TO play failed")
+        case .unknown:
+            printStatusDetails(withPrefix: "FAILED TO play unknown")
+        @unknown default:
+            printStatusDetails(withPrefix: "FAILED TO play default")
+        }
+    }
 
-        startPlayback()
+    func printStatusDetails(withPrefix prefix: String) {
+        let bufferFull = cellVideoNode.currentItem?.isPlaybackBufferFull ?? false
+        let bufferEmpty = cellVideoNode.currentItem?.isPlaybackBufferEmpty ?? false
+        let likelyToKeepUp = cellVideoNode.currentItem?.isPlaybackLikelyToKeepUp ?? false
+        let error = cellVideoNode.currentItem?.error?.localizedDescription ?? "Unknown error"
+        
+        print("\(prefix): \(bufferFull) - \(bufferEmpty) - \(likelyToKeepUp) - \(error)")
+        
+        if bufferEmpty == true, likelyToKeepUp == false {
+            cellVideoNode.currentItem?.preferredForwardBufferDuration = 120
+        } else if cellVideoNode.currentItem?.isPlaybackBufferFull == true {
+            startPlayback()
+        }
     }
 
     func startPlayback() {
-        cellVideoNode.player?.automaticallyWaitsToMinimizeStalling = false
-        cellVideoNode.currentItem?.preferredForwardBufferDuration = 10.0
         cellVideoNode.play()
     }
 
     func handleUnknownStatus(delayTime: Double) {
         DispatchQueue.main.asyncAfter(deadline: .now() + delayTime) { [weak self] in
-            guard let self = self else { return }
-
-            if let status = self.cellVideoNode.currentItem?.status, status == .readyToPlay {
-                self.startPlayback()
-            }
+            self?.handleVideoStatus()
         }
     }
 
+    
+    func resetAssets() {
+        
+        if !cellVideoNode.isPlaying() {
+            
+            DispatchQueue.main.async() {
+                
+                self.cellVideoNode.asset = nil
+                self.cellVideoNode.asset = AVAsset(url: self.getVideoURL(post: self.post)!)
+              
+
+                self.playVideo()
+                 
+            }
+            
+        }
+        
+    }
 
 
     func pauseVideo() {
+        
         
         cellVideoNode.pause()
         print("Asset paused and reseted")
