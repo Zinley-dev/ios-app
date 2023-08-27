@@ -2134,13 +2134,13 @@ extension UserContactApi: EndPointType {
 }
 
 public enum CategoryApi {
-  case getAll(page: Int, limit: Int)
+  case getAll
 }
 extension CategoryApi: EndPointType {
   var path: String {
     switch self {
-      case .getAll(let page, let limit):
-        return "/?page=\(page)&limit=\(limit)"
+      case .getAll:
+        return "/"
     }
   }
   

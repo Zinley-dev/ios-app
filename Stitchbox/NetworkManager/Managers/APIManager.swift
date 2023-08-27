@@ -954,8 +954,8 @@ extension APIManager {
       completion(resut)
     }
   }
-  func getCategory(page: Int, limit: Int, completion: @escaping APICompletion) {
-    categoryManager.request(.getAll(page: page, limit: limit)) { resut in
+  func getCategory(completion: @escaping APICompletion) {
+    categoryManager.request(.getAll) { resut in
       completion(resut)
     }
   }
