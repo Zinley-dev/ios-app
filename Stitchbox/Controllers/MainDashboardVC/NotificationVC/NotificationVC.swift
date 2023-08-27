@@ -16,18 +16,16 @@ class NotificationVC: UIViewController {
     }
     
     let backButton: UIButton = UIButton(type: .custom)
+    
     @IBOutlet weak var contentView: UIView!
 
- 
-    
     var page = 1
     var refresh_request = false
     private var pullControl = UIRefreshControl()
     var tableNode: ASTableNode!
     var UserNotificationList = [UserNotificationModel]()
     var firstAnimated = true
-    
-    
+
     
     required init?(coder aDecoder: NSCoder) {
         
@@ -50,8 +48,6 @@ class NotificationVC: UIViewController {
         self.tableNode.view.leadingAnchor.constraint(equalTo: self.contentView.leadingAnchor, constant: 0).isActive = true
         self.tableNode.view.trailingAnchor.constraint(equalTo: self.contentView.trailingAnchor, constant: 0).isActive = true
         self.tableNode.view.bottomAnchor.constraint(equalTo: self.contentView.bottomAnchor, constant: 0).isActive = true
-        
-        
         
         self.applyStyle()
         self.tableNode.leadingScreensForBatching = 5

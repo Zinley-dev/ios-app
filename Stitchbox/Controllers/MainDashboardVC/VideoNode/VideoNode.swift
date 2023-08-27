@@ -984,9 +984,6 @@ extension VideoNode: UIGestureRecognizerDelegate {
         let nav = UINavigationController(rootViewController: PLHVC)
         PLHVC.searchHashtag = selectedHashtag
         PLHVC.onPresent = true
-        nav.navigationBar.barTintColor = .background
-        nav.navigationBar.tintColor = .white
-        nav.navigationBar.titleTextAttributes = [.foregroundColor: UIColor.white]
         nav.modalPresentationStyle = .fullScreen
         vc.present(nav, animated: true, completion: nil)
     }
@@ -1093,9 +1090,6 @@ extension VideoNode: UIGestureRecognizerDelegate {
         let nav = UINavigationController(rootViewController: UPVC)
         UPVC.userId = id
         UPVC.onPresent = true
-        nav.navigationBar.barTintColor = .background
-        nav.navigationBar.tintColor = .white
-        nav.navigationBar.titleTextAttributes = [.foregroundColor: UIColor.white]
         nav.modalPresentationStyle = .fullScreen
         vc.present(nav, animated: true, completion: nil)
     }
@@ -1198,9 +1192,6 @@ extension VideoNode {
     }
 
     private func configureNavigationController(_ navigationController: UINavigationController) {
-        navigationController.navigationBar.barTintColor = .background
-        navigationController.navigationBar.tintColor = .white
-        navigationController.navigationBar.titleTextAttributes = [.foregroundColor: UIColor.white]
         navigationController.modalPresentationStyle = .fullScreen
     }
 

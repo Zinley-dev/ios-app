@@ -237,7 +237,7 @@ extension ResolutionVC {
     
     func retrieveNextPageWithCompletion(block: @escaping ([[String: Any]]) -> Void) {
         
-        APIManager.shared.getModeration { [weak self] result in
+        APIManager.shared.getModeration(page: 1) { [weak self] result in
             guard let self = self else { return }
             
             switch result {

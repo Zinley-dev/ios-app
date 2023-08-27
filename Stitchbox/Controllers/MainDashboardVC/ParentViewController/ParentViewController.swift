@@ -54,7 +54,6 @@ class ParentViewController: UIViewController {
         }
         
         
-        
         loadNewestCoreData { [weak self] in
             guard let self = self else { return }
             self.loadSettings {
@@ -66,8 +65,7 @@ class ParentViewController: UIViewController {
             requestTrackingAuthorization(userId: _AppCoreData.userDataSource.value?.userID ?? "")
         }
      
-       
-        
+        setupCategoryIfNeed()
         firstLoadDone = true
         
     }
@@ -111,6 +109,32 @@ class ParentViewController: UIViewController {
             if stitchViewController.currentIndex != nil {
                 stitchViewController.pauseVideo(index: stitchViewController.currentIndex!)
             }
+        }
+        
+        
+    }
+    
+    func setupCategoryIfNeed() {
+        
+        if !UserDefaults.standard.bool(forKey: "setupCategory") {
+            //UserDefaults.standard.set(true, forKey: "setupCategory")
+            
+            guard let CVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "CategoryVC") as? CategoryVC
+                 else { return }
+            
+            NotificationCenter.default.addObserver(self, selector: #selector(ParentViewController.reloadFeedAfterSetCategory), name: (NSNotification.Name(rawValue: "reloadFeedAfterSetCategory")), object: nil)
+            
+            
+            let nav = UINavigationController(rootViewController: CVC)
+            nav.modalPresentationStyle = .fullScreen
+            self.present(nav, animated: true, completion: nil)
+            
+            
+        } else {
+            
+            feedViewController.readyToLoad = true
+            feedViewController.collectionNode.reloadData()
+            
         }
         
         
@@ -725,6 +749,15 @@ extension ParentViewController {
     
     }
     
+    
+    @objc func reloadFeedAfterSetCategory() {
+        
+        NotificationCenter.default.removeObserver(self, name: NSNotification.Name(rawValue: "reloadFeedAfterSetCategory"), object: nil)
+        feedViewController.readyToLoad = true
+        feedViewController.collectionNode.reloadData()
+        
+        
+    }
     
 }
 

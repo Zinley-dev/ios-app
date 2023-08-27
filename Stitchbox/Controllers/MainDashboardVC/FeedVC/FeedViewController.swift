@@ -39,6 +39,7 @@ class FeedViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
     var firstAnimated = true
     var lastLoadTime: Date?
     var animatedLabel: MarqueeLabel!
+    var readyToLoad = false
     private var pullControl = UIRefreshControl()
     
     override func viewDidLoad() {
@@ -65,35 +66,6 @@ class FeedViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
         
         NotificationCenter.default.addObserver(self, selector: #selector(FeedViewController.updateProgressBar), name: (NSNotification.Name(rawValue: "updateProgressBar2")), object: nil)
         
-        
-    }
-    
-   
-    
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-       
-        /*
-        if firstAnimated {
-            
-            DispatchQueue.global(qos: .background).async {
-                do {
-                    if let path = Bundle.main.path(forResource: "fox2", ofType: "gif") {
-                        let gifData = try Data(contentsOf: URL(fileURLWithPath: path))
-                        let image = FLAnimatedImage(animatedGIFData: gifData)
-                        
-                        DispatchQueue.main.async { [weak self] in
-                            self?.loadingImage.animatedImage = image
-                            self?.loadingView.backgroundColor = self?.view.backgroundColor
-                        }
-                    }
-                } catch {
-                    print(error.localizedDescription)
-                }
-            }
-        } */
-
-   
         
     }
     
@@ -331,7 +303,7 @@ extension FeedViewController: ASCollectionDataSource {
     
     func collectionNode(_ collectionNode: ASCollectionNode, willBeginBatchFetchWith context: ASBatchContext) {
         
-        if refresh_request == false, posts.count <= 200 {
+        if refresh_request == false, posts.count <= 200, readyToLoad {
             retrieveNextPageWithCompletion { [weak self] (newPosts) in
                 guard let self = self else { return }
                 self.insertNewRowsInCollectionNode(newPosts: newPosts)

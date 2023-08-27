@@ -182,6 +182,95 @@
             </objects>
             <point key="canvasLocation" x="-3415" y="1603"/>
         </scene>
+        <!--CategoryVC-->
+        <scene sceneID="1ob-hl-aZD">
+            <objects>
+                <viewController storyboardIdentifier="CategoryVC" id="OW4-W8-gAE" customClass="CategoryVC" customModule="Stitchbox" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="a8z-jO-e95">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <stackView opaque="NO" contentMode="scaleToFill" spacing="42" translatesAutoresizingMaskIntoConstraints="NO" id="JU0-aA-pL1">
+                                <rect key="frame" x="46.666666666666657" y="702" width="282" height="44"/>
+                                <subviews>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="glt-9F-p7g">
+                                        <rect key="frame" x="0.0" y="0.0" width="120" height="44"/>
+                                        <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" constant="120" id="1tJ-rU-Sdg"/>
+                                            <constraint firstAttribute="height" constant="44" id="Ixm-Jy-kEd"/>
+                                        </constraints>
+                                        <fontDescription key="fontDescription" name="Roboto-Bold" family="Roboto" pointSize="14"/>
+                                        <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                                        <state key="normal" title="Skip">
+                                            <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                            <color key="titleShadowColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        </state>
+                                        <userDefinedRuntimeAttributes>
+                                            <userDefinedRuntimeAttribute type="boolean" keyPath="isPrimary" value="YES"/>
+                                            <userDefinedRuntimeAttribute type="number" keyPath="size">
+                                                <integer key="value" value="2"/>
+                                            </userDefinedRuntimeAttribute>
+                                            <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                                                <real key="value" value="10"/>
+                                            </userDefinedRuntimeAttribute>
+                                        </userDefinedRuntimeAttributes>
+                                        <connections>
+                                            <action selector="skipBtnPressed:" destination="OW4-W8-gAE" eventType="touchUpInside" id="Nyp-LV-HzM"/>
+                                        </connections>
+                                    </button>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="dfG-yS-JlF">
+                                        <rect key="frame" x="162" y="0.0" width="120" height="44"/>
+                                        <color key="backgroundColor" name="Secondary"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="44" id="8Z9-ft-WFL"/>
+                                            <constraint firstAttribute="width" constant="120" id="KOd-Sc-hIj"/>
+                                        </constraints>
+                                        <fontDescription key="fontDescription" name="Roboto-Bold" family="Roboto" pointSize="14"/>
+                                        <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                                        <state key="normal" title="Next">
+                                            <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                            <color key="titleShadowColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        </state>
+                                        <userDefinedRuntimeAttributes>
+                                            <userDefinedRuntimeAttribute type="boolean" keyPath="isPrimary" value="YES"/>
+                                            <userDefinedRuntimeAttribute type="number" keyPath="size">
+                                                <integer key="value" value="2"/>
+                                            </userDefinedRuntimeAttribute>
+                                            <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                                                <real key="value" value="10"/>
+                                            </userDefinedRuntimeAttribute>
+                                        </userDefinedRuntimeAttributes>
+                                        <connections>
+                                            <action selector="NextBtnPressed:" destination="OW4-W8-gAE" eventType="touchUpInside" id="41l-T6-vAh"/>
+                                        </connections>
+                                    </button>
+                                </subviews>
+                            </stackView>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="iN3-0D-aLn">
+                                <rect key="frame" x="8" y="66" width="359" height="620"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            </view>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="Y9c-he-jWe"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstItem="iN3-0D-aLn" firstAttribute="top" secondItem="Y9c-he-jWe" secondAttribute="top" constant="16" id="5yQ-gB-Yim"/>
+                            <constraint firstItem="JU0-aA-pL1" firstAttribute="centerX" secondItem="a8z-jO-e95" secondAttribute="centerX" id="UQp-EH-AIS"/>
+                            <constraint firstItem="Y9c-he-jWe" firstAttribute="bottom" secondItem="JU0-aA-pL1" secondAttribute="bottom" constant="32" id="qch-yb-l4i"/>
+                            <constraint firstItem="JU0-aA-pL1" firstAttribute="top" secondItem="iN3-0D-aLn" secondAttribute="bottom" constant="16" id="uUD-eE-HuO"/>
+                            <constraint firstItem="iN3-0D-aLn" firstAttribute="leading" secondItem="Y9c-he-jWe" secondAttribute="leading" constant="8" id="w7z-3I-kiR"/>
+                            <constraint firstItem="Y9c-he-jWe" firstAttribute="trailing" secondItem="iN3-0D-aLn" secondAttribute="trailing" constant="8" id="z5n-Fd-bbc"/>
+                        </constraints>
+                    </view>
+                    <connections>
+                        <outlet property="contentView" destination="iN3-0D-aLn" id="iRF-Bc-in7"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="yhT-Kr-JIh" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-1474" y="1609"/>
+        </scene>
         <!--TrendingVC-->
         <scene sceneID="TLo-ON-iiT">
             <objects>
