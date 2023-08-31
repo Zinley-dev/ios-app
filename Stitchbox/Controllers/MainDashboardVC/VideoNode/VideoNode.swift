@@ -1993,41 +1993,51 @@ extension VideoNode {
 
 
     func printStatusDetails(withPrefix prefix: String) {
-        let bufferFull = cellVideoNode.currentItem?.isPlaybackBufferFull ?? false
-        let bufferEmpty = cellVideoNode.currentItem?.isPlaybackBufferEmpty ?? false
-        let likelyToKeepUp = cellVideoNode.currentItem?.isPlaybackLikelyToKeepUp ?? false
-        let error = cellVideoNode.currentItem?.error?.localizedDescription ?? "Unknown error"
         
-        print("\(prefix): \(bufferFull) - \(bufferEmpty) - \(likelyToKeepUp) - \(error)")
-        
-        cellVideoNode.currentItem?.preferredForwardBufferDuration = 10
-        
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) { [weak self] in
+        let connectionStatus = ReachabilityManager.shared.reachability.connection
+
+        if connectionStatus == .unavailable {
+            showNote(text: "No Internet Connection")
+        } else {
+            let bufferFull = cellVideoNode.currentItem?.isPlaybackBufferFull ?? false
+            let bufferEmpty = cellVideoNode.currentItem?.isPlaybackBufferEmpty ?? false
+            let likelyToKeepUp = cellVideoNode.currentItem?.isPlaybackLikelyToKeepUp ?? false
+            let error = cellVideoNode.currentItem?.error?.localizedDescription ?? "Unknown error"
             
-            guard let status = self?.cellVideoNode.currentItem?.status else {
-                print("FAILED - status null")
-                self?.resetAssets()
-                return
+            print("\(prefix): \(bufferFull) - \(bufferEmpty) - \(likelyToKeepUp) - \(error)")
+            
+            cellVideoNode.currentItem?.preferredForwardBufferDuration = 10
+            
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) { [weak self] in
+                
+                guard let status = self?.cellVideoNode.currentItem?.status else {
+                    print("FAILED - status null")
+                    self?.resetAssets()
+                    return
+                }
+                
+                switch status {
+                case .readyToPlay:
+                    self?.startPlayback()
+                    print("FAILED - Ready to play")
+                case .failed:
+                    self?.resetAssets()
+                    print("FAILED TO play failed")
+                case .unknown:
+                    self?.resetAssets()
+                    print("FAILED TO play unknown")
+                @unknown default:
+                    self?.resetAssets()
+                    print("FAILED TO play default")
+                }
+                
             }
-            
-            switch status {
-            case .readyToPlay:
-                self?.startPlayback()
-                print("FAILED - Ready to play")
-            case .failed:
-                self?.resetAssets()
-                print("FAILED TO play failed")
-            case .unknown:
-                self?.resetAssets()
-                print("FAILED TO play unknown")
-            @unknown default:
-                self?.resetAssets()
-                print("FAILED TO play default")
-            }
-            
         }
+
         
     }
+    
+    
     
     func resetAssets() {
         // Pause player
