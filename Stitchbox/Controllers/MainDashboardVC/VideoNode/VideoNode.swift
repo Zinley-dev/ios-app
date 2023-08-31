@@ -35,6 +35,7 @@ class VideoNode: ASCellNode, ASVideoNodeDelegate {
     var vcType = ""
     var didSlideEnd = true
     var setupMaxVal = false
+    var isActive = false
     //------------------------------------------//
 
     var isFirstItem = false
@@ -65,6 +66,9 @@ class VideoNode: ASCellNode, ASVideoNodeDelegate {
     private var index: Int!
     private var isPreview: Bool!
     private var playTimeBar: CustomSlider!
+    
+    var statusObservation: NSKeyValueObservation?
+   
     
     init(with post: PostModel, at: Int, isPreview: Bool, vcType: String, selectedStitch: Bool) {
         print("VideoNode \(at) is loading post: \(post.id)")
@@ -420,7 +424,9 @@ extension VideoNode {
         if cellVideoNode.isPlaying() {
             cellVideoNode.pause()
         } else {
-            cellVideoNode.play()
+            if isActive {
+                cellVideoNode.play()
+            }
         }
         
     }
@@ -748,6 +754,7 @@ extension VideoNode: UIGestureRecognizerDelegate {
         
                         // Scroll to the next page
                         update1.scrollView.setContentOffset(CGPoint(x: offset, y: 0), animated: true)
+                        //update1.feedViewController.currentIndex = 0
                         update1.showFeed()
                        
                     }
@@ -759,6 +766,7 @@ extension VideoNode: UIGestureRecognizerDelegate {
         
                         // Scroll to the next page
                         update1.scrollView.setContentOffset(CGPoint(x: offset, y: 0), animated: true)
+                        //update1.selectedRootPostVC.currentIndex = 0
                         update1.resumeVideo()
                        
                     }
@@ -1917,8 +1925,7 @@ extension VideoNode {
     }
 
     func processEndedSliding() {
-        
-        
+    
         cellVideoNode.play()
         timeLbl.isHidden = true
         blurView.isHidden = true
@@ -1932,6 +1939,7 @@ extension VideoNode {
 
     func playVideo() {
         // Check if video is already playing
+        isActive = true
         if cellVideoNode.isPlaying() {
             return
         }
@@ -1942,21 +1950,35 @@ extension VideoNode {
         } else {
             cellVideoNode.muted = !globalIsSound
         }
+        
+        // Remove existing observers
+        removeObservers()
 
-        // Handle the video status
-        handleVideoStatus()
+        // Check if currentItem is available
+        if let _ = cellVideoNode.currentItem {
+            addObservers()
+        } else {
+            // Delay to ensure currentItem becomes available
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) { [weak self] in
+                if let _ = self?.cellVideoNode.currentItem {
+                    self?.addObservers()
+                } else {
+                    // Handle or log error - still not ready
+                }
+            }
+        }
     }
 
-    func handleVideoStatus() {
-        guard let status = cellVideoNode.currentItem?.status else {
-            handleUnknownStatus(delayTime: 1.25)
-            return
-        }
-        
-        // Set player settings
-        cellVideoNode.player?.automaticallyWaitsToMinimizeStalling = false
-        cellVideoNode.currentItem?.preferredForwardBufferDuration = 60
-        
+    func addObservers() {
+        statusObservation = cellVideoNode.currentItem?.observe(\.status, options: [.new, .initial], changeHandler: { [weak self] (playerItem, change) in
+            self?.handleStatusChange()
+        })
+    }
+
+    
+    func handleStatusChange() {
+        guard let status = cellVideoNode.currentItem?.status else { return }
+
         switch status {
         case .readyToPlay:
             startPlayback()
@@ -1969,6 +1991,7 @@ extension VideoNode {
         }
     }
 
+
     func printStatusDetails(withPrefix prefix: String) {
         let bufferFull = cellVideoNode.currentItem?.isPlaybackBufferFull ?? false
         let bufferEmpty = cellVideoNode.currentItem?.isPlaybackBufferEmpty ?? false
@@ -1977,50 +2000,77 @@ extension VideoNode {
         
         print("\(prefix): \(bufferFull) - \(bufferEmpty) - \(likelyToKeepUp) - \(error)")
         
-        if bufferEmpty == true, likelyToKeepUp == false {
-            cellVideoNode.currentItem?.preferredForwardBufferDuration = 120
-        } else if cellVideoNode.currentItem?.isPlaybackBufferFull == true {
-            startPlayback()
+        cellVideoNode.currentItem?.preferredForwardBufferDuration = 10
+        
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) { [weak self] in
+            
+            guard let status = self?.cellVideoNode.currentItem?.status else {
+                print("FAILED - status null")
+                self?.resetAssets()
+                return
+            }
+            
+            switch status {
+            case .readyToPlay:
+                self?.startPlayback()
+                print("FAILED - Ready to play")
+            case .failed:
+                self?.resetAssets()
+                print("FAILED TO play failed")
+            case .unknown:
+                self?.resetAssets()
+                print("FAILED TO play unknown")
+            @unknown default:
+                self?.resetAssets()
+                print("FAILED TO play default")
+            }
+            
         }
+        
     }
-
-    func startPlayback() {
-        cellVideoNode.play()
-    }
-
-    func handleUnknownStatus(delayTime: Double) {
-        DispatchQueue.main.asyncAfter(deadline: .now() + delayTime) { [weak self] in
-            self?.handleVideoStatus()
-        }
-    }
-
     
     func resetAssets() {
-        
-        if !cellVideoNode.isPlaying() {
-            
-            DispatchQueue.main.async() {
-                
-                self.cellVideoNode.asset = nil
-                self.cellVideoNode.asset = AVAsset(url: self.getVideoURL(post: self.post)!)
-              
+        // Pause player
+        cellVideoNode.player?.pause()
 
-                self.playVideo()
-                 
+        // Fade out the video node
+        UIView.animate(withDuration: 0.2, animations: {
+            self.cellVideoNode.alpha = 0.0
+        }) { (completed) in
+            // Replace asset
+            self.cellVideoNode.asset = nil
+            self.cellVideoNode.asset = AVAsset(url: self.getVideoURL(post: self.post)!)
+
+            // Fade the video node back in
+            UIView.animate(withDuration: 0.2) {
+                self.cellVideoNode.alpha = 1.0
+            }
+
+            self.playVideo()
+            
+        }
+        
+    }
+
+
+    func startPlayback() {
+        
+        if isActive {
+            DispatchQueue.main.async() { [weak self] in
+                self?.cellVideoNode.play()
             }
             
         }
         
     }
 
-
     func pauseVideo() {
         
-        
+        isActive = false
         cellVideoNode.pause()
-        print("Asset paused and reseted")
         let time = CMTime(seconds: 0, preferredTimescale: 1)
         cellVideoNode.player?.seek(to: time)
+        removeObservers()
     }
     
     func unmuteVideo() {
@@ -2029,5 +2079,18 @@ extension VideoNode {
         shouldMute = false
         
     }
+    
+    func removeObservers() {
+        statusObservation?.invalidate()
+        statusObservation = nil
+        
+    }
+
+    override func didExitVisibleState() {
+        super.didExitVisibleState()
+        pauseVideo()
+    }
+
+
     
 }

@@ -53,14 +53,6 @@ class ParentViewController: UIViewController {
             navigationController.navigationBar.isTranslucent = false
         }
         
-        
-        loadNewestCoreData { [weak self] in
-            guard let self = self else { return }
-            self.loadSettings {
-                print("Oke!")
-            }
-        }
-        
         if _AppCoreData.userDataSource.value?.userID != "" {
             requestTrackingAuthorization(userId: _AppCoreData.userDataSource.value?.userID ?? "")
         }
@@ -116,7 +108,7 @@ class ParentViewController: UIViewController {
     
     func setupCategoryIfNeed() {
         
-        if !UserDefaults.standard.bool(forKey: "setupCategory") {
+        if _AppCoreData.userDataSource.value?.isCategorySet != true {
             //UserDefaults.standard.set(true, forKey: "setupCategory")
             
             guard let CVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "CategoryVC") as? CategoryVC
@@ -526,6 +518,7 @@ extension ParentViewController {
     func showFeed() {
         
         isFeed = true
+        
         if stitchViewController.currentIndex != nil {
             stitchViewController.pauseVideo(index: stitchViewController.currentIndex!)
         } else {
@@ -545,7 +538,9 @@ extension ParentViewController {
     func showStitch() {
         
         isFeed = false
+        
         if feedViewController.currentIndex != nil {
+            print("Pause at: \(feedViewController.currentIndex)")
             feedViewController.pauseVideo(index: feedViewController.currentIndex!)
         } else {
             feedViewController.pauseVideo(index: 0)

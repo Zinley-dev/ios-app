@@ -13,7 +13,7 @@ target 'Stitchbox' do
   pod 'Alamofire', '~> 5.6.4'
   pod 'Cache', '~> 5.3.0'
   pod 'ObjectMapper', '~> 3.5'
-
+  pod 'ReachabilitySwift'
   pod 'GoogleSignIn', '~> 7.0.0'
   
   # Sendbird SDK

@@ -90,6 +90,13 @@ class UserDataSource: Mappable {
     }
     
     private var _name : String? = ""
+    private var _isCategorySet : Bool? = false
+    
+    var isCategorySet: Bool? {
+      set(newValue) { _isCategorySet = newValue }
+      get { return _isCategorySet}
+    }
+    
     var name: String? {
       set(newValue) { _name = newValue }
       get { return _name}
@@ -181,7 +188,8 @@ class UserDataSource: Mappable {
         status          <- map["status"]
         ageRange        <- map["AgeRange"]
         discordUrl      <- map["discordLink"]
-        passEligible  <- map["passEligible"]
+        passEligible     <- map["passEligible"]
         favoriteContent  <- map["favoriteContent"]
+        isCategorySet    <- map["isCategorySet"]
     }
 }

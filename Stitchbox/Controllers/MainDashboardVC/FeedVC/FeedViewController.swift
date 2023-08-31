@@ -26,6 +26,9 @@ class FeedViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
     var newPlayingIndex: Int? = 0
     var isVideoPlaying = false
     
+    var lastScrollTime: TimeInterval = 0
+    var throttleTime: TimeInterval = 0.5 // Time in seconds
+    
     var isfirstLoad = true
     var posts = [PostModel]()
    
@@ -41,6 +44,7 @@ class FeedViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
     var animatedLabel: MarqueeLabel!
     var readyToLoad = false
     private var pullControl = UIRefreshControl()
+  
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -64,10 +68,12 @@ class FeedViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
         }
         
         
+        
         NotificationCenter.default.addObserver(self, selector: #selector(FeedViewController.updateProgressBar), name: (NSNotification.Name(rawValue: "updateProgressBar2")), object: nil)
         
         
     }
+
     
     
     func addAnimatedLabelToTop() {
@@ -163,10 +169,8 @@ extension FeedViewController {
 
 extension FeedViewController {
 
- 
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         
-
         if !posts.isEmpty, scrollView == collectionNode.view, !refresh_request {
 
             // Get the visible rect of the collection view.
@@ -246,6 +250,7 @@ extension FeedViewController: ASCollectionDelegate {
     func shouldBatchFetch(for collectionNode: ASCollectionNode) -> Bool {
         return true
     }
+    
     
 }
 
@@ -356,7 +361,7 @@ extension FeedViewController {
         self.collectionNode.view.showsVerticalScrollIndicator = false
         self.collectionNode.view.allowsSelection = false
         self.collectionNode.view.contentInsetAdjustmentBehavior = .never
-        
+        self.collectionNode.view.decelerationRate = UIScrollView.DecelerationRate.fast
     }
     
     
@@ -411,22 +416,34 @@ extension FeedViewController {
             clearExistingPosts()
         }
 
-        let uniquePosts = Set(self.posts)
-        let items = newPosts.compactMap { PostModel(JSON: $0) }.filter { !uniquePosts.contains($0) }
-        
-        guard !items.isEmpty else { return }
+        let uniquePosts = Set(self.posts)  // Make a Set from existing posts for quick lookup
+        var newUniquePosts: [PostModel] = []  // Array to store new unique posts
 
-        self.posts.append(contentsOf: items)
+        // Convert newPosts to PostModel and filter out the duplicates
+        for newPost in newPosts {
+            if let postModel = PostModel(JSON: newPost) {
+                if !uniquePosts.contains(postModel) {
+                    newUniquePosts.append(postModel)
+                }
+            }
+        }
 
-        let indexPaths = (posts.count - items.count..<posts.count).map { IndexPath(row: $0, section: 0) }
-        
+        guard !newUniquePosts.isEmpty else { return }  // Make sure we have new unique posts
 
+        // Append new unique posts to self.posts
+        self.posts.append(contentsOf: newUniquePosts)
+
+        // Generate the index paths for the new items
+        let indexPaths = (posts.count - newUniquePosts.count..<posts.count).map { IndexPath(row: $0, section: 0) }
+
+        // Insert the new unique items into the collection node
         collectionNode.insertItems(at: indexPaths)
-        
+
         if refresh_request {
             refresh_request = false
         }
     }
+
 
 
     private func clearExistingPosts() {
