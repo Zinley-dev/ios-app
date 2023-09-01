@@ -43,6 +43,7 @@ target 'Stitchbox' do
   pod "SwipeTransitionAutoSwipeBack"      # if needed
   pod "SwipeTransitionAutoSwipeToDismiss" # if needed
   pod 'SCLAlertView'
+  pod 'NVActivityIndicatorView'
   
   target 'StitchboxTests' do
     inherit! :search_paths

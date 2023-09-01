@@ -1113,7 +1113,17 @@ extension ParentViewController {
                     scrollView.setContentOffset(CGPoint(x: offset, y: 0), animated: true)
                 }
                 
+                if feedViewController.currentIndex == 1 {
+                    feedViewController.collectionNode.scrollToItem(at: IndexPath(row: 0, section: 0), at: .centeredVertically, animated: true)
+                } else {
+                    
+                    feedViewController.collectionNode.scrollToItem(at: IndexPath(row: 1, section: 0), at: .centeredVertically, animated: false)
+                    feedViewController.collectionNode.scrollToItem(at: IndexPath(row: 0, section: 0), at: .centeredVertically, animated: true)
+                    
+                }
+                
                 rootId = ""
+                
                 feedViewController.clearAllData()
 
             } else {

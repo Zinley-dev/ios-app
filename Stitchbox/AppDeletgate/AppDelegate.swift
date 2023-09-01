@@ -51,7 +51,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         sentrySetup()
         CacheManager.shared.asyncRemoveExpiredObjects()
         metricsManager = AppMetrics()
-        clearTmpDirectory()
         
         
         return true
@@ -701,28 +700,63 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
     func applicationDidBecomeActive(_ application: UIApplication) {
         UIApplication.shared.applicationIconBadgeNumber = 0
         requestAppleReview()
-        clearTmpDirectory()
+        
+        do {
+            let maxSizeInBytes: UInt64 = UInt64(1 * 1024 * 1024 * 1024)  // 1GB
+            try maintainTmpDirectory(maxSizeInBytes: maxSizeInBytes)
+        } catch {
+            print("Failed to maintain tmp directory with error: \(error)")
+        }
+
     }
     
-    
-    
-    func clearTmpDirectory() {
-        let tmpDirectory = NSTemporaryDirectory()
+    func maintainTmpDirectory(maxSizeInBytes: UInt64) throws {
+        let tmpURL = URL(fileURLWithPath: NSTemporaryDirectory())
         let fileManager = FileManager.default
         
         do {
-            let tmpFiles = try fileManager.contentsOfDirectory(atPath: tmpDirectory)
+            let tmpFiles = try fileManager.contentsOfDirectory(at: tmpURL, includingPropertiesForKeys: nil, options: [])
             
-            for file in tmpFiles {
-                let filePath = "\(tmpDirectory)/\(file)"
-                try fileManager.removeItem(atPath: filePath)
+            var totalSize: UInt64 = 0
+            var fileAttributesMap: [URL: (UInt64, Date)] = [:]
+            
+            // Calculate the total size and gather attributes for each file
+            for fileURL in tmpFiles {
+                let attributes = try fileManager.attributesOfItem(atPath: fileURL.path)
+                if let fileSize = attributes[.size] as? UInt64,
+                   let modificationDate = attributes[.modificationDate] as? Date {
+                    totalSize += fileSize
+                    fileAttributesMap[fileURL] = (fileSize, modificationDate)
+                }
             }
             
-            print("Successfully cleared tmp directory.")
+            // Check if the total size exceeds the maximum allowed size
+            if totalSize > maxSizeInBytes {
+                // Sort files by modification date, oldest first
+                let sortedFiles = fileAttributesMap.sorted { $0.1.1 < $1.1.1 }
+                
+                var bytesToDelete = totalSize - maxSizeInBytes
+                for (fileURL, (fileSize, _)) in sortedFiles {
+                    // Delete the file
+                    try fileManager.removeItem(at: fileURL)
+                    
+                    // Update the bytes left to delete
+                    bytesToDelete -= fileSize
+                    
+                    // If we've deleted enough, break
+                    if bytesToDelete <= 0 {
+                        break
+                    }
+                }
+            }
+            
+            print("Successfully maintained tmp directory.")
         } catch {
-            print("Error clearing tmp directory: \(error)")
+            print("Error maintaining tmp directory: \(error)")
+            throw error
         }
     }
+
     
 }
 

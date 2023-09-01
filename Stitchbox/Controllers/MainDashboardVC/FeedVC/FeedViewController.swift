@@ -501,6 +501,7 @@ extension FeedViewController {
         print("VideoNode: \(posts.count)")
         if let cell = self.collectionNode.nodeForItem(at: IndexPath(row: index, section: 0)) as? VideoNode {
             handleAnimationTextAndImage(post: cell.post)
+            cell.isActive = true
             cell.playVideo()
             mainRootId = cell.post.id
             NotificationCenter.default.post(name: (NSNotification.Name(rawValue: "observeRootChangeForFeed")), object: nil)

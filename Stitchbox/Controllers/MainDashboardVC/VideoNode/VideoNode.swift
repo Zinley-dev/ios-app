@@ -12,6 +12,7 @@ import Alamofire
 import AVFoundation
 import AVKit
 import ActiveLabel
+import NVActivityIndicatorView
 
 class VideoNode: ASCellNode, ASVideoNodeDelegate {
 
@@ -47,7 +48,7 @@ class VideoNode: ASCellNode, ASVideoNodeDelegate {
     private var blurView: UIView!
     private let fireworkController = FountainFireworkController()
     private let fireworkController2 = ClassicFireworkController()
-    
+    private var spinner: NVActivityIndicatorView!
     
     private var headerView: PostHeader!
     private var sideButtonsView: ButtonSideList!
@@ -94,7 +95,7 @@ class VideoNode: ASCellNode, ASVideoNodeDelegate {
         
         addPinchGestureRecognizer()
         addPanGestureRecognizer()
-        
+        spinner = NVActivityIndicatorView(frame:  CGRect(x: 0, y: 0, width: 75, height: 75), type: .ballScale, color: .secondary, padding: 0)
         
         if !isPreview {
             setupTimeView()
@@ -382,7 +383,7 @@ class VideoNode: ASCellNode, ASVideoNodeDelegate {
     func getVideoURL(post: PostModel) -> URL? {
         if post.muxPlaybackId != "" {
             
-            let urlString = "https://stream.mux.com/\(post.muxPlaybackId).m3u8?redundant_streams=true"
+            let urlString = "https://stream.mux.com/\(post.muxPlaybackId).m3u8?redundant_streams=true&max_resolution=1080p"
             return URL(string: urlString)
             
         } else {
@@ -1939,7 +1940,6 @@ extension VideoNode {
 
     func playVideo() {
         // Check if video is already playing
-        isActive = true
         if cellVideoNode.isPlaying() {
             return
         }
@@ -1971,6 +1971,10 @@ extension VideoNode {
 
     func addObservers() {
         statusObservation = cellVideoNode.currentItem?.observe(\.status, options: [.new, .initial], changeHandler: { [weak self] (playerItem, change) in
+            if playerItem.status == .readyToPlay {
+                self?.removeObservers()
+            }
+            print("statusObservation called for: \(self?.post.id) - \(playerItem.status.rawValue)")
             self?.handleStatusChange()
         })
     }
@@ -2006,9 +2010,9 @@ extension VideoNode {
             
             print("\(prefix): \(bufferFull) - \(bufferEmpty) - \(likelyToKeepUp) - \(error)")
             
-            cellVideoNode.currentItem?.preferredForwardBufferDuration = 10
+            cellVideoNode.currentItem?.preferredForwardBufferDuration = 2
             
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) { [weak self] in
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.75) { [weak self] in
                 
                 guard let status = self?.cellVideoNode.currentItem?.status else {
                     print("FAILED - status null")
@@ -2021,13 +2025,16 @@ extension VideoNode {
                     self?.startPlayback()
                     print("FAILED - Ready to play")
                 case .failed:
-                    self?.resetAssets()
+                    //self?.resetAssets()
+                    self?.addSpinner()
                     print("FAILED TO play failed")
                 case .unknown:
-                    self?.resetAssets()
+                    //self?.resetAssets()
+                    self?.addSpinner()
                     print("FAILED TO play unknown")
                 @unknown default:
-                    self?.resetAssets()
+                    //self?.resetAssets()
+                    self?.addSpinner()
                     print("FAILED TO play default")
                 }
                 
@@ -2037,6 +2044,46 @@ extension VideoNode {
         
     }
     
+    func addSpinner() {
+        
+        spinner.center = view.center
+        view.addSubview(spinner)
+        spinner.startAnimating()
+        
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) { [weak self] in
+            
+            guard let status = self?.cellVideoNode.currentItem?.status else {
+                print("FAILED - status null")
+                self?.resetAssets()
+                return
+            }
+            
+            switch status {
+            case .readyToPlay:
+                self?.startPlayback()
+                print("FAILED - Ready to play")
+            case .failed:
+                //self?.resetAssets()
+                self?.resetAssets()
+                print("FAILED TO play failed")
+            case .unknown:
+                //self?.resetAssets()
+                self?.resetAssets()
+                print("FAILED TO play unknown")
+            @unknown default:
+                //self?.resetAssets()
+                self?.resetAssets()
+                print("FAILED TO play default")
+            }
+            
+        }
+        
+    }
+    
+    func removeSpinner() {
+        spinner.stopAnimating()
+        spinner.removeFromSuperview()
+    }
     
     
     func resetAssets() {
@@ -2064,6 +2111,8 @@ extension VideoNode {
 
 
     func startPlayback() {
+        
+        removeSpinner()
         
         if isActive {
             DispatchQueue.main.async() { [weak self] in
@@ -2093,14 +2142,19 @@ extension VideoNode {
     func removeObservers() {
         statusObservation?.invalidate()
         statusObservation = nil
-        
     }
 
     override func didExitVisibleState() {
         super.didExitVisibleState()
         pauseVideo()
+        removeObservers()
     }
 
 
+    override func didEnterVisibleState() {
+        super.didEnterVisibleState()
+        
+        isActive = true
+    }
     
 }

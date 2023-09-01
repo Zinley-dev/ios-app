@@ -543,6 +543,7 @@ extension StitchViewController {
         
         if let cell = self.collectionNode.nodeForItem(at: IndexPath(row: index, section: 0)) as? VideoNode {
             
+            cell.isActive = true
             handleAnimationTextAndImage(for: index)
             
             if globalSetting.ClearMode == true {

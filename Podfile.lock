@@ -20,6 +20,9 @@ PODS:
     - GTMSessionFetcher/Core (< 4.0, >= 1.5)
   - GTMSessionFetcher/Core (3.1.1)
   - MarqueeLabel (4.3.1)
+  - NVActivityIndicatorView (5.1.1):
+    - NVActivityIndicatorView/Base (= 5.1.1)
+  - NVActivityIndicatorView/Base (5.1.1)
   - NYTPhotoViewer (1.1.0):
     - NYTPhotoViewer/AnimatedGifSupport (= 1.1.0)
     - NYTPhotoViewer/Core (= 1.1.0)
@@ -119,6 +122,7 @@ DEPENDENCIES:
   - FLAnimatedImage (~> 1.0)
   - GoogleSignIn (~> 7.0.0)
   - MarqueeLabel
+  - NVActivityIndicatorView
   - NYTPhotoViewer (~> 1.1.0)
   - ObjectMapper (~> 3.5)
   - OneSignalXCFramework (< 4.0, >= 3.0.0)
@@ -153,6 +157,7 @@ SPEC REPOS:
     - GTMAppAuth
     - GTMSessionFetcher
     - MarqueeLabel
+    - NVActivityIndicatorView
     - NYTPhotoViewer
     - ObjectMapper
     - OneSignalXCFramework
@@ -194,6 +199,7 @@ SPEC CHECKSUMS:
   GTMAppAuth: 99fb010047ba3973b7026e45393f51f27ab965ae
   GTMSessionFetcher: e8647203b65cee28c5f73d0f473d096653945e72
   MarqueeLabel: da4b9cf619fe70c75d7bab4580b0b4a0b868aa6b
+  NVActivityIndicatorView: 1f6c5687f1171810aa27a3296814dc2d7dec3667
   NYTPhotoViewer: e80e8767f3780d2df37c6f72cbab15d6c7232911
   ObjectMapper: 97111c97e054a6ee25917662106689f0b4127b37
   OneSignalXCFramework: ff1c970b7aeb4ac0fe48fb35393eb5d8bf378135
@@ -224,6 +230,6 @@ SPEC CHECKSUMS:
   ZSWTaggedString: 1a6aab3143188634c1e5dfe9383ce754c1fb5fe2
   ZSWTappableLabel: cff84c0a55e30f2141f7dac24e5903302a7e35ec
 
-PODFILE CHECKSUM: ced8ce651457ce3abcb53e55fee4db9c46959265
+PODFILE CHECKSUM: 430bc233e0ceb5faec1b06fc83125374ae92850f
 
 COCOAPODS: 1.12.1

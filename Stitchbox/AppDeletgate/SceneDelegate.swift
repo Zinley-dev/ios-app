@@ -51,14 +51,27 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         // Release any resources associated with this scene that can be re-created the next time the scene connects.
         // The scene may re-connect later, as its session was not necessarily discarded (see `application:didDiscardSceneSessions` instead).
         CacheManager.shared.asyncRemoveExpiredObjects()
-        clearTmpDirectory()
+        
+        do {
+            let maxSizeInBytes: UInt64 = UInt64(1 * 1024 * 1024 * 1024)  // 1GB
+            try maintainTmpDirectory(maxSizeInBytes: maxSizeInBytes)
+        } catch {
+            print("Failed to maintain tmp directory with error: \(error)")
+        }
     }
 
     func sceneDidBecomeActive(_ scene: UIScene) {
         // Called when the scene has moved from an inactive state to an active state.
         // Use this method to restart any tasks that were paused (or not yet started) when the scene was inactive.
         CacheManager.shared.asyncRemoveExpiredObjects()
-        clearTmpDirectory()
+        
+        do {
+            let maxSizeInBytes: UInt64 = UInt64(1 * 1024 * 1024 * 1024)  // 1GB
+            try maintainTmpDirectory(maxSizeInBytes: maxSizeInBytes)
+        } catch {
+            print("Failed to maintain tmp directory with error: \(error)")
+        }
+        
         guard let currentVC = UIViewController.currentViewController() else { return }
         
         if let currentStartVC = currentVC as? StartViewController {
@@ -89,7 +102,13 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     func sceneWillResignActive(_ scene: UIScene) {
         // Called when the scene will move from an active state to an inactive state.
         // This may occur due to temporary interruptions (ex. an incoming phone call).
-        clearTmpDirectory()
+        do {
+            let maxSizeInBytes: UInt64 = UInt64(1 * 1024 * 1024 * 1024)  // 1GB
+            try maintainTmpDirectory(maxSizeInBytes: maxSizeInBytes)
+        } catch {
+            print("Failed to maintain tmp directory with error: \(error)")
+        }
+        
         guard let currentVC = UIViewController.currentViewController() else { return }
         
         if let currentFeedVC = currentVC as? ParentViewController {
@@ -127,33 +146,75 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     func sceneWillEnterForeground(_ scene: UIScene) {
         // Called as the scene transitions from the background to the foreground.
         // Use this method to undo the changes made on entering the background.
-        clearTmpDirectory()
+        do {
+            let maxSizeInBytes: UInt64 = UInt64(1 * 1024 * 1024 * 1024)  // 1GB
+            try maintainTmpDirectory(maxSizeInBytes: maxSizeInBytes)
+        } catch {
+            print("Failed to maintain tmp directory with error: \(error)")
+        }
+
     }
 
     func sceneDidEnterBackground(_ scene: UIScene) {
         // Called as the scene transitions from the foreground to the background.
         // Use this method to save data, release shared resources, and store enough scene-specific state information
         // to restore the scene back to its current state.
-        clearTmpDirectory()
+        do {
+            let maxSizeInBytes: UInt64 = UInt64(1 * 1024 * 1024 * 1024)  // 1GB
+            try maintainTmpDirectory(maxSizeInBytes: maxSizeInBytes)
+        } catch {
+            print("Failed to maintain tmp directory with error: \(error)")
+        }
+
     }
     
-    func clearTmpDirectory() {
-        let tmpDirectory = NSTemporaryDirectory()
+    func maintainTmpDirectory(maxSizeInBytes: UInt64) throws {
+        let tmpURL = URL(fileURLWithPath: NSTemporaryDirectory())
         let fileManager = FileManager.default
         
         do {
-            let tmpFiles = try fileManager.contentsOfDirectory(atPath: tmpDirectory)
+            let tmpFiles = try fileManager.contentsOfDirectory(at: tmpURL, includingPropertiesForKeys: nil, options: [])
             
-            for file in tmpFiles {
-                let filePath = "\(tmpDirectory)/\(file)"
-                try fileManager.removeItem(atPath: filePath)
+            var totalSize: UInt64 = 0
+            var fileAttributesMap: [URL: (UInt64, Date)] = [:]
+            
+            // Calculate the total size and gather attributes for each file
+            for fileURL in tmpFiles {
+                let attributes = try fileManager.attributesOfItem(atPath: fileURL.path)
+                if let fileSize = attributes[.size] as? UInt64,
+                   let modificationDate = attributes[.modificationDate] as? Date {
+                    totalSize += fileSize
+                    fileAttributesMap[fileURL] = (fileSize, modificationDate)
+                }
             }
             
-            print("Successfully cleared tmp directory.")
+            // Check if the total size exceeds the maximum allowed size
+            if totalSize > maxSizeInBytes {
+                // Sort files by modification date, oldest first
+                let sortedFiles = fileAttributesMap.sorted { $0.1.1 < $1.1.1 }
+                
+                var bytesToDelete = totalSize - maxSizeInBytes
+                for (fileURL, (fileSize, _)) in sortedFiles {
+                    // Delete the file
+                    try fileManager.removeItem(at: fileURL)
+                    
+                    // Update the bytes left to delete
+                    bytesToDelete -= fileSize
+                    
+                    // If we've deleted enough, break
+                    if bytesToDelete <= 0 {
+                        break
+                    }
+                }
+            }
+            
+            print("Successfully maintained tmp directory.")
         } catch {
-            print("Error clearing tmp directory: \(error)")
+            print("Error maintaining tmp directory: \(error)")
+            throw error
         }
     }
+
 
 
 }
