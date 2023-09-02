@@ -691,21 +691,8 @@ extension ApprovedStitchVC {
                 } else {
                     // Do nothing if the current index is the same as newPlayingIndex
                 }
-            } else {
+            }
 
-            }
-            
-            // If the video is stuck, reset the buffer by seeking to the current playback time.
-            if let currentIndex = currentIndex, let cell = waitCollectionNode.nodeForItem(at: IndexPath(row: currentIndex, section: 0)) as? StitchControlForRemoveNode {
-                if let playerItem = cell.cellVideoNode.currentItem, !playerItem.isPlaybackLikelyToKeepUp {
-                    if let currentTime = cell.cellVideoNode.currentItem?.currentTime() {
-                        cell.cellVideoNode.player?.seek(to: currentTime)
-                    } else {
-                        cell.cellVideoNode.player?.seek(to: CMTime.zero)
-                    }
-                }
-            }
-            
             // If there's no current playing video and no visible video, pause the last playing video, if any.
             if !isVideoPlaying && currentIndex != nil {
                 pauseVideo(index: currentIndex!)
@@ -719,35 +706,18 @@ extension ApprovedStitchVC {
         if let cell = self.waitCollectionNode.nodeForItem(at: IndexPath(row: index, section: 0)) as? StitchControlForRemoveNode {
             
             // Seek to the beginning of the video
-            cell.cellVideoNode.player?.seek(to: CMTime(seconds: 0, preferredTimescale: 1))
-             
-            // Pause the video
-            cell.cellVideoNode.pause()
+            cell.pauseVideo()
             
         }
         
     }
 
     
-    
-    func seekVideo(index: Int, time: CMTime) {
-        
-        if let cell = self.waitCollectionNode.nodeForItem(at: IndexPath(row: index, section: 0)) as? StitchControlForRemoveNode {
-            
-            cell.cellVideoNode.player?.seek(to: time)
-            
-            
-        }
-        
-    }
-    
-    
     func playVideo(index: Int) {
         
         if let cell = self.waitCollectionNode.nodeForItem(at: IndexPath(row: index, section: 0)) as? StitchControlForRemoveNode {
             
-            cell.cellVideoNode.muted = shouldMute ?? !globalIsSound
-            cell.cellVideoNode.play()
+            cell.playVideo()
             
         }
         

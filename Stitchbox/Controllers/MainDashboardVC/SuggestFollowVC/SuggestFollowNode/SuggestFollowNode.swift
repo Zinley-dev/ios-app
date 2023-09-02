@@ -10,7 +10,6 @@ import UIKit
 import AsyncDisplayKit
 import Alamofire
 
-
 fileprivate let OrganizerImageSize: CGFloat = 40
 fileprivate let HorizontalBuffer: CGFloat = 10
 fileprivate let FontSize: CGFloat = 13

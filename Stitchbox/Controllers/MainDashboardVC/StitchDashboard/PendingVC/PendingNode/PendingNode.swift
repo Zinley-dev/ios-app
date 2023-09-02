@@ -13,6 +13,7 @@ import SendBirdSDK
 import AVFoundation
 import AVKit
 import ActiveLabel
+import NVActivityIndicatorView
 
 
 fileprivate let FontSize: CGFloat = 12
@@ -28,10 +29,11 @@ class PendingNode: ASCellNode, ASVideoNodeDelegate {
     var allowProcess = true
     var isFollowingUser = false
     var isSave = false
-    
+    var isActive = false
     var buttonNode: ASDisplayNode!
     var post: PostModel!
-    var cellVideoNode: ASVideoNode
+    private var cellVideoNode: ASVideoNode
+    var statusObservation: NSKeyValueObservation?
     var headerView: PostHeader!
    
     var gradientNode: GradienView
@@ -39,7 +41,7 @@ class PendingNode: ASCellNode, ASVideoNodeDelegate {
     var pendingView: HandlePendingView!
     
     let maximumShowing = 100
-    
+    private var spinner: NVActivityIndicatorView!
     var approveBtn : ((ASCellNode) -> Void)?
     var declineBtn : ((ASCellNode) -> Void)?
 
@@ -70,7 +72,7 @@ class PendingNode: ASCellNode, ASVideoNodeDelegate {
         
         self.gradientNode.cornerRadius = 10
         self.gradientNode.clipsToBounds = true
-        
+        spinner = NVActivityIndicatorView(frame:  CGRect(x: 0, y: 0, width: 75, height: 75), type: .ballScale, color: .secondary, padding: 0)
         
     }
     
@@ -379,7 +381,7 @@ class PendingNode: ASCellNode, ASVideoNodeDelegate {
     func getVideoURL(post: PostModel) -> URL? {
         if post.muxPlaybackId != "" {
                 
-            let urlString = "https://stream.mux.com/\(post.muxPlaybackId).m3u8"
+            let urlString = "https://stream.mux.com/\(post.muxPlaybackId).m3u8?redundant_streams=true&max_resolution=720p"
             return URL(string: urlString)
                 
         } else {
@@ -587,4 +589,226 @@ extension PendingNode {
         declineBtn?(self)
         
     }
+}
+
+extension PendingNode {
+
+    func playVideo() {
+        // Check if video is already playing
+        if cellVideoNode.isPlaying() {
+            return
+        }
+
+        // Determine if the video should be muted
+        if let muteStatus = shouldMute {
+            cellVideoNode.muted = muteStatus
+        } else {
+            cellVideoNode.muted = !globalIsSound
+        }
+        
+        // Remove existing observers
+        removeObservers()
+
+        // Check if currentItem is available
+        if let _ = cellVideoNode.currentItem {
+            addObservers()
+        } else {
+            // Delay to ensure currentItem becomes available
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) { [weak self] in
+                if let _ = self?.cellVideoNode.currentItem {
+                    self?.addObservers()
+                } else {
+                    // Handle or log error - still not ready
+                }
+            }
+        }
+    }
+
+    func addObservers() {
+        statusObservation = cellVideoNode.currentItem?.observe(\.status, options: [.new, .initial], changeHandler: { [weak self] (playerItem, change) in
+            if playerItem.status == .readyToPlay {
+                self?.removeObservers()
+            }
+            print("statusObservation called for: \(self?.post.id) - \(playerItem.status.rawValue)")
+            self?.handleStatusChange()
+        })
+    }
+
+    
+    func handleStatusChange() {
+        guard let status = cellVideoNode.currentItem?.status else { return }
+
+        switch status {
+        case .readyToPlay:
+            startPlayback()
+        case .failed:
+            printStatusDetails(withPrefix: "FAILED TO play failed")
+        case .unknown:
+            printStatusDetails(withPrefix: "FAILED TO play unknown")
+        @unknown default:
+            printStatusDetails(withPrefix: "FAILED TO play default")
+        }
+    }
+
+
+    func printStatusDetails(withPrefix prefix: String) {
+        
+        let connectionStatus = ReachabilityManager.shared.reachability.connection
+
+        if connectionStatus == .unavailable {
+            showNote(text: "No Internet Connection")
+        } else {
+            let bufferFull = cellVideoNode.currentItem?.isPlaybackBufferFull ?? false
+            let bufferEmpty = cellVideoNode.currentItem?.isPlaybackBufferEmpty ?? false
+            let likelyToKeepUp = cellVideoNode.currentItem?.isPlaybackLikelyToKeepUp ?? false
+            let error = cellVideoNode.currentItem?.error?.localizedDescription ?? "Unknown error"
+            
+            print("\(prefix): \(bufferFull) - \(bufferEmpty) - \(likelyToKeepUp) - \(error)")
+            
+            cellVideoNode.currentItem?.preferredForwardBufferDuration = 2
+            
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.75) { [weak self] in
+                
+                guard let status = self?.cellVideoNode.currentItem?.status else {
+                    print("FAILED - status null")
+                    self?.resetAssets()
+                    return
+                }
+                
+                switch status {
+                case .readyToPlay:
+                    self?.startPlayback()
+                    print("FAILED - Ready to play")
+                case .failed:
+                    //self?.resetAssets()
+                    self?.addSpinner()
+                    print("FAILED TO play failed")
+                case .unknown:
+                    //self?.resetAssets()
+                    self?.addSpinner()
+                    print("FAILED TO play unknown")
+                @unknown default:
+                    //self?.resetAssets()
+                    self?.addSpinner()
+                    print("FAILED TO play default")
+                }
+                
+            }
+        }
+
+        
+    }
+    
+    func addSpinner() {
+        
+        spinner.center = view.center
+        view.addSubview(spinner)
+        spinner.startAnimating()
+        
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) { [weak self] in
+            
+            guard let status = self?.cellVideoNode.currentItem?.status else {
+                print("FAILED - status null")
+                self?.resetAssets()
+                return
+            }
+            
+            switch status {
+            case .readyToPlay:
+                self?.startPlayback()
+                print("FAILED - Ready to play")
+            case .failed:
+                //self?.resetAssets()
+                self?.resetAssets()
+                print("FAILED TO play failed")
+            case .unknown:
+                //self?.resetAssets()
+                self?.resetAssets()
+                print("FAILED TO play unknown")
+            @unknown default:
+                //self?.resetAssets()
+                self?.resetAssets()
+                print("FAILED TO play default")
+            }
+            
+        }
+        
+    }
+    
+    func removeSpinner() {
+        spinner.stopAnimating()
+        spinner.removeFromSuperview()
+    }
+    
+    
+    func resetAssets() {
+        // Pause player
+        cellVideoNode.player?.pause()
+
+        // Fade out the video node
+        UIView.animate(withDuration: 0.2, animations: {
+            self.cellVideoNode.alpha = 0.0
+        }) { (completed) in
+            // Replace asset
+            self.cellVideoNode.asset = nil
+            self.cellVideoNode.asset = AVAsset(url: self.getVideoURL(post: self.post)!)
+
+            UIView.animate(withDuration: 0.2, animations: {
+                self.cellVideoNode.alpha = 1.0
+            }) { (completed) in
+                self.playVideo()
+            }
+
+        }
+        
+    }
+
+
+    func startPlayback() {
+        
+        removeSpinner()
+        
+        if isActive {
+            DispatchQueue.main.async() { [weak self] in
+                self?.cellVideoNode.play()
+            }
+            
+        }
+        
+    }
+
+    func pauseVideo() {
+        
+        isActive = false
+        cellVideoNode.pause()
+        let time = CMTime(seconds: 0, preferredTimescale: 1)
+        cellVideoNode.player?.seek(to: time)
+        removeObservers()
+    }
+    
+    func unmuteVideo() {
+        
+        cellVideoNode.muted = false
+        shouldMute = false
+        
+    }
+    
+    func removeObservers() {
+        statusObservation?.invalidate()
+        statusObservation = nil
+    }
+
+    override func didExitVisibleState() {
+        super.didExitVisibleState()
+        pauseVideo()
+        removeObservers()
+    }
+
+
+    override func didEnterVisibleState() {
+        super.didEnterVisibleState()
+        
+        isActive = true
+    }
+    
 }

@@ -178,7 +178,6 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
             var totalSize: UInt64 = 0
             var fileAttributesMap: [URL: (UInt64, Date)] = [:]
             
-            // Calculate the total size and gather attributes for each file
             for fileURL in tmpFiles {
                 let attributes = try fileManager.attributesOfItem(atPath: fileURL.path)
                 if let fileSize = attributes[.size] as? UInt64,
@@ -188,23 +187,18 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
                 }
             }
             
-            // Check if the total size exceeds the maximum allowed size
             if totalSize > maxSizeInBytes {
-                // Sort files by modification date, oldest first
                 let sortedFiles = fileAttributesMap.sorted { $0.1.1 < $1.1.1 }
                 
                 var bytesToDelete = totalSize - maxSizeInBytes
                 for (fileURL, (fileSize, _)) in sortedFiles {
-                    // Delete the file
                     try fileManager.removeItem(at: fileURL)
                     
-                    // Update the bytes left to delete
-                    bytesToDelete -= fileSize
-                    
-                    // If we've deleted enough, break
-                    if bytesToDelete <= 0 {
+                    if fileSize >= bytesToDelete {
                         break
                     }
+                    
+                    bytesToDelete -= fileSize
                 }
             }
             
@@ -214,6 +208,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
             throw error
         }
     }
+
 
 
 

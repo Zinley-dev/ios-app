@@ -2098,13 +2098,12 @@ extension VideoNode {
             self.cellVideoNode.asset = nil
             self.cellVideoNode.asset = AVAsset(url: self.getVideoURL(post: self.post)!)
 
-            // Fade the video node back in
-            UIView.animate(withDuration: 0.2) {
+            UIView.animate(withDuration: 0.2, animations: {
                 self.cellVideoNode.alpha = 1.0
+            }) { (completed) in
+                self.playVideo()
             }
 
-            self.playVideo()
-            
         }
         
     }
