@@ -11,6 +11,11 @@ import GPTEncoder
 
 class ChatGPTAPI: @unchecked Sendable {
     
+    deinit {
+        print("ChatGPTAPI instance is being deallocated")
+    }
+
+    
     private let tokenizer: GPTEncoder
     private let systemMessage: Message
     private let temperature: Double
@@ -49,7 +54,7 @@ class ChatGPTAPI: @unchecked Sendable {
         self.apiKey = apiKey
         self.systemMessage = .init(role: "system", content: systemPrompt)
         self.temperature = temperature
-        self.tokenManager = ChatGPTTokenManager(tokenizer: GPTEncoder())
+        self.tokenManager = ChatGPTTokenManager(tokenizer: self.tokenizer)
     }
     
     private func generateMessages(from text: String) -> [Message] {

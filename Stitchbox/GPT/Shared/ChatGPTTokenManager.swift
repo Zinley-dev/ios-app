@@ -10,6 +10,11 @@ import GPTEncoder
 
 class ChatGPTTokenManager {
     
+    deinit {
+        print("ChatGPTTokenManager instance is being deallocated")
+    }
+
+    
     private let tokenizer: GPTEncoder
     private(set) var historyList: [Message]
     private var maxTokenCount: Int = 16384

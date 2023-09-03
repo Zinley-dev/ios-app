@@ -11,6 +11,11 @@ import AVKit
 
 class ViewModel: ObservableObject {
     
+    deinit {
+        print("ViewModel is being deallocated")
+    }
+
+    
     @Published var isInteractingWithChatGPT = false
     @Published var messages: [MessageRow] = []
     @Published var history: [Message] = []

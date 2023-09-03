@@ -275,12 +275,11 @@ extension ParentViewController {
         
     }
     
-    
     func setupHomeButton() {
         
         // Do any additional setup after loading the view.
-        homeButton.setImage(UIImage.init(named: "Logo")?.resize(targetSize: CGSize(width: 35, height: 35)), for: [])
-        homeButton.addTarget(self, action: #selector(onClickHome(_:)), for: .touchUpInside)
+        homeButton.setImage(UIImage.init(named: "gpt-white")?.resize(targetSize: CGSize(width: 30, height: 30)), for: [])
+        homeButton.addTarget(self, action: #selector(openChatBot(_:)), for: .touchUpInside)
         homeButton.frame = back_frame
         homeButton.setTitleColor(UIColor.white, for: .normal)
         homeButton.setTitle("", for: .normal)
@@ -345,8 +344,14 @@ extension ParentViewController {
 
 extension ParentViewController {
     
-    @objc func onClickHome(_ sender: AnyObject) {
-        shouldScrollToTop()
+    @objc func openChatBot(_ sender: AnyObject) {
+        if let SBCB = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "SB_ChatBot") as? SB_ChatBot {
+            
+            SBCB.hidesBottomBarWhenPushed = true
+            hideMiddleBtn(vc: self)
+            self.navigationController?.pushViewController(SBCB, animated: true)
+    
+        }
     }
     
     
@@ -520,15 +525,19 @@ extension ParentViewController {
         isFeed = true
         
         if stitchViewController.currentIndex != nil {
+            print("Parent - Pause at: \(stitchViewController.currentIndex) for stitch")
             stitchViewController.pauseVideo(index: stitchViewController.currentIndex!)
         } else {
+            print("Parent - Pause at: nil 0 for stitch")
             stitchViewController.currentIndex = 0
             stitchViewController.pauseVideo(index: 0)
         }
         
         if feedViewController.currentIndex != nil {
+            print("Parent - Play at: \(feedViewController.currentIndex) for feed")
             feedViewController.playVideo(index: feedViewController.currentIndex!)
         } else {
+            print("Parent - Play at: nil 0 for feed")
             feedViewController.currentIndex = 0
             feedViewController.playVideo(index: 0)
         }
@@ -538,17 +547,25 @@ extension ParentViewController {
     func showStitch() {
         
         isFeed = false
-        
         if feedViewController.currentIndex != nil {
-            print("Pause at: \(feedViewController.currentIndex)")
+            print("Parent - Pause at: \(feedViewController.currentIndex) for feed")
             feedViewController.pauseVideo(index: feedViewController.currentIndex!)
         } else {
+            print("Parent - Pause at: nil 0 for feed")
             feedViewController.pauseVideo(index: 0)
         }
         
         
-        if stitchViewController.currentIndex != nil, !stitchViewController.posts.isEmpty {
-            stitchViewController.playVideo(index: stitchViewController.currentIndex!)
+        if !stitchViewController.posts.isEmpty {
+            if stitchViewController.currentIndex != nil {
+                print("Parent - Play at: \(stitchViewController.currentIndex) for stitch")
+                stitchViewController.playVideo(index: stitchViewController.currentIndex!)
+            } else {
+                print("Parent - Play at: nil 0 for stitch")
+                stitchViewController.currentIndex = 0
+                stitchViewController.playVideo(index: 0)
+            }
+    
         }
         
     }
@@ -738,7 +755,7 @@ extension ParentViewController {
             scrollView.setContentOffset(CGPoint(x: offset, y: 0), animated: true)
             
             showFeed()
-            
+            currentPageIndex = 0
             
         }
     
@@ -1121,9 +1138,8 @@ extension ParentViewController {
                     feedViewController.collectionNode.scrollToItem(at: IndexPath(row: 0, section: 0), at: .centeredVertically, animated: true)
                     
                 }
-                
+                currentPageIndex = 0
                 rootId = ""
-                
                 feedViewController.clearAllData()
 
             } else {

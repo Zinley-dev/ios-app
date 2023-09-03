@@ -435,5 +435,4 @@ class MainMessageVC: UIViewController, UINavigationBarDelegate, UINavigationCont
         return channel.memberCount > 3 ? "\(names.joined(separator: ","))" : names.joined(separator: ",")
     }
 
-    
 }

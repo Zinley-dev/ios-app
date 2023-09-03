@@ -278,6 +278,9 @@ class VideoNode: ASCellNode, ASVideoNodeDelegate {
         sideButtonsView.stickStack.isHidden = false
         sideButtonsView.backToOriginalBtn.isHidden = false
         
+        let viewStitchTap = UITapGestureRecognizer(target: self, action: #selector(VideoNode.viewStitchTapped))
+        sideButtonsView.viewStitchBtn.addGestureRecognizer(viewStitchTap)
+
         let backToOriginal = UITapGestureRecognizer(target: self, action: #selector(VideoNode.backToOriginal))
         sideButtonsView.backToOriginalBtn.addGestureRecognizer(backToOriginal)
         
@@ -744,6 +747,28 @@ extension VideoNode: UIGestureRecognizerDelegate {
     }
     
     
+    @objc func viewStitchTapped() {
+            if let vc = UIViewController.currentViewController() {
+                if vc is ParentViewController {
+                    if let update1 = vc as? ParentViewController {
+                        if !update1.isFeed {
+                            hideAllInfo()
+                            update1.stitchViewController.selectPostCollectionView.isHidden = false
+                          
+                        }
+                    } else if let update1 = vc as? SelectedParentVC {
+                        if !update1.isRoot {
+                            // Calculate the next page index
+                           
+                            hideAllInfo()
+                            update1.stitchViewController.selectPostCollectionView.isHidden = false
+                           
+                        }
+                    }
+                }
+            }
+        }
+    
     @objc func backToOriginal() {
         if let vc = UIViewController.currentViewController() {
             if vc is ParentViewController {
@@ -757,6 +782,7 @@ extension VideoNode: UIGestureRecognizerDelegate {
                         update1.scrollView.setContentOffset(CGPoint(x: offset, y: 0), animated: true)
                         //update1.feedViewController.currentIndex = 0
                         update1.showFeed()
+                        update1.currentPageIndex = 0
                        
                     }
                 } else if let update1 = vc as? SelectedParentVC {
@@ -768,7 +794,8 @@ extension VideoNode: UIGestureRecognizerDelegate {
                         // Scroll to the next page
                         update1.scrollView.setContentOffset(CGPoint(x: offset, y: 0), animated: true)
                         //update1.selectedRootPostVC.currentIndex = 0
-                        update1.resumeVideo()
+                        update1.showRoot()
+                        update1.currentPageIndex = 0
                        
                     }
                 }

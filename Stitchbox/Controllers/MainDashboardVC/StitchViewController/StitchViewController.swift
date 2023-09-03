@@ -48,16 +48,28 @@ class StitchViewController: UIViewController, UICollectionViewDelegateFlowLayout
     var animatedLabel: MarqueeLabel!
     
     private var pullControl = UIRefreshControl()
+    @IBOutlet weak var selectPostCollectionView: UIView!
+    @IBOutlet weak var heightConstraint: NSLayoutConstraint!
+    @IBOutlet weak var galleryView: UIView!
     
+    var galleryCollectionNode: ASCollectionNode!
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        let height =  UIScreen.main.bounds.height * 1 / 4
+        heightConstraint.constant = height
+      
 
         setupCollectionNode()
+        setupGalleryNode()
         addAnimatedLabelToTop()
         collectionNode.dataSource = self
         collectionNode.delegate = self
         
+        
+        galleryCollectionNode.delegate = self
+        galleryCollectionNode.dataSource = self
        
     }
 
@@ -111,6 +123,23 @@ class StitchViewController: UIViewController, UICollectionViewDelegateFlowLayout
             animatedLabel.text = text
         }
            
+    }
+    
+    
+    @IBAction func hideBtnPressed(_ sender: Any) {
+        
+        selectPostCollectionView.isHidden = true
+        
+        if let index = currentIndex {
+            
+            if let cell = self.collectionNode.nodeForItem(at: IndexPath(row: index, section: 0)) as? VideoNode {
+
+                cell.showAllInfo()
+                
+            }
+            
+        }
+        
     }
     
     
@@ -267,30 +296,46 @@ extension StitchViewController: ASCollectionDelegate {
     
     func collectionNode(_ collectionNode: ASCollectionNode, constrainedSizeForItemAt indexPath: IndexPath) -> ASSizeRange {
         
-        let frameWidth = self.collectionNode.frame.width
-        let frameHeight = self.collectionNode.frame.height
-        
-        // Check for excessively large sizes
-        guard frameWidth < CGFloat.greatestFiniteMagnitude,
-              frameHeight < CGFloat.greatestFiniteMagnitude else {
-            print("Frame width or height is too large")
-            return ASSizeRangeMake(CGSize.zero, CGSize.zero)
+        if collectionNode == galleryCollectionNode {
+                    
+            let height =  UIScreen.main.bounds.height * 1 / 4 - 70
+            let width = height * 9 / 13.5
+                    
+            let min = CGSize(width: width, height: height)
+            let max = CGSize(width: width, height: height)
+                
+            return ASSizeRangeMake(min, max)
+                    
+        } else {
+            
+            let frameWidth = self.collectionNode.frame.width
+            let frameHeight = self.collectionNode.frame.height
+            
+            // Check for excessively large sizes
+            guard frameWidth < CGFloat.greatestFiniteMagnitude,
+                  frameHeight < CGFloat.greatestFiniteMagnitude else {
+                print("Frame width or height is too large")
+                return ASSizeRangeMake(CGSize.zero, CGSize.zero)
+            }
+            
+            let min = CGSize(width: frameWidth, height: 50);
+            let max = CGSize(width: frameWidth, height: frameHeight);
+            
+            return ASSizeRangeMake(min, max);
+            
+            
         }
         
-        let min = CGSize(width: frameWidth, height: 50);
-        let max = CGSize(width: frameWidth, height: frameHeight);
-        
-        return ASSizeRangeMake(min, max);
-        
-        
-        
-
     }
 
-    
     func shouldBatchFetch(for collectionNode: ASCollectionNode) -> Bool {
         
+        if collectionNode == galleryCollectionNode {
+            return false
+        }
+        
         return true
+        
 
     }
     
@@ -307,21 +352,22 @@ extension StitchViewController: ASCollectionDataSource {
     func collectionNode(_ collectionNode: ASCollectionNode, numberOfItemsInSection section: Int) -> Int {
         
         
-        if self.posts.isEmpty {
+        if self.collectionNode == collectionNode {
             
-            self.collectionNode.view.setEmptyMessage("No stitch found!", color: .white)
+            if self.posts.isEmpty {
+                
+                self.collectionNode.view.setEmptyMessage("No stitch found!", color: .white)
+                
+            } else {
+                
+                self.collectionNode.view.restore()
+                
+            }
             
-            
-            return 0
-            
-        } else {
-            
-            self.collectionNode.view.restore()
-           
-            
-            return self.posts.count
         }
+        
     
+        return self.posts.count
         
     }
     
@@ -331,26 +377,44 @@ extension StitchViewController: ASCollectionDataSource {
         let post = self.posts[indexPath.row]
         
         
-        return { [weak self] in
-            guard let self = self else {
-                return ASCellNode()
+        if collectionNode == galleryCollectionNode {
+                           
+            return {
+                let node = StitchGalleryNode(with: post)
+                node.neverShowPlaceholders = true
+                node.debugName = "Node \(indexPath.row)"
+                node.automaticallyManagesSubnodes = true
+                               //
+                return node
+            }
+                           
+        } else {
+            
+            return { [weak self] in
+                guard let self = self else {
+                    return ASCellNode()
+                }
+                
+                let node = VideoNode(with: post, at: indexPath.row, isPreview: false, vcType: "stitch", selectedStitch: selectedStitch)
+                node.neverShowPlaceholders = true
+                node.debugName = "Node \(indexPath.row)"
+                
+                node.automaticallyManagesSubnodes = true
+                
+                return node
             }
             
-            let node = VideoNode(with: post, at: indexPath.row, isPreview: false, vcType: "stitch", selectedStitch: selectedStitch)
-            node.neverShowPlaceholders = true
-            node.debugName = "Node \(indexPath.row)"
             
-            node.automaticallyManagesSubnodes = true
-            
-            return node
         }
+        
+       
          
         
     }
     
     func collectionNode(_ collectionNode: ASCollectionNode, willBeginBatchFetchWith context: ASBatchContext) {
         
-        if rootId != "", !refresh_request, posts.count <= 50 {
+        if rootId != "", !refresh_request, posts.count <= 50, collectionNode != galleryCollectionNode {
          
             retrieveNextPageWithCompletion { [weak self] (newPosts) in
                 guard let self = self else { return }
@@ -366,6 +430,7 @@ extension StitchViewController: ASCollectionDataSource {
         }
         
     }
+
     
 
 }
@@ -398,6 +463,34 @@ extension StitchViewController {
        
         self.applyStyle()
      
+    }
+    
+    func setupGalleryNode() {
+            
+        let flowLayout = UICollectionViewFlowLayout()
+        flowLayout.scrollDirection = .horizontal
+        flowLayout.minimumLineSpacing = 12
+        flowLayout.minimumInteritemSpacing = 12
+        galleryCollectionNode = ASCollectionNode(collectionViewLayout: flowLayout)
+            
+        galleryView.addSubview(galleryCollectionNode.view)
+        galleryCollectionNode.view.translatesAutoresizingMaskIntoConstraints = false
+        galleryCollectionNode.view.topAnchor.constraint(equalTo: galleryView.topAnchor, constant: 0).isActive = true
+        galleryCollectionNode.view.leadingAnchor.constraint(equalTo: galleryView.leadingAnchor, constant: 0).isActive = true
+        galleryCollectionNode.view.trailingAnchor.constraint(equalTo: galleryView.trailingAnchor, constant: 0).isActive = true
+        galleryCollectionNode.view.bottomAnchor.constraint(equalTo: galleryView.bottomAnchor, constant: 0).isActive = true
+        galleryCollectionNode.backgroundColor = .red
+            
+        galleryCollectionNode.view.isPagingEnabled = false
+        galleryCollectionNode.view.backgroundColor = UIColor.clear
+        galleryCollectionNode.view.showsVerticalScrollIndicator = false
+        galleryCollectionNode.view.allowsSelection = true
+        galleryCollectionNode.allowsMultipleSelection = false
+        galleryCollectionNode.view.contentInsetAdjustmentBehavior = .never
+        galleryCollectionNode.needsDisplayOnBoundsChange = true
+           
+        galleryCollectionNode.allowsMultipleSelection = false
+        
     }
     
     func applyStyle() {
@@ -462,7 +555,7 @@ extension StitchViewController {
         if !items.isEmpty {
             let indexPaths = generateIndexPaths(for: items)
             collectionNode.insertItems(at: indexPaths)
-            //galleryCollectionNode.insertItems(at: indexPaths)
+            galleryCollectionNode.insertItems(at: indexPaths)
         }
         
         if refresh_request {
@@ -473,6 +566,7 @@ extension StitchViewController {
     private func clearExistingPosts() {
         posts.removeAll()
         self.collectionNode.reloadData()
+        self.galleryCollectionNode.reloadData()
         
     }
 
@@ -489,7 +583,7 @@ extension StitchViewController {
                 self?.posts.removeAll()
                 
                 self?.collectionNode.reloadData()
-                //self?.galleryCollectionNode.reloadData()
+                self?.galleryCollectionNode.reloadData()
             
                 if self?.posts.isEmpty == true {
                     self?.collectionNode.view.setEmptyMessage("No stitch found!", color: .white)
@@ -513,6 +607,43 @@ extension StitchViewController {
         updateData()
     }
 
+    func collectionNode(_ collectionNode: ASCollectionNode, didSelectItemAt indexPath: IndexPath) {
+        
+        if collectionNode == galleryCollectionNode {
+            
+            if let currentIndex = currentIndex, abs(currentIndex - indexPath.row) > 1 {
+                var prev = IndexPath(item: currentIndex, section: 0)
+                
+                // If the user is moving forward
+                if indexPath.row > currentIndex {
+                    prev = IndexPath(item: indexPath.row - 1, section: 0)
+                }
+                
+                // If the user is moving backward
+                if indexPath.row < currentIndex {
+                    prev = IndexPath(item: indexPath.row + 1, section: 0)
+                }
+                
+                self.collectionNode.scrollToItem(at: prev, at: .centeredVertically, animated: false)
+                self.collectionNode.scrollToItem(at: indexPath, at: .centeredVertically, animated: true)
+                print("scroll: scroll1")
+            } else {
+                self.collectionNode.scrollToItem(at: indexPath, at: .centeredVertically, animated: true)
+                print("scroll: scroll2")
+            }
+            
+            
+        }
+        
+        
+    }
+    
+    func updateCellAppearance(_ cell: StitchGalleryNode, isSelected: Bool) {
+        cell.layer.cornerRadius = 10
+        cell.layer.borderWidth = isSelected ? 2 : 0
+        cell.layer.borderColor = isSelected ? UIColor.secondary.cgColor : UIColor.clear.cgColor
+        cell.isSelected = isSelected
+    }
 
 }
 
@@ -529,19 +660,29 @@ extension StitchViewController {
     }
 
     
-    func updateCellAppearance(_ cell: StitchGalleryNode, isSelected: Bool) {
-            cell.layer.cornerRadius = 10
-            cell.layer.borderWidth = isSelected ? 2 : 0
-            cell.layer.borderColor = isSelected ? UIColor.secondary.cgColor : UIColor.clear.cgColor
-            cell.isSelected = isSelected
-        }
-    
     
     func playVideo(index: Int) {
         
         print("StitchViewController: \(index) - play")
         
         if let cell = self.collectionNode.nodeForItem(at: IndexPath(row: index, section: 0)) as? VideoNode {
+            
+            // Cell selection/deselection logic
+            let indexPath = IndexPath(row: index, section: 0)
+            if let imgCell = galleryCollectionNode.nodeForItem(at: indexPath) as? StitchGalleryNode {
+                    updateCellAppearance(imgCell, isSelected: true)
+                    galleryCollectionNode.selectItem(at: indexPath, animated: false, scrollPosition: [])
+                    galleryCollectionNode.scrollToItem(at: indexPath, at: .centeredHorizontally, animated: true)
+
+                    // Deselect all other cells
+                    for i in 0..<galleryCollectionNode.numberOfItems(inSection: 0) {
+                        if i != index, let otherCell = galleryCollectionNode.nodeForItem(at: IndexPath(row: i, section: 0)) as? StitchGalleryNode {
+                            updateCellAppearance(otherCell, isSelected: false)
+                        }
+                    }
+                } else {
+                print("Couldn't cast ?")
+            }
             
             cell.isActive = true
             handleAnimationTextAndImage(for: index)

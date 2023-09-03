@@ -8,6 +8,13 @@
 import SwiftUI
 
 class ToolbarActions: ObservableObject {
+    
+    deinit {
+        print("ToolbarActions is being deallocated")
+        // cleanup code
+    }
+    
+    
     @Published var clearAction: (() -> Void)?
     @Published var isClearActionDisabled: Bool = false
     @Published var getConversationHistory: (() -> Void)?
@@ -15,6 +22,8 @@ class ToolbarActions: ObservableObject {
 }
 
 struct ChatBotView: View {
+    
+    
     @StateObject var vm = ViewModel(api: ChatGPTAPI(apiKey: "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"))
     @ObservedObject var toolbarActions: ToolbarActions
     @State private var scrollToLastMessage: Bool = false
@@ -22,6 +31,7 @@ struct ChatBotView: View {
     
     var body: some View {
         ContentView(vm: vm, scrollToLastMessage: $scrollToLastMessage)
+        /*
             .onAppear {
                 if !didLoadHistory {
                     vm.getConversationHistory {
@@ -37,6 +47,7 @@ struct ChatBotView: View {
                     vm.clearMessages()
                 }
             }
+         */
             .onChange(of: scrollToLastMessage) { newValue in
                 if newValue {
                     scrollToLastMessage = false
