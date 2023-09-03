@@ -68,6 +68,13 @@ class ViewModel: ObservableObject {
         }
     }
     
+    @MainActor
+    func helloMessages() {
+        
+        print("helloMessages")
+        
+    }
+    
     
     @MainActor
     func retry(message: MessageRow) async {

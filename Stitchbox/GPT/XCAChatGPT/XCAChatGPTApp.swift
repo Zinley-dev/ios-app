@@ -31,8 +31,9 @@ struct ChatBotView: View {
     
     var body: some View {
         ContentView(vm: vm, scrollToLastMessage: $scrollToLastMessage)
-        /*
+        
             .onAppear {
+                
                 if !didLoadHistory {
                     vm.getConversationHistory {
                         DispatchQueue.main.asyncAfter(deadline: .now() + 0.25) {
@@ -43,11 +44,14 @@ struct ChatBotView: View {
                     }
                     didLoadHistory = true
                 }
-                toolbarActions.clearAction = {
-                    vm.clearMessages()
+
+                
+                toolbarActions.clearAction = { [weak vm] in
+                    vm?.clearMessages()
                 }
+
             }
-         */
+        
             .onChange(of: scrollToLastMessage) { newValue in
                 if newValue {
                     scrollToLastMessage = false

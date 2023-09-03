@@ -41,7 +41,7 @@ class SB_ChatBot: UIViewController {
 
         setupButtons()
         setupNavBar()
-        //presentSwiftLoader()
+        presentSwiftLoader()
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.01) { [weak self] in
             self?.setupWithoutMeta()
         }
