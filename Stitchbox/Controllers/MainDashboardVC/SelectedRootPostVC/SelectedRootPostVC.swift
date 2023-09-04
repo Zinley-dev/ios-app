@@ -161,6 +161,37 @@ extension SelectedRootPostVC {
 
 extension SelectedRootPostVC {
     
+    func scrollViewWillEndDragging(_ scrollView: UIScrollView, withVelocity velocity: CGPoint, targetContentOffset: UnsafeMutablePointer<CGPoint>) {
+
+        if !posts.isEmpty, scrollView == collectionNode.view {
+            
+            let pageHeight: CGFloat = scrollView.bounds.height
+            let currentOffset: CGFloat = scrollView.contentOffset.y
+            let targetOffset: CGFloat = targetContentOffset.pointee.y
+            var newTargetOffset: CGFloat = 0
+
+            if targetOffset > currentOffset {
+                newTargetOffset = ceil(currentOffset / pageHeight) * pageHeight
+            } else {
+                newTargetOffset = floor(currentOffset / pageHeight) * pageHeight
+            }
+
+            if newTargetOffset < 0 {
+                newTargetOffset = 0
+            } else if newTargetOffset > scrollView.contentSize.height - pageHeight {
+                newTargetOffset = scrollView.contentSize.height - pageHeight
+            }
+
+            // Adjust the target content offset to the new target offset
+            targetContentOffset.pointee.y = newTargetOffset
+            
+            // Optional: Use UIView animation to control the animation duration if desired.
+            UIView.animate(withDuration: 0.2, delay: 0, options: .curveEaseOut, animations: {
+                scrollView.setContentOffset(CGPoint(x: 0, y: newTargetOffset), animated: false)
+            }, completion: nil)
+        }
+    }
+    
        func scrollViewDidScroll(_ scrollView: UIScrollView) {
            
            if !posts.isEmpty, scrollView == collectionNode.view {

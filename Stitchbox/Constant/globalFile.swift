@@ -976,3 +976,26 @@ protocol PostManaging {
     var collectionNode: ASCollectionNode { get } // Replace with your collection node type
 }
 
+
+func requestTrackingAuthorization() {
+    ATTrackingManager.requestTrackingAuthorization(completionHandler: { status in
+        switch status {
+        case .authorized:
+            // User has granted permission to track
+            // You can now access the IDFA
+            let idfa = ASIdentifierManager.shared().advertisingIdentifier.uuidString
+            print("IDFA: \(idfa)")
+        case .denied:
+            // User has denied permission to track
+            print("Tracking denied")
+        case .restricted:
+            // Tracking capability is restricted
+            print("Tracking restricted")
+        case .notDetermined:
+            // User has not been asked for tracking permission
+            print("Tracking not determined")
+        @unknown default:
+            print("Unknown tracking status")
+        }
+    })
+}

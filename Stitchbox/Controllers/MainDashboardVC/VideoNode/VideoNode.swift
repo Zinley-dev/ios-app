@@ -127,58 +127,6 @@ class VideoNode: ASCellNode, ASVideoNodeDelegate {
         
      }
     
-    
-    // Called when the video player's state changes
-    func videoNode(_ videoNode: ASVideoNode, willChange state: ASVideoNodePlayerState, to toState: ASVideoNodePlayerState) {
-        let currentStateDescription: String
-        let nextStateDescription: String
-
-        switch state {
-        case .loading:
-            currentStateDescription = "loading/buffering"
-        case .playing:
-            currentStateDescription = "playing"
-        case .paused:
-            currentStateDescription = "paused"
-        case .finished:
-            currentStateDescription = "finished"
-        case .unknown:
-            currentStateDescription = "unknown"
-        default:
-            currentStateDescription = "unspecified"
-        }
-
-        switch toState {
-        case .loading:
-            nextStateDescription = "loading/buffering"
-        case .playing:
-            nextStateDescription = "playing"
-        case .paused:
-            nextStateDescription = "paused"
-        case .finished:
-            nextStateDescription = "finished"
-        case .unknown:
-            nextStateDescription = "unknown"
-        default:
-            nextStateDescription = "unspecified"
-        }
-
-        print("videonode log: Video is changing from \(currentStateDescription) to \(nextStateDescription)")
-
-        if let playerItem = videoNode.player?.currentItem, playerItem.isPlaybackBufferEmpty {
-            print("videonode log: Playback buffer is empty")
-        } else {
-            print("videonode log: Playback buffer is not empty")
-        }
-    }
-
-
-    // Called when there's an error loading a certain key for the video asset
-    func videoNode(_ videoNode: ASVideoNode, didFailToLoadValueForKey key: String, error: Error) {
-        print("videonode log: Failed to load value for key: \(key). Error: \(error.localizedDescription)")
-    }
-    
-    
     override func layout() {
         super.layout()
         if self.label != nil, self.headerView != nil {

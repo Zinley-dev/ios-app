@@ -16,7 +16,7 @@ import MarqueeLabel
 class FeedViewController: UIViewController, UICollectionViewDelegateFlowLayout, UIAdaptivePresentationControllerDelegate {
     
     var timer: Timer?
-    
+    var isDraggingEnded: Bool = false
     @IBOutlet weak var progressBar: ProgressBar!
     @IBOutlet weak var contentView: UIView!
     var lastContentOffsetY: CGFloat = 0
@@ -168,10 +168,45 @@ extension FeedViewController {
 
 
 extension FeedViewController {
+    
+    func scrollViewWillEndDragging(_ scrollView: UIScrollView, withVelocity velocity: CGPoint, targetContentOffset: UnsafeMutablePointer<CGPoint>) {
+
+        if !posts.isEmpty, scrollView == collectionNode.view, !refresh_request {
+            
+            let pageHeight: CGFloat = scrollView.bounds.height
+            let currentOffset: CGFloat = scrollView.contentOffset.y
+            let targetOffset: CGFloat = targetContentOffset.pointee.y
+            var newTargetOffset: CGFloat = 0
+
+            if targetOffset > currentOffset {
+                newTargetOffset = ceil(currentOffset / pageHeight) * pageHeight
+            } else {
+                newTargetOffset = floor(currentOffset / pageHeight) * pageHeight
+            }
+
+            if newTargetOffset < 0 {
+                newTargetOffset = 0
+            } else if newTargetOffset > scrollView.contentSize.height - pageHeight {
+                newTargetOffset = scrollView.contentSize.height - pageHeight
+            }
+
+            // Adjust the target content offset to the new target offset
+            targetContentOffset.pointee.y = newTargetOffset
+            
+            // Set the flag
+            isDraggingEnded = true
+        }
+    }
 
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         
         if !posts.isEmpty, scrollView == collectionNode.view, !refresh_request {
+            
+            if isDraggingEnded {
+                    // Skip scrollViewDidScroll logic if we have just ended dragging
+                    isDraggingEnded = false
+                    return
+                }
 
             // Get the visible rect of the collection view.
             let visibleRect = CGRect(origin: scrollView.contentOffset, size: scrollView.bounds.size)
@@ -223,8 +258,6 @@ extension FeedViewController {
         }
     }
 
-
- 
 }
 
 extension FeedViewController: ASCollectionDelegate {

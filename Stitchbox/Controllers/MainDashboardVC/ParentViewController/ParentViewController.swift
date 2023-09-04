@@ -35,6 +35,7 @@ class ParentViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        requestTrackingAuthorization()
         setupObservation()
         syncSendbirdAccount()
         IAPManager.shared.configure()

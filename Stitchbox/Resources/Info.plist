@@ -93,5 +93,7 @@
 		<string>remote-notification</string>
 		<string>voip</string>
 	</array>
+    <key>NSUserTrackingUsageDescription</key>
+    <string>Your custom message explaining why you need tracking permission.</string>
 </dict>
 </plist>

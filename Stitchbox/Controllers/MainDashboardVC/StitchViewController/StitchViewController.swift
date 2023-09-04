@@ -24,7 +24,7 @@ class StitchViewController: UIViewController, UICollectionViewDelegateFlowLayout
     var hasViewAppeared = false
     var isVideoPlaying = false
     var curPage = 1
-  
+    var isDraggingEnded: Bool = false
     let homeButton: UIButton = UIButton(type: .custom)
    
     
@@ -186,10 +186,51 @@ extension StitchViewController {
 
 
 extension StitchViewController {
+    
+    
+    func scrollViewWillEndDragging(_ scrollView: UIScrollView, withVelocity velocity: CGPoint, targetContentOffset: UnsafeMutablePointer<CGPoint>) {
+
+        if !posts.isEmpty, scrollView == collectionNode.view {
+            
+            let pageWidth: CGFloat = scrollView.bounds.width
+            let currentOffset: CGFloat = scrollView.contentOffset.x
+            let targetOffset: CGFloat = targetContentOffset.pointee.x
+            var newTargetOffset: CGFloat = 0
+
+            if targetOffset > currentOffset {
+                newTargetOffset = ceil(currentOffset / pageWidth) * pageWidth
+            } else {
+                newTargetOffset = floor(currentOffset / pageWidth) * pageWidth
+            }
+
+            if newTargetOffset < 0 {
+                newTargetOffset = 0
+            } else if newTargetOffset > scrollView.contentSize.width - pageWidth {
+                newTargetOffset = scrollView.contentSize.width - pageWidth
+            }
+
+            // Adjust the target content offset to the new target offset
+            
+            // Adjust the target content offset to the new target offset
+            targetContentOffset.pointee.x = newTargetOffset
+            
+            // Set the flag
+            isDraggingEnded = true
+            
+        }
+    }
 
  
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         if !posts.isEmpty, scrollView == collectionNode.view {
+            
+            if isDraggingEnded {
+                // Skip scrollViewDidScroll logic if we have just ended dragging
+                isDraggingEnded = false
+                return
+            }
+
+
             // Check if it's a horizontal scroll
             if lastContentOffset != scrollView.contentOffset.x {
                 lastContentOffset = scrollView.contentOffset.x
@@ -227,7 +268,6 @@ extension StitchViewController {
                     
                     if !posts[newPlayingIndex!].muxPlaybackId.isEmpty {
                         foundVisibleVideo = true
-                       
                     }
                     
                 }
@@ -249,8 +289,6 @@ extension StitchViewController {
                         if let node = collectionNode.nodeForItem(at: IndexPath(item: currentIndex!, section: 0)) as? VideoNode {
                             resetView(cell: node)
                         }
-                    } else {
-                        // Do nothing if the current index is the same as newPlayingIndex
                     }
                 }
                 
@@ -722,6 +760,7 @@ extension StitchViewController {
                             
                             // Scroll to the next page
                             update1.scrollView.setContentOffset(CGPoint(x: offset, y: 0), animated: true)
+                            update1.currentPageIndex = 0
                             update1.showFeed()
                           
                         }
@@ -733,6 +772,7 @@ extension StitchViewController {
                             
                             // Scroll to the next page
                             update1.scrollView.setContentOffset(CGPoint(x: offset, y: 0), animated: true)
+                            update1.currentPageIndex = 0
                             update1.showRoot()
                           
                         }
