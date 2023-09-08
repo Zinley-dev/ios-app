@@ -53,7 +53,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         CacheManager.shared.asyncRemoveExpiredObjects()
         
         do {
-            let maxSizeInBytes: UInt64 = UInt64(1 * 1024 * 1024 * 1024)  // 1GB
+            let maxSizeInBytes: UInt64 = UInt64(0.5 * 1024 * 1024 * 1024)  // 1GB
             try maintainTmpDirectory(maxSizeInBytes: maxSizeInBytes)
         } catch {
             print("Failed to maintain tmp directory with error: \(error)")
@@ -66,7 +66,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         CacheManager.shared.asyncRemoveExpiredObjects()
         
         do {
-            let maxSizeInBytes: UInt64 = UInt64(1 * 1024 * 1024 * 1024)  // 1GB
+            let maxSizeInBytes: UInt64 = UInt64(0.5 * 1024 * 1024 * 1024)  // 1GB
             try maintainTmpDirectory(maxSizeInBytes: maxSizeInBytes)
         } catch {
             print("Failed to maintain tmp directory with error: \(error)")
@@ -103,7 +103,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         // Called when the scene will move from an active state to an inactive state.
         // This may occur due to temporary interruptions (ex. an incoming phone call).
         do {
-            let maxSizeInBytes: UInt64 = UInt64(1 * 1024 * 1024 * 1024)  // 1GB
+            let maxSizeInBytes: UInt64 = UInt64(0.5 * 1024 * 1024 * 1024)  // 1GB
             try maintainTmpDirectory(maxSizeInBytes: maxSizeInBytes)
         } catch {
             print("Failed to maintain tmp directory with error: \(error)")
@@ -147,7 +147,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         // Called as the scene transitions from the background to the foreground.
         // Use this method to undo the changes made on entering the background.
         do {
-            let maxSizeInBytes: UInt64 = UInt64(1 * 1024 * 1024 * 1024)  // 1GB
+            let maxSizeInBytes: UInt64 = UInt64(0.5 * 1024 * 1024 * 1024)  // 1GB
             try maintainTmpDirectory(maxSizeInBytes: maxSizeInBytes)
         } catch {
             print("Failed to maintain tmp directory with error: \(error)")
@@ -160,7 +160,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         // Use this method to save data, release shared resources, and store enough scene-specific state information
         // to restore the scene back to its current state.
         do {
-            let maxSizeInBytes: UInt64 = UInt64(1 * 1024 * 1024 * 1024)  // 1GB
+            let maxSizeInBytes: UInt64 = UInt64(0.5 * 1024 * 1024 * 1024)  // 1GB
             try maintainTmpDirectory(maxSizeInBytes: maxSizeInBytes)
         } catch {
             print("Failed to maintain tmp directory with error: \(error)")

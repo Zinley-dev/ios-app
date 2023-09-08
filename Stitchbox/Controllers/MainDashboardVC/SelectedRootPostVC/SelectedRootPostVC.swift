@@ -49,6 +49,7 @@ class SelectedRootPostVC: UIViewController, UICollectionViewDelegateFlowLayout {
     var animatedLabel: MarqueeLabel!
     var selectedLoadingMode = loadingMode.none
     var page = 0
+    var isDraggingEnded: Bool = false
     
     @IBOutlet weak var loadingImage: FLAnimatedImageView!
     @IBOutlet weak var loadingView: UIView!
@@ -185,16 +186,21 @@ extension SelectedRootPostVC {
             // Adjust the target content offset to the new target offset
             targetContentOffset.pointee.y = newTargetOffset
             
-            // Optional: Use UIView animation to control the animation duration if desired.
-            UIView.animate(withDuration: 0.2, delay: 0, options: .curveEaseOut, animations: {
-                scrollView.setContentOffset(CGPoint(x: 0, y: newTargetOffset), animated: false)
-            }, completion: nil)
+            // Set the flag
+            isDraggingEnded = true
+            
         }
     }
     
        func scrollViewDidScroll(_ scrollView: UIScrollView) {
            
            if !posts.isEmpty, scrollView == collectionNode.view {
+               
+               if isDraggingEnded {
+                       // Skip scrollViewDidScroll logic if we have just ended dragging
+                       isDraggingEnded = false
+                       return
+                   }
                
                // Get the visible rect of the collection view.
                let visibleRect = CGRect(origin: scrollView.contentOffset, size: scrollView.bounds.size)
@@ -364,10 +370,7 @@ extension SelectedRootPostVC: ASCollectionDataSource {
     func collectionNode(_ collectionNode: ASCollectionNode, nodeBlockForItemAt indexPath: IndexPath) -> ASCellNodeBlock {
         let post = self.posts[indexPath.row]
         
-        return { [weak self] in
-            guard let self = self else {
-                return ASCellNode()
-            }
+        return {
             
             let node = VideoNode(with: post, at: indexPath.row, isPreview: false, vcType: "selectedRoot", selectedStitch: false)
             node.neverShowPlaceholders = true
@@ -581,7 +584,7 @@ extension SelectedRootPostVC {
     func applyAnimationText(text: String) {
         if text != "" {
             animatedLabel.text = text + "                   "
-            animatedLabel.restartLabel()
+           // animatedLabel.restartLabel()
         } else {
             //animatedLabel.pauseLabel()
             animatedLabel.text = text

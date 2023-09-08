@@ -664,6 +664,7 @@ extension ParentViewController {
         
         if shouldReload {
             
+            
             DispatchQueue.main.async { [weak self] in
                 guard let self = self else { return }
                 self.scrollView.isScrollEnabled = false
@@ -691,6 +692,7 @@ extension ParentViewController {
                     }
                 }
             }
+            
         }
          
     }
@@ -734,7 +736,7 @@ extension ParentViewController {
                     }
                     
                 }
-                
+                 
             } else {
                 
                 feedViewController.delayItem3.perform(after: 0.25) { [weak self] in

@@ -115,10 +115,10 @@ class StitchViewController: UIViewController, UICollectionViewDelegateFlowLayout
     func applyAnimationText(text: String) {
         if text == "Back to original!" {
             animatedLabel.text = text + "                                 "
-            animatedLabel.restartLabel()
+            //animatedLabel.restartLabel()
         } else if text != ""  {
             animatedLabel.text = text + "                   "
-            animatedLabel.restartLabel()
+            //animatedLabel.restartLabel()
         } else {
             animatedLabel.text = text
         }

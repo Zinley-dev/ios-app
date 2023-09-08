@@ -117,7 +117,7 @@ class FeedViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
     func applyAnimationText(text: String) {
         if text != "" {
             animatedLabel.text = text + "                   "
-            animatedLabel.restartLabel()
+            //animatedLabel.restartLabel()
         } else {
             //animatedLabel.pauseLabel()
             animatedLabel.text = text

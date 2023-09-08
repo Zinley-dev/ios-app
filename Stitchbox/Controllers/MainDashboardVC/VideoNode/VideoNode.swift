@@ -50,10 +50,24 @@ class VideoNode: ASCellNode, ASVideoNodeDelegate {
     private let fireworkController2 = ClassicFireworkController()
     private var spinner: NVActivityIndicatorView!
     
-    private var headerView: PostHeader!
-    private var sideButtonsView: ButtonSideList!
+    private lazy var headerView: PostHeader = {
+        let header = PostHeader()
+        return header
+    }()
+
+    private lazy var sideButtonsView: ButtonSideList = {
+        let buttonsView = ButtonSideList()
+        // Any initial configuration for buttonsView can go here.
+        return buttonsView
+    }()
+
     
-    private var label: ActiveLabel!
+    private lazy var label: ActiveLabel = {
+        let activeLabel = ActiveLabel()
+        // Any initial configuration for activeLabel can go here.
+        return activeLabel
+    }()
+
     private let maximumShowing = 100
     private var isSave = false
     private var isFollowingUser = false
@@ -97,14 +111,25 @@ class VideoNode: ASCellNode, ASVideoNodeDelegate {
         addPanGestureRecognizer()
         spinner = NVActivityIndicatorView(frame:  CGRect(x: 0, y: 0, width: 75, height: 75), type: .ballScale, color: .secondary, padding: 0)
         
+        setupViews()
+         
         if !isPreview {
             setupTimeView()
             setupFunction()
+            
+            if isOriginal {
+                // Handle count stitch if not then hide
+                addSideButtons(isOwned: true, total: post.totalStitchTo + post.totalMemberStitch)
+            } else {
+                addSideButtons(isOwned: false)
+            }
+            
         }
+        
+        setupLabel()
+        setupSpace(width: UIScreen.main.bounds.width)
     
     /*
-        addPinchGestureRecognizer()
-        addPanGestureRecognizer()
         setupViews()
         
         if !isPreview {
@@ -129,12 +154,8 @@ class VideoNode: ASCellNode, ASVideoNodeDelegate {
     
     override func layout() {
         super.layout()
-        if self.label != nil, self.headerView != nil {
-            self.label.frame = self.headerView.contentLbl.bounds
-            self.label.numberOfLines = Int(self.headerView.contentLbl.numberOfLines)
-        }
-        
-        
+        self.label.frame = self.headerView.contentLbl.bounds
+        self.label.numberOfLines = Int(self.headerView.contentLbl.numberOfLines)
     }
     
     func clearMode() {
@@ -156,25 +177,22 @@ class VideoNode: ASCellNode, ASVideoNodeDelegate {
     
     private func setupSpace(width: CGFloat) {
         
-        if let buttonsView = self.headerView {
-         
-            let leftAndRightPadding: CGFloat = 20 * 2 // Padding for both sides
-            let itemWidth: CGFloat = 60
-            let numberOfItems: CGFloat = 4 // Number of items in the stack view
-            let superViewWidth: CGFloat = width // Assuming this is the superview's width
-            
-            // Calculate the total width of items
-            let totalItemWidth: CGFloat = numberOfItems * itemWidth
-            
-            // Calculate the total space we have left for spacing after subtracting the item widths and paddings
-            let totalSpacingWidth: CGFloat = superViewWidth - totalItemWidth - leftAndRightPadding
-            
-            // Calculate the spacing by dividing the total space by the number of spaces (which is 3, for 4 items)
-            let spacing: CGFloat = totalSpacingWidth / (numberOfItems - 1)
-            
-            // Set the calculated spacing
-            buttonsView.stackView.spacing = spacing
-        }
+        let leftAndRightPadding: CGFloat = 20 * 2 // Padding for both sides
+        let itemWidth: CGFloat = 60
+        let numberOfItems: CGFloat = 4 // Number of items in the stack view
+        let superViewWidth: CGFloat = width // Assuming this is the superview's width
+        
+        // Calculate the total width of items
+        let totalItemWidth: CGFloat = numberOfItems * itemWidth
+        
+        // Calculate the total space we have left for spacing after subtracting the item widths and paddings
+        let totalSpacingWidth: CGFloat = superViewWidth - totalItemWidth - leftAndRightPadding
+        
+        // Calculate the spacing by dividing the total space by the number of spaces (which is 3, for 4 items)
+        let spacing: CGFloat = totalSpacingWidth / (numberOfItems - 1)
+        
+        // Set the calculated spacing
+        headerView.stackView.spacing = spacing
     }
 
 
@@ -188,7 +206,6 @@ class VideoNode: ASCellNode, ASVideoNodeDelegate {
     }
 
     private func setupSideButtonsView() {
-        let sideButtonsView = ButtonSideList()
         sideButtonsView.backgroundColor = .clear
         sideButtonsView.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(sideButtonsView)
@@ -239,11 +256,7 @@ class VideoNode: ASCellNode, ASVideoNodeDelegate {
 
     func updateStitchCount(text: String) {
         
-        if sideButtonsView != nil {
-            
-            sideButtonsView.stitchCount.text = text
-            
-        }
+        sideButtonsView.stitchCount.text = text
         
     }
 
@@ -389,49 +402,19 @@ extension VideoNode {
     }
 
     func hideAllInfo() {
-        if sideButtonsView != nil, headerView != nil, label != nil {
-            label.isHidden = true
-            gradientNode.isHidden = true
-            sideButtonsView.isHidden = true
-            headerView.isHidden = true
-        } else {
-            if sideButtonsView == nil {
-                print("sideButtonsView is nil.")
-            }
-            if headerView == nil {
-                print("headerView is nil.")
-            }
-            if label == nil {
-                print("label is nil.")
-            }
-            
-            print("Failed to hideAllInfo due to nil elements.")
-        }
+        label.isHidden = true
+        gradientNode.isHidden = true
+        sideButtonsView.isHidden = true
+        headerView.isHidden = true
     }
 
     
     func showAllInfo() {
-        if sideButtonsView != nil, headerView != nil, label != nil{
-            label.isHidden = false
-            gradientNode.isHidden = false
-            sideButtonsView.isHidden = false
-            headerView.isHidden = false
-        } else {
-            if sideButtonsView == nil {
-                print("sideButtonsView is nil.")
-            }
-            if headerView == nil {
-                print("headerView is nil.")
-            }
-            if label == nil {
-                print("label is nil.")
-            }
-            
-            print("Failed to showAllInfo due to nil elements.")
-        }
+        label.isHidden = false
+        gradientNode.isHidden = false
+        sideButtonsView.isHidden = false
+        headerView.isHidden = false
     }
-
-
 
 
     func videoNode(_ videoNode: ASVideoNode, didPlayToTimeInterval timeInterval: TimeInterval) {
@@ -838,7 +821,6 @@ extension VideoNode: UIGestureRecognizerDelegate {
     
     func setupViews() {
         // Header View Setup
-        self.headerView = PostHeader()
         self.view.addSubview(self.headerView)
         
         addConstraints(to: self.headerView, within: self.view)
@@ -1817,19 +1799,13 @@ extension VideoNode {
     
     func disableTouching() {
         
-        if headerView != nil {
-            headerView.createStitchView.isHidden = true
-            headerView.followBtn.isHidden = true
-            headerView.isUserInteractionEnabled = false
-            headerView.stackView.isHidden = true
-            headerView.contentLbl.isUserInteractionEnabled = false
-        }
+        headerView.createStitchView.isHidden = true
+        headerView.followBtn.isHidden = true
+        headerView.isUserInteractionEnabled = false
+        headerView.stackView.isHidden = true
+        headerView.contentLbl.isUserInteractionEnabled = false
+        sideButtonsView.isHidden = true
         
-        if sideButtonsView != nil {
-            
-            sideButtonsView.isHidden = true
-            
-        }
         
     }
     

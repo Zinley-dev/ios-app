@@ -702,7 +702,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         requestAppleReview()
         
         do {
-            let maxSizeInBytes: UInt64 = UInt64(1 * 1024 * 1024 * 1024)  // 1GB
+            let maxSizeInBytes: UInt64 = UInt64(0.5 * 1024 * 1024 * 1024)  // 1GB
             try maintainTmpDirectory(maxSizeInBytes: maxSizeInBytes)
         } catch {
             print("Failed to maintain tmp directory with error: \(error)")
