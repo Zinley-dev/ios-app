@@ -244,10 +244,10 @@ class VideoNode: ASCellNode, ASVideoNodeDelegate {
         sideButtonsView.backToOriginalBtn.isHidden = false
         
         let viewStitchTap = UITapGestureRecognizer(target: self, action: #selector(VideoNode.viewStitchTapped))
-        sideButtonsView.viewStitchBtn.addGestureRecognizer(viewStitchTap)
+        //sideButtonsView.viewStitchBtn.addGestureRecognizer(viewStitchTap)
 
-        let backToOriginal = UITapGestureRecognizer(target: self, action: #selector(VideoNode.backToOriginal))
-        sideButtonsView.backToOriginalBtn.addGestureRecognizer(backToOriginal)
+        //let backToOriginal = UITapGestureRecognizer(target: self, action: #selector(VideoNode.backToOriginal))
+        sideButtonsView.backToOriginalBtn.addGestureRecognizer(viewStitchTap)
         
         sideButtonsView.statusImg.image = UIImage(named: "partner white")
         
