@@ -128,27 +128,7 @@ class VideoNode: ASCellNode, ASVideoNodeDelegate {
         
         setupLabel()
         setupSpace(width: UIScreen.main.bounds.width)
-    
-    /*
-        setupViews()
-        
-        if !isPreview {
-            setupTimeView()
-            setupFunction()
-            
-            
-            if isOriginal {
-                // Handle count stitch if not then hide
-                addSideButtons(isOwned: true, total: post.totalStitchTo + post.totalMemberStitch)
-            } else {
-                addSideButtons(isOwned: false)
-            }
-            
-        }
-        setupLabel()
-        setupSpace(width: UIScreen.main.bounds.width)
         clearMode()
-        */
         
      }
     
