@@ -514,7 +514,7 @@ extension SelectedRootPostVC {
             
             handleAnimationTextAndImage(post: cell.post)
             mainRootId = cell.post.id
-            
+            cell.isActive = true
             cell.playVideo()
 
             NotificationCenter.default.post(name: (NSNotification.Name(rawValue: "observeRootChangeForSelected")), object: nil)
