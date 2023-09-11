@@ -819,14 +819,14 @@ extension SelectedParentVC {
         guard let ASTEVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "AddStitchToExistingVC") as? AddStitchToExistingVC else {
             return
         }
-
-        ASTEVC.hidesBottomBarWhenPushed = true
+        
         ASTEVC.stitchedPost = isRoot ? selectedRootPostVC.editeddPost : stitchViewController.editeddPost
-        hideMiddleBtn(vc: self)
 
         delay(0.1) {
             self.navigationController?.pushViewController(ASTEVC, animated: true)
         }
+    
+      
     }
 
     

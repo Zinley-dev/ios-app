@@ -21,7 +21,6 @@ class AddStitchToExistingVC: UIViewController, UICollectionViewDelegateFlowLayou
     @IBOutlet weak var imgHeight: NSLayoutConstraint!
     @IBOutlet weak var imgWidth: NSLayoutConstraint!
     let backButton: UIButton = UIButton(type: .custom)
-    var stitchedPost: PostModel!
     @IBOutlet weak var loadingImage: FLAnimatedImageView!
     @IBOutlet weak var loadingView: UIView!
     @IBOutlet weak var contentView: UIView!
@@ -36,6 +35,7 @@ class AddStitchToExistingVC: UIViewController, UICollectionViewDelegateFlowLayou
     @IBOutlet weak var originalView: UIView!
     @IBOutlet weak var stitchView: UIView!
     
+    var stitchedPost: PostModel!
     var selectedPost: PostModel!
     var posts = [PostModel]()
     var page = 1
@@ -45,7 +45,6 @@ class AddStitchToExistingVC: UIViewController, UICollectionViewDelegateFlowLayou
         super.viewDidLoad()
 
         // Do any additional setup after loading the view.
-        
         
         setupNavBar()
         setupButtons()
@@ -507,35 +506,43 @@ extension AddStitchToExistingVC {
     
     @objc func onClickStitch(_ sender: AnyObject) {
         
-        swiftLoader(progress: "Stitching...")
- 
-        print("Done")
-        
-        APIManager.shared.stitch(rootId: stitchedPost.id, memberId: selectedPost.id) { [weak self] result in
-            guard let self = self else { return }
+        if stitchedPost != nil {
+            
+            swiftLoader(progress: "Stitching...")
+     
+            print("Done")
+            
+            APIManager.shared.stitch(rootId: stitchedPost.id, memberId: selectedPost.id) { [weak self] result in
+                guard let self = self else { return }
 
-            switch result {
-            case .success(let apiResponse):
-                print(apiResponse)
-                DispatchQueue.main.async { [weak self] in
-                    guard let self = self else { return }
-                    if let navigationController = self.navigationController {
-                        SwiftLoader.hide()
-                        navigationController.popViewController(animated: true)
-                        showNote(text: "Stitched successfully")
+                switch result {
+                case .success(let apiResponse):
+                    print(apiResponse)
+                    DispatchQueue.main.async { [weak self] in
+                        guard let self = self else { return }
+                        if let navigationController = self.navigationController {
+                            SwiftLoader.hide()
+                            navigationController.popViewController(animated: true)
+                            showNote(text: "Stitched successfully")
+                        }
                     }
-                }
 
-            case .failure(let error):
-                DispatchQueue.main.async {
-                    print(error)
-                    SwiftLoader.hide()
-                    self.showErrorAlert("Oops!", msg: "Couldn't stitch now, please try again")
-                }
+                case .failure(let error):
+                    DispatchQueue.main.async {
+                        print(error)
+                        SwiftLoader.hide()
+                        self.showErrorAlert("Oops!", msg: "Couldn't stitch now, please try again")
+                    }
 
+                }
             }
+            
+        } else {
+            
+            self.showErrorAlert("Oops!", msg: "Couldn't stitch now, please try again")
+            
         }
-       
+        
         
     }
     

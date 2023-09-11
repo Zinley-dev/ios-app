@@ -1338,8 +1338,14 @@ extension VideoNode {
             } else {
                 updateVC.stitchViewController.editeddPost = post
             }
-        } else {
+        } else if let updateVC = vc as? SelectedParentVC {
             slideVC.isSelected = true
+            
+            if updateVC.isRoot {
+                updateVC.selectedRootPostVC.editeddPost = post
+            } else {
+                updateVC.stitchViewController.editeddPost = post
+            }
         }
 
         general_vc = vc
@@ -1909,7 +1915,6 @@ extension VideoNode {
             self?.handleStatusChange()
         })
     }
-
     
     func handleStatusChange() {
         guard let status = cellVideoNode.currentItem?.status else { return }
