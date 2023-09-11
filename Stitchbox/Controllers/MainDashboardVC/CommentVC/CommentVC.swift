@@ -18,8 +18,6 @@ class CommentVC: UIViewController, UITextViewDelegate, UIGestureRecognizerDelega
         print("CommentVC is being deallocated.")
     }
     
-    @IBOutlet weak var loadingView: UIView!
-    @IBOutlet weak var loadingImage: FLAnimatedImageView!
     @IBOutlet weak var sendBtnBottomConstraint: NSLayoutConstraint!
     @IBOutlet weak var commentBtn: UIButton!
     var isSending = false
@@ -224,10 +222,10 @@ class CommentVC: UIViewController, UITextViewDelegate, UIGestureRecognizerDelega
                     
                     if !self.commentList.isEmpty {
                         self.tableNode.reloadData()
-                        self.hideAnimation()
+                        
                         self.wireDelegates()
                     } else {
-                        self.hideAnimation()
+    
                         self.wireDelegates()
                     }
                     
@@ -249,29 +247,6 @@ class CommentVC: UIViewController, UITextViewDelegate, UIGestureRecognizerDelega
         NotificationCenter.default.addObserver(self, selector: #selector(handleKeyboardHide),
                                                name: UIResponder.keyboardWillHideNotification, object: nil)
         
-        if firstAnimated {
-            
-            DispatchQueue.global(qos: .userInitiated).async {
-                do {
-                    if let path = Bundle.main.path(forResource: "fox2", ofType: "gif") {
-                        let gifData = try Data(contentsOf: URL(fileURLWithPath: path))
-                        let image = FLAnimatedImage(animatedGIFData: gifData)
-
-                        DispatchQueue.main.async { [weak self] in
-                            guard let self = self else { return }
-
-                            self.loadingImage.animatedImage = image
-                            self.loadingView.backgroundColor = self.view.backgroundColor
-                        }
-                    }
-                } catch {
-                    print(error.localizedDescription)
-                }
-            }
-            
-            loadingView.backgroundColor = .white
-            
-        }
         
     }
     
@@ -929,7 +904,7 @@ extension CommentVC {
 
     func insertNewRowsInTableNode(newPosts: [[String: Any]]) {
         guard newPosts.count > 0 else {
-            hideAnimation()
+           
             return
         }
         
@@ -964,9 +939,7 @@ extension CommentVC {
         
         self.commentList.append(contentsOf: items)
         self.tableNode.insertRows(at: indexPaths, with: .none)
-        
-        hideAnimation()
-        
+       
     }
     
     
@@ -974,72 +947,7 @@ extension CommentVC {
         return commentList.contains { $0.comment_id == post.comment_id }
     }
     
-    func hideAnimation() {
-        
-        if firstAnimated {
-            
-            firstAnimated = false
-            
-            UIView.animate(withDuration: 0.25) {
-                
-                Dispatch.main.async { [weak self] in
-                    guard let self = self else { return }
-                    self.loadingView.alpha = 0
-                }
-                
-            }
-            
-            
-            if !commentList.isEmpty {
-                
-                DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) { [weak self] in
-                    guard let self = self else { return }
-                    
-                    if self.loadingView.alpha == 0 {
-                        
-                        self.loadingView.isHidden = true
-                        
-                        self.loadingImage.stopAnimating()
-                        self.loadingImage.animatedImage = nil
-                        self.loadingImage.image = nil
-                        self.loadingImage.removeFromSuperview()
-                        
-                    }
-                    
-                }
-                
-            } else {
-                
-                DispatchQueue.main.asyncAfter(deadline: .now()) { [weak self] in
-                    guard let self = self else { return }
-                     
-                    if self.loadingView.alpha == 0 {
-                        
-                        self.loadingView.isHidden = true
-                        
-                        
-                        self.loadingImage.stopAnimating()
-                        self.loadingImage.animatedImage = nil
-                        self.loadingImage.image = nil
-                        self.loadingImage.removeFromSuperview()
-                        
-                    }
-                    
-                }
-                
-                
-                
-            }
-            
-            
-            
-            
-        }
-        
-    }
-    
-    
-    
+  
 }
 
 extension CommentVC {
