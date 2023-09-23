@@ -25,7 +25,7 @@ class TrendingHashtagNode: ASCellNode {
     var rankNode: ASTextNode!
     var hashtagTextNode: ASTextNode!
     var viewsNode: ASTextNode!
-   
+    private var didSetup = false
     
     init(with trendingHashtag: TrendingHashtag, rank: Int) {
         
@@ -50,9 +50,16 @@ class TrendingHashtagNode: ASCellNode {
 
     }
     
-    override func didLoad() {
-        super.didLoad()
-        
+    override func didEnterVisibleState() {
+            
+            if !didSetup {
+                setupLayout()
+            }
+            
+        }
+    
+    func setupLayout() {
+        didSetup = true
         let paragraphStyles = NSMutableParagraphStyle()
         paragraphStyles.alignment = .left
 
@@ -85,7 +92,10 @@ class TrendingHashtagNode: ASCellNode {
 
         viewsNode.backgroundColor = UIColor.clear
         
+        
     }
+    
+
     
     
     override func layoutSpecThatFits(_ constrainedSize: ASSizeRange) -> ASLayoutSpec {

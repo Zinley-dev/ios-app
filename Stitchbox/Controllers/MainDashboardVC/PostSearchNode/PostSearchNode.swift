@@ -25,7 +25,8 @@ class PostSearchNode: ASCellNode {
     private var videoSignNode: ASImageNode!
     private var stitchSignNode: ASImageNode!
     private var countNode: ASTextNode!
-   
+    private var didSetup = false
+    
     let paragraphStyles = NSMutableParagraphStyle()
     var keyword = ""
 
@@ -57,8 +58,18 @@ class PostSearchNode: ASCellNode {
         automaticallyManagesSubnodes = true
     }
     
-    override func didLoad() {
-        super.didLoad()
+    
+    override func didEnterVisibleState() {
+            
+            if !didSetup {
+                setupLayout()
+            }
+            
+        }
+    
+    
+    func setupLayout() {
+        didSetup = true
         self.backgroundColor = .clear // set background to clear
         paragraphStyles.alignment = .center
         
@@ -90,6 +101,7 @@ class PostSearchNode: ASCellNode {
         setupStitchCount()
         setupViewCount()
         setupnode()
+        
         
     }
     

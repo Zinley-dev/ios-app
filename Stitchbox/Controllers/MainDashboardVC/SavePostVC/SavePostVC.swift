@@ -203,7 +203,7 @@ extension SavePostVC: ASCollectionDelegate {
     
     func collectionNode(_ collectionNode: ASCollectionNode, constrainedSizeForItemAt indexPath: IndexPath) -> ASSizeRange {
 
-        let size = self.collectionNode.view.layer.frame.width/2 - 7
+        let size = self.collectionNode.view.layer.frame.width/2 - 2
         let min = CGSize(width: size, height: size * 1.75)
         let max = CGSize(width: size, height: size * 1.75)
         
@@ -280,8 +280,8 @@ extension SavePostVC {
     func setupCollectionNode() {
         let flowLayout = UICollectionViewFlowLayout()
         
-        flowLayout.minimumInteritemSpacing = 7 // Set minimum spacing between items to 0
-        flowLayout.minimumLineSpacing = 7 // Set minimum line spacing to 0
+        flowLayout.minimumInteritemSpacing = 0 // Set minimum spacing between items to 0
+        flowLayout.minimumLineSpacing = 0// Set minimum line spacing to 0
         
         self.collectionNode = ASCollectionNode(collectionViewLayout: flowLayout)
         self.collectionNode.automaticallyRelayoutOnLayoutMarginsChanges = true

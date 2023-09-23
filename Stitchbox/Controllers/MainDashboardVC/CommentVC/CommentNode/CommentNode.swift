@@ -45,6 +45,7 @@ class CommentNode: ASCellNode {
     var reply : ((ASCellNode) -> Void)?
     var isLiked = false
     var label: ActiveLabel!
+    private var didSetup = false
 
     init(with post: CommentModel) {
         
@@ -121,9 +122,17 @@ class CommentNode: ASCellNode {
           
     }
     
-    override func didLoad() {
-        super.didLoad()
-        
+    
+    override func didEnterVisibleState() {
+            
+            if !didSetup {
+                setupLayout()
+            }
+            
+        }
+    
+    func setupLayout() {
+        didSetup = true
         label = ActiveLabel()
           
         cmtNode.view.addSubview(self.label)
@@ -224,6 +233,7 @@ class CommentNode: ASCellNode {
         cmtCount()
         
     }
+    
 
     
     func present(_ viewController: UIViewController, animated: Bool = true) {

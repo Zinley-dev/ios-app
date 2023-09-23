@@ -18,6 +18,7 @@ class OwnerPostSearchNode: ASCellNode {
     var imageNode: ASNetworkImageNode!
     var FontSize: CGFloat = 13
     let paragraphStyles = NSMutableParagraphStyle()
+    private var didSetup = false
     
     private lazy var stitchSignNode: ASImageNode = {
         let imageNode = ASImageNode()
@@ -133,9 +134,17 @@ class OwnerPostSearchNode: ASCellNode {
         
     }
     
-    override func didLoad() {
-        super.didLoad()
-        
+    override func didEnterVisibleState() {
+            
+            if !didSetup {
+                setupLayout()
+            }
+            
+        }
+    
+    
+    func setupLayout() {
+        didSetup = true
         self.backgroundColor = .clear // set background to clear
 
       

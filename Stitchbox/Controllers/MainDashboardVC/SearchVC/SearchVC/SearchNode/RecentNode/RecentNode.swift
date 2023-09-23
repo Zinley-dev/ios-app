@@ -26,7 +26,7 @@ class RecentNode: ASCellNode {
     var upperNameNode: ASTextNode!
     var belowNameNode: ASTextNode!
     var imageNode: ASNetworkImageNode!
-    
+    private var didSetup = false
     
     init(with item: RecentModel) {
         
@@ -50,9 +50,17 @@ class RecentNode: ASCellNode {
           
     }
     
-    override func didLoad() {
-        super.didLoad()
-        
+    
+    override func didEnterVisibleState() {
+            
+            if !didSetup {
+                setupLayout()
+            }
+            
+        }
+    
+    func setupLayout() {
+        didSetup = true
         if item.type == "user" {
             
             imageNode.cornerRadius = OrganizerImageSize/2

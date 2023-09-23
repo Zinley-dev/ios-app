@@ -33,7 +33,8 @@ class TrendingPostNode: ASCellNode {
     var stitchSignNode: ASImageNode!
     var countNode: ASTextNode!
     var ranking = 0
-
+    private var didSetup = false
+    
     init(with post: PostModel, ranking: Int) {
         self.ranking = ranking
         self.post = post
@@ -65,9 +66,16 @@ class TrendingPostNode: ASCellNode {
         
     }
     
-    override func didLoad() {
-        super.didLoad()
-
+    override func didEnterVisibleState() {
+        
+        if !didSetup {
+            setupLayout()
+        }
+        
+    }
+    
+    func setupLayout() {
+        didSetup = true
         // Basic setup
         self.backgroundColor = .clear
         self.imageNode.backgroundColor = .clear
@@ -140,7 +148,9 @@ class TrendingPostNode: ASCellNode {
                     NSAttributedString.Key.paragraphStyle: paragraphStyle
                 ]
         )
+        
     }
+    
 
     
     

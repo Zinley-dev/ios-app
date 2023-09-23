@@ -34,6 +34,7 @@ class BlockNode: ASCellNode {
     
     var isBlock = true
     var isFollowingUser = false
+    private var didSetup = false
     
     init(with user: BlockUserModel) {
         
@@ -76,6 +77,19 @@ class BlockNode: ASCellNode {
         automaticallyManagesSubnodes = true
         
         
+        
+    }
+    
+    override func didEnterVisibleState() {
+            
+            if !didSetup {
+                setupLayout()
+            }
+            
+        }
+    
+    func setupLayout() {
+        didSetup = true
         if isBlock {
             
             DispatchQueue.main.async { [weak self] in

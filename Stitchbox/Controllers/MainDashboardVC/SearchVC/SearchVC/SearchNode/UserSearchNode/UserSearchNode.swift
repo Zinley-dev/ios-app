@@ -25,6 +25,7 @@ class UserSearchNode: ASCellNode {
     var userNameNode: ASTextNode!
     var nameNode: ASTextNode!
     var imageNode: ASNetworkImageNode!
+    private var didSetup = false
     
     init(with user: UserSearchModel) {
         
@@ -49,8 +50,21 @@ class UserSearchNode: ASCellNode {
         nameNode.backgroundColor = UIColor.clear
         
         automaticallyManagesSubnodes = true
-        
+    
 
+        
+    }
+    
+    override func didEnterVisibleState() {
+            
+            if !didSetup {
+                setupLayout()
+            }
+            
+        }
+    
+    func setupLayout() {
+        didSetup = true
         DispatchQueue.main.async { [weak self] in
             guard let self = self else { return }
             
@@ -92,10 +106,9 @@ class UserSearchNode: ASCellNode {
                 self.imageNode.image = UIImage.init(named: "defaultuser")
             }
         }
-
+        
         
     }
-    
 
 
     override func layoutSpecThatFits(_ constrainedSize: ASSizeRange) -> ASLayoutSpec {

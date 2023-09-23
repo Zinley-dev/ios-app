@@ -44,7 +44,8 @@ class PendingNode: ASCellNode, ASVideoNodeDelegate {
     private var spinner: NVActivityIndicatorView!
     var approveBtn : ((ASCellNode) -> Void)?
     var declineBtn : ((ASCellNode) -> Void)?
-
+    private var didSetup = false
+    
     init(with post: PostModel) {
         self.post = post
       
@@ -61,9 +62,16 @@ class PendingNode: ASCellNode, ASVideoNodeDelegate {
     
     }
     
-    override func didLoad() {
-        super.didLoad()
+    override func didEnterVisibleState() {
+        isActive = true
+        if !didSetup {
+            setupLayout()
+        }
         
+    }
+    
+    func setupLayout() {
+        didSetup = true
         setupViews()
         setupLabel()
         
@@ -73,9 +81,7 @@ class PendingNode: ASCellNode, ASVideoNodeDelegate {
         self.gradientNode.cornerRadius = 10
         self.gradientNode.clipsToBounds = true
         spinner = NVActivityIndicatorView(frame:  CGRect(x: 0, y: 0, width: 75, height: 75), type: .ballScale, color: .secondary, padding: 0)
-        
     }
-    
 
     override func layout() {
         super.layout()
@@ -805,10 +811,4 @@ extension PendingNode {
     }
 
 
-    override func didEnterVisibleState() {
-        super.didEnterVisibleState()
-        
-        isActive = true
-    }
-    
 }

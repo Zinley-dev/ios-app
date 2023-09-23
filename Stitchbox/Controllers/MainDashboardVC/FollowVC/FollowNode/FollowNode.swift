@@ -32,6 +32,7 @@ class FollowNode: ASCellNode {
     var isFollowingUser = false
     var denyBtn = false
     var allowProcess = true
+    private var didSetup = false
     
     init(with user: FollowModel) {
         self.user = user
@@ -62,6 +63,21 @@ class FollowNode: ASCellNode {
 
         automaticallyManagesSubnodes = true
 
+        
+        
+        
+    }
+    
+    override func didEnterVisibleState() {
+            
+            if !didSetup {
+                setupLayout()
+            }
+            
+        }
+    
+    func setupLayout() {
+        didSetup = true
         if let user = user.userId {
             if user == _AppCoreData.userDataSource.value?.userID {
                 denyBtn = true
@@ -145,7 +161,6 @@ class FollowNode: ASCellNode {
         } else {
             avatarNode.image = UIImage.init(named: "defaultuser")
         }
-        
         
     }
 

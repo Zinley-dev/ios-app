@@ -38,6 +38,7 @@ class SuggestFollowNode: ASCellNode {
     
     let font = FontManager.shared.roboto(.Medium, size: FontSize + 1)
     let textColor = UIColor.black
+    private var didSetup = false
     
     init(with users: FriendSuggestionModel) {
         user = users
@@ -95,16 +96,23 @@ class SuggestFollowNode: ASCellNode {
         ]
     }
     
-    override func didLoad() {
-        super.didLoad()
-        
-        
+    
+    override func didEnterVisibleState() {
+            
+            if !didSetup {
+                setupLayout()
+            }
+            
+        }
+    
+    
+    func setupLayout() {
+        didSetup = true
         if user.userId == _AppCoreData.userDataSource.value?.userID {
             denyBtn = true
         }
 
         self.checkIfFollow()
-        
         
     }
 

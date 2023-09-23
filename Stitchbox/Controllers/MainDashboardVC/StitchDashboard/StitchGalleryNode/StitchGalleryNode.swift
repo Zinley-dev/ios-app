@@ -24,6 +24,7 @@ class StitchGalleryNode: ASCellNode {
     private var stitchSignNode: ASImageNode!
     private var countNode: ASTextNode!
     private var stitchCountNode: ASTextNode!
+    private var didSetup = false
     
     init(with post: PostModel) {
         
@@ -49,11 +50,17 @@ class StitchGalleryNode: ASCellNode {
       
     }
     
+    override func didEnterVisibleState() {
+        
+        if !didSetup {
+            setupLayout()
+        }
+        
+    }
     
-    override func didLoad() {
-        super.didLoad()
+    func setupLayout() {
         
-        
+        didSetup = true
         self.backgroundColor = .clear // set background to clear
         self.imageNode.backgroundColor = .clear
         

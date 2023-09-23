@@ -26,7 +26,7 @@ class HashTagSearchNode: ASCellNode {
     var hashtagTextNode: ASTextNode!
     var hashtagSymbolImg: ASTextNode!
     var countNode: ASTextNode!
-   
+    private var didSetup = false
     
     init(with hashtag: HashtagsModel) {
         
@@ -52,10 +52,16 @@ class HashTagSearchNode: ASCellNode {
         
     }
     
+    override func didEnterVisibleState() {
+            
+            if !didSetup {
+                setupLayout()
+            }
+            
+        }
     
-    override func didLoad() {
-        super.didLoad()
-        
+    func setupLayout() {
+        didSetup = true
         let paragraphStyles = NSMutableParagraphStyle()
         paragraphStyles.alignment = .right
         
@@ -91,6 +97,7 @@ class HashTagSearchNode: ASCellNode {
 
         
         countNode.backgroundColor = UIColor.clear
+        
         
     }
     

@@ -25,7 +25,7 @@ class AccountActivityNode: ASCellNode {
     var timeNode: ASTextNode!
     var AvatarNode: ASNetworkImageNode!
     let paragraphStyles = NSMutableParagraphStyle()
-    
+    private var didSetup = false
     
     init(with activity: UserActivityModel) {
         
@@ -57,6 +57,21 @@ class AccountActivityNode: ASCellNode {
         timeNode.backgroundColor = UIColor.clear
         
         automaticallyManagesSubnodes = true
+        
+
+
+    }
+    
+    override func didEnterVisibleState() {
+            
+            if !didSetup {
+                setupLayout()
+            }
+            
+        }
+    
+    func setupLayout() {
+        didSetup = true
         
         let date = self.activity.createdAt
     
@@ -169,7 +184,7 @@ class AccountActivityNode: ASCellNode {
             let url = URL(string: avatarUrl)
             AvatarNode.url = url
         }
-
+        
     }
     
     override func layoutSpecThatFits(_ constrainedSize: ASSizeRange) -> ASLayoutSpec {

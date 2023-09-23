@@ -42,7 +42,7 @@ class StitchControlForRemoveNode: ASCellNode, ASVideoNodeDelegate {
     var isActive = false
     var unstitchBtn : ((ASCellNode) -> Void)?
     var stitchTo: Bool
-    
+    private var didSetup = false
     private var spinner: NVActivityIndicatorView!
     var statusObservation: NSKeyValueObservation?
     
@@ -62,9 +62,16 @@ class StitchControlForRemoveNode: ASCellNode, ASVideoNodeDelegate {
     
     }
     
-    override func didLoad() {
-        super.didLoad()
+    
+    override func didEnterVisibleState() {
+        isActive = true
+        if !didSetup {
+            setupLayout()
+        }
         
+    }
+    
+    func setupLayout() {
         setupViews()
         setupLabel()
         configureInfoNode(for: post, stitchTo: stitchTo, fontSize: FontSize)
@@ -74,9 +81,9 @@ class StitchControlForRemoveNode: ASCellNode, ASVideoNodeDelegate {
         
         self.gradientNode.cornerRadius = 10
         self.gradientNode.clipsToBounds = true
-        
-        
     }
+    
+
     
 
     override func layout() {
@@ -826,12 +833,6 @@ extension StitchControlForRemoveNode {
         removeObservers()
     }
 
-
-    override func didEnterVisibleState() {
-        super.didEnterVisibleState()
-        
-        isActive = true
-    }
     
     
 }
