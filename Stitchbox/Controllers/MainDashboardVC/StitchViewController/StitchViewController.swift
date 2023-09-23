@@ -128,13 +128,27 @@ class StitchViewController: UIViewController, UICollectionViewDelegateFlowLayout
     
     @IBAction func hideBtnPressed(_ sender: Any) {
         
+        hideStitchView()
+        
+    }
+    
+    func hideStitchView() {
+        
         selectPostCollectionView.isHidden = true
         
         if let index = currentIndex {
             
             if let cell = self.collectionNode.nodeForItem(at: IndexPath(row: index, section: 0)) as? VideoNode {
 
-                cell.showAllInfo()
+                if globalSetting.ClearMode == true {
+                    
+                    cell.hideAllInfo()
+                    
+                } else {
+                    
+                    cell.showAllInfo()
+                    
+                }
                 
             }
             
@@ -601,7 +615,7 @@ extension StitchViewController {
         }
     }
 
-    private func clearExistingPosts() {
+    func clearExistingPosts() {
         posts.removeAll()
         self.collectionNode.reloadData()
         self.galleryCollectionNode.reloadData()
@@ -643,6 +657,10 @@ extension StitchViewController {
         curPage = 1
        
         updateData()
+    }
+    
+    func clearExistingPost() {
+        
     }
 
     func collectionNode(_ collectionNode: ASCollectionNode, didSelectItemAt indexPath: IndexPath) {
@@ -734,6 +752,7 @@ extension StitchViewController {
                 cell.showAllInfo()
                 
             }
+            
             cell.updateStitchCount(text: "\(index + 1)/\(posts.count)")
             cell.playVideo()
             

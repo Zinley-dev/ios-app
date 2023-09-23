@@ -416,6 +416,10 @@ extension SelectedParentVC {
             stitchViewController.pauseVideo(index: 0)
         }
         
+        if !stitchViewController.selectPostCollectionView.isHidden {
+            stitchViewController.hideStitchView()
+        }
+        
         if selectedRootPostVC.currentIndex != nil {
             selectedRootPostVC.playVideo(index: selectedRootPostVC.currentIndex!)
         } else {

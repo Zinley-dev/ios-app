@@ -401,6 +401,7 @@ extension FeedViewController {
 }
 
 extension FeedViewController {
+    
 
     @objc func clearAllData() {
         refresh_request = true
@@ -479,7 +480,7 @@ extension FeedViewController {
 
 
 
-    private func clearExistingPosts() {
+    func clearExistingPosts() {
         posts.removeAll()
         collectionNode.reloadData()
     }

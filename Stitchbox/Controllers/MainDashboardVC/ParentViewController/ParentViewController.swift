@@ -534,6 +534,10 @@ extension ParentViewController {
             stitchViewController.pauseVideo(index: 0)
         }
         
+        if !stitchViewController.selectPostCollectionView.isHidden {
+            stitchViewController.hideStitchView()
+        }
+        
         if feedViewController.currentIndex != nil {
             print("Parent - Play at: \(feedViewController.currentIndex) for feed")
             feedViewController.playVideo(index: feedViewController.currentIndex!)
@@ -742,6 +746,8 @@ extension ParentViewController {
                 feedViewController.delayItem3.perform(after: 0.25) { [weak self] in
                     guard let self = self else { return }
                     self.rootId = ""
+                    self.stitchViewController.clearExistingPosts()
+                    self.feedViewController.clearExistingPosts()
                     self.feedViewController.clearAllData()
 
                 }
@@ -1141,9 +1147,13 @@ extension ParentViewController {
                     feedViewController.collectionNode.scrollToItem(at: IndexPath(row: 0, section: 0), at: .centeredVertically, animated: true)
                     
                 }
+        
                 currentPageIndex = 0
                 rootId = ""
+                stitchViewController.clearExistingPosts()
+                feedViewController.clearExistingPosts()
                 feedViewController.clearAllData()
+                
 
             } else {
                 resumeVideo()
