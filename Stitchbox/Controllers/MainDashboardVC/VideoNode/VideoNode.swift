@@ -38,6 +38,8 @@ class VideoNode: ASCellNode, ASVideoNodeDelegate {
     var setupMaxVal = false
     var isActive = false
     var firstSetup = false
+    var spinnerRemoved = true
+    var assetReset = false
     //------------------------------------------//
 
     var isFirstItem = false
@@ -1891,6 +1893,7 @@ extension VideoNode {
             if playerItem.status == .readyToPlay {
                 self?.removeObservers()
             }
+            
             print("statusObservation called for: \(self?.post.id) - \(playerItem.status.rawValue)")
             self?.handleStatusChange()
         })
@@ -1962,11 +1965,19 @@ extension VideoNode {
     
     func addSpinner() {
         
-        spinner.center = view.center
-        view.addSubview(spinner)
-        spinner.startAnimating()
+        if spinnerRemoved {
+            
+            spinner.center = view.center
+            view.addSubview(spinner)
+            spinner.startAnimating()
+            spinnerRemoved = false
+        }
         
-        DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) { [weak self] in
+        DispatchQueue.main.asyncAfter(deadline: .now() + 2) { [weak self] in
+            
+            if self?.cellVideoNode.isPlaying() == true {
+                return
+            }
             
             guard let status = self?.cellVideoNode.currentItem?.status else {
                 print("FAILED - status null")
@@ -1978,18 +1989,37 @@ extension VideoNode {
             case .readyToPlay:
                 self?.startPlayback()
                 print("FAILED - Ready to play")
-            case .failed:
-                //self?.resetAssets()
-                self?.resetAssets()
+            case .failed, .unknown:
+            
+                if let likelyToKeepUp = self?.cellVideoNode.currentItem?.isPlaybackLikelyToKeepUp, !likelyToKeepUp {
+                    
+                    if self?.assetReset == false {
+                        self?.resetAssets()
+                    } else {
+                        self?.handleStatusChange()
+                    }
+        
+                } else {
+                    self?.handleStatusChange()
+                }
+                
                 print("FAILED TO play failed")
-            case .unknown:
-                //self?.resetAssets()
-                self?.resetAssets()
-                print("FAILED TO play unknown")
             @unknown default:
-                //self?.resetAssets()
-                self?.resetAssets()
-                print("FAILED TO play default")
+                
+                if let likelyToKeepUp = self?.cellVideoNode.currentItem?.isPlaybackLikelyToKeepUp, !likelyToKeepUp {
+                    
+                    if self?.assetReset == false {
+                        self?.resetAssets()
+                    } else {
+                        self?.handleStatusChange()
+                    }
+                    
+                } else {
+                    self?.handleStatusChange()
+                }
+                
+                print("FAILED TO play failed")
+                
             }
             
         }
@@ -1997,6 +2027,7 @@ extension VideoNode {
     }
     
     func removeSpinner() {
+        spinnerRemoved = true
         spinner.stopAnimating()
         spinner.removeFromSuperview()
     }
@@ -2005,7 +2036,7 @@ extension VideoNode {
     func resetAssets() {
         // Pause player
         cellVideoNode.player?.pause()
-
+        assetReset = true
         // Fade out the video node
         UIView.animate(withDuration: 0.2, animations: {
             self.cellVideoNode.alpha = 0.0
