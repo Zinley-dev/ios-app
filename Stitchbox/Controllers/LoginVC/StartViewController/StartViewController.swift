@@ -189,8 +189,7 @@ class StartViewController: UIViewController, ControllerType, ZSWTappableLabelTap
             case .failure(let error):
                 print(error)
                 
-                
-                
+        
                 completed()
                
             }

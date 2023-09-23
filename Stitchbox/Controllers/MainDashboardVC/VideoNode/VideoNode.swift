@@ -37,6 +37,7 @@ class VideoNode: ASCellNode, ASVideoNodeDelegate {
     var didSlideEnd = true
     var setupMaxVal = false
     var isActive = false
+    var firstSetup = false
     //------------------------------------------//
 
     var isFirstItem = false
@@ -106,30 +107,9 @@ class VideoNode: ASCellNode, ASVideoNodeDelegate {
     
     override func didLoad() {
         super.didLoad()
-        
-        addPinchGestureRecognizer()
-        addPanGestureRecognizer()
+    
         spinner = NVActivityIndicatorView(frame:  CGRect(x: 0, y: 0, width: 75, height: 75), type: .ballScale, color: .secondary, padding: 0)
-        
-        setupViews()
-         
-        if !isPreview {
-            setupTimeView()
-            setupFunction()
-            
-            if isOriginal {
-                // Handle count stitch if not then hide
-                addSideButtons(isOwned: true, total: post.totalStitchTo + post.totalMemberStitch)
-            } else {
-                addSideButtons(isOwned: false)
-            }
-            
-        }
-        
-        setupLabel()
-        setupSpace(width: UIScreen.main.bounds.width)
-        clearMode()
-        
+       
      }
     
     override func layout() {
@@ -345,7 +325,7 @@ class VideoNode: ASCellNode, ASVideoNodeDelegate {
         
         
         
-         
+        
         // Add 16 points of inset to the bottom
         let insetSpec = ASInsetLayoutSpec(insets: UIEdgeInsets(top: 0, left: 0, bottom: 8, right: 0), child: gradientOverlaySpec)
 
@@ -1819,6 +1799,9 @@ extension VideoNode {
         processEndedSliding()
         playTimeBar.endLayout()
         didSlideEnd = true
+        
+        let newVideoTime = CMTimeMakeWithSeconds(Float64(playTimeBar.value), preferredTimescale: Int32(NSEC_PER_SEC))
+        cellVideoNode.player?.seek(to: newVideoTime)
     }
     
     
@@ -1826,10 +1809,7 @@ extension VideoNode {
         // Get the new video time
     
         timeLbl.text = processTime()
-        
-        let newVideoTime = CMTimeMakeWithSeconds(Float64(playTimeBar.value), preferredTimescale: Int32(NSEC_PER_SEC))
-        cellVideoNode.player?.seek(to: newVideoTime)
-        
+    
     }
 
     
@@ -2090,6 +2070,44 @@ extension VideoNode {
         super.didEnterVisibleState()
         
         isActive = true
+        
+        if !firstSetup {
+            firstSetup = true
+            setupAllViews()
+            print("Setup completed for - \(post.id)")
+        } else {
+            print("Setup already completed for - \(post.id)")
+        }
+        
     }
+    
+    func setupAllViews() {
+        
+        addPinchGestureRecognizer()
+        addPanGestureRecognizer()
+        
+        setupViews()
+         
+        if !isPreview {
+            setupTimeView()
+            setupFunction()
+            
+            if isOriginal {
+                // Handle count stitch if not then hide
+                addSideButtons(isOwned: true, total: post.totalStitchTo + post.totalMemberStitch)
+            } else {
+                addSideButtons(isOwned: false)
+            }
+            
+        }
+        
+        setupLabel()
+        setupSpace(width: UIScreen.main.bounds.width)
+        clearMode()
+        
+        
+        
+    }
+    
     
 }
