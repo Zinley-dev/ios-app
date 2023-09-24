@@ -28,7 +28,8 @@ class StitchControlForRemoveNode: ASCellNode, ASVideoNodeDelegate {
     var allowProcess = true
     var isFollowingUser = false
     var isSave = false
-    
+    var spinnerRemoved = true
+    var assetReset = false
     var buttonNode: ASDisplayNode!
     var post: PostModel!
     private var cellVideoNode: ASVideoNode
@@ -655,14 +656,10 @@ extension StitchControlForRemoveNode {
 
     func addObservers() {
         statusObservation = cellVideoNode.currentItem?.observe(\.status, options: [.new, .initial], changeHandler: { [weak self] (playerItem, change) in
-            if playerItem.status == .readyToPlay {
-                self?.removeObservers()
-            }
             print("statusObservation called for: \(self?.post.id) - \(playerItem.status.rawValue)")
             self?.handleStatusChange()
         })
     }
-
     
     func handleStatusChange() {
         guard let status = cellVideoNode.currentItem?.status else { return }
@@ -694,7 +691,7 @@ extension StitchControlForRemoveNode {
             
             print("\(prefix): \(bufferFull) - \(bufferEmpty) - \(likelyToKeepUp) - \(error)")
             
-            cellVideoNode.currentItem?.preferredForwardBufferDuration = 2
+            cellVideoNode.currentItem?.preferredForwardBufferDuration = 5
             
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.75) { [weak self] in
                 
@@ -730,11 +727,20 @@ extension StitchControlForRemoveNode {
     
     func addSpinner() {
         
-        spinner.center = view.center
-        view.addSubview(spinner)
-        spinner.startAnimating()
+        if spinnerRemoved {
+            
+            spinner.center = view.center
+            view.addSubview(spinner)
+            spinner.startAnimating()
+            spinnerRemoved = false
+        }
         
-        DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) { [weak self] in
+        DispatchQueue.main.asyncAfter(deadline: .now() + 2) { [weak self] in
+            
+            if self?.cellVideoNode.isPlaying() == true {
+                self?.removeSpinner()
+                return
+            }
             
             guard let status = self?.cellVideoNode.currentItem?.status else {
                 print("FAILED - status null")
@@ -746,25 +752,61 @@ extension StitchControlForRemoveNode {
             case .readyToPlay:
                 self?.startPlayback()
                 print("FAILED - Ready to play")
-            case .failed:
-                //self?.resetAssets()
-                self?.resetAssets()
+            case .failed, .unknown:
+                if let likelyToKeepUp = self?.cellVideoNode.currentItem?.isPlaybackLikelyToKeepUp,
+                   !likelyToKeepUp,
+                   let loadedTimeRanges = self?.cellVideoNode.currentItem?.loadedTimeRanges,
+                   self?.bufferIsEmpty(loadedTimeRanges: loadedTimeRanges) == true {
+                    
+                    if self?.assetReset == false {
+                        self?.resetAssets()
+                    } else {
+                        self?.handleStatusChange()
+                    }
+            
+                } else {
+                    self?.handleStatusChange()
+                }
+                
                 print("FAILED TO play failed")
-            case .unknown:
-                //self?.resetAssets()
-                self?.resetAssets()
-                print("FAILED TO play unknown")
             @unknown default:
-                //self?.resetAssets()
-                self?.resetAssets()
-                print("FAILED TO play default")
+                
+                if let likelyToKeepUp = self?.cellVideoNode.currentItem?.isPlaybackLikelyToKeepUp,
+                   !likelyToKeepUp,
+                   let loadedTimeRanges = self?.cellVideoNode.currentItem?.loadedTimeRanges,
+                   self?.bufferIsEmpty(loadedTimeRanges: loadedTimeRanges) == true {
+                    
+                    if self?.assetReset == false {
+                        self?.resetAssets()
+                    } else {
+                        self?.handleStatusChange()
+                    }
+                    
+                } else {
+                    self?.handleStatusChange()
+                }
+                
+                print("FAILED TO play failed")
+                
             }
             
         }
         
     }
+
+    func bufferIsEmpty(loadedTimeRanges: [NSValue]) -> Bool {
+        guard let lastTimeRange = loadedTimeRanges.last as? CMTimeRange else {
+            return true
+        }
+        let bufferEndTime = CMTimeAdd(lastTimeRange.start, lastTimeRange.duration)
+        let currentTime = self.cellVideoNode.player?.currentTime() ?? CMTime.zero
+        return bufferEndTime < currentTime
+    }
+
+
     
     func removeSpinner() {
+        spinnerRemoved = true
         spinner.stopAnimating()
         spinner.removeFromSuperview()
     }
@@ -773,7 +815,7 @@ extension StitchControlForRemoveNode {
     func resetAssets() {
         // Pause player
         cellVideoNode.player?.pause()
-
+        assetReset = true
         // Fade out the video node
         UIView.animate(withDuration: 0.2, animations: {
             self.cellVideoNode.alpha = 0.0
@@ -799,7 +841,9 @@ extension StitchControlForRemoveNode {
         
         if isActive {
             DispatchQueue.main.async() { [weak self] in
-                self?.cellVideoNode.play()
+                if self?.cellVideoNode.isPlaying() != true {
+                    self?.cellVideoNode.play()
+                }
             }
             
         }

@@ -110,7 +110,7 @@ class VideoNode: ASCellNode, ASVideoNodeDelegate {
     override func didLoad() {
         super.didLoad()
     
-        spinner = NVActivityIndicatorView(frame:  CGRect(x: 0, y: 0, width: 75, height: 75), type: .circleStrokeSpin, color: .white, padding: 0)
+        spinner = NVActivityIndicatorView(frame:  CGRect(x: 0, y: 0, width: 55, height: 55), type: .circleStrokeSpin, color: .white, padding: 0)
        
      }
     
@@ -1925,7 +1925,7 @@ extension VideoNode {
             
             print("\(prefix): \(bufferFull) - \(bufferEmpty) - \(likelyToKeepUp) - \(error)")
             
-            cellVideoNode.currentItem?.preferredForwardBufferDuration = 2
+            cellVideoNode.currentItem?.preferredForwardBufferDuration = 5
             
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.75) { [weak self] in
                 
@@ -1987,15 +1987,17 @@ extension VideoNode {
                 self?.startPlayback()
                 print("FAILED - Ready to play")
             case .failed, .unknown:
-            
-                if let likelyToKeepUp = self?.cellVideoNode.currentItem?.isPlaybackLikelyToKeepUp, !likelyToKeepUp {
+                if let likelyToKeepUp = self?.cellVideoNode.currentItem?.isPlaybackLikelyToKeepUp,
+                   !likelyToKeepUp,
+                   let loadedTimeRanges = self?.cellVideoNode.currentItem?.loadedTimeRanges,
+                   self?.bufferIsEmpty(loadedTimeRanges: loadedTimeRanges) == true {
                     
                     if self?.assetReset == false {
                         self?.resetAssets()
                     } else {
                         self?.handleStatusChange()
                     }
-        
+            
                 } else {
                     self?.handleStatusChange()
                 }
@@ -2003,7 +2005,10 @@ extension VideoNode {
                 print("FAILED TO play failed")
             @unknown default:
                 
-                if let likelyToKeepUp = self?.cellVideoNode.currentItem?.isPlaybackLikelyToKeepUp, !likelyToKeepUp {
+                if let likelyToKeepUp = self?.cellVideoNode.currentItem?.isPlaybackLikelyToKeepUp,
+                   !likelyToKeepUp,
+                   let loadedTimeRanges = self?.cellVideoNode.currentItem?.loadedTimeRanges,
+                   self?.bufferIsEmpty(loadedTimeRanges: loadedTimeRanges) == true {
                     
                     if self?.assetReset == false {
                         self?.resetAssets()
@@ -2022,6 +2027,17 @@ extension VideoNode {
         }
         
     }
+
+    func bufferIsEmpty(loadedTimeRanges: [NSValue]) -> Bool {
+        guard let lastTimeRange = loadedTimeRanges.last as? CMTimeRange else {
+            return true
+        }
+        let bufferEndTime = CMTimeAdd(lastTimeRange.start, lastTimeRange.duration)
+        let currentTime = self.cellVideoNode.player?.currentTime() ?? CMTime.zero
+        return bufferEndTime < currentTime
+    }
+
+
     
     func removeSpinner() {
         spinnerRemoved = true
