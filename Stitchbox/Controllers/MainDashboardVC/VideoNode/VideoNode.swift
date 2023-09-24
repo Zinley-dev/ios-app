@@ -110,7 +110,7 @@ class VideoNode: ASCellNode, ASVideoNodeDelegate {
     override func didLoad() {
         super.didLoad()
     
-        spinner = NVActivityIndicatorView(frame:  CGRect(x: 0, y: 0, width: 75, height: 75), type: .ballScale, color: .secondary, padding: 0)
+        spinner = NVActivityIndicatorView(frame:  CGRect(x: 0, y: 0, width: 75, height: 75), type: .circleStrokeSpin, color: .white, padding: 0)
        
      }
     
@@ -1890,10 +1890,6 @@ extension VideoNode {
 
     func addObservers() {
         statusObservation = cellVideoNode.currentItem?.observe(\.status, options: [.new, .initial], changeHandler: { [weak self] (playerItem, change) in
-            if playerItem.status == .readyToPlay {
-                self?.removeObservers()
-            }
-            
             print("statusObservation called for: \(self?.post.id) - \(playerItem.status.rawValue)")
             self?.handleStatusChange()
         })
@@ -1976,6 +1972,7 @@ extension VideoNode {
         DispatchQueue.main.asyncAfter(deadline: .now() + 2) { [weak self] in
             
             if self?.cellVideoNode.isPlaying() == true {
+                self?.removeSpinner()
                 return
             }
             
@@ -2062,20 +2059,25 @@ extension VideoNode {
         
         if isActive {
             DispatchQueue.main.async() { [weak self] in
-                self?.cellVideoNode.play()
+                if self?.cellVideoNode.isPlaying() != true {
+                    self?.cellVideoNode.play()
+                }
             }
             
         }
         
     }
 
-    func pauseVideo() {
+    func pauseVideo(shouldSeekToStart: Bool) {
         
         isActive = false
         cellVideoNode.pause()
-        let time = CMTime(seconds: 0, preferredTimescale: 1)
-        cellVideoNode.player?.seek(to: time)
         removeObservers()
+        
+        if shouldSeekToStart {
+            let time = CMTime(seconds: 0, preferredTimescale: 1)
+            cellVideoNode.player?.seek(to: time)
+        }
     }
     
     func unmuteVideo() {
@@ -2092,7 +2094,7 @@ extension VideoNode {
 
     override func didExitVisibleState() {
         super.didExitVisibleState()
-        pauseVideo()
+        pauseVideo(shouldSeekToStart: false)
         removeObservers()
     }
 

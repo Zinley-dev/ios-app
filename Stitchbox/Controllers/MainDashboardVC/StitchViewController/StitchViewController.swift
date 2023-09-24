@@ -293,7 +293,7 @@ extension StitchViewController {
                     if let newPlayingIndex = newPlayingIndex, currentIndex != newPlayingIndex {
                         // Pause the current video, if any.
                         if let currentIndex = currentIndex {
-                            pauseVideo(index: currentIndex)
+                            pauseVideoOnScrolling(index: currentIndex)
                         }
                         // Play the new video.
                         currentIndex = newPlayingIndex
@@ -309,7 +309,7 @@ extension StitchViewController {
                 
                 // If there's no current playing video and no visible video, pause the last playing video, if any.
                 if !isVideoPlaying && currentIndex != nil {
-                    pauseVideo(index: currentIndex!)
+                    pauseVideoOnScrolling(index: currentIndex!)
                     currentIndex = nil
                 }
             }
@@ -705,11 +705,21 @@ extension StitchViewController {
 
 extension StitchViewController {
     
-    func pauseVideo(index: Int) {
+    func pauseVideoOnScrolling(index: Int) {
         
         if let cell = self.collectionNode.nodeForItem(at: IndexPath(row: index, section: 0)) as? VideoNode {
             
-            cell.pauseVideo()
+            cell.pauseVideo(shouldSeekToStart: true)
+            
+        }
+        
+    }
+    
+    func pauseVideoOnAppStage(index: Int) {
+        
+        if let cell = self.collectionNode.nodeForItem(at: IndexPath(row: index, section: 0)) as? VideoNode {
+            
+            cell.pauseVideo(shouldSeekToStart: false)
             
         }
         

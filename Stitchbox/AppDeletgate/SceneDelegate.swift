@@ -115,13 +115,13 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
             if currentFeedVC.isFeed {
                 
                 if let index = currentFeedVC.feedViewController.currentIndex, !currentFeedVC.feedViewController.posts.isEmpty {
-                    currentFeedVC.feedViewController.pauseVideo(index: index)
+                    currentFeedVC.feedViewController.pauseVideoOnAppStage(index: index)
                 }
                 
             } else {
                 
                 if let index = currentFeedVC.stitchViewController.currentIndex, !currentFeedVC.stitchViewController.posts.isEmpty {
-                    currentFeedVC.stitchViewController.pauseVideo(index: index)
+                    currentFeedVC.stitchViewController.pauseVideoOnAppStage(index: index)
                 }
                
             }
@@ -129,13 +129,13 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
             if currentFeedVC.isRoot {
                 
                 if let index = currentFeedVC.selectedRootPostVC.currentIndex, !currentFeedVC.selectedRootPostVC.posts.isEmpty {
-                    currentFeedVC.selectedRootPostVC.pauseVideo(index: index)
+                    currentFeedVC.selectedRootPostVC.pauseVideoOnAppStage(index: index)
                 }
                 
             } else {
                 
                 if let index = currentFeedVC.stitchViewController.currentIndex, !currentFeedVC.stitchViewController.posts.isEmpty {
-                    currentFeedVC.stitchViewController.pauseVideo(index: index)
+                    currentFeedVC.stitchViewController.pauseVideoOnAppStage(index: index)
                 }
                
             }

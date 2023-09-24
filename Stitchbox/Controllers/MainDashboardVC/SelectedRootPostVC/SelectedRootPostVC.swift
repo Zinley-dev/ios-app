@@ -238,7 +238,7 @@ extension SelectedRootPostVC {
                    if let newPlayingIndex = newPlayingIndex, currentIndex != newPlayingIndex {
                        // Pause the current video, if any.
                        if let currentIndex = currentIndex {
-                           pauseVideo(index: currentIndex)
+                           pauseVideoOnScrolling(index: currentIndex)
                        }
                        // Play the new video.
                        currentIndex = newPlayingIndex
@@ -496,11 +496,21 @@ extension SelectedRootPostVC {
 
 extension SelectedRootPostVC {
     
-    func pauseVideo(index: Int) {
+    func pauseVideoOnScrolling(index: Int) {
         
         if let cell = self.collectionNode.nodeForItem(at: IndexPath(row: index, section: 0)) as? VideoNode {
             
-            cell.pauseVideo()
+            cell.pauseVideo(shouldSeekToStart: true)
+            
+        }
+        
+    }
+    
+    func pauseVideoOnAppStage(index: Int) {
+        
+        if let cell = self.collectionNode.nodeForItem(at: IndexPath(row: index, section: 0)) as? VideoNode {
+            
+            cell.pauseVideo(shouldSeekToStart: false)
             
         }
         

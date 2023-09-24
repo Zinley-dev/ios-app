@@ -4674,7 +4674,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = Stitchbox/Stitchbox.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 3.4;
+				CURRENT_PROJECT_VERSION = 3.5;
 				DEVELOPMENT_TEAM = 5CH47FHM8Q;
 				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = arm64;
 				GENERATE_INFOPLIST_FILE = YES;
@@ -4699,7 +4699,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 6.8;
+				MARKETING_VERSION = 6.9;
 				PRODUCT_BUNDLE_IDENTIFIER = com.mobile.gg.Stitchbox1;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
@@ -4720,7 +4720,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = Stitchbox/Stitchbox.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 3.4;
+				CURRENT_PROJECT_VERSION = 3.5;
 				DEVELOPMENT_TEAM = 5CH47FHM8Q;
 				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = arm64;
 				GENERATE_INFOPLIST_FILE = YES;
@@ -4745,7 +4745,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 6.8;
+				MARKETING_VERSION = 6.9;
 				PRODUCT_BUNDLE_IDENTIFIER = com.mobile.gg.Stitchbox1;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";

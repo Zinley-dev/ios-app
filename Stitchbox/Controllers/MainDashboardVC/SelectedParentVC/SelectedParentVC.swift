@@ -137,11 +137,11 @@ class SelectedParentVC: UIViewController, UIScrollViewDelegate {
         
         if isRoot {
             if selectedRootPostVC.currentIndex != nil {
-                selectedRootPostVC.pauseVideo(index: selectedRootPostVC.currentIndex!)
+                selectedRootPostVC.pauseVideoOnAppStage(index: selectedRootPostVC.currentIndex!)
             }
         } else {
             if stitchViewController.currentIndex != nil {
-                stitchViewController.pauseVideo(index: stitchViewController.currentIndex!)
+                stitchViewController.pauseVideoOnAppStage(index: stitchViewController.currentIndex!)
             }
         }
         
@@ -410,10 +410,10 @@ extension SelectedParentVC {
         
         isRoot = true
         if stitchViewController.currentIndex != nil {
-            stitchViewController.pauseVideo(index: stitchViewController.currentIndex!)
+            stitchViewController.pauseVideoOnScrolling(index: stitchViewController.currentIndex!)
         } else {
             stitchViewController.currentIndex = 0
-            stitchViewController.pauseVideo(index: 0)
+            stitchViewController.pauseVideoOnScrolling(index: 0)
         }
         
         if !stitchViewController.selectPostCollectionView.isHidden {
@@ -433,9 +433,9 @@ extension SelectedParentVC {
         
         isRoot = false
         if selectedRootPostVC.currentIndex != nil {
-            selectedRootPostVC.pauseVideo(index: selectedRootPostVC.currentIndex!)
+            selectedRootPostVC.pauseVideoOnScrolling(index: selectedRootPostVC.currentIndex!)
         } else {
-            selectedRootPostVC.pauseVideo(index: 0)
+            selectedRootPostVC.pauseVideoOnScrolling(index: 0)
         }
         
         

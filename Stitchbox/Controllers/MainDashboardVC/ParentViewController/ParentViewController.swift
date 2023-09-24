@@ -96,11 +96,11 @@ class ParentViewController: UIViewController {
         
         if isFeed {
             if feedViewController.currentIndex != nil {
-                feedViewController.pauseVideo(index: feedViewController.currentIndex!)
+                feedViewController.pauseVideoOnAppStage(index: feedViewController.currentIndex!)
             }
         } else {
             if stitchViewController.currentIndex != nil {
-                stitchViewController.pauseVideo(index: stitchViewController.currentIndex!)
+                stitchViewController.pauseVideoOnAppStage(index: stitchViewController.currentIndex!)
             }
         }
         
@@ -527,11 +527,11 @@ extension ParentViewController {
         
         if stitchViewController.currentIndex != nil {
             print("Parent - Pause at: \(stitchViewController.currentIndex) for stitch")
-            stitchViewController.pauseVideo(index: stitchViewController.currentIndex!)
+            stitchViewController.pauseVideoOnScrolling(index: stitchViewController.currentIndex!)
         } else {
             print("Parent - Pause at: nil 0 for stitch")
             stitchViewController.currentIndex = 0
-            stitchViewController.pauseVideo(index: 0)
+            stitchViewController.pauseVideoOnScrolling(index: 0)
         }
         
         if !stitchViewController.selectPostCollectionView.isHidden {
@@ -554,10 +554,10 @@ extension ParentViewController {
         isFeed = false
         if feedViewController.currentIndex != nil {
             print("Parent - Pause at: \(feedViewController.currentIndex) for feed")
-            feedViewController.pauseVideo(index: feedViewController.currentIndex!)
+            feedViewController.pauseVideoOnScrolling(index: feedViewController.currentIndex!)
         } else {
             print("Parent - Pause at: nil 0 for feed")
-            feedViewController.pauseVideo(index: 0)
+            feedViewController.pauseVideoOnScrolling(index: 0)
         }
         
         
