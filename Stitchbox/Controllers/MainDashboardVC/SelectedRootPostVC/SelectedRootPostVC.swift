@@ -534,6 +534,15 @@ extension SelectedRootPostVC {
         
     }
     
+    func seekToZero(index: Int) {
+      
+        if let cell = self.collectionNode.nodeForItem(at: IndexPath(row: index, section: 0)) as? VideoNode {
+            cell.seekToZero()
+            
+        }
+        
+    }
+    
     
     func handleAnimationTextAndImage(post: PostModel) {
         

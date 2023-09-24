@@ -2096,6 +2096,11 @@ extension VideoNode {
         }
     }
     
+    func seekToZero() {
+        let time = CMTime(seconds: 0, preferredTimescale: 1)
+        cellVideoNode.player?.seek(to: time)
+    }
+    
     func unmuteVideo() {
         
         cellVideoNode.muted = false

@@ -849,4 +849,18 @@ extension SelectedParentVC {
     }
 
     
+    func seekToZero() {
+        
+        if isRoot {
+            if let currentIndex = selectedRootPostVC.currentIndex {
+                selectedRootPostVC.seekToZero(index: currentIndex)
+            }
+        } else {
+            if let currentIndex = stitchViewController.currentIndex {
+                stitchViewController.seekToZero(index: currentIndex)
+            }
+        }
+        
+    }
+    
 }

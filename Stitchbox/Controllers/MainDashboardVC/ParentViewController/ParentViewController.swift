@@ -1176,6 +1176,19 @@ extension ParentViewController {
         }
     }
 
+    func seekToZero() {
+        
+        if isFeed {
+            if let currentIndex = feedViewController.currentIndex {
+                feedViewController.seekToZero(index: currentIndex)
+            }
+        } else {
+            if let currentIndex = stitchViewController.currentIndex {
+                stitchViewController.seekToZero(index: currentIndex)
+            }
+        }
+        
+    }
 
     
 }

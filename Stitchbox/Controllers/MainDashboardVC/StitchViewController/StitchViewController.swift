@@ -770,6 +770,14 @@ extension StitchViewController {
         
     }
     
+    func seekToZero(index: Int) {
+      
+        if let cell = self.collectionNode.nodeForItem(at: IndexPath(row: index, section: 0)) as? VideoNode {
+            cell.seekToZero()
+            
+        }
+        
+    }
     
     @objc func labelTapped() {
         if currentIndex != nil, currentIndex! + 1 < posts.count {

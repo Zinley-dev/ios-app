@@ -16,6 +16,7 @@ enum RootType {
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
     var window: UIWindow?
+    var lastInactiveTime: Date?
 
     lazy var deeplinkCoordinator : DeeplinkCoordinatorProtocol = {
       return DeeplinkCoordinator(handlers: [
@@ -64,44 +65,48 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         // Called when the scene has moved from an inactive state to an active state.
         // Use this method to restart any tasks that were paused (or not yet started) when the scene was inactive.
         CacheManager.shared.asyncRemoveExpiredObjects()
-        
+
+        // Maintain tmp directory
         do {
-            let maxSizeInBytes: UInt64 = UInt64(0.5 * 1024 * 1024 * 1024)  // 1GB
-            try maintainTmpDirectory(maxSizeInBytes: maxSizeInBytes)
+            let halfGigabyte = UInt64(0.5 * 1024 * 1024 * 1024)
+            try maintainTmpDirectory(maxSizeInBytes: halfGigabyte)
         } catch {
             print("Failed to maintain tmp directory with error: \(error)")
         }
-        
+
+        // Get current view controller
         guard let currentVC = UIViewController.currentViewController() else { return }
         
-        if let currentStartVC = currentVC as? StartViewController {
-            if currentStartVC.player != nil {
-                
-                currentStartVC.player?.play()
-                
+        // Calculate the two minutes ago time only once
+        let twoMinsAgo = Date().addingTimeInterval(-120)
+
+        // Check for each type of view controller
+        if let startVC = currentVC as? StartViewController, startVC.player != nil {
+            startVC.player?.play()
+        } else if let parentVC = currentVC as? ParentViewController, parentVC.firstLoadDone {
+            if let lastBackground = lastInactiveTime, lastBackground < twoMinsAgo {
+                parentVC.seekToZero()
             }
-        }
-        
-        
-        if let currentFeedVC = currentVC as? ParentViewController {
-            if currentFeedVC.firstLoadDone {
-                currentFeedVC.loadFeed()
+            parentVC.loadFeed()
+        } else if let selectedParentVC = currentVC as? SelectedParentVC {
+            if let lastBackground = lastInactiveTime, lastBackground < twoMinsAgo {
+                selectedParentVC.seekToZero()
             }
-        } else if  let currentFeedVC = currentVC as? SelectedParentVC {
-            currentFeedVC.resumeVideo()
+            selectedParentVC.resumeVideo()
         }
 
-        
+        // Reset application badge number and request a review
         UIApplication.shared.applicationIconBadgeNumber = 0
         requestAppleReview()
-        
-        
-     
     }
+
 
     func sceneWillResignActive(_ scene: UIScene) {
         // Called when the scene will move from an active state to an inactive state.
         // This may occur due to temporary interruptions (ex. an incoming phone call).
+        
+        lastInactiveTime = Date()
+        
         do {
             let maxSizeInBytes: UInt64 = UInt64(0.5 * 1024 * 1024 * 1024)  // 1GB
             try maintainTmpDirectory(maxSizeInBytes: maxSizeInBytes)
