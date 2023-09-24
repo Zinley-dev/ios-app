@@ -2087,13 +2087,14 @@ extension VideoNode {
         if shouldSeekToStart {
             let time = CMTime(seconds: 0, preferredTimescale: 1)
             cellVideoNode.player?.seek(to: time)
-            playTimeBar.setValue(Float(0), animated: false)
+            playTimeBar.setValue(Float(0), animated: true)
         }
     }
     
     func seekToZero() {
         let time = CMTime(seconds: 0, preferredTimescale: 1)
         cellVideoNode.player?.seek(to: time)
+        playTimeBar.setValue(Float(0), animated: true)
     }
     
     func unmuteVideo() {
