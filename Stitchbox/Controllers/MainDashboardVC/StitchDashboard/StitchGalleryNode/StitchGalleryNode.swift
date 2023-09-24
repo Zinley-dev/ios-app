@@ -188,7 +188,7 @@ class StitchGalleryNode: ASCellNode {
         let infoNodeMaxWidth: CGFloat = constrainedSize.max.width // Set the max width based on your main view's width
         infoNode.style.maxWidth = ASDimension(unit: .points, value: infoNodeMaxWidth) // Limit the width of infoNode
 
-        let infoInsets = UIEdgeInsets(top: 8, left: 4, bottom: .infinity, right: .infinity)
+        let infoInsets = UIEdgeInsets(top: 6, left: 4, bottom: .infinity, right: .infinity)
         let infoInsetSpec = ASInsetLayoutSpec(insets: infoInsets, child: infoNode)
 
         let overlayLayoutSpec = ASOverlayLayoutSpec(child: imageNode, overlay: videoCountInsetSpec)

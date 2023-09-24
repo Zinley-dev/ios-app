@@ -135,8 +135,6 @@ class VideoNode: ASCellNode, ASVideoNodeDelegate {
         
     }
     
-
-    
     private func setupSpace(width: CGFloat) {
         
         let leftAndRightPadding: CGFloat = 20 * 2 // Padding for both sides
@@ -246,7 +244,8 @@ class VideoNode: ASCellNode, ASVideoNodeDelegate {
             setDefaultVideoContentMode()
         }
         
-        DispatchQueue.main.async() {
+        DispatchQueue.main.async() { [weak self] in
+            guard let self = self else { return }
             
             self.cellVideoNode.asset = AVAsset(url: self.getVideoURL(post: post)!)
             
@@ -279,8 +278,6 @@ class VideoNode: ASCellNode, ASVideoNodeDelegate {
         cellVideoNode.gravity = AVLayerVideoGravity.resizeAspect.rawValue
     }
 
-    
-
     private func addPinchGestureRecognizer() {
         let pinchGestureRecognizer = UIPinchGestureRecognizer(target: self, action: #selector(handlePinchGesture(_:)))
         view.addGestureRecognizer(pinchGestureRecognizer)
@@ -292,7 +289,6 @@ class VideoNode: ASCellNode, ASVideoNodeDelegate {
         panGestureRecognizer.minimumNumberOfTouches = 2
         view.addGestureRecognizer(panGestureRecognizer)
     }
-
 
     func getThumbnailURL(post: PostModel) -> URL? {
         if post.muxPlaybackId != "" {
@@ -324,9 +320,6 @@ class VideoNode: ASCellNode, ASVideoNodeDelegate {
         let ratioSpec = ASRatioLayoutSpec(ratio:ratio, child: cellVideoNode)
      
         let gradientOverlaySpec = ASOverlayLayoutSpec(child:ratioSpec, overlay: gradientNode)
-        
-        
-        
         
         // Add 16 points of inset to the bottom
         let insetSpec = ASInsetLayoutSpec(insets: UIEdgeInsets(top: 0, left: 0, bottom: 8, right: 0), child: gradientOverlaySpec)
@@ -1181,7 +1174,8 @@ extension VideoNode {
                     return
                 }
 
-                DispatchQueue.main.async {
+                DispatchQueue.main.async { [weak self] in
+                    guard let self = self else { return }
                     self.isSave = getIsSaved
                     if self.isSave {
                         self.saveAnimation()
@@ -1210,7 +1204,8 @@ extension VideoNode {
                     return
                 }
 
-                DispatchQueue.main.async {
+                DispatchQueue.main.async { [weak self] in
+                    guard let self = self else { return }
                     self.saveCount = countFromQuery
                     self.headerView.saveCountLbl.text = "\(formatPoints(num: Double(countFromQuery)))"
                 }
@@ -1640,7 +1635,8 @@ extension VideoNode {
                 self.allowProcess = true
 
             case .failure:
-                DispatchQueue.main.async {
+                DispatchQueue.main.async {[weak self] in
+                    guard let self = self else { return }
                     self.allowProcess = true
                     self.headerView.followBtn.setTitle("Following", for: .normal)
                     showNote(text: "Something happened!")
@@ -1665,7 +1661,8 @@ extension VideoNode {
                 self.allowProcess = true
 
             case .failure:
-                DispatchQueue.main.async {
+                DispatchQueue.main.async { [weak self] in
+                    guard let self = self else { return }
                     self.allowProcess = true
                     self.headerView.followBtn.setTitle("Follow", for: .normal)
                     showNote(text: "Something happened!")
@@ -1890,7 +1887,6 @@ extension VideoNode {
 
     func addObservers() {
         statusObservation = cellVideoNode.currentItem?.observe(\.status, options: [.new, .initial], changeHandler: { [weak self] (playerItem, change) in
-            print("statusObservation called for: \(self?.post.id) - \(playerItem.status.rawValue)")
             self?.handleStatusChange()
         })
     }
@@ -2074,10 +2070,8 @@ extension VideoNode {
         removeSpinner()
         
         if isActive {
-            DispatchQueue.main.async() { [weak self] in
-                if self?.cellVideoNode.isPlaying() != true {
-                    self?.cellVideoNode.play()
-                }
+            if cellVideoNode.isPlaying() != true {
+                cellVideoNode.play()
             }
             
         }
@@ -2093,6 +2087,7 @@ extension VideoNode {
         if shouldSeekToStart {
             let time = CMTime(seconds: 0, preferredTimescale: 1)
             cellVideoNode.player?.seek(to: time)
+            playTimeBar.setValue(Float(0), animated: false)
         }
     }
     
@@ -2139,7 +2134,6 @@ extension VideoNode {
         
         addPinchGestureRecognizer()
         addPanGestureRecognizer()
-        
         setupViews()
          
         if !isPreview {
@@ -2158,8 +2152,6 @@ extension VideoNode {
         setupLabel()
         setupSpace(width: UIScreen.main.bounds.width)
         clearMode()
-        
-        
         
     }
     
