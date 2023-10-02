@@ -229,7 +229,6 @@ class VideoNode: ASCellNode, ASVideoNodeDelegate {
         
         cellVideoNode.url = getThumbnailURL(post: post)
         
-        
         cellVideoNode.shouldAutoplay = false
         cellVideoNode.shouldAutorepeat = true
         
@@ -1698,7 +1697,7 @@ extension VideoNode {
     
     func handleReaction(isFollower: Bool, isFollowing: Bool, isLiked: Bool, isSaved: Bool) {
        
-        if isFollower {
+        if isFollower || post.owner?.id == _AppCoreData.userDataSource.value?.userID {
             self.hideFollowBtn()
         } else {
             self.setupFollowBtn()

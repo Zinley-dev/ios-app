@@ -72,6 +72,7 @@ class PostVC: UIViewController {
     var length: Double!
     var renderedImage: UIImage!
     var selectedDescTxtView = ""
+    var container: ContainerController!
 
  
     override func viewDidLoad() {
@@ -103,6 +104,25 @@ class PostVC: UIViewController {
             stitchView.isHidden = true
         }
        
+        
+        container = ContainerController(modes: [.library, .video], initialMode: .video, restoresPreviousMode: false)
+        
+        container.editControllerDelegate = self
+        container.libraryController.previewCropController.maxRatioForPortraitMedia = CGSize(width: 1, height: .max)
+        container.libraryController.previewCropController.maxRatioForLandscapeMedia = CGSize(width: .max, height: 1)
+        container.libraryController.previewCropController.defaultsToAspectFillForPortraitMedia = false
+        container.libraryController.previewCropController.defaultsToAspectFillForLandscapeMedia = false
+        
+    
+        container.cameraController.aspectRatio = CGSize(width: 9, height: 16)
+
+        
+        // Include only videos from the users photo library
+        container.libraryController.fetchPredicate = NSPredicate(format: "mediaType == %d", PHAssetMediaType.video.rawValue)
+        // Include only videos from the users drafts
+        container.libraryController.draftMediaTypes = [.video]
+        
+        
     }
     
     func setupNavBar() {
@@ -147,24 +167,6 @@ class PostVC: UIViewController {
     }
     
     func presentCamera() {
-        
-        let container = ContainerController(modes: [.library, .video], initialMode: .video, restoresPreviousMode: false)
-        
-        container.editControllerDelegate = self
-        container.libraryController.previewCropController.maxRatioForPortraitMedia = CGSize(width: 1, height: .max)
-        container.libraryController.previewCropController.maxRatioForLandscapeMedia = CGSize(width: .max, height: 1)
-        container.libraryController.previewCropController.defaultsToAspectFillForPortraitMedia = false
-        container.libraryController.previewCropController.defaultsToAspectFillForLandscapeMedia = false
-        
-    
-        container.cameraController.aspectRatio = CGSize(width: 9, height: 16)
-
-        
-        // Include only videos from the users photo library
-        container.libraryController.fetchPredicate = NSPredicate(format: "mediaType == %d", PHAssetMediaType.video.rawValue)
-        // Include only videos from the users drafts
-        container.libraryController.draftMediaTypes = [.video]
-       
         
         let nav = UINavigationController(rootViewController: container)
         nav.modalPresentationStyle = .fullScreen

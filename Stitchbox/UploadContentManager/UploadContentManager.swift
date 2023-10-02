@@ -44,6 +44,10 @@ class UploadContentManager {
 
             case .failure(let error):
                 global_percentComplete = 0.00
+                Dispatch.main.async {
+                    showNote(text: "Couldn't upload this video, please try again! \(error.localizedDescription)")
+                }
+                
                 print(error)
             }
             
