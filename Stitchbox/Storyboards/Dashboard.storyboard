@@ -3720,21 +3720,15 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="LXZ-FB-Sxr">
-                                <rect key="frame" x="0.0" y="0.0" width="375" height="728"/>
+                                <rect key="frame" x="0.0" y="0.0" width="375" height="778"/>
                                 <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             </view>
-                            <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" minValue="0.0" maxValue="1" translatesAutoresizingMaskIntoConstraints="NO" id="nN2-uK-ySa" customClass="CustomSlider" customModule="Stitchbox" customModuleProvider="target">
-                                <rect key="frame" x="-2" y="738" width="379" height="31"/>
-                                <color key="minimumTrackTintColor" name="Secondary"/>
-                                <color key="maximumTrackTintColor" white="0.33333333329999998" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                <color key="thumbTintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                            </slider>
                             <view hidden="YES" alpha="0.60000002384185802" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="mwn-u2-yvV">
-                                <rect key="frame" x="0.0" y="0.0" width="375" height="730"/>
+                                <rect key="frame" x="0.0" y="0.0" width="375" height="778"/>
                                 <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             </view>
                             <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="00:00 / 00:00" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="hQJ-lv-q0b">
-                                <rect key="frame" x="142.33333333333334" y="656" width="90.666666666666657" height="18"/>
+                                <rect key="frame" x="142.33333333333334" y="728" width="90.666666666666657" height="18"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <fontDescription key="fontDescription" name="Roboto-Bold" family="Roboto" pointSize="15"/>
                                 <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -3762,23 +3756,20 @@
                         <viewLayoutGuide key="safeArea" id="Lnf-OH-i32"/>
                         <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
-                            <constraint firstItem="nN2-uK-ySa" firstAttribute="top" secondItem="LXZ-FB-Sxr" secondAttribute="bottom" constant="10" id="6xN-7h-MwW"/>
+                            <constraint firstItem="Lnf-OH-i32" firstAttribute="bottom" secondItem="hQJ-lv-q0b" secondAttribute="bottom" constant="32" id="381-Vz-b5X"/>
                             <constraint firstItem="Lnf-OH-i32" firstAttribute="trailing" secondItem="mwn-u2-yvV" secondAttribute="trailing" id="9cX-C7-Hea"/>
-                            <constraint firstItem="nN2-uK-ySa" firstAttribute="top" secondItem="hQJ-lv-q0b" secondAttribute="bottom" constant="64" id="GHK-Qh-p3k"/>
                             <constraint firstItem="Lnf-OH-i32" firstAttribute="trailing" secondItem="LXZ-FB-Sxr" secondAttribute="trailing" id="GeD-8w-Utw"/>
+                            <constraint firstItem="Lnf-OH-i32" firstAttribute="bottom" secondItem="mwn-u2-yvV" secondAttribute="bottom" id="I6F-Nh-6hJ"/>
                             <constraint firstAttribute="bottom" secondItem="htp-gG-0hU" secondAttribute="bottom" id="J5J-4I-1NW"/>
+                            <constraint firstItem="Lnf-OH-i32" firstAttribute="bottom" secondItem="LXZ-FB-Sxr" secondAttribute="bottom" id="K8Z-Qe-iie"/>
                             <constraint firstItem="htp-gG-0hU" firstAttribute="leading" secondItem="C3B-Ib-HWi" secondAttribute="leading" id="L1l-6y-5hY"/>
                             <constraint firstItem="htp-gG-0hU" firstAttribute="top" secondItem="C3B-Ib-HWi" secondAttribute="top" id="MUY-xc-H5g"/>
                             <constraint firstItem="hQJ-lv-q0b" firstAttribute="centerX" secondItem="C3B-Ib-HWi" secondAttribute="centerX" id="UIu-b9-F14"/>
                             <constraint firstItem="LXZ-FB-Sxr" firstAttribute="leading" secondItem="Lnf-OH-i32" secondAttribute="leading" id="eqF-YM-nU0"/>
-                            <constraint firstItem="Lnf-OH-i32" firstAttribute="bottom" secondItem="nN2-uK-ySa" secondAttribute="bottom" constant="10" id="f3H-W9-53G"/>
                             <constraint firstItem="mwn-u2-yvV" firstAttribute="leading" secondItem="Lnf-OH-i32" secondAttribute="leading" id="j9Y-oC-drx"/>
                             <constraint firstItem="mwn-u2-yvV" firstAttribute="top" secondItem="C3B-Ib-HWi" secondAttribute="top" id="jIY-jp-EC5"/>
                             <constraint firstItem="LXZ-FB-Sxr" firstAttribute="top" secondItem="C3B-Ib-HWi" secondAttribute="top" id="kSw-Qi-X0A"/>
-                            <constraint firstItem="nN2-uK-ySa" firstAttribute="top" secondItem="mwn-u2-yvV" secondAttribute="bottom" constant="8" id="m0M-QE-06n"/>
-                            <constraint firstItem="nN2-uK-ySa" firstAttribute="leading" secondItem="C3B-Ib-HWi" secondAttribute="leading" id="pzZ-vy-ggn"/>
                             <constraint firstAttribute="trailing" secondItem="htp-gG-0hU" secondAttribute="trailing" id="xWx-E6-aPP"/>
-                            <constraint firstItem="Lnf-OH-i32" firstAttribute="trailing" secondItem="nN2-uK-ySa" secondAttribute="trailing" id="z14-sm-yx7"/>
                         </constraints>
                     </view>
                     <connections>
@@ -3786,7 +3777,6 @@
                         <outlet property="contentView" destination="LXZ-FB-Sxr" id="lnR-To-hgO"/>
                         <outlet property="loadingImage" destination="MhA-gQ-Kfc" id="bkZ-0p-30b"/>
                         <outlet property="loadingView" destination="htp-gG-0hU" id="xrq-az-Dky"/>
-                        <outlet property="playTimeBar" destination="nN2-uK-ySa" id="bxt-SD-MWC"/>
                         <outlet property="timeLbl" destination="hQJ-lv-q0b" id="9Su-Wr-OG3"/>
                     </connections>
                 </viewController>
@@ -9472,9 +9462,6 @@
         </designable>
         <designable name="mQ7-db-ueA">
             <size key="intrinsicContentSize" width="359.66666666666669" height="15.333333333333334"/>
-        </designable>
-        <designable name="nN2-uK-ySa">
-            <size key="intrinsicContentSize" width="-1" height="30"/>
         </designable>
         <designable name="uAM-Hz-5k4">
             <size key="intrinsicContentSize" width="697.66666666666663" height="15.333333333333334"/>

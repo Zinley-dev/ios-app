@@ -63,6 +63,10 @@ class PendingNode: ASCellNode, ASVideoNodeDelegate {
     
     }
     
+    override func didLoad() {
+        spinner = NVActivityIndicatorView(frame:  CGRect(x: 0, y: 0, width: 55, height: 55), type: .circleStrokeSpin, color: .white, padding: 0)
+    }
+    
     override func didEnterVisibleState() {
         isActive = true
         if !didSetup {

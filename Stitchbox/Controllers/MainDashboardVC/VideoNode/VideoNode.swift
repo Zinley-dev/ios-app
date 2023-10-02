@@ -2147,7 +2147,12 @@ extension VideoNode {
                 addSideButtons(isOwned: false)
             }
             
+        } else {
+            playTimeBar = CustomSlider()
+            playTimeBar.translatesAutoresizingMaskIntoConstraints = false
+            playTimeBar.isHidden = true
         }
+            
         
         setupLabel()
         setupSpace(width: UIScreen.main.bounds.width)

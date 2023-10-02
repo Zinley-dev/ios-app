@@ -96,7 +96,11 @@ class PostVC: UIViewController {
             let userDefaults = UserDefaults.standard
             if userDefaults.bool(forKey: "hasAlertContentBefore") == false {
                 
-                acceptTermStitch()
+                delay(0.25) { [weak self] in
+                    self?.acceptTermStitch()
+                }
+                
+                
                 
             }
             
@@ -981,8 +985,7 @@ extension PostVC {
                     _ = alert.showCustom("Hi \(username),", subTitle: terms, color: UIColor.white, icon: icon!)
             
         }
-        
-        
+    
         
     }
     

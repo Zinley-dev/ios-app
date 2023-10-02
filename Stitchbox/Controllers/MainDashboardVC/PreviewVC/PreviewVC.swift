@@ -16,7 +16,6 @@ class PreviewVC: UIViewController, UICollectionViewDelegateFlowLayout, UIAdaptiv
     @IBOutlet weak var contentView: UIView!
     @IBOutlet weak var timeLbl: UILabel!
     @IBOutlet weak var blurView: UIView!
-    @IBOutlet weak var playTimeBar: CustomSlider!
     
     @IBOutlet weak var loadingImage: FLAnimatedImageView!
     @IBOutlet weak var loadingView: UIView!
@@ -182,7 +181,7 @@ class PreviewVC: UIViewController, UICollectionViewDelegateFlowLayout, UIAdaptiv
                 
             } else {
                 self.isVideoPlaying = false
-                self.playTimeBar.isHidden = true
+               
             }
             
         }
