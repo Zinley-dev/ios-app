@@ -7,16 +7,17 @@
 
 import Foundation
 import ObjectMapper
+import UIKit // Required for CGFloat
+
 
 class FriendSuggestionModel: Mappable {
     
-    private(set) var userId: String?
-    private(set) var avatar: String?
-    private(set) var username: String?
-    private(set) var name: String?
-    private(set) var bio: String?
-    private(set) var discordLink: String?
-    private(set) var challengeCard: ChallengeCard?
+    private(set) var userId: String = ""
+    private(set) var avatar: String = ""
+    private(set) var username: String = ""
+    private(set) var name: String = ""
+    private(set) var bio: String = ""
+    private(set) var discordLink: String = ""
     
     required init?(map: Map) {
         //
@@ -29,23 +30,18 @@ class FriendSuggestionModel: Mappable {
         name           <- map["name"]
         bio            <- map["bio"]
         discordLink    <- map["discordLink"]
-        challengeCard  <- map["challengeCard"]
     }
 }
 
-class ChallengeCard: Mappable {
-    private(set) var badge: String?
-    private(set) var games: String?
-    private(set) var quote: String?
-    
-    required init?(map: Map) {
-        //
-    }
-    
-    func mapping(map: Map) {
-        badge <- map["badge"]
-        games <- map["games"]
-        quote <- map["quote"]
-    }
-}
 
+extension FriendSuggestionModel: Hashable {
+    
+    static func == (lhs: FriendSuggestionModel, rhs: FriendSuggestionModel) -> Bool {
+        return lhs.userId == rhs.userId
+    }
+    
+    func hash(into hasher: inout Hasher) {
+        hasher.combine(userId)
+    }
+    
+}

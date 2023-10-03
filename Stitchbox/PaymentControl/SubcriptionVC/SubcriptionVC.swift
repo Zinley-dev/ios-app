@@ -35,7 +35,7 @@ class SubcriptionVC: UIViewController, ZSWTappableLabelTapDelegate {
       var URL: Foundation.URL {
           switch self {
           case .Privacy:
-              return Foundation.URL(string: "https://stitchbox.net/public-policy")!
+              return Foundation.URL(string: "https://stitchbox.net/privacy-policy")!
           case .TermsOfUse:
               return Foundation.URL(string: "https://stitchbox.net/term-of-use")!
              
@@ -64,7 +64,7 @@ class SubcriptionVC: UIViewController, ZSWTappableLabelTapDelegate {
                   .tappableHighlightedForegroundColor: UIColor.black,
                   .foregroundColor: UIColor.black,
                   .underlineStyle: NSUnderlineStyle.single.rawValue,
-                  StartViewController.URLAttributeName: type.URL
+                  SubcriptionVC.URLAttributeName: type.URL
               ]
           })
           
@@ -229,7 +229,5 @@ extension SubcriptionVC {
             break
         }
     }
-
-    //...
-
+    
 }

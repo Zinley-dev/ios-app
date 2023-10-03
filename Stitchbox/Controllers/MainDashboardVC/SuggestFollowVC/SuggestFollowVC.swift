@@ -16,8 +16,7 @@ class SuggestFollowVC: UIViewController {
     var userList = [FriendSuggestionModel]()
     @IBOutlet weak var contentView: UIView!
     var tableNode: ASTableNode!
-    var requestedUserId: String?
-    var userId = _AppCoreData.userDataSource.value?.userID ?? ""
+  
     var refresh_request = false
     private var pullControl = UIRefreshControl()
     lazy var delayItem = workItem()
@@ -59,7 +58,7 @@ extension SuggestFollowVC {
         self.tableNode.leadingScreensForBatching = 5
         
         
-        pullControl.tintColor = UIColor.systemOrange
+        pullControl.tintColor = .secondary
         pullControl.addTarget(self, action: #selector(refreshListData(_:)), for: .valueChanged)
         
         if UIDevice.current.hasNotch {
@@ -71,67 +70,6 @@ extension SuggestFollowVC {
         } else {
             tableNode.view.addSubview(pullControl)
         }
-        
-    }
-    
-    @objc private func refreshListData(_ sender: Any) {
-        // self.pullControl.endRefreshing() // You can stop after API Call
-        // Call API
-        
-        clearAllData()
-        
-    }
-    
-    @objc func clearAllData() {
-        
-        refresh_request = true
-        currPage = 1
-        updateData()
-        
-    }
-    
-    
-    func updateData() {
-        self.retrieveNextPageWithCompletion { (newFollowers) in
-            
-            if newFollowers.count > 0 {
-                
-                self.userList.removeAll()
-                self.tableNode.reloadData()
-                
-                self.insertNewRowsInTableNode(newFollowers: newFollowers)
-                
-            } else {
-                
-                self.refresh_request = false
-                self.userList.removeAll()
-                self.tableNode.reloadData()
-                
-                if self.userList.isEmpty == true {
-                    
-                    self.tableNode.view.setEmptyMessage("No suggestion found")
-                    
-                } else {
-                    
-                    self.tableNode.view.restore()
-                    
-                }
-                
-            }
-            
-            if self.pullControl.isRefreshing == true {
-                self.pullControl.endRefreshing()
-            }
-            
-            self.delayItem.perform(after: 0.75) {
-                
-                self.tableNode.scrollToRow(at: IndexPath(row: 0, section: 0), at: .top, animated: true)
-                
-            }
-            
-            
-        }
-        
         
     }
     
@@ -186,7 +124,7 @@ extension SuggestFollowVC: ASTableDelegate {
         
         self.retrieveNextPageWithCompletion { [weak self] (newFollowers) in
             guard let self = self else { return }
-            self.insertNewRowsInTableNode(newFollowers: newFollowers)
+            self.insertNewRowsInTableNode(newUsers: newFollowers)
             
             context.completeBatchFetching(true)
             
@@ -227,7 +165,7 @@ extension SuggestFollowVC: ASTableDataSource {
         
         if array.count == 0 {
             
-            tableNode.view.setEmptyMessage("No suggestion found")
+            tableNode.view.setEmptyMessage("No suggestion found!")
             
         } else {
             tableNode.view.restore()
@@ -241,7 +179,6 @@ extension SuggestFollowVC: ASTableDataSource {
         //let array = inSearchMode ? searchChannelList : channels
         let user = userList[indexPath.row]
         
- 
         return {
             var node: SuggestFollowNode!
             node = SuggestFollowNode(with: user)
@@ -267,65 +204,92 @@ extension SuggestFollowVC {
             
             switch result {
             case .success(let apiResponse):
-                
-                guard let data = apiResponse.body?["data"] as? [[String: Any]] else {
-                    let item = [[String: Any]]()
-                    DispatchQueue.main.async {
-                        block(item)
-                    }
-                    return
-                }
-                
-                
-                if !data.isEmpty {
-                    self.currPage += 1
-                    
+                if let data = apiResponse.body?["data"] as? [[String: Any]], !data.isEmpty {
                     print("Successfully retrieved \(data.count) users.")
-                    let items = data
+                    self.currPage += 1
                     DispatchQueue.main.async {
-                        block(items)
+                        block(data)
                     }
                 } else {
-                    
-                    let item = [[String: Any]]()
-                    DispatchQueue.main.async {
-                        block(item)
-                    }
+                    self.completeWithEmptyData(block)
                 }
-                
             case .failure(let error):
                 print(error)
-                let item = [[String: Any]]()
-                DispatchQueue.main.async {
-                    block(item)
+                self.completeWithEmptyData(block)
+            }
+        }
+    }
+
+    private func completeWithEmptyData(_ block: @escaping ([[String: Any]]) -> Void) {
+        DispatchQueue.main.async {
+            block([])
+        }
+    }
+
+    func insertNewRowsInTableNode(newUsers: [[String: Any]]) {
+        guard newUsers.count > 0 else { return }
+        
+        if refresh_request {
+            clearExistingPosts()
+            refresh_request = false
+        }
+
+        let items = newUsers.compactMap { FriendSuggestionModel(JSON: $0) }.filter { !self.userList.contains($0) }
+        self.userList.append(contentsOf: items)
+        
+        if !items.isEmpty {
+            let indexPaths = generateIndexPaths(for: items)
+            tableNode.insertRows(at: indexPaths, with: .automatic)
+        }
+    }
+
+    private func clearExistingPosts() {
+        userList.removeAll()
+        tableNode.reloadData()
+    }
+
+    private func generateIndexPaths(for items: [FriendSuggestionModel]) -> [IndexPath] {
+        let startIndex = self.userList.count - items.count
+        return (startIndex..<self.userList.count).map { IndexPath(row: $0, section: 0) }
+    }
+
+    func updateData() {
+        self.retrieveNextPageWithCompletion { [weak self] (newNotis) in
+            guard let self = self else { return }
+
+            if self.pullControl.isRefreshing {
+                self.pullControl.endRefreshing()
+            }
+            
+            if newNotis.isEmpty {
+                self.refresh_request = false
+                self.userList.removeAll()
+                self.tableNode.reloadData()
+                if self.userList.isEmpty {
+                    self.tableNode.view.setEmptyMessage("No suggestion found!")
+                } else {
+                    self.tableNode.view.restore()
                 }
+            } else {
+                self.insertNewRowsInTableNode(newUsers: newNotis)
             }
         }
         
     }
-    
-    func insertNewRowsInTableNode(newFollowers: [[String: Any]]) {
-        // Check if there are new posts to insert
-        guard !newFollowers.isEmpty else { return }
-        
-        
-        // Calculate the range of new rows
-        let startIndex = userList.count
-        let endIndex = startIndex + newFollowers.count
-        
-        // Create an array of PostModel objects
-        let newItems = newFollowers.compactMap { FriendSuggestionModel(JSON: $0) }
-        
-        // Append the new items to the existing array
-        userList.append(contentsOf: newItems)
-        
-        // Create an array of index paths for the new rows
-        let insertIndexPaths = (startIndex..<endIndex).map { IndexPath(row: $0, section: 0) }
-        
-        // Insert the new rows
-        tableNode.insertRows(at: insertIndexPaths, with: .automatic)
-        
 
+    @objc func clearAllData() {
+      
+        refresh_request = true
+        currPage = 1
+        updateData()
+    }
+    
+    @objc private func refreshListData(_ sender: Any) {
+        // self.pullControl.endRefreshing() // You can stop after API Call
+        // Call API
+        
+        clearAllData()
+        
     }
     
 }

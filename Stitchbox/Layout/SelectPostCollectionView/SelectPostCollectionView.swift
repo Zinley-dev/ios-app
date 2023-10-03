@@ -10,7 +10,7 @@ import UIKit
 class SelectPostCollectionView: UIView {
     
     @IBOutlet var contentView: UIView!
-    @IBOutlet var collectionView: UICollectionView!
+    @IBOutlet var galleryView: UIView!
     @IBOutlet var hideBtn: UIView!
 
     let kCONTENT_XIB_NAME = "SelectPostCollectionView"

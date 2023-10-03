@@ -158,7 +158,8 @@ extension UserSearchVC: ASTableDataSource {
                             
                             if self.searchUserList != newSearchList {
                                 self.searchUserList = newSearchList
-                                DispatchQueue.main.async {
+                                DispatchQueue.main.async { [weak self] in
+                                    guard let self = self else { return }
                                     self.tableNode.reloadData()
                                 }
                             }
@@ -187,7 +188,8 @@ extension UserSearchVC: ASTableDataSource {
                     
                     if self.searchUserList != retrievedSearchList {
                         self.searchUserList = retrievedSearchList
-                        DispatchQueue.main.async {
+                        DispatchQueue.main.async { [weak self] in
+                            guard let self = self else { return }
                             self.tableNode.reloadData(completion: nil)
                         }
                     }
@@ -209,9 +211,8 @@ extension UserSearchVC {
     
     func saveRecentUser(userId: String) {
         
-        APIManager.shared.addRecent(query: userId, type: "user") { [weak self] result in
-            guard let self = self else { return }
-
+        APIManager.shared.addRecent(query: userId, type: "user") {  result in
+            
             switch result {
             case .success(let apiResponse):
                 
@@ -229,9 +230,8 @@ extension UserSearchVC {
     
     func saveRecentText(text: String) {
         
-        APIManager.shared.addRecent(query: text, type: "text") { [weak self] result in
-            guard let self = self else { return }
-
+        APIManager.shared.addRecent(query: text, type: "text") {  result in
+          
             switch result {
             case .success(let apiResponse):
                 

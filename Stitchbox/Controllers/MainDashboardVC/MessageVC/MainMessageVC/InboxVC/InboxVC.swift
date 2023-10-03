@@ -15,7 +15,11 @@ class InboxVC: UIViewController, UITableViewDelegate, UITableViewDataSource, SBD
     
     deinit {
         print("InboxVC is being deallocated.")
+        SBDMain.removeAllChannelDelegates()
+        SBDMain.removeAllConnectionDelegates()
+        SBDMain.removeAllUserEventDelegates()
     }
+
 
     @IBOutlet weak var groupChannelsTableView: UITableView!
     
@@ -60,7 +64,7 @@ class InboxVC: UIViewController, UITableViewDelegate, UITableViewDataSource, SBD
         self.updateTotalUnreadMessageCountBadge()
         
         // Load the first page of channels from the server
-        self.loadChannelListNextPage(true)
+        loadChannelListNextPage(true)
         
         // Add self as a delegate for the SBDChannel and SBDConnection classes to handle events such as incoming messages and changes in connection status
         SBDMain.add(self as SBDChannelDelegate, identifier: self.description)
@@ -411,7 +415,6 @@ class InboxVC: UIViewController, UITableViewDelegate, UITableViewDataSource, SBD
                     // Check if there are any active members in the channel
                     let hasActiveMember = filteredMembers.contains(where: { $0.connectionStatus.rawValue == 1 })
                     // Update the background color of the active view based on the active status of the members
-                    print(hasActiveMember)
                     updateCell.activeView.backgroundColor = hasActiveMember ? .green : .lightGray
                 }
             }
@@ -577,19 +580,19 @@ class InboxVC: UIViewController, UITableViewDelegate, UITableViewDataSource, SBD
     
     func loadChannelListNextPage(_ refresh: Bool) {
         if refresh {
-            self.channelListQuery = nil
-            self.lastUpdatedTimestamp = Int64(Date().timeIntervalSince1970*1000)
-            self.channels = []
-            self.lastUpdatedToken = nil
+            channelListQuery = nil
+            lastUpdatedTimestamp = Int64(Date().timeIntervalSince1970*1000)
+            channels = []
+            lastUpdatedToken = nil
         }
         
         if self.channelListQuery == nil {
-            self.channelListQuery = SBDGroupChannel.createMyGroupChannelListQuery()
-            self.channelListQuery?.order = .latestLastMessage
-            self.channelListQuery?.memberStateFilter = .stateFilterJoinedOnly
-            self.channelListQuery?.limit = self.limit
-            self.channelListQuery?.includeFrozenChannel = true
-            self.channelListQuery?.includeEmptyChannel = true
+            channelListQuery = SBDGroupChannel.createMyGroupChannelListQuery()
+            channelListQuery?.order = .latestLastMessage
+            channelListQuery?.memberStateFilter = .stateFilterJoinedOnly
+            channelListQuery?.limit = self.limit
+            channelListQuery?.includeFrozenChannel = true
+            channelListQuery?.includeEmptyChannel = true
         }
         
         guard let query = self.channelListQuery, query.hasNext else {
@@ -597,26 +600,30 @@ class InboxVC: UIViewController, UITableViewDelegate, UITableViewDataSource, SBD
         }
         
         query.loadNextPage { [weak self] (newChannels, error) in
+            guard let self = self else { return }
+            
             if let error = error {
                 print("Failed to load next page: \(error)")
                 DispatchQueue.main.async {
-                    self?.refreshControl?.endRefreshing()
+                    self.refreshControl?.endRefreshing()
                 }
                 return
             }
             
-            DispatchQueue.main.async {
+            DispatchQueue.main.async { [weak self] in
+                guard let self = self else { return }
                 if refresh {
-                    self?.channels.removeAll()
+                    self.channels.removeAll()
                 }
                 
                 if let newChannels = newChannels {
-                    self?.channels += newChannels
-                    self?.sortChannelList(needReload: true)
-                    self?.lastUpdatedTimestamp = Int64(Date().timeIntervalSince1970*1000)
+                    self.channels += newChannels
+                    self.sortChannelList(needReload: true)
+                    self.lastUpdatedTimestamp = Int64(Date().timeIntervalSince1970*1000)
                 }
-                self?.refreshControl?.endRefreshing()
+                self.refreshControl?.endRefreshing()
             }
+            
         }
     }
 
@@ -672,7 +679,8 @@ class InboxVC: UIViewController, UITableViewDelegate, UITableViewDataSource, SBD
     
     
     func deleteChannel(channel: SBDGroupChannel) {
-        DispatchQueue.main.async {
+        DispatchQueue.main.async { [weak self] in
+            guard let self = self else { return }
             if let index = self.channels.firstIndex(of: channel as SBDGroupChannel) {
                 self.channels.remove(at: index)
                 self.groupChannelsTableView.deleteRows(at: [IndexPath(row: index, section: 0)], with: .automatic)

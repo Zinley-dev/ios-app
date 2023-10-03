@@ -16,7 +16,6 @@ class PreviewVC: UIViewController, UICollectionViewDelegateFlowLayout, UIAdaptiv
     @IBOutlet weak var contentView: UIView!
     @IBOutlet weak var timeLbl: UILabel!
     @IBOutlet weak var blurView: UIView!
-    @IBOutlet weak var playTimeBar: CustomSlider!
     
     @IBOutlet weak var loadingImage: FLAnimatedImageView!
     @IBOutlet weak var loadingView: UIView!
@@ -166,7 +165,7 @@ class PreviewVC: UIViewController, UICollectionViewDelegateFlowLayout, UIAdaptiv
             
             if !self.posts[self.startIndex].muxPlaybackId.isEmpty {
 
-                if let currentCell = collectionNode.nodeForItem(at: IndexPath(item: self.startIndex, section: 0)) as? ReelNode {
+                if let currentCell = collectionNode.nodeForItem(at: IndexPath(item: self.startIndex, section: 0)) as? VideoNode {
                     
                     if !currentCell.post.muxPlaybackId.isEmpty {
                         currentIndex = 0
@@ -182,7 +181,7 @@ class PreviewVC: UIViewController, UICollectionViewDelegateFlowLayout, UIAdaptiv
                 
             } else {
                 self.isVideoPlaying = false
-                self.playTimeBar.isHidden = true
+               
             }
             
         }
@@ -331,14 +330,18 @@ extension PreviewVC: ASCollectionDataSource {
     func collectionNode(_ collectionNode: ASCollectionNode, nodeBlockForItemAt indexPath: IndexPath) -> ASCellNodeBlock {
         let post = self.posts[indexPath.row]
         
-        return {
-            let node = ReelNode(with: post)
-            node.collectionNode = self.collectionNode
+        return { [weak self] in
+            guard let self = self else {
+                return ASCellNode()
+            }
+            let node = VideoNode(with: post, at: indexPath.row, isPreview: true, vcType: "preview", selectedStitch: false)
+            //node.collectionNode = self.collectionNode
             node.neverShowPlaceholders = true
             node.debugName = "Node \(indexPath.row)"
-            
-           
+            node.isOriginal = true
+            node.automaticallyManagesSubnodes = true
             //
+            
             return node
         }
         
@@ -402,81 +405,24 @@ extension PreviewVC {
     
     func pauseVideo(index: Int) {
         
-        if let cell = self.collectionNode.nodeForItem(at: IndexPath(row: index, section: 0)) as? ReelNode {
+        if let cell = self.collectionNode.nodeForItem(at: IndexPath(row: index, section: 0)) as? VideoNode {
          
             
-            cell.videoNode.pause()
+            cell.pauseVideo(shouldSeekToStart: false)
             
         }
         
     }
-    
-    func seekVideo(index: Int, time: CMTime) {
-        
-        if let cell = self.collectionNode.nodeForItem(at: IndexPath(row: index, section: 0)) as? ReelNode {
-            
-            cell.videoNode.player?.seek(to: time)
-            
-        }
-        
-    }
-    
+
     
     func playVideo(index: Int) {
         
-        if let cell = self.collectionNode.nodeForItem(at: IndexPath(row: index, section: 0)) as? ReelNode {
+        if let cell = self.collectionNode.nodeForItem(at: IndexPath(row: index, section: 0)) as? VideoNode {
             
-            if !cell.videoNode.isPlaying() {
-                
-                
-                if cell.headerView != nil {
-                    cell.headerView.stichBtn.isHidden = true
-                    cell.headerView.createStitchView.isHidden = true
-                    cell.headerView.createStitchStack.isHidden = true
-                    cell.headerView.followBtn.isHidden = true
-                    cell.headerView.isUserInteractionEnabled = false
-                }
-                
-                if cell.sideButtonsView != nil {
-                    
-                    cell.sideButtonsView.isHidden = true
-                    
-                }
-                
-                if cell.buttonsView != nil {
-                    cell.buttonsView.isHidden = true
-                }
-                
-                cell.contentNode.isUserInteractionEnabled = false
-                
-                cell.setNeedsLayout()
-
-                if let muteStatus = shouldMute {
-                    
-
-                    if muteStatus {
-                        cell.videoNode.muted = true
-                    } else {
-                        cell.videoNode.muted = false
-                    }
-                    
-                    cell.videoNode.play()
-                    
-                } else {
-                    
-                    
-                    if globalIsSound {
-                        cell.videoNode.muted = false
-                    } else {
-                        cell.videoNode.muted = true
-                    }
-                    
-                    cell.videoNode.play()
-                    
-                }
-                
-                
-            }
+            cell.disableTouching()
+            
+            cell.setNeedsLayout()
+            cell.playVideo()
             
         }
         

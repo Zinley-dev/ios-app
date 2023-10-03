@@ -8,19 +8,21 @@
 import UIKit
 
 struct RedirectionHelper {
-    static func redirectToLogin() {
+    static func setRootViewController(storyboardName: String) {
         DispatchQueue.main.async {
-            let dashboardVC = UIStoryboard(name: "Main", bundle: nil).instantiateInitialViewController()
-            UIApplication.shared.windows.first?.rootViewController = dashboardVC
-            UIApplication.shared.windows.first?.makeKeyAndVisible()
+            if let newVC = UIStoryboard(name: storyboardName, bundle: nil).instantiateInitialViewController(),
+               let window = UIApplication.shared.connectedScenes.first as? UIWindowScene {
+                window.windows.first?.rootViewController = newVC
+                window.windows.first?.makeKeyAndVisible()
+            }
         }
     }
-
+    
+    static func redirectToLogin() {
+        setRootViewController(storyboardName: "Main")
+    }
+    
     static func redirectToDashboard() {
-        DispatchQueue.main.async {
-            let dashboardVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateInitialViewController()
-            UIApplication.shared.windows.first?.rootViewController = dashboardVC
-            UIApplication.shared.windows.first?.makeKeyAndVisible()
-        }
+        setRootViewController(storyboardName: "Dashboard")
     }
 }

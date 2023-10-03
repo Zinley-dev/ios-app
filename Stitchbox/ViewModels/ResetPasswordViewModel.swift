@@ -53,14 +53,13 @@ class ResetPasswordViewModel: ViewModelProtocol {
     
     func logic() {
         sendOTPDidTapSubject.asObservable()
-            .subscribe (onNext: { (phone, countryCode) in
+            .subscribe (onNext: { [weak self] (phone, countryCode) in
+                guard let self = self else { return }
                 // call api toward login api of backend
                 let phoneNumber = "\(countryCode)\(phone.formatPhoneNumber())"
                 print("PHONE NUMBER \(phoneNumber)")
-                if let phoneResetVc = self.vc as? PhoneResetVC {
-                    Dispatch.main.async {
-                        presentSwiftLoader()
-                    }
+                Dispatch.main.async {
+                    presentSwiftLoader()
                 }
                 APIManager.shared.forgotPasswordByPhone(params: ["phone": phoneNumber]) { [weak self] result in
                     guard let self = self else { return }
@@ -75,16 +74,16 @@ class ResetPasswordViewModel: ViewModelProtocol {
                         self.errorsSubject.onNext(NSError(domain: "User not found", code: 300))
                     }
                     
-                    if let phoneResetVc = self.vc as? PhoneResetVC {
-                        Dispatch.main.async {
-                            SwiftLoader.hide()
-                        }
+                    Dispatch.main.async {
+                        SwiftLoader.hide()
                     }
+                    
                 }
             }).disposed(by: disposeBag)
         
         sendOTPViaEmailDidTapSubject.asObserver()
-            .subscribe(onNext: { email in
+            .subscribe(onNext: { [weak self] email in
+                guard let self = self else { return }
                 print("EMAIL \(email)")
                 if let emailResetVc = self.vc as? EmailResetVC {
                     Dispatch.main.async {
@@ -105,11 +104,10 @@ class ResetPasswordViewModel: ViewModelProtocol {
                     }
                 }
                 
-                if let emailResetVc = self.vc as? EmailResetVC {
-                    Dispatch.main.async {
-                        SwiftLoader.hide()
-                    }
+                Dispatch.main.async {
+                    SwiftLoader.hide()
                 }
+                
             })
     }
     

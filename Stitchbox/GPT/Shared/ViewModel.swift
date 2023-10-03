@@ -11,6 +11,11 @@ import AVKit
 
 class ViewModel: ObservableObject {
     
+    deinit {
+        print("ViewModel is being deallocated")
+    }
+
+    
     @Published var isInteractingWithChatGPT = false
     @Published var messages: [MessageRow] = []
     @Published var history: [Message] = []
@@ -61,6 +66,13 @@ class ViewModel: ObservableObject {
             self?.messages.append(welcomeMessage)
             
         }
+    }
+    
+    @MainActor
+    func helloMessages() {
+        
+        print("helloMessages")
+        
     }
     
     
@@ -116,7 +128,7 @@ class ViewModel: ObservableObject {
                     let lastResult = results[results.count - 1]
                     var lastAttrString = lastResult.attributedString
                     if lastResult.isCodeBlock {
-                        lastAttrString.append(AttributedString(String(suffixText), attributes: .init([.font: UIFont.systemFont(ofSize: 12).apply(newTraits: .traitMonoSpace), .foregroundColor: UIColor.white])))
+                        lastAttrString.append(AttributedString(String(suffixText), attributes: .init([.font: FontManager.shared.roboto(.Regular, size: 12).apply(newTraits: .traitMonoSpace), .foregroundColor: UIColor.white])))
                     } else {
                         lastAttrString.append(AttributedString(String(suffixText)))
                     }
@@ -206,65 +218,63 @@ class ViewModel: ObservableObject {
     }
 
 
-     func getConversationHistory(completion: @escaping () -> Void) {
+    func getConversationHistory(completion: @escaping () -> Void) {
          
         self.processFinalPreConversation(completion: completion)
          
      }
      
+    func processConversationHistory(_ conversationHistory: ConversationData) async {
+        for (prompt, response) in zip(conversationHistory.prompts, conversationHistory.responses) {
+            let userAttributedText = await ResponseParsingTask().parse(text: prompt)
+            let assistantAttributedText = await ResponseParsingTask().parse(text: response)
+
+            let userMessage = MessageRow(
+                isInteractingWithChatGPT: false,
+                sendImage: "profile",
+                send: .attributed(userAttributedText),
+                responseImage: "openai",
+                response: nil
+            )
+            let assistantMessage = MessageRow(
+                isInteractingWithChatGPT: false,
+                sendImage: nil,
+                send: nil,
+                responseImage: "openai",
+                response: .attributed(assistantAttributedText)
+            )
+
+            let userHistory = Message(role: "user", content: prompt)
+            let assistantHistory = Message(role: "assistant", content: response)
+
+            DispatchQueue.main.async {
+                self.messages.append(userMessage)
+                self.messages.append(assistantMessage)
+                self.history.append(userHistory)
+                self.history.append(assistantHistory)
+
+                self.setConversationHistory(messages: self.history)
+
+                SwiftLoader.hide()
+            }
+        }
+    }
+
     func processFinalPreConversation(completion: @escaping () -> Void) {
-        
+
         APIManager.shared.getGptConversation(gameId: chatbot_id) { [weak self] result in
             guard let self = self else { return }
 
             switch result {
             case .success(let apiResponse):
                 if let body = apiResponse.body,
-                    let data = body["data"] as? [String: Any],
-                    let jsonData = try? JSONSerialization.data(withJSONObject: data, options: []),
-                    let conversationHistory = try? JSONDecoder().decode(ConversationData.self, from: jsonData) {
+                   let data = body["data"] as? [String: Any],
+                   let jsonData = try? JSONSerialization.data(withJSONObject: data, options: []),
+                   let conversationHistory = try? JSONDecoder().decode(ConversationData.self, from: jsonData) {
 
-                    for (prompt, response) in zip(conversationHistory.prompts, conversationHistory.responses) {
-                        Task {
-                            let userAttributedText = await ResponseParsingTask().parse(text: self.removeFocusSentence(prompt))
-                            let assistantAttributedText = await ResponseParsingTask().parse(text: response)
-
-                            let userMessage = MessageRow(
-                                isInteractingWithChatGPT: false,
-                                sendImage: "profile",
-                                send: .attributed(userAttributedText),
-                                responseImage: "openai",
-                                response: nil
-                            )
-                            let assistantMessage = MessageRow(
-                                isInteractingWithChatGPT: false,
-                                sendImage: nil,
-                                send: nil,
-                                responseImage: "openai",
-                                response: .attributed(assistantAttributedText)
-                            )
-
-                            let userHistory = Message(role: "user", content: prompt)
-                            let assistantHistory = Message(role: "assistant", content: response)
-                            
-                            let guideUserHistory = Message(role: "user", content: "Prioritize truth, relevance, and brevity. Ensure logical layout. Understand context.")
-                            let guideAssistantHistory = Message(role: "assistant", content: "Understood. I'll prioritize truth, relevance, brevity, logical layout, and context understanding.")
-
-
-                            DispatchQueue.main.async {
-                                self.messages.append(userMessage)
-                                self.messages.append(assistantMessage)
-                                self.history.append(userHistory)
-                                self.history.append(assistantHistory)
-                                self.history.append(guideUserHistory)
-                                self.history.append(guideAssistantHistory)
-                                self.setConversationHistory(messages: self.history)
-                                
-                                SwiftLoader.hide()
-                                
-                                completion()
-                            }
-                        }
+                    Task {
+                        await self.processConversationHistory(conversationHistory)
+                        completion()
                     }
                 } else {
                     DispatchQueue.main.async {
@@ -278,12 +288,10 @@ class ViewModel: ObservableObject {
                 DispatchQueue.main.async {
                     self.displayWelcomeMessage(completion: completion)
                 }
-
             }
         }
-        
-        
     }
+
 
     func displayWelcomeMessage(completion: @escaping () -> Void)  {
         let welcomeText = "Welcome to SB-ChatBot! How can I help you today?"
@@ -296,28 +304,13 @@ class ViewModel: ObservableObject {
             response: .rawText(welcomeText)
         )
         self.messages.append(welcomeMessage)
-        
-        let userHistory = Message(role: "user", content: "Please Prioritize accurate and relevant information, Ensure logical order and layout, Keep responses short, concise, and clear, Understand game context and tailor responses accordingly.")
-        let assistantHistory = Message(role: "assistant", content: "Yes I will repsond based on prioritize accurate and relevant information, Ensure logical order and layout, Keep responses short, concise, and clear.")
-        
-        self.history.append(userHistory)
-        self.history.append(assistantHistory)
-        self.setConversationHistory(messages: self.history)
-        
+         
         Dispatch.main.async {
             SwiftLoader.hide()
         }
         
         completion()
     }
-
-    func removeFocusSentence(_ input: String) -> String {
-        
-        return input
-        
-        
-    }
-
   
 }
 

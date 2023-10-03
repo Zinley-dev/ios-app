@@ -18,7 +18,7 @@ class TrendingHashtagVC: UIViewController {
     var tableNode: ASTableNode!
     var refresh_request = false
     private var pullControl = UIRefreshControl()
-    lazy var delayItem = workItem()
+   
     
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
@@ -57,7 +57,7 @@ extension TrendingHashtagVC {
         self.tableNode.leadingScreensForBatching = 5
         
         
-        pullControl.tintColor = UIColor.systemOrange
+        pullControl.tintColor = .secondary
         pullControl.addTarget(self, action: #selector(refreshListData(_:)), for: .valueChanged)
         
         if UIDevice.current.hasNotch {
@@ -77,59 +77,6 @@ extension TrendingHashtagVC {
         // Call API
         
         clearAllData()
-        
-    }
-    
-    @objc func clearAllData() {
-        
-        refresh_request = true
-        currPage = 1
-        updateData()
-        
-    }
-    
-    
-    func updateData() {
-        self.retrieveNextPageWithCompletion { (newHashtags) in
-            
-            if newHashtags.count > 0 {
-                
-                self.hashtagList.removeAll()
-                self.tableNode.reloadData()
-                
-                self.insertNewRowsInTableNode(newHashtags: newHashtags)
-                
-            } else {
-                
-                self.refresh_request = false
-                self.hashtagList.removeAll()
-                self.tableNode.reloadData()
-                
-                if self.hashtagList.isEmpty == true {
-                    
-                    self.tableNode.view.setEmptyMessage("Trending hashtags will be shown here")
-                    
-                } else {
-                    
-                    self.tableNode.view.restore()
-                    
-                }
-                
-            }
-            
-            if self.pullControl.isRefreshing == true {
-                self.pullControl.endRefreshing()
-            }
-            
-            self.delayItem.perform(after: 0.75) {
-                
-                self.tableNode.scrollToRow(at: IndexPath(row: 0, section: 0), at: .top, animated: true)
-                
-            }
-            
-            
-        }
-        
         
     }
     
@@ -179,7 +126,7 @@ extension TrendingHashtagVC: ASTableDelegate {
             context.completeBatchFetching(true)
             
         }
-        
+    
     }
     
     func tableNode(_ tableNode: ASTableNode, didSelectRowAt indexPath: IndexPath) {
@@ -245,52 +192,36 @@ extension TrendingHashtagVC {
             
             switch result {
             case .success(let apiResponse):
-                
-                guard let data = apiResponse.body?["data"] as? [[String: Any]] else {
-                    let item = [[String: Any]]()
-                    DispatchQueue.main.async {
-                        block(item)
-                    }
-                    return
-                }
-                
-                
-                if !data.isEmpty {
+                if let data = apiResponse.body?["data"] as? [[String: Any]], !data.isEmpty {
+                    print("Successfully retrieved \(data.count) users.")
                     self.currPage += 1
-                    
-                    print("Successfully retrieved \(data.count) hashtags.")
-                    let items = data
                     DispatchQueue.main.async {
-                        block(items)
+                        block(data)
                     }
                 } else {
-                    
-                    let item = [[String: Any]]()
-                    DispatchQueue.main.async {
-                        block(item)
-                    }
+                    self.completeWithEmptyData(block)
                 }
-                
             case .failure(let error):
                 print(error)
-                let item = [[String: Any]]()
-                DispatchQueue.main.async {
-                    block(item)
-                }
+                self.completeWithEmptyData(block)
             }
         }
-        
-    
     }
-    
+
+    private func completeWithEmptyData(_ block: @escaping ([[String: Any]]) -> Void) {
+        DispatchQueue.main.async {
+            block([])
+        }
+    }
+
     func insertNewRowsInTableNode(newHashtags: [[String: Any]]) {
-        // Check if there are new posts to insert
-        guard !newHashtags.isEmpty else { return }
+        guard newHashtags.count > 0 else { return }
+        
+        if refresh_request {
+            clearExistingPosts()
+            refresh_request = false
+        }
 
-        // Calculate the range of new rows
-        let startIndex = hashtagList.count
-
-        // Create an array of TrendingHashtag objects
         var newItems: [TrendingHashtag] = []
         for dictionary in newHashtags {
             do {
@@ -300,21 +231,53 @@ extension TrendingHashtagVC {
                 print("Error creating TrendingHashtag: \(error)")
             }
         }
+        
+        if !newItems.isEmpty {
+            hashtagList.append(contentsOf: newItems)
+            let indexPaths = generateIndexPaths(for: newItems)
+            tableNode.insertRows(at: indexPaths, with: .automatic)
+        }
+    }
 
-        let newCount = newItems.count
-        guard newCount > 0 else { return }
+    private func clearExistingPosts() {
+        //let deleteIndexPaths = hashtagList.enumerated().map { IndexPath(row: $0.offset, section: 0) }
+        hashtagList.removeAll()
+        tableNode.reloadData()
+    }
 
-        // Append the new items to the existing array
-        hashtagList.append(contentsOf: newItems)
+    private func generateIndexPaths(for items: [TrendingHashtag]) -> [IndexPath] {
+        let startIndex = self.hashtagList.count - items.count
+        return (startIndex..<self.hashtagList.count).map { IndexPath(row: $0, section: 0) }
+    }
 
-        // Calculate the range of new rows
-        let endIndex = startIndex + newCount
+    func updateData() {
+        self.retrieveNextPageWithCompletion { [weak self] (newHashtags) in
+            guard let self = self else { return }
 
-        // Create an array of index paths for the new rows
-        let insertIndexPaths = (startIndex..<endIndex).map { IndexPath(row: $0, section: 0) }
+            if self.pullControl.isRefreshing {
+                self.pullControl.endRefreshing()
+            }
+            
+            if newHashtags.isEmpty {
+                self.refresh_request = false
+                self.hashtagList.removeAll()
+                self.tableNode.reloadData()
+                if self.hashtagList.isEmpty {
+                    self.tableNode.view.setEmptyMessage("Trending hashtags will be shown here!")
+                } else {
+                    self.tableNode.view.restore()
+                }
+            } else {
+                self.insertNewRowsInTableNode(newHashtags: newHashtags)
+            }
+        }
+    }
 
-        // Insert the new rows
-        tableNode.insertRows(at: insertIndexPaths, with: .automatic)
+    @objc func clearAllData() {
+      
+        refresh_request = true
+        currPage = 1
+        updateData()
     }
 
     

@@ -11,9 +11,15 @@ class ButtonSideList: UIView {
     
     @IBOutlet var contentView: UIView!
     @IBOutlet weak var viewStitchBtn: UIButton!
+    @IBOutlet weak var backToOriginalBtn: UIButton!
     @IBOutlet weak var stitchCount: UILabel!
+    @IBOutlet weak var originalStitchCount: UILabel!
    
     @IBOutlet weak var statusImg: UIImageView!
+    
+    @IBOutlet weak var originalStack: UIStackView!
+    
+    @IBOutlet weak var stickStack: UIStackView!
 
     let kCONTENT_XIB_NAME = "ButtonSideList"
     
@@ -28,12 +34,8 @@ class ButtonSideList: UIView {
     }
     
     func commonInit() {
-        
-        
         Bundle.main.loadNibNamed(kCONTENT_XIB_NAME, owner: self, options: nil)
         contentView.fixInView(self)
-
-    
     }
 
 }

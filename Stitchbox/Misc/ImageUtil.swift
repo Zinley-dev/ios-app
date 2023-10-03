@@ -38,45 +38,35 @@ extension UIButton {
     func setImageWithCache(from url: URL) {
         let cacheKey = url.absoluteString
         
-        imageStorage.async.object(forKey: cacheKey) { result in
-            if case .value(let image) = result {
-                
-               
-                DispatchQueue.main.async {
-                    let resize = image.resize(targetSize: CGSize(width: self.bounds.width - 15, height: self.bounds.height - 15))
-                    self.setImage(resize, for: .normal)
-                    self.imageView?.backgroundColor = .clear
-                    self.imageView?.contentMode = .scaleAspectFit
-                    self.layer.cornerRadius = self.bounds.size.width / 2
-                    self.clipsToBounds = true
-                }
-               
+        CacheManager.shared.fetchImage(forKey: cacheKey) { [weak self] cachedImage in
+            guard let strongSelf = self else { return }
+            
+            if let image = cachedImage {
+                strongSelf.updateUI(with: image)
             } else {
-                
-                AF.request(url).responseImage { response in
-                                      
-                   switch response.result {
+                AF.request(url).responseImage { [weak self] response in
+                    guard let strongSelf = self else { return }
+                    switch response.result {
                     case let .success(value):
-                       
-                      
-                       DispatchQueue.main.async {
-                           let resize = value.resize(targetSize: CGSize(width: self.bounds.width - 15, height: self.bounds.height - 15))
-                           self.setImage(resize, for: .normal)
-                           self.imageView?.backgroundColor = .clear
-                           self.imageView?.contentMode = .scaleAspectFit
-                           self.layer.cornerRadius = self.bounds.size.width / 2
-                           self.clipsToBounds = true
-                       }
-                       
-                       try? imageStorage.setObject(value, forKey: cacheKey, expiry: .date(Date().addingTimeInterval(2 * 3600)))
-                                          
-                           case let .failure(error):
-                               print(error)
-                        }
-                                      
-                  }
-                
+                        strongSelf.updateUI(with: value)
+                        CacheManager.shared.storeImage(forKey: cacheKey, image: value)
+                    case let .failure(error):
+                        print("Error fetching image: \(error)")
+                    }
+                }
             }
+        }
+    }
+    
+    private func updateUI(with image: UIImage) {
+        DispatchQueue.main.async { [weak self] in
+            guard let strongSelf = self else { return }
+            let resize = image.resize(targetSize: CGSize(width: strongSelf.bounds.width - 15, height: strongSelf.bounds.height - 15))
+            strongSelf.setImage(resize, for: .normal)
+            strongSelf.imageView?.backgroundColor = .clear
+            strongSelf.imageView?.contentMode = .scaleAspectFit
+            strongSelf.layer.cornerRadius = strongSelf.bounds.size.width / 2
+            strongSelf.clipsToBounds = true
         }
     }
 }
@@ -90,130 +80,75 @@ extension UIImageView {
     
     func setProfileImageView(for user: SBDUser) {
         if let url = URL(string: ImageUtil.transformUserProfileImage(user: user)){
-            //self.af_setImage(withURL: url, placeholderImage: ImageUtil.getDefaultUserProfileImage(user: user))
             self.af.setImage(withURL: url)
-        }
-        else {
+        } else {
             self.image = ImageUtil.getDefaultUserProfileImage(user: user)
         }
     }
     
     func load(url: URL, str: String) {
-        
-        imageStorage.async.object(forKey: str) { result in
-            if case .value(let image) = result {
-                
-                DispatchQueue.main.async {
-                    self.image = image
+        CacheManager.shared.fetchImage(forKey: str) { [weak self] cachedImage in
+            guard let self = self else { return }
+            
+            if let image = cachedImage {
+                DispatchQueue.main.async { [weak self] in
+                    self?.image = image
                 }
-               
-                
             } else {
-                
-                AF.request(url).responseImage { response in
-                                      
-                   switch response.result {
-                    case let .success(value):
-                       DispatchQueue.main.async {
-                           self.image = value
-                       }
-                       try? imageStorage.setObject(value, forKey: str, expiry: .date(Date().addingTimeInterval(2 * 3600)))
-                                          
-                           case let .failure(error):
-                               print(error)
-                                self.image = UIImage.init(named: "defaultuser")
+                AF.request(url).responseImage { [weak self] response in
+                    guard let self = self else { return }
+                    switch response.result {
+                    case .success(let value):
+                        DispatchQueue.main.async { [weak self] in
+                            self?.image = value
                         }
-                    
-                    
-                                      
-                  }
-                
+                        CacheManager.shared.storeImage(forKey: str, image: value)
+                    case .failure(let error):
+                        print("Error fetching image: \(error)")
+                        DispatchQueue.main.async { [weak self] in
+                            self?.image = UIImage(named: "defaultuser")
+                        }
+                    }
+                }
             }
         }
-  
     }
     
     func loadProfileContent(url: URL, str: String) {
-        
-        imageStorage.async.object(forKey: str) { result in
-            if case .value(let image) = result {
-                
-                DispatchQueue.main.async {
-                    self.image = image
+        CacheManager.shared.fetchImage(forKey: str) { [weak self] cachedImage in
+            guard let self = self else { return }
+            
+            if let image = cachedImage {
+                DispatchQueue.main.async { [weak self] in
+                    self?.image = image
                 }
-               
-                
             } else {
-                
-                AF.request(url).responseImage { response in
-                                      
-                   switch response.result {
-                    case let .success(value):
-                       DispatchQueue.main.async {
-                           self.image = value
-                       }
-                       try? imageStorage.setObject(value, forKey: str, expiry: .date(Date().addingTimeInterval(2 * 3600)))
-                                          
-                           case let .failure(error):
-                               print(error)
-                                self.image = UIImage.init(named: "empty")
-                        }
-                  
-                  }
-                
+                self.fetchImageFromServer(url: url, cacheKey: str)
             }
         }
-  
     }
-    
-    func loadGame(url: URL) {
-        
-        let cacheKey = url.absoluteString
-        
-        imageStorage.async.object(forKey: cacheKey) { result in
-            if case .value(let image) = result {
+
+    private func fetchImageFromServer(url: URL, cacheKey: String) {
+        AF.request(url).responseImage { [weak self] response in
+            guard let self = self else { return }
+            switch response.result {
+            case .success(let value):
                 
-               
-                DispatchQueue.main.async {
-                    let resize = image.resize(targetSize: CGSize(width: self.bounds.width - 15, height: self.bounds.height - 15))
-                    self.image = resize
-                    self.backgroundColor = .clear
-                    self.contentMode = .scaleAspectFit
-                    self.layer.cornerRadius = self.bounds.size.width / 2
-                    self.clipsToBounds = true
+                DispatchQueue.main.async { [weak self] in
+                    self?.image = value
                 }
-               
-            } else {
                 
-                AF.request(url).responseImage { response in
-                                      
-                   switch response.result {
-                    case let .success(value):
-                       
-                      
-                       DispatchQueue.main.async {
-                           let resize = value.resize(targetSize: CGSize(width: self.bounds.width - 15, height: self.bounds.height - 15))
-                           self.image = resize
-                           self.backgroundColor = .clear
-                           self.contentMode = .scaleAspectFit
-                           self.layer.cornerRadius = self.bounds.size.width / 2
-                           self.clipsToBounds = true
-                       }
-                       
-                       try? imageStorage.setObject(value, forKey: cacheKey, expiry: .date(Date().addingTimeInterval(2 * 3600)))
-                                          
-                           case let .failure(error):
-                               print(error)
-                        }
-                                      
-                  }
-                
+                CacheManager.shared.storeImage(forKey: cacheKey, image: value)
+            case .failure(let error):
+                print(error)
+                DispatchQueue.main.async { [weak self] in
+                    self?.image = UIImage(named: "empty")
+                }
             }
         }
-  
     }
-    
 }
+
 
 class ProfileImageView: UIView {
     
@@ -329,39 +264,37 @@ class ProfileImageView: UIView {
         super.init(coder: aDecoder)
     }
     
-    func setImage(withCoverUrl coverUrl: String){
+    func setImage(withCoverUrl coverUrl: String) {
         let imageView = UIImageView()
         imageView.contentMode = .scaleAspectFill
         
-        imageStorage.async.object(forKey: coverUrl) { result in
-            if case .value(let image) = result {
-                
-                DispatchQueue.main.async { // Make sure you're on the main thread here
-                       
-                    imageView.image = image
-           
-                }
-                
-            } else {
-                
-                
-             AF.request(coverUrl).responseImage { response in
-                    
-                    switch response.result {
-                    case let .success(value):
-                        imageView.image = value
-                       
-                        try? imageStorage.setObject(value, forKey: coverUrl)
-                    case let .failure(error):
-                        print(error)
-                        imageView.image = UIImage.init(named: "defaultuser")
-                    }
-                 
-                    
-                }
-                
-            }
+        // Use CacheManager to fetch image
+        CacheManager.shared.fetchImage(forKey: coverUrl) { [weak self] cachedImage in
+            guard let self = self else { return }
             
+            if let image = cachedImage {
+                DispatchQueue.main.async {
+                    imageView.image = image
+                }
+            } else {
+                AF.request(coverUrl).responseImage { [weak self] response in
+                    guard let self = self else { return }
+                    switch response.result {
+                    case .success(let value):
+                        DispatchQueue.main.async {
+                            imageView.image = value
+                        }
+                        
+                        CacheManager.shared.storeImage(forKey: coverUrl, image: value)
+                        
+                    case .failure(let error):
+                        print("Error fetching image: \(error)")
+                        DispatchQueue.main.async {
+                            imageView.image = UIImage(named: "defaultuser")
+                        }
+                    }
+                }
+            }
         }
         
         let stackView = UIStackView(frame: CGRect(x: 0, y: 0, width: self.frame.width, height: self.frame.height))
@@ -370,8 +303,9 @@ class ProfileImageView: UIView {
         stackView.axis = .horizontal
         self.addSubview(stackView)
         makeCircularWithSpacing(spacing: 0)
-     
     }
+
+
     
     
     func setImage(withImage image: UIImage){

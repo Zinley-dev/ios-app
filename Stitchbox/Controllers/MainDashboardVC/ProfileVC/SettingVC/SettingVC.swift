@@ -32,6 +32,8 @@ class SettingVC: UIViewController {
     
     @IBOutlet weak var SoundSwitch: UISwitch!
     @IBOutlet weak var StitchSwitch: UISwitch!
+    @IBOutlet weak var PublicStitchSwitch: UISwitch!
+    @IBOutlet weak var ClearSwitch: UISwitch!
     @IBOutlet weak var proView: UIView!
     
     
@@ -39,8 +41,10 @@ class SettingVC: UIViewController {
     @IBOutlet weak var accountViewHeight: NSLayoutConstraint!
     
     var isStitch = false
+    var isPublicStitch = false
     var isSound = false
     var isPrivate = false
+    var isClearMode = false
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -95,7 +99,7 @@ class SettingVC: UIViewController {
     }
     
     @IBAction func securityBtnPressed(_ sender: Any) {
-        
+         
         if let SVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "SecurityVC") as? SecurityVC {
             self.navigationController?.pushViewController(SVC, animated: true)
             
@@ -123,7 +127,7 @@ class SettingVC: UIViewController {
     
     @IBAction func contactUsBtnPressed(_ sender: Any) {
         
-        if let CUVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "ContactUsVC") as? ContactUsVC {
+        if let CUVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "SupportVC") as? SupportVC {
             self.navigationController?.pushViewController(CUVC, animated: true)
             
         }
@@ -133,7 +137,7 @@ class SettingVC: UIViewController {
     
     @IBAction func termOfServiceBtnPressed(_ sender: Any) {
         
-        guard let urls = URL(string: "https://stitchbox.gg/term-of-use") else {
+        guard let urls = URL(string: "https://stitchbox.net/term-of-use") else {
             return //be safe
         }
         
@@ -152,26 +156,14 @@ class SettingVC: UIViewController {
         IAPManager.shared.signout()
         removeAllUserDefaults()
         
-        delay(1) {
+        delay(1) { [weak self] in
+        guard let self = self else { return }
             
-        _AppCoreData.signOut()
-            
-            
-            
-        if let SNVC = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "StartViewController") as? StartViewController {
-                
-                
-            let nav = UINavigationController(rootViewController: SNVC)
-
-            // Customize the navigation bar appearance
-            nav.navigationBar.barTintColor = .background
-            nav.navigationBar.tintColor = .white
-            nav.navigationBar.titleTextAttributes = [.foregroundColor: UIColor.white]
-
-            nav.modalPresentationStyle = .fullScreen
-            self.present(nav, animated: true, completion: nil)
-                
-            }
+            SwiftLoader.hide()
+            CacheManager.shared.clearAllCache()
+            _AppCoreData.signOut()
+            RedirectionHelper.redirectToLogin()
+         
         }
         
         
@@ -206,7 +198,8 @@ class SettingVC: UIViewController {
                 reloadGlobalSettings()
                 
             case.failure(let error):
-                DispatchQueue.main.async {
+                DispatchQueue.main.async { [weak self] in
+                    guard let self = self else { return }
                     self.showErrorAlert("Oops!", msg: "Cannot update user's setting information \(error.localizedDescription)")
                 }
             }
@@ -239,7 +232,79 @@ class SettingVC: UIViewController {
                 reloadGlobalSettings()
                 
             case.failure(let error):
-                DispatchQueue.main.async {
+                DispatchQueue.main.async { [weak self] in
+                    guard let self = self else { return }
+                    self.showErrorAlert("Oops!", msg: "Cannot update user's setting information \(error.localizedDescription)")
+                }
+            }
+        }
+        
+        
+    }
+    
+    
+    @IBAction func ClearSwitchPressed(_ sender: Any) {
+        
+        var params = ["clearMode": false]
+        
+        if isClearMode {
+            
+            params = ["clearMode": false]
+            isClearMode = false
+            globalClear = false
+            
+        } else {
+            
+            params = ["clearMode": true]
+            isClearMode = true
+            globalClear = true
+        }
+        
+        APIManager.shared.updateSettings(params: params) { [weak self] result in
+            guard let self = self else { return }
+            
+            switch result {
+            case .success(_):
+                print("Setting API update success")
+                reloadGlobalSettings()
+                
+            case.failure(let error):
+                DispatchQueue.main.async { [weak self] in
+                    guard let self = self else { return }
+                    self.showErrorAlert("Oops!", msg: "Cannot update user's setting information \(error.localizedDescription)")
+                }
+            }
+        }
+        
+        
+    }
+    
+    @IBAction func PublicStitchSwitchPressed(_ sender: Any) {
+        
+        var params = ["publicStitch": false]
+        
+        if isPublicStitch {
+            
+            params = ["publicStitch": false]
+            isPublicStitch = false
+            
+        } else {
+            
+            params = ["publicStitch": true]
+            isPublicStitch = true
+        }
+        
+        APIManager.shared.updateSettings(params: params) { [weak self] result in
+            guard let self = self else { return }
+            
+            switch result {
+            case .success(_):
+                print("Setting API update success")
+                reloadGlobalSettings()
+                
+            case.failure(let error):
+                DispatchQueue.main.async { [weak self] in
+                    guard let self = self else { return }
                     self.showErrorAlert("Oops!", msg: "Cannot update user's setting information \(error.localizedDescription)")
                 }
             }
@@ -337,7 +402,8 @@ extension SettingVC {
     
     func loadSettings() {
         
-        DispatchQueue.main {
+        DispatchQueue.main.async { [weak self] in
+            guard let self = self else { return }
             self.processDefaultData()
         }
         
@@ -361,6 +427,22 @@ extension SettingVC {
             } else {
                 self.StitchSwitch.setOn(false, animated: true)
                 isStitch = false
+            }
+            
+            if globalSetting.PublicStitch == true {
+                self.PublicStitchSwitch.setOn(true, animated: true)
+                isPublicStitch = true
+            } else {
+                self.PublicStitchSwitch.setOn(false, animated: true)
+                isPublicStitch = false
+            }
+            
+            if globalSetting.ClearMode == true {
+                self.ClearSwitch.setOn(true, animated: true)
+                isClearMode = true
+            } else {
+                self.ClearSwitch.setOn(false, animated: true)
+                isClearMode = false
             }
             
         }
@@ -406,10 +488,12 @@ extension SettingVC {
     
     func checkPlan() {
         
-        IAPManager.shared.checkPermissions { result in
+        IAPManager.shared.checkPermissions { [weak self] result in
+            guard let self = self else { return }
             if result == false {
                 
-                Dispatch.main.async {
+                Dispatch.main.async { [weak self] in
+                    guard let self = self else { return }
                     
                     self.setupLayoutForNonPro()
                     
@@ -418,7 +502,8 @@ extension SettingVC {
                 
             } else {
              
-                Dispatch.main.async {
+                Dispatch.main.async { [weak self] in
+                    guard let self = self else { return }
                 
                     self.setupLayoutForPro()
                     

@@ -101,7 +101,8 @@ class EditPhoneVC: UIViewController, CountryPickerViewDelegate, CountryPickerVie
                     
                     guard apiResponse.body?["message"] as? String == "OTP sent" else {
                         
-                        DispatchQueue.main.async {
+                        DispatchQueue.main.async { [weak self] in
+                            guard let self = self else { return }
                             SwiftLoader.hide()
                             self.showErrorAlert("Oops!", msg: "This phone has been registered")
                             self.phoneTextfield.text = ""
@@ -111,14 +112,16 @@ class EditPhoneVC: UIViewController, CountryPickerViewDelegate, CountryPickerVie
                         return
                     }
                     
-                    DispatchQueue.main.async {
+                    DispatchQueue.main.async { [weak self] in
+                        guard let self = self else { return }
                         SwiftLoader.hide()
                         self.moveToVerifyVC(phone: countryCode + phone)
                     }
                     
                 case .failure(let error):
                     
-                    DispatchQueue.main.async {
+                    DispatchQueue.main.async { [weak self] in
+                        guard let self = self else { return }
                         SwiftLoader.hide()
                         print(error)
                         self.showErrorAlert("Oops!", msg: "This phone number may already exists or another error occurs, please try again")

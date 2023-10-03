@@ -16,18 +16,16 @@ class NotificationVC: UIViewController {
     }
     
     let backButton: UIButton = UIButton(type: .custom)
-    @IBOutlet weak var loadingImage: FLAnimatedImageView!
-    @IBOutlet weak var contentView: UIView!
-    @IBOutlet weak var loadingView: UIView!
-    private var pullControl = UIRefreshControl()
     
+    @IBOutlet weak var contentView: UIView!
+
     var page = 1
     var refresh_request = false
+    private var pullControl = UIRefreshControl()
     var tableNode: ASTableNode!
     var UserNotificationList = [UserNotificationModel]()
     var firstAnimated = true
-    lazy var delayItem = workItem()
-    
+
     
     required init?(coder aDecoder: NSCoder) {
         
@@ -51,15 +49,13 @@ class NotificationVC: UIViewController {
         self.tableNode.view.trailingAnchor.constraint(equalTo: self.contentView.trailingAnchor, constant: 0).isActive = true
         self.tableNode.view.bottomAnchor.constraint(equalTo: self.contentView.bottomAnchor, constant: 0).isActive = true
         
-        
-        
         self.applyStyle()
         self.tableNode.leadingScreensForBatching = 5
         self.tableNode.automaticallyRelayoutOnLayoutMarginsChanges = true
         self.tableNode.automaticallyAdjustsContentOffset = true
         
         
-        pullControl.tintColor = UIColor.systemOrange
+        pullControl.tintColor = .secondary
         pullControl.addTarget(self, action: #selector(refreshListData(_:)), for: .valueChanged)
         
         if UIDevice.current.hasNotch {
@@ -76,27 +72,7 @@ class NotificationVC: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        loadingView.isHidden = true
-        /*
-        if firstAnimated {
-            
-            do {
-                
-                let path = Bundle.main.path(forResource: "fox2", ofType: "gif")!
-                let gifData = try NSData(contentsOfFile: path) as Data
-                let image = FLAnimatedImage(animatedGIFData: gifData)
-                
-                
-                self.loadingImage.animatedImage = image
-                
-            } catch {
-                print(error.localizedDescription)
-            }
-            
-            loadingView.backgroundColor = self.view.backgroundColor
-            
-        } */
-        
+       
         let navigationBarAppearance = UINavigationBarAppearance()
         navigationBarAppearance.configureWithOpaqueBackground()
         navigationBarAppearance.backgroundColor = .white
@@ -119,60 +95,6 @@ extension NotificationVC {
         clearAllData()
         
     }
-    
-    @objc func clearAllData() {
-        
-        refresh_request = true
-        page = 1
-        updateData()
-        
-    }
-    
-    
-    func updateData() {
-        self.retrieveNextPageWithCompletion { (newNotis) in
-            
-            if newNotis.count > 0 {
-                
-                self.UserNotificationList.removeAll()
-                self.tableNode.reloadData()
-                
-                self.insertNewRowsInTableNode(newNotis: newNotis)
-                
-            } else {
-                
-                self.refresh_request = false
-                self.UserNotificationList.removeAll()
-                self.tableNode.reloadData()
-                
-                if self.UserNotificationList.isEmpty == true {
-                    
-                    self.tableNode.view.setEmptyMessage("No active notification")
-                    
-                } else {
-                    
-                    self.tableNode.view.restore()
-                    
-                }
-                
-            }
-            
-            if self.pullControl.isRefreshing == true {
-                self.pullControl.endRefreshing()
-            }
-            
-            self.delayItem.perform(after: 0.75) {
-                
-                self.tableNode.scrollToRow(at: IndexPath(row: 0, section: 0), at: .top, animated: true)
-                
-            }
-            
-            
-        }
-        
-        
-    }
-    
     
 }
 
@@ -360,17 +282,13 @@ extension NotificationVC {
     
     func openPost(post: PostModel) {
         
-        if let RVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "SelectedPostVC") as? SelectedPostVC {
+        if let RVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "SelectedParentVC") as? SelectedParentVC {
             
             let nav = UINavigationController(rootViewController: RVC)
             
             // Set the user ID, nickname, and onPresent properties of UPVC
             RVC.posts = [post]
-            
-            // Customize the navigation bar appearance
-            nav.navigationBar.barTintColor = .background
-            nav.navigationBar.tintColor = .white
-            nav.navigationBar.titleTextAttributes = [.foregroundColor: UIColor.white]
+            RVC.startIndex = 0
             
             nav.modalPresentationStyle = .fullScreen
             self.present(nav, animated: true, completion: nil)
@@ -509,72 +427,83 @@ extension NotificationVC {
             
             switch result {
             case .success(let apiResponse):
-                
-                guard let data = apiResponse.body?["data"] as? [[String: Any]] else {
-                    let item = [[String: Any]]()
-                    DispatchQueue.main.async {
-                        block(item)
-                    }
-                    return
-                }
-                
-                if !data.isEmpty {
+                if let data = apiResponse.body?["data"] as? [[String: Any]], !data.isEmpty {
+                    print("Successfully retrieved \(data.count) posts.")
                     self.page += 1
-                    print("Successfully retrieved \(data.count) notifications.")
-                    let items = data
                     DispatchQueue.main.async {
-                        block(items)
+                        block(data)
                     }
                 } else {
-                    
-                    let item = [[String: Any]]()
-                    DispatchQueue.main.async {
-                        block(item)
-                    }
+                    self.completeWithEmptyData(block)
                 }
-                
             case .failure(let error):
                 print(error)
-                let item = [[String: Any]]()
-                DispatchQueue.main.async {
-                    block(item)
-                }
+                self.completeWithEmptyData(block)
             }
         }
-        
     }
-    
-    
+
+    private func completeWithEmptyData(_ block: @escaping ([[String: Any]]) -> Void) {
+        DispatchQueue.main.async {
+            block([])
+        }
+    }
+
     func insertNewRowsInTableNode(newNotis: [[String: Any]]) {
+        guard newNotis.count > 0 else { return }
         
-        guard newNotis.count > 0 else {
-            hideAnimation()
-            return
+        if refresh_request {
+            clearExistingPosts()
+            refresh_request = false
         }
-        
-        
-        let section = 0
-        var items = [UserNotificationModel]()
-        var indexPaths: [IndexPath] = []
-        let total = self.UserNotificationList.count + newNotis.count
-        
-        for row in self.UserNotificationList.count...total-1 {
-            let path = IndexPath(row: row, section: section)
-            indexPaths.append(path)
-        }
-        
-        for i in newNotis {
-            
-            let item = UserNotificationModel(UserNotificationModel: i)
-            items.append(item)
-            
-        }
-        
-        
+
+        let items = newNotis.compactMap { UserNotificationModel(UserNotificationModel: $0) }.filter { !self.UserNotificationList.contains($0) }
         self.UserNotificationList.append(contentsOf: items)
-        self.tableNode.insertRows(at: indexPaths, with: .none)
-        hideAnimation()
         
+        if !items.isEmpty {
+            let indexPaths = generateIndexPaths(for: items)
+            tableNode.insertRows(at: indexPaths, with: .automatic)
+        }
+    }
+
+    private func clearExistingPosts() {
+        UserNotificationList.removeAll()
+        tableNode.reloadData()
+    }
+
+    private func generateIndexPaths(for items: [UserNotificationModel]) -> [IndexPath] {
+        let startIndex = self.UserNotificationList.count - items.count
+        return (startIndex..<self.UserNotificationList.count).map { IndexPath(row: $0, section: 0) }
+    }
+
+    func updateData() {
+        self.retrieveNextPageWithCompletion { [weak self] (newNotis) in
+            guard let self = self else { return }
+
+            if self.pullControl.isRefreshing {
+                self.pullControl.endRefreshing()
+            }
+            
+            if newNotis.isEmpty {
+                self.refresh_request = false
+                self.UserNotificationList.removeAll()
+                self.tableNode.reloadData()
+                if self.UserNotificationList.isEmpty {
+                    self.tableNode.view.setEmptyMessage("No active notification!")
+                } else {
+                    self.tableNode.view.restore()
+                }
+            } else {
+                self.insertNewRowsInTableNode(newNotis: newNotis)
+            }
+        }
+    }
+
+    @objc func clearAllData() {
+      
+        refresh_request = true
+        page = 1
+        updateData()
     }
     
 }
@@ -586,7 +515,7 @@ extension NotificationVC: ASTableDataSource {
         
         if self.UserNotificationList.count == 0 {
             
-            tableNode.view.setEmptyMessage("No active notification")
+            tableNode.view.setEmptyMessage("No active notification!")
             
         } else {
             tableNode.view.restore()
@@ -610,35 +539,6 @@ extension NotificationVC: ASTableDataSource {
         }
         
     }
-    
-    func hideAnimation() {
-        
-        if firstAnimated {
-            
-            firstAnimated = false
-            
-            UIView.animate(withDuration: 0.5) {
-                
-                Dispatch.main.async {
-                    self.loadingView.alpha = 0
-                }
-                
-            }
-            
-            
-            DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
-                
-                if self.loadingView.alpha == 0 {
-                    
-                    self.loadingView.isHidden = true
-                    
-                }
-                
-            }
-            
-            
-        }
-        
-    }
+
     
 }

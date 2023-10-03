@@ -395,6 +395,7 @@ public enum UserAPI {
     case updateFavoriteContent(params: [String: Any] )
   case updateLocation(params: [String: Any] )
     case deleteGameChallengeCard(params: [String: Any])
+    case addInterestCategory(params: [String: Any])
     
     
 }
@@ -461,8 +462,8 @@ extension UserAPI: EndPointType {
             return "/challenge-card"
           case .deleteGameChallengeCard:
             return "/challenge-card"
-         
-            
+          case .addInterestCategory:
+            return "/category"
         }
     }
     
@@ -524,6 +525,8 @@ extension UserAPI: EndPointType {
             return .put
           case .deleteGameChallengeCard:
             return .delete
+          case .addInterestCategory:
+            return .post
          
         }
     }
@@ -586,6 +589,8 @@ extension UserAPI: EndPointType {
             return .requestParameters(parameters: params)
           case .deleteGameChallengeCard(let params):
             return .requestParameters(parameters: params)
+          case .addInterestCategory(let params):
+            return .requestParameters(parameters: params)
         }
     }
     
@@ -645,6 +650,8 @@ public enum PostAPI {
     case lastSetting
     case deleteMyPost(pid: String)
     case stats(pid: String)
+    case reaction(pid: String)
+    case moderation(page: Int)
 }
 extension PostAPI: EndPointType {
     var module: String {
@@ -685,6 +692,10 @@ extension PostAPI: EndPointType {
             return "/\(pid)"
           case .stats(let pid):
             return "/stats/\(pid)"
+          case .reaction(let pid):
+            return "/reaction/\(pid)"
+          case .moderation(let page):
+            return "/moderation?page=\(page)"
         }
     }
     
@@ -722,6 +733,10 @@ extension PostAPI: EndPointType {
             return .get
           case .checkSavedPost:
             return .get
+          case .reaction:
+            return .get
+          case .moderation:
+            return .get
         }
     }
     
@@ -758,6 +773,10 @@ extension PostAPI: EndPointType {
           case .countSavedPost:
             return .request
           case .checkSavedPost:
+            return .request
+          case .reaction:
+            return .request
+          case .moderation:
             return .request
         }
     }
@@ -1874,6 +1893,7 @@ public enum PostStitchApi {
   case getMyWaitlist(page: Int)
   case getMyPostsHasStitched(page: Int)
   case getStitchTo(pid: String)
+  case getStitchInsight(uid: String)
 }
 extension PostStitchApi: EndPointType {
   var path: String {
@@ -1914,6 +1934,8 @@ extension PostStitchApi: EndPointType {
         return "/my-stitched-post?page=\(page)"
       case .getStitchTo(let pid):
         return "/stitch-to/\(pid)"
+      case .getStitchInsight(let uid):
+        return "/\(uid)/insight"
     }
   }
   
@@ -1959,6 +1981,8 @@ extension PostStitchApi: EndPointType {
         return .get
       case .countStitchBy:
         return .get
+      case .getStitchInsight:
+        return .get
     }
   }
   
@@ -1999,6 +2023,8 @@ extension PostStitchApi: EndPointType {
       case .getStitchTo:
         return .request
       case .countStitchBy:
+        return .request
+      case .getStitchInsight:
         return .request
     }
   }
@@ -2101,6 +2127,45 @@ extension UserContactApi: EndPointType {
         return .requestParameters(parameters: body)
       case .createBulk(let body):
         return .requestParameters(parameters: body)
+    }
+  }
+  
+  var headers: [String : String]? {
+    var secondsFromGMT: Int { return TimeZone.current.secondsFromGMT() }
+    
+    return ["Authorization": _AppCoreData.userSession.value?.accessToken ?? "",
+            "X-User-Token": _AppCoreData.userSession.value?.accessToken ?? "",
+            "X-Client-Timezone": "\(secondsFromGMT)"]
+  }
+  
+}
+
+public enum CategoryApi {
+  case getAll
+}
+extension CategoryApi: EndPointType {
+  var path: String {
+    switch self {
+      case .getAll:
+        return "/"
+    }
+  }
+  
+  var module: String {
+    return "/category"
+  }
+  
+  var httpMethod: HTTPMethod {
+    switch self {
+      case .getAll:
+        return .get
+    }
+  }
+  
+  var task: HTTPTask {
+    switch self {
+      case .getAll:
+        return .request
     }
   }
   

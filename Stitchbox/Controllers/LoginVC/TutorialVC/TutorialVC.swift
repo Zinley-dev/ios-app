@@ -43,7 +43,13 @@ class TutorialVC: UIViewController {
             nextIndex()
         case 2:
             print("Show next item here")
-            RedirectionHelper.redirectToDashboard()
+            DispatchQueue.main.async { [weak self] in
+                UserDefaults.standard.set(true, forKey: "hasShowCleaned")
+                if let vc = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "ShowCleanModeVC") as? ShowCleanModeVC {
+                    vc.modalPresentationStyle = .fullScreen
+                    self?.present(vc, animated: true)
+                }
+            }
             
         default:
             break

@@ -43,6 +43,12 @@ extension AddVC {
         print("switch request")
         self.tabBarController?.selectedViewController = self.tabBarController?.viewControllers![0]
         
+        if let vc = UIViewController.currentViewController() as? ParentViewController {
+            
+            vc.setupTabBar()
+            
+        }
+        
     }
     
     @objc func switchvcToIndex() {

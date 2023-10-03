@@ -7,13 +7,15 @@
 
 import UIKit
 import AsyncDisplayKit
-import FLAnimatedImage
 import Alamofire
 
 class CommentNotificationVC: UIViewController, UITextViewDelegate, UIGestureRecognizerDelegate {
     
-    @IBOutlet weak var loadingImage: FLAnimatedImageView!
-    @IBOutlet weak var loadingView: UIView!
+    deinit {
+        print("CommentNotificationVC is being deallocated.")
+        NotificationCenter.default.removeObserver(self)
+    }
+    
     @IBOutlet weak var commentBottomConstraint: NSLayoutConstraint!
     @IBOutlet weak var commentBtn: UIButton!
     var isSending = false
@@ -38,7 +40,7 @@ class CommentNotificationVC: UIViewController, UITextViewDelegate, UIGestureReco
     var post: PostModel!
     var prev_id: String!
     //
-    var CommentList = [CommentModel]()
+    var commentList = [CommentModel]()
     var tableNode: ASTableNode!
     var reply_to_username: String!
     var LoadPath: [IndexPath] = []
@@ -84,7 +86,8 @@ class CommentNotificationVC: UIViewController, UITextViewDelegate, UIGestureReco
         vc.view.frame = searchResultContainerView.bounds
         
         
-        vc.userSearchcompletionHandler = { newMention, userUID in
+        vc.userSearchcompletionHandler = { [weak self] newMention, userUID in
+            guard let self = self else { return }
             if newMention.isEmpty {
                 return
             }
@@ -109,7 +112,8 @@ class CommentNotificationVC: UIViewController, UITextViewDelegate, UIGestureReco
             
         }
         
-        vc.hashtagSearchcompletionHandler = { newHashtag in
+        vc.hashtagSearchcompletionHandler = { [weak self] newHashtag in
+            guard let self = self else { return }
             
             if newHashtag.isEmpty {
                 return
@@ -194,7 +198,8 @@ class CommentNotificationVC: UIViewController, UITextViewDelegate, UIGestureReco
             
             if root_id == reply_to_cid {
                 
-                loadRootCmt(rootComment: root_id) {
+                loadRootCmt(rootComment: root_id) { [weak self] in
+                    guard let self = self else { return }
                     
                     self.loadComment(comment_id: self.commentId)
                     
@@ -202,9 +207,11 @@ class CommentNotificationVC: UIViewController, UITextViewDelegate, UIGestureReco
                 
             } else {
                 
-                loadRootCmt(rootComment: root_id) {
+                loadRootCmt(rootComment: root_id) { [weak self] in
+                    guard let self = self else { return }
                     
-                    self.loadReplyToComment(replyToCmt: self.reply_to_cid) {
+                    self.loadReplyToComment(replyToCmt: self.reply_to_cid) { [weak self] in
+                        guard let self = self else { return }
                         self.loadComment(comment_id: self.commentId)
                     }
                     
@@ -219,7 +226,8 @@ class CommentNotificationVC: UIViewController, UITextViewDelegate, UIGestureReco
             
             if root_id == reply_to_cid {
                 
-                loadRootCmt(rootComment: root_id) {
+                loadRootCmt(rootComment: root_id) { [weak self] in
+                    guard let self = self else { return }
                     
                     self.loadComment(comment_id: self.commentId)
                     
@@ -227,9 +235,12 @@ class CommentNotificationVC: UIViewController, UITextViewDelegate, UIGestureReco
                 
             } else {
                 
-                loadRootCmt(rootComment: root_id) {
+                loadRootCmt(rootComment: root_id) { [weak self] in
+                    guard let self = self else { return }
                     
-                    self.loadReplyToComment(replyToCmt: self.reply_to_cid) {
+                    self.loadReplyToComment(replyToCmt: self.reply_to_cid) { [weak self] in
+                        guard let self = self else { return }
+                        
                         self.loadComment(comment_id: self.commentId)
                     }
                     
@@ -294,20 +305,6 @@ class CommentNotificationVC: UIViewController, UITextViewDelegate, UIGestureReco
         NotificationCenter.default.addObserver(self, selector: #selector(handleKeyboardHide),
                                                name: UIResponder.keyboardWillHideNotification, object: nil)
         
-        do {
-            
-            let path = Bundle.main.path(forResource: "fox2", ofType: "gif")!
-            let gifData = try NSData(contentsOfFile: path) as Data
-            let image = FLAnimatedImage(animatedGIFData: gifData)
-            
-            
-            self.loadingImage.animatedImage = image
-            
-        } catch {
-            print(error.localizedDescription)
-        }
-        
-        loadingView.backgroundColor = .white
     }
     
     override func viewDidDisappear(_ animated: Bool) {
@@ -326,26 +323,14 @@ class CommentNotificationVC: UIViewController, UITextViewDelegate, UIGestureReco
             
             if let vc = UIViewController.currentViewController() {
                 
-                if let update1 = vc as? FeedViewController {
+                if let update1 = vc as? ParentViewController {
                     
                     if !update1.hasViewAppeared {
                         update1.viewWillAppear(true)
                     }
                     
                     
-                } else if let update1 = vc as? PostListWithHashtagVC {
-                    
-                    if !update1.hasViewAppeared {
-                        update1.viewWillAppear(true)
-                    }
-                    
-                } else if let update1 = vc as? MainSearchVC {
-                    
-                    if !update1.hasViewAppeared {
-                        update1.PostSearchVC.viewWillAppear(true)
-                    }
-                    
-                } else if let update1 = vc as? SelectedPostVC {
+                } else if let update1 = vc as? SelectedParentVC {
                     
                     if !update1.hasViewAppeared {
                         update1.viewWillAppear(true)
@@ -365,27 +350,27 @@ class CommentNotificationVC: UIViewController, UITextViewDelegate, UIGestureReco
         }
         let avatarUrl = userDataSource.avatarURL
         
-        imageStorage.async.object(forKey: avatarUrl) { result in
-            if case .value(let image) = result {
-                // Return the image from cache
+        CacheManager.shared.fetchImage(forKey: avatarUrl) { [weak self] cachedImage in
+            if let image = cachedImage {
                 DispatchQueue.main.async {
-                    self.avatarView.image = image
+                    self?.avatarView.image = image
                 }
-                return
-            }
-            
-            // Image not found in cache or storage, fetch from network
-            AF.request(avatarUrl).validate().responseImage { response in
-                switch response.result {
-                case .success(let image):
-                    self.avatarView.image = image
-                    try? imageStorage.setObject(image, forKey: avatarUrl)
-                case .failure(let error):
-                    print(error)
+            } else {
+                AF.request(avatarUrl).validate().responseImage { [weak self] response in
+                    switch response.result {
+                    case .success(let image):
+                        DispatchQueue.main.async {
+                            self?.avatarView.image = image
+                        }
+                        CacheManager.shared.storeImage(forKey: avatarUrl, image: image)
+                    case .failure(let error):
+                        print(error)
+                    }
                 }
             }
         }
     }
+
     
     
     
@@ -415,7 +400,7 @@ class CommentNotificationVC: UIViewController, UITextViewDelegate, UIGestureReco
                     
                     
                     let item = CommentModel(postKey: data["_id"] as! String, Comment_model: data)
-                    self.CommentList.append(item)
+                    self.commentList.append(item)
                     
                     completed()
                 } else {
@@ -439,8 +424,9 @@ class CommentNotificationVC: UIViewController, UITextViewDelegate, UIGestureReco
             case .success(let apiResponse):
                 
                 guard let data = apiResponse.body else {
-                    DispatchQueue.main.async {
-                        self.hideAnimation()
+                    DispatchQueue.main.async { [weak self] in
+                        guard let self = self else { return }
+                        
                     }
                     return
                 }
@@ -460,42 +446,44 @@ class CommentNotificationVC: UIViewController, UITextViewDelegate, UIGestureReco
                     self.reply_to_uid = item.comment_uid
                     self.reply_to_cid = item.comment_id
                     
-                    self.CommentList.append(item)
+                    self.commentList.append(item)
                     
-                    if !self.CommentList.isEmpty {
+                    if !self.commentList.isEmpty {
                         
                         let section = 0
                         
-                        for row in 0...self.CommentList.count-1 {
+                        for row in 0...self.commentList.count-1 {
                             let path = IndexPath(row: row, section: section)
                             self.LoadPath.append(path)
                         }
                         
                         
-                        DispatchQueue.main.async {
+                        DispatchQueue.main.async { [weak self] in
+                            guard let self = self else { return }
                             
                             self.tableNode.insertRows(at: self.LoadPath, with: .automatic)
-                            self.hideAnimation()
+                           
                         }
                         
                     }
                     
                 } else {
                     
-                    if !self.CommentList.isEmpty {
+                    if !self.commentList.isEmpty {
                         
                         let section = 0
                         
-                        for row in 0...self.CommentList.count-1 {
+                        for row in 0...self.commentList.count-1 {
                             let path = IndexPath(row: row, section: section)
                             self.LoadPath.append(path)
                         }
                         
                         
-                        DispatchQueue.main.async {
+                        DispatchQueue.main.async { [weak self] in
+                            guard let self = self else { return }
                             
                             self.tableNode.insertRows(at: self.LoadPath, with: .automatic)
-                            self.hideAnimation()
+                           
                             
                         }
                         
@@ -505,20 +493,21 @@ class CommentNotificationVC: UIViewController, UITextViewDelegate, UIGestureReco
             case .failure(let error):
                 print(error)
                 
-                if !self.CommentList.isEmpty {
+                if !self.commentList.isEmpty {
                     
                     let section = 0
                     
-                    for row in 0...self.CommentList.count-1 {
+                    for row in 0...self.commentList.count-1 {
                         let path = IndexPath(row: row, section: section)
                         self.LoadPath.append(path)
                     }
                     
                     
-                    DispatchQueue.main.async {
-                        
+                    DispatchQueue.main.async { [weak self] in
+                        guard let self = self else { return }
+                         
                         self.tableNode.insertRows(at: self.LoadPath, with: .automatic)
-                        self.hideAnimation()
+                        
                         
                     }
                     
@@ -546,7 +535,7 @@ class CommentNotificationVC: UIViewController, UITextViewDelegate, UIGestureReco
                 
                 if !data.isEmpty {
                     let item = CommentModel(postKey: data["_id"] as! String, Comment_model: data)
-                    self.CommentList.append(item)
+                    self.commentList.append(item)
                     completed()
                 } else {
                     completed()
@@ -818,9 +807,10 @@ class CommentNotificationVC: UIViewController, UITextViewDelegate, UIGestureReco
                 
                 if let index = self.index {
                     start = index + 1
-                    self.CommentList.insert(item, at: start)
+                    self.commentList.insert(item, at: start)
                     
-                    DispatchQueue.main.async {
+                    DispatchQueue.main.async { [weak self] in
+                        guard let self = self else { return }
                         // Insert the new comment at its respective position
                         let indexPath = IndexPath(row: start, section: 0)
                         self.tableNode.insertRows(at: [indexPath], with: .none)
@@ -832,10 +822,11 @@ class CommentNotificationVC: UIViewController, UITextViewDelegate, UIGestureReco
                         //self.tableNode.reloadRows(at: [indexPath], with: .none)
                     }
                 } else {
-                    let start = self.CommentList.count
-                    self.CommentList.append(item)
+                    let start = self.commentList.count
+                    self.commentList.append(item)
                     
-                    DispatchQueue.main.async {
+                    DispatchQueue.main.async { [weak self] in
+                        guard let self = self else { return }
                         // Insert the new comment at its respective position
                         let indexPath = IndexPath(row: start, section: 0)
                         self.tableNode.insertRows(at: [indexPath], with: .none)
@@ -857,7 +848,8 @@ class CommentNotificationVC: UIViewController, UITextViewDelegate, UIGestureReco
                 self.mention_arr.removeAll()
                 self.mention_dict.removeAll()
                 
-                DispatchQueue.main.async {
+                DispatchQueue.main.async { [weak self] in
+                    guard let self = self else { return }
                     // showNote(text: "Comment sent!")
                     self.searchResultContainerView.isHidden = true
                     self.cmtTxtView.text = ""
@@ -868,7 +860,8 @@ class CommentNotificationVC: UIViewController, UITextViewDelegate, UIGestureReco
             case .failure(let error):
                 print(error)
                 self.isSending = false
-                DispatchQueue.main.async {
+                DispatchQueue.main.async { [weak self] in
+                    guard let self = self else { return }
                     self.showErrorAlert("Oops!", msg: error.localizedDescription)
                 }
             }
@@ -890,7 +883,8 @@ class CommentNotificationVC: UIViewController, UITextViewDelegate, UIGestureReco
             bView.isHidden = false
             
             
-            UIView.animate(withDuration: 0, delay: 0, options: .curveEaseOut, animations:  {
+            UIView.animate(withDuration: 0, delay: 0, options: .curveEaseOut, animations:  { [weak self] in
+                guard let self = self else { return }
                 self.view.layoutIfNeeded()
             }, completion: { (completed) in
                 
@@ -940,7 +934,8 @@ class CommentNotificationVC: UIViewController, UITextViewDelegate, UIGestureReco
         }
         
         
-        UIView.animate(withDuration: 0, delay: 0, options: .curveEaseOut, animations:  {
+        UIView.animate(withDuration: 0, delay: 0, options: .curveEaseOut, animations:  { [weak self] in
+            guard let self = self else { return }
             self.view.layoutIfNeeded()
         }, completion: { (completed) in
             
@@ -970,7 +965,8 @@ class CommentNotificationVC: UIViewController, UITextViewDelegate, UIGestureReco
                 self.dismiss(animated: true, completion: nil)
             } else {
                 // Set back to original position of the view controller
-                UIView.animate(withDuration: 0.3) {
+                UIView.animate(withDuration: 0.3) { [weak self] in
+                    guard let self = self else { return }
                     self.view.frame.origin = self.pointOrigin ?? CGPoint(x: 0, y: 400)
                 }
             }
@@ -981,7 +977,7 @@ class CommentNotificationVC: UIViewController, UITextViewDelegate, UIGestureReco
         
         if let viewPost = self.post {
             
-            if let RVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "SelectedPostVC") as? SelectedPostVC {
+            if let RVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "SelectedParentVC") as? SelectedParentVC {
                 
                 let nav = UINavigationController(rootViewController: RVC)
                 
@@ -995,13 +991,10 @@ class CommentNotificationVC: UIViewController, UITextViewDelegate, UIGestureReco
                 RVC.onPresent = true
                 
                 // Set the user ID, nickname, and onPresent properties of UPVC
-                RVC.selectedPost = [viewPost]
+                RVC.posts = [viewPost]
                 RVC.startIndex = 0
                 // Customize the navigation bar appearance
-                nav.navigationBar.barTintColor = .background
-                nav.navigationBar.tintColor = .white
-                nav.navigationBar.titleTextAttributes = [.foregroundColor: UIColor.white]
-                
+               
                 nav.modalPresentationStyle = .fullScreen
                 self.present(nav, animated: true, completion: nil)
                 
@@ -1016,7 +1009,7 @@ class CommentNotificationVC: UIViewController, UITextViewDelegate, UIGestureReco
     }
     
     func findCommentIndex(item: CommentModel) -> Int {
-        if let index = self.CommentList.firstIndex(where: { $0.comment_uid == item.comment_uid && $0.comment_id == item.comment_id }) {
+        if let index = self.commentList.firstIndex(where: { $0.comment_uid == item.comment_uid && $0.comment_id == item.comment_id }) {
             return index
         }
         return -1
@@ -1031,12 +1024,12 @@ class CommentNotificationVC: UIViewController, UITextViewDelegate, UIGestureReco
             
             cmtTxtView.becomeFirstResponder()
             
-            if CommentList[cIndex].comment_uid != "" {
+            if commentList[cIndex].comment_uid != "" {
                 
                 let paragraphStyles = NSMutableParagraphStyle()
                 paragraphStyles.alignment = .left
                 
-                if let username = CommentList[cIndex].comment_username {
+                if let username = commentList[cIndex].comment_username {
                     
                     
                     self.placeholderLabel.text = "Reply to @\(username)"
@@ -1048,18 +1041,18 @@ class CommentNotificationVC: UIViewController, UITextViewDelegate, UIGestureReco
                 placeholderLabel.text = "Reply to @Undefined"
             }
             
-            if CommentList[cIndex].isReply == false {
-                root_id = CommentList[cIndex].comment_id
+            if commentList[cIndex].isReply == false {
+                root_id = commentList[cIndex].comment_id
                 index = cIndex
             } else {
-                root_id = CommentList[cIndex].root_id
+                root_id = commentList[cIndex].root_id
                 index = cIndex
             }
             
             
-            reply_to_uid =  CommentList[cIndex].comment_uid
-            reply_to_cid =  CommentList[cIndex].comment_id
-            reply_to_username = CommentList[cIndex].comment_username
+            reply_to_uid =  commentList[cIndex].comment_uid
+            reply_to_cid =  commentList[cIndex].comment_id
+            reply_to_username = commentList[cIndex].comment_username
             
             tableNode.scrollToRow(at: IndexPath(row: cIndex, section: 0), at: .top, animated: true)
             
@@ -1098,12 +1091,12 @@ extension CommentNotificationVC: ASTableDataSource {
     
     func tableNode(_ tableNode: ASTableNode, numberOfRowsInSection section: Int) -> Int {
         
-        return self.CommentList.count
+        return self.commentList.count
         
     }
     
     func tableNode(_ tableNode: ASTableNode, nodeBlockForRowAt indexPath: IndexPath) -> ASCellNodeBlock {
-        let comment = self.CommentList[indexPath.row]
+        let comment = self.commentList[indexPath.row]
         
         return makeCommentNodeBlock(with: comment)
     }
@@ -1115,7 +1108,7 @@ extension CommentNotificationVC: ASTableDataSource {
             
             node.replyBtn = { [weak self] (node) in
                 guard let self = self else { return }
-                if let currentIndex = self.CommentList.firstIndex(where: { $0.comment_id == comment.comment_id }) {
+                if let currentIndex = self.commentList.firstIndex(where: { $0.comment_id == comment.comment_id }) {
                     self.handleReply(for: comment, indexPath: IndexPath(row: currentIndex, section: 0))
                 }
             }
@@ -1148,7 +1141,7 @@ extension CommentNotificationVC: ASTableDataSource {
             return
         }
         
-        if let currentIndex = self.CommentList.firstIndex(where: { $0.comment_id == comment.comment_id }) {
+        if let currentIndex = self.commentList.firstIndex(where: { $0.comment_id == comment.comment_id }) {
             
             if let node = tableNode.nodeForRow(at: IndexPath(row: currentIndex, section: 0)) as? CommentNode {
                 UIView.animate(withDuration: 0.3, animations: {
@@ -1189,11 +1182,12 @@ extension CommentNotificationVC: ASTableDataSource {
                 let newCommentModels = replyData.map { CommentModel(postKey: $0["_id"] as! String, Comment_model: $0) }
                 
                 // Find the current index of the item
-                if let currentIndex = self.CommentList.firstIndex(where: { $0.comment_id == comment.comment_id }) {
+                if let currentIndex = self.commentList.firstIndex(where: { $0.comment_id == comment.comment_id }) {
                     
-                    self.CommentList.insert(contentsOf: newCommentModels, at: currentIndex + 1)
+                    self.commentList.insert(contentsOf: newCommentModels, at: currentIndex + 1)
                     
-                    DispatchQueue.main.async {
+                    DispatchQueue.main.async { [weak self] in
+                        guard let self = self else { return }
                         let indexPaths = (currentIndex + 1 ..< currentIndex + 1 + newCommentModels.count).map { IndexPath(row: $0, section: 0) }
                         self.tableNode.insertRows(at: indexPaths, with: .none)
                         
@@ -1224,7 +1218,7 @@ extension CommentNotificationVC: ASTableDataSource {
         index = 0
         
         
-        for item in CommentList {
+        for item in commentList {
             
             
             if item.comment_id == post.root_id
@@ -1243,7 +1237,7 @@ extension CommentNotificationVC: ASTableDataSource {
     
     
     func checkDuplicateLoading(post: CommentModel) -> Bool {
-        return CommentList.contains { $0.comment_id == post.comment_id }
+        return commentList.contains { $0.comment_id == post.comment_id }
     }
     
 }
@@ -1260,12 +1254,12 @@ extension CommentNotificationVC {
             
             cmtTxtView.becomeFirstResponder()
             
-            if CommentList[cIndex].comment_uid != "" {
+            if commentList[cIndex].comment_uid != "" {
                 
                 let paragraphStyles = NSMutableParagraphStyle()
                 paragraphStyles.alignment = .left
                 
-                if let username = CommentList[cIndex].comment_username {
+                if let username = commentList[cIndex].comment_username {
                     
                     self.placeholderLabel.text = "Reply to @\(username)"
                     
@@ -1275,18 +1269,18 @@ extension CommentNotificationVC {
                 placeholderLabel.text = "Reply to @Undefined"
             }
             
-            if CommentList[cIndex].isReply == false {
-                root_id = CommentList[cIndex].comment_id
+            if commentList[cIndex].isReply == false {
+                root_id = commentList[cIndex].comment_id
                 index = cIndex
             } else {
-                root_id = CommentList[cIndex].root_id
+                root_id = commentList[cIndex].root_id
                 index = cIndex
             }
             
             
-            reply_to_uid =  CommentList[cIndex].comment_uid
-            reply_to_cid =  CommentList[cIndex].comment_id
-            reply_to_username = CommentList[cIndex].comment_username
+            reply_to_uid =  commentList[cIndex].comment_uid
+            reply_to_cid =  commentList[cIndex].comment_id
+            reply_to_username = commentList[cIndex].comment_username
             
             tableNode.scrollToRow(at: IndexPath(row: cIndex, section: 0), at: .top, animated: true)
             
@@ -1314,7 +1308,7 @@ extension CommentNotificationVC {
                 }
                 
                 let uid = userUID
-                let selectedCmt = CommentList[indexPath.row]
+                let selectedCmt = commentList[indexPath.row]
                 
                 
                 let commentSettings = CommentSettings()
@@ -1362,16 +1356,18 @@ extension CommentNotificationVC {
             case .success(let apiResponse):
                 guard apiResponse.body?["message"] as? String == "success" else {
                     
-                    DispatchQueue.main.async {
-                        self.showErrorAlert("Ops !", msg: "Unable to remove this comment right now, please try again.")
+                    DispatchQueue.main.async { [weak self] in
+                        guard let self = self else { return }
+                        self.showErrorAlert("Oops!", msg: "Unable to remove this comment right now, please try again.")
                     }
                     return
                 }
                 
                 
-                DispatchQueue.main.async {
+                DispatchQueue.main.async { [weak self] in
+                    guard let self = self else { return }
                     
-                    self.CommentList.remove(at: indexPath)
+                    self.commentList.remove(at: indexPath)
                     self.tableNode.deleteRows(at: [IndexPath(item: indexPath, section: 0)], with: .automatic)
                     
                     if items.root_id == "nil" {
@@ -1388,8 +1384,9 @@ extension CommentNotificationVC {
             case .failure(let error):
                 print(error)
                 
-                DispatchQueue.main.async {
-                    self.showErrorAlert("Ops !", msg: "Unable to remove this comment right now, please try again.")
+                DispatchQueue.main.async { [weak self] in
+                    guard let self = self else { return }
+                    self.showErrorAlert("Oops!", msg: "Unable to remove this comment right now, please try again.")
                 }
             }
         }
@@ -1400,13 +1397,13 @@ extension CommentNotificationVC {
         var indexPaths: [IndexPath] = []
         let rootId = from.comment_id
         
-        for (index, item) in CommentList.enumerated() {
+        for (index, item) in commentList.enumerated() {
             if item.root_id == rootId {
                 indexPaths.append(IndexPath(row: index, section: 0))
             }
         }
         
-        CommentList.removeSubrange(start..<start+indexPaths.count)
+        commentList.removeSubrange(start..<start+indexPaths.count)
         tableNode.deleteRows(at: indexPaths, with: .automatic)
     }
     
@@ -1418,7 +1415,7 @@ extension CommentNotificationVC {
     @objc func copyRequest() {
         
         if let index = editedIndexpath?.row {
-            UIPasteboard.general.string = self.CommentList[index].text
+            UIPasteboard.general.string = self.commentList[index].text
             showNote(text: "Copied successfully")
         }
         
@@ -1440,14 +1437,15 @@ extension CommentNotificationVC {
             
             let slideVC =  reportView()
             
-            slideVC.commentId = self.CommentList[index].comment_id
+            slideVC.commentId = self.commentList[index].comment_id
             slideVC.comment_report = true
             slideVC.modalPresentationStyle = .custom
             slideVC.transitioningDelegate = self
             global_presetingRate = Double(0.75)
             global_cornerRadius = 35
             
-            delay(0.1) {
+            delay(0.1) { [weak self] in
+                guard let self = self else { return }
                 self.present(slideVC, animated: true, completion: nil)
             }
             
@@ -1455,34 +1453,6 @@ extension CommentNotificationVC {
         
     }
     
-    func hideAnimation() {
-        
-        if firstAnimated {
-            
-            firstAnimated = false
-            
-            UIView.animate(withDuration: 0.5) {
-                
-                Dispatch.main.async {
-                    self.loadingView.alpha = 0
-                }
-                
-            }
-            
-            
-            DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
-                
-                if self.loadingView.alpha == 0 {
-                    
-                    self.loadingView.isHidden = true
-                    
-                }
-                
-            }
-            
-            
-        }
-        
-    }
+   
     
 }

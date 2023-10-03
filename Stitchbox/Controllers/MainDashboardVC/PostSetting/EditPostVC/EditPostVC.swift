@@ -146,8 +146,8 @@ class EditPostVC: UIViewController {
             
             HTVC.text = self.hiddenHashTagTxtField.text
             
-            HTVC.completionHandler = { text in
-                
+            HTVC.completionHandler = { [weak self] text in
+                guard let self = self else { return }
                 if !text.findMHashtagText().isEmpty {
                     self.collectionHeight.constant = 50.0
                     self.settingViewHeight.constant = 335
@@ -181,9 +181,9 @@ class EditPostVC: UIViewController {
         
         mode = 0
         
-        globalBtn.setImage(UIImage(named: "selectedPublic"), for: .normal)
-        followingBtn.setImage(UIImage(named: "following"), for: .normal)
-        privateBtn.setImage(UIImage(named: "onlyme"), for: .normal)
+        globalBtn.setImage(UIImage(named: "selectedPublic")?.resize(targetSize: CGSize(width: 30, height: 30)), for: .normal)
+        followingBtn.setImage(UIImage(named: "following")?.resize(targetSize: CGSize(width: 30, height: 30)), for: .normal)
+        privateBtn.setImage(UIImage(named: "onlyme")?.resize(targetSize: CGSize(width: 30, height: 30)), for: .normal)
         
         publicLbl.textColor = .black
         followLbl.textColor = .lightGray
@@ -196,9 +196,9 @@ class EditPostVC: UIViewController {
         
         mode = 1
         
-        globalBtn.setImage(UIImage(named: "public"), for: .normal)
-        followingBtn.setImage(UIImage(named: "selectedFollowing"), for: .normal)
-        privateBtn.setImage(UIImage(named: "onlyme"), for: .normal)
+        globalBtn.setImage(UIImage(named: "public")?.resize(targetSize: CGSize(width: 30, height: 30)), for: .normal)
+        followingBtn.setImage(UIImage(named: "selectedFollowing")?.resize(targetSize: CGSize(width: 30, height: 30)), for: .normal)
+        privateBtn.setImage(UIImage(named: "onlyme")?.resize(targetSize: CGSize(width: 30, height: 30)), for: .normal)
         
         publicLbl.textColor = .lightGray
         followLbl.textColor = .black
@@ -209,9 +209,9 @@ class EditPostVC: UIViewController {
         
         mode = 2
         
-        globalBtn.setImage(UIImage(named: "public"), for: .normal)
-        followingBtn.setImage(UIImage(named: "following"), for: .normal)
-        privateBtn.setImage(UIImage(named: "selectedOnlyme"), for: .normal)
+        globalBtn.setImage(UIImage(named: "public")?.resize(targetSize: CGSize(width: 30, height: 30)), for: .normal)
+        followingBtn.setImage(UIImage(named: "following")?.resize(targetSize: CGSize(width: 30, height: 30)), for: .normal)
+        privateBtn.setImage(UIImage(named: "selectedOnlyme")?.resize(targetSize: CGSize(width: 30, height: 30)), for: .normal)
         
         
         publicLbl.textColor = .lightGray
@@ -340,7 +340,7 @@ extension EditPostVC {
         delay(0.1) { [weak self] in
             guard let self = self else { return }
             
-            self.hashtagList = self.selectedPost.hashtags
+            self.hashtagList = self.selectedPost.hashtags ?? [""]
             self.hiddenHashTagTxtField.text = self.hashtagList.joined(separator: "")
             
             if self.hashtagList.count == 1 {
@@ -372,10 +372,12 @@ extension EditPostVC {
     
     func setDefaultMeia() {
         
-        DispatchQueue.global().async {
+        DispatchQueue.global().async { [weak self] in
+            guard let self = self else { return }
             
             if let data = try? Data(contentsOf: self.selectedPost.imageUrl) {
-                DispatchQueue.main.async {
+                DispatchQueue.main.async { [weak self] in
+                    guard let self = self else { return }
                     self.thumbnailImg.image = UIImage(data: data)
                 }
             }
@@ -416,9 +418,9 @@ extension EditPostVC {
             
             mode = 0
             
-            globalBtn.setImage(UIImage(named: "selectedPublic"), for: .normal)
-            followingBtn.setImage(UIImage(named: "following"), for: .normal)
-            privateBtn.setImage(UIImage(named: "onlyme"), for: .normal)
+            globalBtn.setImage(UIImage(named: "selectedPublic")?.resize(targetSize: CGSize(width: 30, height: 30)), for: .normal)
+            followingBtn.setImage(UIImage(named: "following")?.resize(targetSize: CGSize(width: 30, height: 30)), for: .normal)
+            privateBtn.setImage(UIImage(named: "onlyme")?.resize(targetSize: CGSize(width: 30, height: 30)), for: .normal)
             
             publicLbl.textColor = .black
             followLbl.textColor = .lightGray
@@ -428,9 +430,9 @@ extension EditPostVC {
             
             mode = 1
             
-            globalBtn.setImage(UIImage(named: "public"), for: .normal)
-            followingBtn.setImage(UIImage(named: "selectedFollowing"), for: .normal)
-            privateBtn.setImage(UIImage(named: "onlyme"), for: .normal)
+            globalBtn.setImage(UIImage(named: "public")?.resize(targetSize: CGSize(width: 30, height: 30)), for: .normal)
+            followingBtn.setImage(UIImage(named: "selectedFollowing")?.resize(targetSize: CGSize(width: 30, height: 30)), for: .normal)
+            privateBtn.setImage(UIImage(named: "onlyme")?.resize(targetSize: CGSize(width: 30, height: 30)), for: .normal)
             
             publicLbl.textColor = .lightGray
             followLbl.textColor = .black
@@ -440,9 +442,9 @@ extension EditPostVC {
             
             mode = 2
             
-            globalBtn.setImage(UIImage(named: "public"), for: .normal)
-            followingBtn.setImage(UIImage(named: "following"), for: .normal)
-            privateBtn.setImage(UIImage(named: "selectedOnlyme"), for: .normal)
+            globalBtn.setImage(UIImage(named: "public")?.resize(targetSize: CGSize(width: 30, height: 30)), for: .normal)
+            followingBtn.setImage(UIImage(named: "following")?.resize(targetSize: CGSize(width: 30, height: 30)), for: .normal)
+            privateBtn.setImage(UIImage(named: "selectedOnlyme")?.resize(targetSize: CGSize(width: 30, height: 30)), for: .normal)
             
             
             publicLbl.textColor = .lightGray
@@ -591,7 +593,8 @@ extension EditPostVC {
             switch result {
             case .success(_):
                 needReloadPost = true
-                Dispatch.main.async {
+                Dispatch.main.async { [weak self] in
+                    guard let self = self else { return }
                     SwiftLoader.hide()
                     showNote(text: "Updated successfully!")
                     self.navigationController?.popBack(3)
@@ -601,7 +604,8 @@ extension EditPostVC {
             case .failure(let error):
                 print(error)
                 
-                DispatchQueue.main.async {
+                DispatchQueue.main.async { [weak self] in
+                    guard let self = self else { return }
                     SwiftLoader.hide()
                     self.showErrorAlert("Oops", msg: "Unable to update \(error.localizedDescription)")
                 }
@@ -719,7 +723,7 @@ extension EditPostVC: UITextViewDelegate {
     func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
         let newText = (textView.text as NSString).replacingCharacters(in: range, with: text)
         let numberOfChars = newText.count
-        return numberOfChars <= 200    // 200 Limit Value
+        return numberOfChars <= 500    // 200 Limit Value
     }
     
     

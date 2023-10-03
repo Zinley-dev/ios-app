@@ -264,7 +264,8 @@ class MemberListVC: UIViewController, UINavigationControllerDelegate, UITableVie
     // objc
 
     @objc func promoteUser() {
-        channel?.addOperators(withUserIds: [userList[selectedIndexpath].userId]) { error in
+        channel?.addOperators(withUserIds: [userList[selectedIndexpath].userId]) { [weak self] error in
+            guard let self = self else { return }
             guard error == nil else {
                 // Handle error.
                
@@ -280,7 +281,8 @@ class MemberListVC: UIViewController, UINavigationControllerDelegate, UITableVie
 
     
     @objc func dismissUser() {
-        channel?.removeOperators(withUserIds: [userList[selectedIndexpath].userId]) { error in
+        channel?.removeOperators(withUserIds: [userList[selectedIndexpath].userId]) { [weak self] error in
+            guard let self = self else { return }
             guard error == nil else {
                 // Handle error.
                 self.presentErrorAlert(message: "Error code: \(error!.code), \(error!.localizedDescription)")
@@ -296,7 +298,8 @@ class MemberListVC: UIViewController, UINavigationControllerDelegate, UITableVie
     
     @objc func muteUser() {
         
-        channel?.muteUser(withUserId: userList[selectedIndexpath].userId) { error in
+        channel?.muteUser(withUserId: userList[selectedIndexpath].userId) { [weak self] error in
+            guard let self = self else { return }
             guard error == nil else {
                 // Handle error.
                 self.presentErrorAlert(message: "Error code: \(error!.code), \(error!.localizedDescription)")
@@ -312,7 +315,8 @@ class MemberListVC: UIViewController, UINavigationControllerDelegate, UITableVie
     
     @objc func unMuteUser() {
         
-        channel?.unmuteUser(withUserId: userList[selectedIndexpath].userId) { error in
+        channel?.unmuteUser(withUserId: userList[selectedIndexpath].userId) { [weak self] error in
+            guard let self = self else { return }
             guard error == nil else {
                 // Handle error.
                 self.presentErrorAlert(message: "Error code: \(error!.code), \(error!.localizedDescription)")
@@ -328,7 +332,8 @@ class MemberListVC: UIViewController, UINavigationControllerDelegate, UITableVie
     
     @objc func banUser() {
         
-        channel?.banUser(withUserId: userList[selectedIndexpath].userId, seconds: 259200, description: "None")  { error in
+        channel?.banUser(withUserId: userList[selectedIndexpath].userId, seconds: 259200, description: "None")  { [weak self] error in
+            guard let self = self else { return }
             guard error == nil else {
                 // Handle error.
                 self.presentErrorAlert(message: "Error code: \(error!.code), \(error!.localizedDescription)")

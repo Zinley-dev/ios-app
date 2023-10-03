@@ -243,3 +243,9 @@ class UserActivityModel {
     
 
 }
+
+extension UserActivityModel: Equatable {
+    static func == (lhs: UserActivityModel, rhs: UserActivityModel) -> Bool {
+        return lhs.id == rhs.id
+    }
+}

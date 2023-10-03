@@ -180,7 +180,7 @@ class StitchControlVC: UIViewController, UICollectionViewDelegateFlowLayout, UIA
                 
                 if self.posts.isEmpty == true {
                     
-                    self.collectionNode.view.setEmptyMessage("We can't find any available posts for you right now, can you post something?")
+                    self.collectionNode.view.setEmptyMessage("We can't find any available posts for you right now, can you post something?", color: .black)
                     
                     
                 } else {

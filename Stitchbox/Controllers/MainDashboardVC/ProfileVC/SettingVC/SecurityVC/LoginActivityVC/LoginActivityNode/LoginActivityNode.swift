@@ -22,7 +22,7 @@ class LoginActivityNode: ASCellNode {
     var descriptionNode: ASTextNode!
     var timeNode: ASTextNode!
     var AvatarNode: ASNetworkImageNode!
-   
+    private var didSetup = false
     
     let paragraphStyles = NSMutableParagraphStyle()
     
@@ -44,7 +44,7 @@ class LoginActivityNode: ASCellNode {
         
         AvatarNode.shouldRenderProgressImages = true
         AvatarNode.isLayerBacked = true
-        
+        timeNode.isLayerBacked = true
         //
         paragraphStyles.alignment = .left
 
@@ -54,6 +54,20 @@ class LoginActivityNode: ASCellNode {
         
         automaticallyManagesSubnodes = true
         
+    
+        
+    }
+    
+    override func didEnterVisibleState() {
+            
+            if !didSetup {
+                setupLayout()
+            }
+            
+        }
+    
+    func setupLayout() {
+        didSetup = true
         let textAttributes: [NSAttributedString.Key: Any] = [
             NSAttributedString.Key.font: FontManager.shared.roboto(.Medium, size: FontSize),
             NSAttributedString.Key.foregroundColor: UIColor.black,
@@ -109,7 +123,6 @@ class LoginActivityNode: ASCellNode {
             let url = URL(string: avatarUrl)
             AvatarNode.url = url
         }
-    
         
     }
     

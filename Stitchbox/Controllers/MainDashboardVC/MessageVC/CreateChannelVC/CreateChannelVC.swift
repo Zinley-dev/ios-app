@@ -336,7 +336,8 @@ class CreateChannelVC: UIViewController, UISearchBarDelegate, UINavigationContro
         tableView.reloadData()
 
         if filteredUsers.isEmpty {
-            delayItem.perform(after: 0.35) {
+            delayItem.perform(after: 0.35) { [weak self] in
+                guard let self = self else { return }
                 self.searchUsers(keyword: searchText)
             }
         }
@@ -443,7 +444,8 @@ class CreateChannelVC: UIViewController, UISearchBarDelegate, UINavigationContro
         channelParams.addUserId(userUID)
         channelParams.operatorUserIds = [userUID]
         
-        SBDGroupChannel.createChannel(with: channelParams) { groupChannel, error in
+        SBDGroupChannel.createChannel(with: channelParams) { [weak self] groupChannel, error in
+            guard let self = self else { return }
             guard error == nil, let channelUrl = groupChannel?.channelUrl else {
                 self.showErrorAlert("Oops!", msg: error?.localizedDescription ?? "Failed to create channel")
                 return
@@ -479,7 +481,8 @@ class CreateChannelVC: UIViewController, UISearchBarDelegate, UINavigationContro
     func checkForChannelInvitation(channelUrl: String, user_ids: [String]) {
         
         
-        APIManager.shared.channelCheckForInviation(userIds: user_ids, channelUrl: channelUrl) { result in
+        APIManager.shared.channelCheckForInviation(userIds: user_ids, channelUrl: channelUrl) { [weak self] result in
+            guard let self = self else { return }
             switch result {
             case .success(let apiResponse):
                 // Check if the request was successful

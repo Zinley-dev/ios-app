@@ -296,7 +296,8 @@ extension EditPhofileVC: EditControllerDelegate {
         
         if let image = session.image {
             
-            ImageExporter.shared.export(image: image, completion: { (error, uiImage) in
+            ImageExporter.shared.export(image: image, completion: { [weak self] (error, uiImage) in
+                guard let self = self else { return }
                     if let error = error {
                         self.showErrorAlert("Oops!", msg: "Unable to export image: \(error)")
                         return
@@ -336,7 +337,8 @@ extension EditPhofileVC: EditControllerDelegate {
                         }
                         
                         
-                        SBUMain.updateUserInfo(nickname: SBDMain.getCurrentUser()!.nickname, profileUrl: url) { error in
+                        SBUMain.updateUserInfo(nickname: SBDMain.getCurrentUser()!.nickname, profileUrl: url) { [weak self] error in
+                            guard let self = self else { return }
                             if error != nil {
                                 print(error?.localizedDescription)
                             }
@@ -430,7 +432,8 @@ extension EditPhofileVC {
     
     func checkPlan() {
         
-        IAPManager.shared.checkPermissions { result in
+        IAPManager.shared.checkPermissions { [weak self] result in
+            guard let self = self else { return }
             if result == false {
                 self.setupProButton()
             } else {

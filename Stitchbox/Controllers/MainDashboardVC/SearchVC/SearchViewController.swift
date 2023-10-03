@@ -15,6 +15,7 @@ class SearchViewController: UIViewController, UINavigationControllerDelegate, UI
     deinit {
         print("SearchViewController is being deallocated.")
     }
+
     
     struct SearchRecord {
         let keyWord: String
@@ -27,8 +28,6 @@ class SearchViewController: UIViewController, UINavigationControllerDelegate, UI
 
     @IBOutlet weak var searchView: UIView!
     @IBOutlet weak var contentview: UIView!
-    @IBOutlet weak var loadingImage: FLAnimatedImageView!
-    @IBOutlet weak var loadingView: UIView!
     
     var searchController: UISearchController?
     var recentList = [RecentModel]()
@@ -36,7 +35,7 @@ class SearchViewController: UIViewController, UINavigationControllerDelegate, UI
     var recentTableNode: ASTableNode!
     var searchTableNode: ASTableNode!
     lazy var delayItem = workItem()
-    var firstLoad = true
+    
     var firstAnimated = true
     let backButton: UIButton = UIButton(type: .custom)
     
@@ -52,27 +51,6 @@ class SearchViewController: UIViewController, UINavigationControllerDelegate, UI
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        
-        if firstLoad {
-            
-            firstLoad = false
-            
-            do {
-                
-                let path = Bundle.main.path(forResource: "fox2", ofType: "gif")!
-                let gifData = try NSData(contentsOfFile: path) as Data
-                let image = FLAnimatedImage(animatedGIFData: gifData)
-                
-                
-                self.loadingImage.animatedImage = image
-                
-            } catch {
-                print(error.localizedDescription)
-            }
-            
-            loadingView.backgroundColor = self.view.backgroundColor
-            
-        }
        
         let navigationBarAppearance = UINavigationBarAppearance()
         navigationBarAppearance.configureWithOpaqueBackground()
@@ -93,8 +71,7 @@ class SearchViewController: UIViewController, UINavigationControllerDelegate, UI
         
     }
     
-    
-    
+
 }
 
 extension SearchViewController {
@@ -185,24 +162,19 @@ extension SearchViewController {
                 
                 if !recentList.isEmpty {
                     
-                    DispatchQueue.main.async {
-                        self.hideAnimation()
+                    DispatchQueue.main.async { [weak self] in
+                        guard let self = self else { return }
+                      
                         self.recentTableNode.reloadData()
                         
                     }
                     
-                } else {
-                    DispatchQueue.main.async {
-                        self.hideAnimation()
-                    }
                 }
                 
                
                 
             case .failure(let error):
-                DispatchQueue.main.async {
-                    self.hideAnimation()
-                }
+        
                 print(error)
                
             }
@@ -270,8 +242,6 @@ extension SearchViewController {
 
         self.navigationItem.leftBarButtonItem = backButtonBarButton
 
-
-        
     }
     
    
@@ -401,19 +371,7 @@ extension SearchViewController: ASTableDataSource, ASTableDelegate {
             
             let item = recentList[indexPath.row]
             
-            if item.type == "game" {
-                
-                if let MSVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "MainSearchVC") as? MainSearchVC {
-                    
-                    MSVC.initialType = "post"
-                    MSVC.hidesBottomBarWhenPushed = true
-                    hideMiddleBtn(vc: self)
-                    MSVC.currentSearchText = item.game_shortName
-                    self.navigationController?.pushViewController(MSVC, animated: true)
-                    
-                }
-                
-            } else if item.type == "user" {
+            if item.type == "user" {
                 
                 saveRecentUser(userId: item.userId)
                 
@@ -484,12 +442,14 @@ extension SearchViewController {
             contentview.isHidden = true
             searchView.isHidden = false
             
-            delayItem.perform(after: 0.35) {
+            delayItem.perform(after: 0.35) { [weak self] in
+                guard let self = self else { return }
                 
                 self.search(for: searchText)
                 
             }
         }
+        
     }
     
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
@@ -517,7 +477,7 @@ extension SearchViewController {
     func search(for searchText: String) {
         
         //check local result first
-        if checkLocalRecords(searchText: searchText){
+        if checkLocalRecords(searchText: searchText) {
             return
         }
         
@@ -545,7 +505,8 @@ extension SearchViewController {
                     
                     if self.searchList != newSearchList {
                         self.searchList = newSearchList
-                        DispatchQueue.main.async {
+                        DispatchQueue.main.async { [weak self] in
+                            guard let self = self else { return }
                             self.searchTableNode.reloadData()
                         }
                     }
@@ -571,7 +532,8 @@ extension SearchViewController {
                     
                     if self.searchList != retrievedSearchList {
                         self.searchList = retrievedSearchList
-                        DispatchQueue.main.async {
+                        DispatchQueue.main.async { [weak self] in
+                            guard let self = self else { return }
                             self.searchTableNode.reloadData(completion: nil)
                         }
                     }
@@ -639,14 +601,16 @@ extension SearchViewController {
 
                 switch result {
                 case .success(_):
-                    DispatchQueue.main.async {
+                    DispatchQueue.main.async { [weak self] in
+                        guard let self = self else { return }
                         self.recentList.remove(at: row)
                         self.recentTableNode.deleteRows(at: [IndexPath(row: row, section: 0)], with: .automatic)
                         showNote(text: "Search removed!")
                     }
                    
                 case .failure(_):
-                    DispatchQueue.main.async {
+                    DispatchQueue.main.async { [weak self] in
+                        guard let self = self else { return }
                         showNote(text: "Unable to remove recent!")
                     }
                     
@@ -656,36 +620,6 @@ extension SearchViewController {
         }
         
     }
-    
-    
-    func hideAnimation() {
-        
-        if firstAnimated {
-                    
-                    firstAnimated = false
-                    
-                    UIView.animate(withDuration: 0.5) {
-                        
-                        Dispatch.main.async {
-                            self.loadingView.alpha = 0
-                        }
-                        
-                    }
-                    
-                    
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
-                        
-                        if self.loadingView.alpha == 0 {
-                            
-                            self.loadingView.isHidden = true
-                            
-                        }
-                        
-                    }
-                    
-                    
-                }
-        
-    }
+
     
 }

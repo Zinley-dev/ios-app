@@ -411,18 +411,17 @@ extension UIView {
 }
 
 extension UIView {
+    @discardableResult
     func addBottomBorderWithColor(color: UIColor, height: CGFloat, width: CGFloat) -> CALayer {
-        
         let border = CALayer()
         border.backgroundColor = color.cgColor
         border.frame = CGRect(x: 0, y: self.frame.size.height - height,
-                              width: width , height: height)
-        
-        
+                              width: width, height: height)
+        self.layer.addSublayer(border)
         return border
-        
     }
 }
+
 
 extension Dictionary {
     mutating func merge(dict: [Key: Value]){
@@ -511,10 +510,10 @@ extension UITableView {
 
 extension UICollectionView {
     
-    func setEmptyMessage(_ message: String) {
+    func setEmptyMessage(_ message: String, color: UIColor) {
         let messageLabel = UILabel(frame: CGRect(x: 0, y: 0, width: self.bounds.size.width - 120, height: self.bounds.size.height))
         messageLabel.text = message
-        messageLabel.textColor = .black
+        messageLabel.textColor = color
         messageLabel.numberOfLines = 3
         messageLabel.textAlignment = .center
         messageLabel.font = FontManager.shared.roboto(.Regular, size: 15)
@@ -1146,8 +1145,8 @@ extension UITextField {
         bottomLine.frame = CGRect(x: 0.0, y: self.bounds.height + 3, width: self.bounds.width, height: 1.5)
         bottomLine.backgroundColor = UIColor.lightGray.cgColor
         
-        self.borderStyle = UITextField.BorderStyle.none
-        self.layer.addSublayer(bottomLine)
+        borderStyle = UITextField.BorderStyle.none
+        layer.addSublayer(bottomLine)
     }
     
 }

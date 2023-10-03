@@ -6,11 +6,9 @@
 //
 
 import Foundation
-
 import UIKit
 import AsyncDisplayKit
 
-fileprivate let FontSize: CGFloat = 13
 
 class OwnerPostSearchNode: ASCellNode {
     
@@ -18,9 +16,9 @@ class OwnerPostSearchNode: ASCellNode {
     var isSave: Bool!
     var nameNode: ASTextNode!
     var imageNode: ASNetworkImageNode!
-    
+    var FontSize: CGFloat = 13
     let paragraphStyles = NSMutableParagraphStyle()
-    
+    private var didSetup = false
     
     private lazy var stitchSignNode: ASImageNode = {
         let imageNode = ASImageNode()
@@ -110,10 +108,7 @@ class OwnerPostSearchNode: ASCellNode {
         textNode.backgroundColor = .black // set the background color to dark gray
         textNode.maximumNumberOfLines = 1
 
-        DispatchQueue.main.async {
-            textNode.view.cornerRadius = 3
-        }
-        
+       
         return textNode
     }()
 
@@ -125,12 +120,35 @@ class OwnerPostSearchNode: ASCellNode {
         self.nameNode = ASTextNode()
         super.init()
         
+        stitchSignNode.isLayerBacked = true
+        stitchCountNode.isLayerBacked = true
+        videoSignNode.isLayerBacked = true
+        countNode.isLayerBacked = true
+        infoNode.isLayerBacked = true
+        nameNode.isLayerBacked = true
+        imageNode.isLayerBacked = true
+        imageNode.shouldRenderProgressImages = true
+        imageNode.url = post.imageUrl
+     
+        automaticallyManagesSubnodes = true
+        
+    }
+    
+    override func didEnterVisibleState() {
+            
+            if !didSetup {
+                setupLayout()
+            }
+            
+        }
+    
+    
+    func setupLayout() {
+        didSetup = true
         self.backgroundColor = .clear // set background to clear
 
       
         self.imageNode.backgroundColor = .clear
-       
-        imageNode.url = post.imageUrl
         imageNode.contentMode = .scaleAspectFill
         imageNode.cornerRadius = 10 // set corner radius of imageNode to 15
         
@@ -154,8 +172,8 @@ class OwnerPostSearchNode: ASCellNode {
             paragraphStyles.alignment = .center
             
             let title = post.content
-            let hashtags = post.hashtags.joined(separator: " ")
-            let combinedString = "\(title) \(hashtags)"
+            let hashtags = post.hashtags?.joined(separator: " ")
+            let combinedString = "\(title) \(hashtags ?? "")"
             let textToDisplay = String(combinedString.prefix(60))
 
             let textAttributes: [NSAttributedString.Key: Any] = [
@@ -186,15 +204,60 @@ class OwnerPostSearchNode: ASCellNode {
 
 
             
-        } else {
-            
         }
         
-        countView(with: post)
-        countViewStitch(with: post)
-        automaticallyManagesSubnodes = true
+        
+        setupUsername()
+        setupStitchCount()
+        setupViewCount()
         
     }
+    
+    func setupUsername() {
+        
+        let paragraphStyle = NSMutableParagraphStyle()
+        paragraphStyle.alignment = .center
+        infoNode.attributedText = NSAttributedString(
+            string: "@\(post.owner?.username ?? "")",
+            attributes: [
+                NSAttributedString.Key.font: FontManager.shared.roboto(.Bold, size: FontSize), // Using the Roboto Bold style
+                NSAttributedString.Key.foregroundColor: UIColor.white,
+                NSAttributedString.Key.paragraphStyle: paragraphStyle
+            ]
+        )
+        
+    }
+    
+    func setupStitchCount() {
+        
+        let paragraphStyle = NSMutableParagraphStyle()
+        paragraphStyle.alignment = .center
+        self.stitchCountNode.attributedText = NSAttributedString(
+            string: "\(formatPoints(num: Double(post.totalStitchTo + post.totalMemberStitch)))",
+            attributes: [
+                NSAttributedString.Key.font: FontManager.shared.roboto(.Regular, size: FontSize - 3), // Using the Roboto Regular style
+                NSAttributedString.Key.foregroundColor: UIColor.white,
+                NSAttributedString.Key.paragraphStyle: paragraphStyle
+            ]
+        )
+        
+    }
+    
+    func setupViewCount() {
+        
+        let paragraphStyle = NSMutableParagraphStyle()
+        paragraphStyle.alignment = .center
+        self.countNode.attributedText = NSAttributedString(
+            string: "\(formatPoints(num: Double(post.estimatedCount?.sizeViews ?? 0)))",
+            attributes: [
+                NSAttributedString.Key.font: FontManager.shared.roboto(.Regular, size: FontSize - 3), // Using the Roboto Regular style
+                NSAttributedString.Key.foregroundColor: UIColor.white,
+                NSAttributedString.Key.paragraphStyle: paragraphStyle
+            ]
+        )
+        
+    }
+
     
     override func layoutSpecThatFits(_ constrainedSize: ASSizeRange) -> ASLayoutSpec {
        
@@ -297,83 +360,6 @@ class OwnerPostSearchNode: ASCellNode {
             return insetLayoutSpec
             
         }
-    }
-
-
-    func countView(with data: PostModel) {
-        
-        APIManager.shared.getPostStats(postId: data.id) { [weak self] result in
-            guard let self = self else { return }
-
-            switch result {
-            case .success(let apiResponse):
-
-                guard let dataDictionary = apiResponse.body?["data"] as? [String: Any] else {
-                    print("Couldn't cast")
-                    return
-                }
-            
-                do {
-                    let data = try JSONSerialization.data(withJSONObject: dataDictionary, options: .fragmentsAllowed)
-                    let decoder = JSONDecoder()
-                    let stats = try decoder.decode(Stats.self, from: data)
-                    
-                    DispatchQueue.main.async {
-                        let paragraphStyle = NSMutableParagraphStyle()
-                        paragraphStyle.alignment = .center
-                        self.countNode.attributedText = NSAttributedString(
-                            string: "\(formatPoints(num: Double(stats.view.total)))",
-                            attributes: [
-                                NSAttributedString.Key.font: FontManager.shared.roboto(.Regular, size: FontSize - 3), // Using the Roboto Regular style
-                                NSAttributedString.Key.foregroundColor: UIColor.white,
-                                NSAttributedString.Key.paragraphStyle: paragraphStyle
-                            ]
-                        )
-
-                    }
-                } catch {
-                    print("Error decoding JSON: \(error)")
-                }
-            case .failure(let error):
-                print(error)
-            }
-        }
-        
-    }
-    
-    func countViewStitch(with data: PostModel) {
-        
-        APIManager.shared.countPostStitch(pid: data.id) { [weak self] result in
-            guard let self = self else { return }
-
-            switch result {
-            case .success(let apiResponse):
-                print(apiResponse)
-
-                guard let total = apiResponse.body?["total"] as? Int else {
-                    print("Couldn't find the 'total' key")
-                    return
-                }
-
-                DispatchQueue.main.async {
-                    let paragraphStyle = NSMutableParagraphStyle()
-                    paragraphStyle.alignment = .center
-                    self.stitchCountNode.attributedText = NSAttributedString(
-                        string: "\(formatPoints(num: Double(total)))",
-                        attributes: [
-                            NSAttributedString.Key.font: FontManager.shared.roboto(.Regular, size: FontSize - 3), // Using the Roboto Regular style
-                            NSAttributedString.Key.foregroundColor: UIColor.white,
-                            NSAttributedString.Key.paragraphStyle: paragraphStyle
-                        ]
-                    )
-
-                }
-                
-            case .failure(let error):
-                print(error)
-            }
-        }
-        
     }
 
 

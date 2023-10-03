@@ -19,8 +19,7 @@ class BlockedListVC: UIViewController {
     let backButton: UIButton = UIButton(type: .custom)
     
     @IBOutlet weak var contentView: UIView!
-    @IBOutlet weak var loadingImage: FLAnimatedImageView!
-    @IBOutlet weak var loadingView: UIView!
+   
     var blockList = [BlockUserModel]()
     var tableNode: ASTableNode!
     var firstAnimated = true
@@ -42,48 +41,7 @@ class BlockedListVC: UIViewController {
         setupTableNode()
         
     }
-    
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        loadingView.isHidden = true
-        /*
-        do {
-            
-            let path = Bundle.main.path(forResource: "fox2", ofType: "gif")!
-            let gifData = try NSData(contentsOfFile: path) as Data
-            let image = FLAnimatedImage(animatedGIFData: gifData)
-            
-            
-            self.loadingImage.animatedImage = image
-            
-        } catch {
-            print(error.localizedDescription)
-        }
-        
-        loadingView.backgroundColor = self.view.backgroundColor
-        */
-        
-        if firstAnimated {
-            
-            do {
-                
-                let path = Bundle.main.path(forResource: "fox2", ofType: "gif")!
-                let gifData = try NSData(contentsOfFile: path) as Data
-                let image = FLAnimatedImage(animatedGIFData: gifData)
-                
-                
-                self.loadingImage.animatedImage = image
-                
-            } catch {
-                print(error.localizedDescription)
-            }
-            
-            loadingView.backgroundColor = self.view.backgroundColor
-            
-        }
-        
-        
-    }
+
     
 }
 
@@ -290,7 +248,6 @@ extension BlockedListVC {
     func insertNewRowsInTableNode(newBlocks: [[String: Any]]) {
         
         guard newBlocks.count > 0 else {
-            hideAnimation()
             return
         }
         
@@ -315,38 +272,8 @@ extension BlockedListVC {
         self.blockList.append(contentsOf: items)
         self.tableNode.insertRows(at: indexPaths, with: .none)
         
-        hideAnimation()
-        
+     
     }
     
-    func hideAnimation() {
-        
-        if firstAnimated {
-            
-            firstAnimated = false
-            
-            UIView.animate(withDuration: 0.5) {
-                
-                Dispatch.main.async {
-                    self.loadingView.alpha = 0
-                }
-                
-            }
-            
-            
-            DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
-                
-                if self.loadingView.alpha == 0 {
-                    
-                    self.loadingView.isHidden = true
-                    
-                }
-                
-            }
-            
-            
-        }
-        
-    }
     
 }

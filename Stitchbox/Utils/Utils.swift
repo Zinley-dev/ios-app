@@ -26,7 +26,6 @@ enum UtilsAction {
 }
 
 class Utils: NSObject {
-    //    static let imageLoaderQueue = DispatchQueue.init(label: "com.sendbird.imageloader", qos: DispatchQoS.background, attributes: DispatchQueue.Attributes., autoreleaseFrequency: <#T##DispatchQueue.AutoreleaseFrequency#>, target: <#T##DispatchQueue?#>)
     static func getMessageDateStringFromTimestamp(_ timestamp: Int64) -> String? {
         var messageDateString: String = ""
         let messageDateFormatter: DateFormatter = DateFormatter()

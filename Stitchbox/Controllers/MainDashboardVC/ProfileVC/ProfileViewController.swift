@@ -16,10 +16,6 @@ class ProfileViewController: UIViewController {
     }
     
     
-    typealias ViewModelType = ProfileViewModel
-    // MARK: - Properties
-    private var currpage = 1
-    
     enum Section: Hashable {
         case header
         case posts
@@ -30,12 +26,17 @@ class ProfileViewController: UIViewController {
         case posts(PostModel)
     }
     
+    typealias ViewModelType = ProfileViewModel
+    // MARK: - Properties
+    private var currpage = 1
     
+    
+    let dispatchGroup = DispatchGroup()
     var followerCount = 0
     var followingCount = 0
     var stitchCount = 0
     var hasLoaded = false
-    
+    var reload = false
     
     typealias Datasource = UICollectionViewDiffableDataSource<Section, Item>
     typealias Snapshot = NSDiffableDataSourceSnapshot<Section, Item>
@@ -53,62 +54,10 @@ class ProfileViewController: UIViewController {
     }
     
     
-    func getMyPost(block: @escaping ([[String: Any]]) -> Void) {
-        
-        APIManager.shared.getMyPost(page: currpage) { [weak self] result in
-            guard let self = self else { return }
-            
-            switch result {
-            case .success(let apiResponse):
-                
-                guard let data = apiResponse.body?["data"] as? [[String: Any]] else {
-                    let item = [[String: Any]]()
-                    DispatchQueue.main.async {
-                        block(item)
-                    }
-                    return
-                }
-                if !data.isEmpty {
-                    
-                    print("Successfully retrieved \(data.count) posts.")
-                    self.currpage += 1
-                    let items = data
-                    DispatchQueue.main.async {
-                        block(items)
-                    }
-                } else {
-                    
-                    let item = [[String: Any]]()
-                    DispatchQueue.main.async {
-                        block(item)
-                    }
-                }
-            case .failure(let error):
-                print(error)
-                let item = [[String: Any]]()
-                DispatchQueue.main.async {
-                    block(item)
-                }
-            }
-        }
-        
-    }
-    
-    func insertNewRowsInCollectionNode(newPosts: [[String: Any]]) {
-        
-        // Check if there are new posts to insert
-        guard !newPosts.isEmpty else { return }
-        let newItems = newPosts.compactMap { PostModel(JSON: $0) }
-        var snapshot = self.datasource.snapshot()
-        
-        snapshot.appendItems(newItems.map({Item.posts($0)}), toSection: .posts)
-        self.datasource.apply(snapshot, animatingDifferences: true)
-        
-    }
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
+        
         
         NotificationCenter.default.addObserver(self, selector: #selector(ProfileViewController.refreshData), name: (NSNotification.Name(rawValue: "refreshData")), object: nil)
         
@@ -128,24 +77,14 @@ class ProfileViewController: UIViewController {
         collectionView.setCollectionViewLayout(createLayout(), animated: true)
         collectionView.register(ProfilePostsHeaderView.nib, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: ProfilePostsHeaderView.reuseIdentifier)
         collectionView.register(ImageViewCell.self, forCellWithReuseIdentifier: ImageViewCell.reuseIdentifier)
-        
         configureDatasource()
-        wireDelegate()
+
+       
+       
         setupSettingButton()
-        getFollowing()
-        getFollowers()
-        getStitchCount()
-        
-        self.getMyPost { (newPosts) in
-            
-            self.insertNewRowsInCollectionNode(newPosts: newPosts)
-            
-        }
-        
-        delay(2) {
-            self.hasLoaded = true
-        }
-        
+        reloadRequest()
+
+  
         
         if let navigationController = self.navigationController {
             navigationController.navigationBar.prefersLargeTitles = false
@@ -154,20 +93,30 @@ class ProfileViewController: UIViewController {
         
         
         
+        
     }
     
     
-    
+    func fetchDataAndUpdateUI() {
+        getStitchCount()
+        getFollowing()
+        getFollowers()
+
+        dispatchGroup.notify(queue: .main) {
+            self.applyChanges(to: [.header])
+        }
+    }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         // Hide the Navigation Bar
         
-       // self.navigationController?.setNavigationBarHidden(true, animated: animated)
+       
         
         // tabbar
-        showMiddleBtn(vc: self)
         
+        showMiddleBtn(vc: self)
+
         // check if need to refresh somethings
         
         if needRecount, hasLoaded {
@@ -183,7 +132,7 @@ class ProfileViewController: UIViewController {
             refreshPost()
             
         }
-        
+         
         
         let navigationBarAppearance = UINavigationBarAppearance()
         navigationBarAppearance.configureWithOpaqueBackground()
@@ -194,16 +143,9 @@ class ProfileViewController: UIViewController {
         self.navigationController?.navigationBar.standardAppearance = navigationBarAppearance
         self.navigationController?.navigationBar.scrollEdgeAppearance = navigationBarAppearance
         
-    }
-    
-    override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
-        // Show the Navigation Bar
         
-        //self.navigationController?.setNavigationBarHidden(false, animated: animated)
         
     }
-    
 
     func setupSettingButton() {
         
@@ -310,6 +252,11 @@ class ProfileViewController: UIViewController {
                 cell.followingStack.addGestureRecognizer(numberOfFollowingTap)
                 
                 
+                let insightTap = UITapGestureRecognizer(target: self, action: #selector(ProfileViewController.insightTapped))
+                cell.stitchStack.isUserInteractionEnabled = true
+                cell.stitchStack.addGestureRecognizer(insightTap)
+                
+                
                 return cell
                 
             } else {
@@ -322,6 +269,7 @@ class ProfileViewController: UIViewController {
             
         case .posts(let data):
             if let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ImageViewCell.reuseIdentifier, for: indexPath) as? ImageViewCell {
+                print("ImageViewCell: \(data.id)")
                 cell.configureWithUrl(with: data)
                 return cell
             } else {
@@ -343,7 +291,7 @@ class ProfileViewController: UIViewController {
         datasource.apply(snapshot(), animatingDifferences: false)
     }
     
-    
+
 }
 
 // selector for header
@@ -351,55 +299,63 @@ extension ProfileViewController {
     
     @objc func refreshListData(_ sender: Any) {
         
+        reloadRequest()
+
+    }
+    
+    func reloadRequest() {
+        reload = true
+        
         var snapshot = self.datasource.snapshot()
         snapshot.deleteItems(snapshot.itemIdentifiers(inSection: .posts))
         datasource.apply(snapshot, animatingDifferences: false) // Apply the updated snapshot
         
         currpage = 1
         
-        self.getMyPost { (newPosts) in
-            
+
+        self.getMyPost { [weak self] (newPosts) in
+            guard let self = self else { return }
             self.insertNewRowsInCollectionNode(newPosts: newPosts)
             
         }
-        
-        
-        reloadUserInformation {
-            self.reloadGetFollowers {
-                self.reloadGetFollowing {
-                    self.reloadGetStitches {
-                        self.applyAllChange()
-                        Dispatch.main.async {
-                            self.pullControl.endRefreshing()
-                        }
-                    }
-                }
-                
-            }
+        self.hasLoaded = true
+        refetchDataAndUpdateUI()
+    }
+    
+    func refetchDataAndUpdateUI() {
+        reloadUserInformation()
+        reloadGetFollowers()
+        reloadGetFollowing()
+        reloadGetStitches()
+
+        dispatchGroup.notify(queue: .main) {
+            self.applyChanges(to: [.header])
+            self.pullControl.endRefreshing()
+            
         }
-        
-        
     }
     
     @objc func refreshData(_ sender: Any) {
         
-        reloadUserInformation {
-            self.applyUIChange()
-            
+        reloadUserInformation()
+        
+        dispatchGroup.notify(queue: .main) {
+            self.applyChanges(to: [.header])
         }
         
+
         
     }
     
     func refreshFollow() {
         
-        reloadGetFollowers {
-            self.reloadGetFollowing {
-                self.applyHeaderChange()
-            }
+        reloadGetFollowers()
+        reloadGetFollowing()
+        
+        dispatchGroup.notify(queue: .main) {
+            self.applyChanges(to: [.header])
         }
-        
-        
+          
     }
     
     func refreshPost() {
@@ -409,11 +365,16 @@ extension ProfileViewController {
         datasource.apply(snapshot, animatingDifferences: false) // Apply the updated snapshot
         currpage = 1
         
-        self.getMyPost { (newPosts) in
-            
-            self.insertNewRowsInCollectionNode(newPosts: newPosts)
+        DispatchQueue.global(qos: .userInitiated).async { [weak self] in
+            guard let self = self else { return }
+            self.getMyPost { [weak self] (newPosts) in
+                guard let self = self else { return }
+                self.insertNewRowsInCollectionNode(newPosts: newPosts)
+                
+            }
             
         }
+        
         
         
     }
@@ -460,13 +421,12 @@ extension ProfileViewController {
     
     @objc func insightTapped(_ sender: UIButton) {
         
-  
-        
-        if let SSVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "StitchStatVC") as? StitchStatVC {
+
+        if let VSSTVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "ViewStitchStatsVC") as? ViewStitchStatsVC {
             
-            SSVC.hidesBottomBarWhenPushed = true
+            VSSTVC.hidesBottomBarWhenPushed = true
             hideMiddleBtn(vc: self)
-            self.navigationController?.pushViewController(SSVC, animated: true)
+            self.navigationController?.pushViewController(VSSTVC, animated: true)
             
         }
         
@@ -622,8 +582,8 @@ extension ProfileViewController {
 
     
     func createLayout() -> UICollectionViewLayout {
-        return UICollectionViewCompositionalLayout { [unowned self] index, env in
-            return self.sectionFor(index: index, environment: env)
+        return UICollectionViewCompositionalLayout { [weak self] index, env in
+            return self?.sectionFor(index: index, environment: env)
         }
     }
     
@@ -671,23 +631,43 @@ extension ProfileViewController: UICollectionViewDelegate {
             
         case .posts(_):
             
-            let selectedPost = datasource.snapshot().itemIdentifiers(inSection: .posts)
+            let selectedPosts = datasource.snapshot().itemIdentifiers(inSection: .posts)
                 .compactMap { item -> PostModel? in
                     if case .posts(let post) = item {
                         return post
                     }
                     return nil
                 }
-            
-            
-            if let SPVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "SelectedPostVC") as? SelectedPostVC {
+
+            if let SPVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "SelectedParentVC") as? SelectedParentVC {
+                // Find the index of the selected post
+                let currentIndex = indexPath.row
+
+                // Determine the range of posts to include before and after the selected post
                 
-                SPVC.selectedPost = selectedPost
-                SPVC.startIndex = indexPath.row
+
+                // Include up to 5 posts before and after the selected post in the sliced array
+                if selectedPosts.count <= 12 {
+                    SPVC.startIndex = currentIndex
+                    SPVC.posts = selectedPosts
+                } else {
+                    let beforeIndex = max(currentIndex - 5, 0)
+                    let afterIndex = min(currentIndex + 5, selectedPosts.count - 1)
+                    SPVC.startIndex = currentIndex - beforeIndex
+                    SPVC.posts = Array(selectedPosts[beforeIndex...afterIndex])
+                }
+
+                // Set the startIndex to the position of the selected post within the sliced array
+                
+                SPVC.page = currpage
+                SPVC.selectedLoadingMode = .myPost
+                SPVC.keepLoading = true
                 SPVC.hidesBottomBarWhenPushed = true
                 hideMiddleBtn(vc: self)
                 self.navigationController?.pushViewController(SPVC, animated: true)
             }
+
+
             
         case .none:
             print("None")
@@ -699,12 +679,26 @@ extension ProfileViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
         
         // Infinite scrolling logic
-        let snap = datasource.snapshot().itemIdentifiers(inSection: .posts)
-        if indexPath.row == snap.count - 5 {
-            self.getMyPost { (newPosts) in
-                self.insertNewRowsInCollectionNode(newPosts: newPosts)
+        if !reload {
+            
+            let snap = datasource.snapshot().itemIdentifiers(inSection: .posts)
+            
+            if snap.count != 0 {
+                
+                if indexPath.row == snap.count - 5 {
+                    self.getMyPost { [weak self] (newPosts) in
+                        guard let self = self else { return }
+                        self.insertNewRowsInCollectionNode(newPosts: newPosts)
+                    }
+ 
+                }
+                
             }
+  
+            
         }
+        
+        
     }
     
     
@@ -739,126 +733,92 @@ extension ProfileViewController {
     
     
     func getStitchCount() {
-        
+        dispatchGroup.enter()
         APIManager.shared.countMyStitch { [weak self] result in
+            defer { self?.dispatchGroup.leave() }  // Ensure that leave() is always called
             guard let self = self else { return }
             
             switch result {
             case .success(let apiResponse):
-                  
                 guard let totalStitch = apiResponse.body?["totalStitch"] as? Int else {
                     print("Couldn't find the 'totalStitch' key")
                     self.stitchCount = 0
                     return
                 }
-                
                 self.stitchCount = totalStitch
-                self.applyHeaderChange()
-                
             case .failure(let error):
                 self.stitchCount = 0
                 print("Error loading stitch: ", error)
-                
             }
         }
-        
-       
     }
-    
+
     func getFollowing() {
-        
+        dispatchGroup.enter()
         APIManager.shared.getFollows(page:1) { [weak self] result in
+            defer { self?.dispatchGroup.leave() }  // Ensure that leave() is always called
             guard let self = self else { return }
             
             switch result {
             case .success(let response):
-                
                 guard response.body?["message"] as? String == "success",
                       let data = response.body?["paging"] as? [String: Any] else {
                     self.followingCount = 0
                     return
                 }
-                
                 if let followingsGet = data["total"] as? Int {
                     self.followingCount = followingsGet
                 } else {
                     self.followingCount = 0
                 }
-                
-                self.applyHeaderChange()
-                
             case .failure(let error):
+                self.followingCount = 0
                 print("Error loading following: ", error)
-                
             }
         }
     }
-    
+
     func getFollowers() {
-        
+        dispatchGroup.enter()
         APIManager.shared.getFollowers(page: 1) { [weak self] result in
+            defer { self?.dispatchGroup.leave() }  // Ensure that leave() is always called
             guard let self = self else { return }
             
             switch result {
             case .success(let response):
                 guard response.body?["message"] as? String == "success",
                       let data = response.body?["paging"] as? [String: Any] else {
+                    self.followerCount = 0
                     return
                 }
-                
                 if let followersGet = data["total"] as? Int {
                     self.followerCount = followersGet
                 } else {
                     self.followerCount = 0
                 }
-                
-                self.applyHeaderChange()
-                
             case .failure(let error):
+                self.followerCount = 0
                 print("Error loading follower: ", error)
             }
         }
     }
 
     
-    func applyHeaderChange() {
-        
-        Dispatch.main.async {
+    func applyChanges(to sections: [Section], animatingDifferences: Bool = false) {
+        DispatchQueue.main.async { [weak self] in
+            guard let self = self else { return }
             var updatedSnapshot = self.datasource.snapshot()
-            updatedSnapshot.reloadSections([.header])
-            self.datasource.apply(updatedSnapshot, animatingDifferences: false)
-            
-            
+            updatedSnapshot.reloadSections(sections)
+            self.datasource.apply(updatedSnapshot, animatingDifferences: animatingDifferences)
         }
-        
-        
     }
+
     
-    func applyAllChange() {
-        Dispatch.main.async {
-            var updatedSnapshot = self.datasource.snapshot()
-            updatedSnapshot.reloadSections([.header, .posts])
-            self.datasource.apply(updatedSnapshot, animatingDifferences: false)
-        }
-        
-    }
-    
-    func applyUIChange() {
-        
-        Dispatch.main.async {
-            var updatedSnapshot = self.datasource.snapshot()
-            updatedSnapshot.reloadSections([.header])
-            self.datasource.apply(updatedSnapshot, animatingDifferences: false)
-        }
-        
-        
-    }
-    
-    
-    func reloadUserInformation(completed: @escaping DownloadComplete) {
-        
-        APIManager.shared.getme { result in
-           
+    func reloadUserInformation() {
+        dispatchGroup.enter()
+        APIManager.shared.getme { [weak self ]result in
+            guard let self = self else { return }
+            defer { self.dispatchGroup.leave() }  // Ensure that leave() is always called
             switch result {
             case .success(let response):
                 
@@ -869,42 +829,35 @@ extension ProfileViewController {
                         if let newUserData = Mapper<UserDataSource>().map(JSON: data) {
                             _AppCoreData.reset()
                             _AppCoreData.userDataSource.accept(newUserData)
-                            completed()
-                        } else {
-                            completed()
+                           
                         }
                         
                         
-                    } else {
-                        completed()
                     }
-                    
-                } else {
-                    completed()
                 }
                 
                 
             case .failure(let error):
                 print("Error loading profile: ", error)
-                completed()
+                
             }
         }
         
     }
     
     
-    func reloadGetFollowing(completed: @escaping DownloadComplete) {
-        
+    func reloadGetFollowing() {
+        dispatchGroup.enter()
         APIManager.shared.getFollows(page:1) { [weak self] result in
             guard let self = self else { return }
-            
+            defer { self.dispatchGroup.leave() }  // Ensure that leave() is always called
             switch result {
             case .success(let response):
                 
                 guard response.body?["message"] as? String == "success",
                       let data = response.body?["paging"] as? [String: Any] else {
                     self.followingCount = 0
-                    completed()
+                   
                     return
                 }
                 
@@ -914,25 +867,25 @@ extension ProfileViewController {
                     self.followingCount = 0
                 }
                 
-                completed()
+                
                 
             case .failure(let error):
                 print("Error loading following: ", error)
-                completed()
+               
                 
             }
         }
     }
-    func reloadGetFollowers(completed: @escaping DownloadComplete) {
-        
+    func reloadGetFollowers() {
+        dispatchGroup.enter()
         APIManager.shared.getFollowers(page: 1) { [weak self] result in
             guard let self = self else { return }
-            
+            defer { self.dispatchGroup.leave() }  // Ensure that leave() is always called
             switch result {
             case .success(let response):
                 guard response.body?["message"] as? String == "success",
                       let data = response.body?["paging"] as? [String: Any] else {
-                    completed()
+                   
                     return
                 }
                 
@@ -942,39 +895,88 @@ extension ProfileViewController {
                     self.followerCount = 0
                 }
                 
-                completed()
                 
             case .failure(let error):
                 print("Error loading follower: ", error)
-                completed()
+               
             }
         }
     }
 
     
-    func reloadGetStitches(completed: @escaping DownloadComplete) {
-        
+    func reloadGetStitches() {
+        dispatchGroup.enter()
         APIManager.shared.countMyStitch { [weak self] result in
             guard let self = self else { return }
-            
+            defer { self.dispatchGroup.leave() }  // Ensure that leave() is always called
             switch result {
             case .success(let apiResponse):
                   
                 guard let totalStitch = apiResponse.body?["totalStitch"] as? Int else {
                     print("Couldn't find the 'totalStitch' key")
                     self.stitchCount = 0
-                    completed()
+                   
                     return
                 }
                 
                 self.stitchCount = totalStitch
-                completed()
+               
                 
             case .failure(let error):
                 self.stitchCount = 0
                 print("Error loading stitch: ", error)
-                completed()
+                
             }
+        }
+    }
+    
+    
+    func getMyPost(block: @escaping ([[String: Any]]) -> Void) {
+        
+        APIManager.shared.getMyPost(page: currpage) { [weak self] result in
+            guard let self = self else { return }
+            
+            switch result {
+            case .success(let apiResponse):
+                if let data = apiResponse.body?["data"] as? [[String: Any]], !data.isEmpty {
+                    print("Successfully retrieved \(data.count) posts.")
+                    self.currpage += 1
+                    DispatchQueue.main.async {
+                        block(data)
+                    }
+                } else {
+                    self.completeWithEmptyData(block)
+                }
+            case .failure(let error):
+                print(error)
+                self.completeWithEmptyData(block)
+            }
+        }
+
+    }
+    
+    func insertNewRowsInCollectionNode(newPosts: [[String: Any]]) {
+       
+        // Check if there are new posts to insert
+        guard !newPosts.isEmpty else { return }
+        let newItems = newPosts.compactMap { PostModel(JSON: $0) }
+        var snapshot = self.datasource.snapshot()
+        
+        snapshot.appendItems(newItems.map({Item.posts($0)}), toSection: .posts)
+        self.datasource.apply(snapshot, animatingDifferences: true)
+        
+        if reload {
+            
+            reload = false
+            
+        }
+    
+        
+    }
+    
+    private func completeWithEmptyData(_ block: @escaping ([[String: Any]]) -> Void) {
+        DispatchQueue.main.async {
+            block([])
         }
     }
     

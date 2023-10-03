@@ -25,6 +25,9 @@
                 <outlet property="sendBtn" destination="TuH-Cb-yxi" id="Azn-vE-WAp"/>
                 <outlet property="shareBtn" destination="xsd-tc-ENb" id="Fhd-vL-7TZ"/>
                 <outlet property="shareView" destination="KbD-rn-4rK" id="vyu-Xi-Bly"/>
+                <outlet property="showInfoBtn" destination="W0x-b2-TIS" id="aex-Gp-Fy2"/>
+                <outlet property="showInfoLbl" destination="x4u-vr-ob6" id="vX7-UU-LyK"/>
+                <outlet property="showInfoStack" destination="J1h-1X-IAB" id="gCP-RV-1sN"/>
                 <outlet property="view" destination="i5M-Pr-FkT" id="FJR-D2-5dI"/>
             </connections>
         </placeholder>
@@ -34,10 +37,56 @@
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
                 <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="center" spacing="25" translatesAutoresizingMaskIntoConstraints="NO" id="hKr-NG-5QU">
-                    <rect key="frame" x="36" y="80" width="336" height="299"/>
+                    <rect key="frame" x="36" y="80" width="336" height="380"/>
                     <subviews>
-                        <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="5" translatesAutoresizingMaskIntoConstraints="NO" id="oVg-O0-80Z">
+                        <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="5" translatesAutoresizingMaskIntoConstraints="NO" id="J1h-1X-IAB">
                             <rect key="frame" x="0.0" y="0.0" width="336" height="56"/>
+                            <subviews>
+                                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="KiP-ax-1Wa">
+                                    <rect key="frame" x="0.0" y="0.0" width="336" height="50"/>
+                                    <subviews>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Show video information" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="x4u-vr-ob6">
+                                            <rect key="frame" x="0.0" y="0.0" width="336" height="50"/>
+                                            <fontDescription key="fontDescription" name="Roboto-Medium" family="Roboto" pointSize="15"/>
+                                            <color key="textColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="W0x-b2-TIS">
+                                            <rect key="frame" x="0.0" y="0.0" width="336" height="50"/>
+                                            <state key="normal" title="Button"/>
+                                            <buttonConfiguration key="configuration" style="plain"/>
+                                            <connections>
+                                                <action selector="showVideoInfoBtnPressed:" destination="-1" eventType="touchUpInside" id="URd-LF-Pk5"/>
+                                            </connections>
+                                        </button>
+                                    </subviews>
+                                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                    <constraints>
+                                        <constraint firstAttribute="bottom" secondItem="x4u-vr-ob6" secondAttribute="bottom" id="55h-5m-tHh"/>
+                                        <constraint firstAttribute="trailing" secondItem="W0x-b2-TIS" secondAttribute="trailing" id="GA8-Z6-FHJ"/>
+                                        <constraint firstItem="W0x-b2-TIS" firstAttribute="top" secondItem="KiP-ax-1Wa" secondAttribute="top" id="LY9-rb-SXx"/>
+                                        <constraint firstItem="x4u-vr-ob6" firstAttribute="top" secondItem="KiP-ax-1Wa" secondAttribute="top" id="Saa-nJ-8VB"/>
+                                        <constraint firstItem="W0x-b2-TIS" firstAttribute="leading" secondItem="KiP-ax-1Wa" secondAttribute="leading" id="VeR-FT-2ar"/>
+                                        <constraint firstItem="x4u-vr-ob6" firstAttribute="leading" secondItem="KiP-ax-1Wa" secondAttribute="leading" id="cxO-cT-uLl"/>
+                                        <constraint firstAttribute="trailing" secondItem="x4u-vr-ob6" secondAttribute="trailing" id="dcv-1t-8PE"/>
+                                        <constraint firstAttribute="bottom" secondItem="W0x-b2-TIS" secondAttribute="bottom" id="ted-gB-rB5"/>
+                                    </constraints>
+                                </view>
+                                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="5p2-Yb-fsl">
+                                    <rect key="frame" x="0.0" y="55" width="336" height="1"/>
+                                    <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                    <constraints>
+                                        <constraint firstAttribute="height" constant="1" id="v6X-1B-scq"/>
+                                    </constraints>
+                                </view>
+                            </subviews>
+                            <constraints>
+                                <constraint firstAttribute="trailing" secondItem="5p2-Yb-fsl" secondAttribute="trailing" id="1NZ-3k-4bF"/>
+                                <constraint firstItem="5p2-Yb-fsl" firstAttribute="leading" secondItem="J1h-1X-IAB" secondAttribute="leading" id="FX6-mH-H6y"/>
+                            </constraints>
+                        </stackView>
+                        <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="5" translatesAutoresizingMaskIntoConstraints="NO" id="oVg-O0-80Z">
+                            <rect key="frame" x="0.0" y="81" width="336" height="56"/>
                             <subviews>
                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="MZc-T6-sbf">
                                     <rect key="frame" x="0.0" y="0.0" width="336" height="50"/>
@@ -83,12 +132,12 @@
                             </constraints>
                         </stackView>
                         <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="5" translatesAutoresizingMaskIntoConstraints="NO" id="nB0-wB-TAq">
-                            <rect key="frame" x="0.0" y="81" width="336" height="56"/>
+                            <rect key="frame" x="0.0" y="162" width="336" height="56"/>
                             <subviews>
                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="bz6-g0-xmb">
                                     <rect key="frame" x="0.0" y="0.0" width="336" height="50"/>
                                     <subviews>
-                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Share post" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="fZS-bk-xgW">
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Share video" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="fZS-bk-xgW">
                                             <rect key="frame" x="0.0" y="0.0" width="336" height="50"/>
                                             <fontDescription key="fontDescription" name="Roboto-Medium" family="Roboto" pointSize="15"/>
                                             <color key="textColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -129,12 +178,12 @@
                             </constraints>
                         </stackView>
                         <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="5" translatesAutoresizingMaskIntoConstraints="NO" id="g3M-j5-SZF">
-                            <rect key="frame" x="0.0" y="162" width="336" height="56"/>
+                            <rect key="frame" x="0.0" y="243" width="336" height="56"/>
                             <subviews>
                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="qXc-99-t1x">
                                     <rect key="frame" x="0.0" y="0.0" width="336" height="50"/>
                                     <subviews>
-                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Report this post" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="oGs-JA-FUh">
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Report this video" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="oGs-JA-FUh">
                                             <rect key="frame" x="0.0" y="0.0" width="336" height="50"/>
                                             <fontDescription key="fontDescription" name="Roboto-Medium" family="Roboto" pointSize="15"/>
                                             <color key="textColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -175,12 +224,12 @@
                             </constraints>
                         </stackView>
                         <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="5" translatesAutoresizingMaskIntoConstraints="NO" id="6IN-HM-DBG">
-                            <rect key="frame" x="0.0" y="243" width="336" height="56"/>
+                            <rect key="frame" x="0.0" y="324" width="336" height="56"/>
                             <subviews>
                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="QgZ-8g-3jK">
                                     <rect key="frame" x="0.0" y="0.0" width="336" height="50"/>
                                     <subviews>
-                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Remove this post" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Qbn-DM-dCb">
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Remove this video" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Qbn-DM-dCb">
                                             <rect key="frame" x="0.0" y="0.0" width="336" height="50"/>
                                             <fontDescription key="fontDescription" name="Roboto-Medium" family="Roboto" pointSize="15"/>
                                             <color key="textColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>

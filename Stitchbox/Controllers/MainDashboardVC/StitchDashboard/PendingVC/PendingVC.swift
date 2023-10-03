@@ -32,6 +32,10 @@ class PendingVC: UIViewController, UINavigationBarDelegate, UINavigationControll
     var newPlayingIndex: Int?
     var firstWaitReload = true
     var rootPost: PostModel!
+    var refresh_request = false
+    
+    private var pullControl = UIRefreshControl()
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -39,7 +43,91 @@ class PendingVC: UIViewController, UINavigationBarDelegate, UINavigationControll
         // Do any additional setup after loading the view.
         
         setupCollectionNode()
+        if #available(iOS 10.0, *) {
+            waitCollectionNode.view.refreshControl = pullControl
+        } else {
+            myCollectionNode.view.addSubview(pullControl)
+            
+        }
+        
+        pullControl.tintColor = .secondary
+        pullControl.addTarget(self, action: #selector(refreshListData(_:)), for: .valueChanged)
+      
+        
     }
+    
+    @objc private func refreshListData(_ sender: Any) {
+        // self.pullControl.endRefreshing() // You can stop after API Call
+        // Call API
+        
+        clearAllData()
+        
+    }
+    
+    
+    @objc func clearAllData() {
+        
+        if rootPost != nil {
+            
+            refresh_request = true
+            waitPage = 1
+            currentIndex = 0
+            updateData()
+            
+        } else {
+            
+            if self.pullControl.isRefreshing == true {
+                self.pullControl.endRefreshing()
+            }
+            
+        }
+        
+    
+    }
+    
+    
+    func updateData() {
+        
+    
+        self.retrieveNextPageForWaitListWithCompletion { [weak self] (newPosts) in
+            guard let self = self else { return }
+            
+            if newPosts.count > 0 {
+                
+                self.insertNewRowsInCollectionNodeForWaitList(newPosts: newPosts)
+                
+                
+            } else {
+                
+                
+                self.refresh_request = false
+                self.waitPost.removeAll()
+                self.waitCollectionNode.reloadData()
+                
+                if self.waitPost.isEmpty == true {
+                    
+                    self.waitCollectionNode.view.setEmptyMessage("No stitch found", color: .black)
+                    
+                    
+                } else {
+                    
+                    self.waitCollectionNode.view.restore()
+                    
+                }
+                
+            }
+            
+            if self.pullControl.isRefreshing == true {
+                self.pullControl.endRefreshing()
+            }
+            
+     
+        }
+        
+        
+    }
+   
+
 
 }
 
@@ -101,14 +189,14 @@ extension PendingVC: ASCollectionDataSource {
         if collectionNode == myCollectionNode {
             
             if self.myPost.isEmpty {
-                myCollectionNode.view.setEmptyMessage("No post found")
+                myCollectionNode.view.setEmptyMessage("No post found", color: .black)
             } else {
                 myCollectionNode.view.restore()
             }
             return self.myPost.count
         } else {
             if self.myPost.isEmpty {
-                waitCollectionNode.view.setEmptyMessage("No stitch found")
+                waitCollectionNode.view.setEmptyMessage("No stitch found", color: .black)
             } else {
                 waitCollectionNode.view.restore()
             }
@@ -136,7 +224,7 @@ extension PendingVC: ASCollectionDataSource {
             
             let post = self.waitPost[indexPath.row]
             
-            return {
+            return { [weak self] in
                 let node = PendingNode(with: post)
                 node.neverShowPlaceholders = true
                 node.debugName = "Node \(indexPath.row)"
@@ -173,12 +261,23 @@ extension PendingVC: ASCollectionDataSource {
             
         } else if collectionNode == waitCollectionNode {
             
-            retrieveNextPageForWaitListWithCompletion { [weak self] (newPosts) in
-                guard let self = self else { return }
-                self.insertNewRowsInCollectionNodeForWaitList(newPosts: newPosts)
+            if refresh_request == false {
+                
+                retrieveNextPageForWaitListWithCompletion { [weak self] (newPosts) in
+                    guard let self = self else { return }
+                    self.insertNewRowsInCollectionNodeForWaitList(newPosts: newPosts)
 
+                    context.completeBatchFetching(true)
+                }
+                
+            } else {
+                
+                
                 context.completeBatchFetching(true)
+                
             }
+            
+            
             
         } else {
             
@@ -475,6 +574,15 @@ extension PendingVC {
         guard newPosts.count > 0 else {
             return
         }
+        
+        if refresh_request {
+
+            refresh_request = false
+            self.waitPost.removeAll()
+            self.waitCollectionNode.reloadData()
+            
+        }
+        
 
         // Create new PostModel objects and append them to the current posts
         var items = [PostModel]()
@@ -579,20 +687,8 @@ extension PendingVC {
                 } else {
                     // Do nothing if the current index is the same as newPlayingIndex
                 }
-            } else {
+            }
 
-            }
-            
-            // If the video is stuck, reset the buffer by seeking to the current playback time.
-            if let currentIndex = currentIndex, let cell = waitCollectionNode.nodeForItem(at: IndexPath(row: currentIndex, section: 0)) as? PendingNode {
-                if let playerItem = cell.videoNode.currentItem, !playerItem.isPlaybackLikelyToKeepUp {
-                    if let currentTime = cell.videoNode.currentItem?.currentTime() {
-                        cell.videoNode.player?.seek(to: currentTime)
-                    } else {
-                        cell.videoNode.player?.seek(to: CMTime.zero)
-                    }
-                }
-            }
             
             // If there's no current playing video and no visible video, pause the last playing video, if any.
             if !isVideoPlaying && currentIndex != nil {
@@ -607,34 +703,20 @@ extension PendingVC {
         if let cell = self.waitCollectionNode.nodeForItem(at: IndexPath(row: index, section: 0)) as? PendingNode {
             
             // Seek to the beginning of the video
-            cell.videoNode.player?.seek(to: CMTime(seconds: 0, preferredTimescale: 1))
+            cell.pauseVideo()
              
-            // Pause the video
-            cell.videoNode.pause()
             
         }
         
     }
 
-    
-    
-    func seekVideo(index: Int, time: CMTime) {
-        
-        if let cell = self.waitCollectionNode.nodeForItem(at: IndexPath(row: index, section: 0)) as? PendingNode {
-            
-            cell.videoNode.player?.seek(to: time)
-            
-        }
-        
-    }
-    
+
     
     func playVideo(index: Int) {
         
         if let cell = self.waitCollectionNode.nodeForItem(at: IndexPath(row: index, section: 0)) as? PendingNode {
             
-            cell.videoNode.muted = shouldMute ?? !globalIsSound
-            cell.videoNode.play()
+            cell.playVideo()
             
         }
         
@@ -652,9 +734,8 @@ extension PendingVC {
             
             APIManager.shared.acceptStitch(rootId: rootPost.id, memberId: post.id) { [weak self] result in
                 guard let self = self else { return }
-                
                 switch result {
-                case .success(let apiResponse):
+                case .success(_):
                     
                     Dispatch.main.async { [weak self]  in
                         guard let self = self else { return }
@@ -694,6 +775,8 @@ extension PendingVC {
                 // return the next index if it exists
                 if indexPath < waitPost.count {
                     playVideo(index: indexPath)
+                } else if waitPost.count == 1 {
+                    playVideo(index: 0)
                 }
 
             }
@@ -717,9 +800,8 @@ extension PendingVC {
             
             APIManager.shared.deniedStitch(rootId: rootPost.id, memberId: post.id) { [weak self] result in
                 guard let self = self else { return }
-                
                 switch result {
-                case .success(let apiResponse):
+                case .success(_):
                     
                     Dispatch.main.async { [weak self]  in
                         guard let self = self else { return }
@@ -733,6 +815,8 @@ extension PendingVC {
                             // return the next index if it exists
                             if indexPath < waitPost.count {
                                 playVideo(index: indexPath)
+                            } else if waitPost.count == 1 {
+                                playVideo(index: 0)
                             }
                             
                         }

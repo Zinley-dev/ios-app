@@ -6,9 +6,7 @@
 //
 
 import UIKit
-import FirebaseCore
 import GoogleSignIn
-import FBSDKCoreKit
 import SendBirdSDK
 import SendBirdCalls
 import PushKit
@@ -16,16 +14,11 @@ import UserNotifications
 import SendBirdUIKit
 import PixelSDK
 import UserNotifications
-import TikTokOpenSDK
 import OneSignal
-import GooglePlaces
-import GoogleMaps
 import Sentry
 import SwipeTransition
 import SwipeTransitionAutoSwipeBack
 import SwipeTransitionAutoSwipeToDismiss
-import AppsFlyerLib
-import AppTrackingTransparency
 
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterDelegate, SBDChannelDelegate {
@@ -34,7 +27,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
     var voipRegistry: PKPushRegistry?
     var volumeOutputList = [Float]()
     static let sharedInstance = UIApplication.shared.delegate as! AppDelegate
-    lazy var delayItem = workItem()
+    var metricsManager: AppMetrics?
     private var audioLevel : Float = 0.0
     
     private var previousVolume: Float = 0.0
@@ -45,15 +38,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         _ application: UIApplication,
         didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?)
     -> Bool {
-        ApplicationDelegate.shared.application(
-            application,
-            didFinishLaunchingWithOptions: launchOptions
-        )
-        
-        UNUserNotificationCenter.current().delegate = self
-        setupPixelSDK()
-        sendbird_authentication()
-        registerAppsFlyer()
+    
         
         setupPixelSDK()
         sendbird_authentication()
@@ -64,13 +49,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         activeSpeaker()
         setupVolumeObserver()
         sentrySetup()
+        CacheManager.shared.asyncRemoveExpiredObjects()
+        metricsManager = AppMetrics()
         
         
-        GMSServices.provideAPIKey("AIzaSyAAYuBDXTubo_qcayPX6og_MrWq9-iM_KE")
-        GMSPlacesClient.provideAPIKey("AIzaSyAAYuBDXTubo_qcayPX6og_MrWq9-iM_KE")
-        
-        //SwipeBackConfiguration.shared = CustomSwipeBackConfiguration()
-     
         return true
         
     }
@@ -79,13 +61,19 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
     func sentrySetup() {
         
         SentrySDK.start { options in
-            options.dsn = "https://3406dbc29f884019aa59d9319a12b765@o4505243020689408.ingest.sentry.io/4505243021606912"
-            options.debug = true // Enabled debug when first installing is always helpful
-            
-            // Set tracesSampleRate to 1.0 to capture 100% of transactions for performance monitoring.
-            // We recommend adjusting this value in production.
-            options.tracesSampleRate = 1.0
-        }
+                options.dsn = "https://f303994ce86f5234623d9f66dbe6f6cb@o4505682647646208.ingest.sentry.io/4505682648170496"
+                options.debug = true // Enabled debug when first installing is always helpful
+
+                // Set tracesSampleRate to 1.0 to capture 100% of transactions for performance monitoring.
+                // We recommend adjusting this value in production.
+                options.tracesSampleRate = 1.0
+                options.attachViewHierarchy = true
+                options.enablePreWarmedAppStartTracing = true
+                options.enableMetricKit = true
+               
+               
+            }
+
         
     }
     
@@ -173,10 +161,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
                     case "NEW_FOLLOW_2":
                         self.openFollow()
                     case "NEW_TAG":
-                        if let post = metaDataOneSignal.post {
-                            self.openComment(commentId: metaDataOneSignal.commentId, rootComment: metaDataOneSignal.rootComment, replyToComment: metaDataOneSignal.replyToComment, type: template, post: post)
-                        }
-                    case "MENTION_IN_COMMENT":
                         if let post = metaDataOneSignal.post {
                             self.openComment(commentId: metaDataOneSignal.commentId, rootComment: metaDataOneSignal.rootComment, replyToComment: metaDataOneSignal.replyToComment, type: template, post: post)
                         }
@@ -319,35 +303,18 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
             // redirect(to: view, with: parameters)
         }
         
-        guard let sourceApplication = options[UIApplication.OpenURLOptionsKey.sourceApplication] as? String,
-              let annotation = options[UIApplication.OpenURLOptionsKey.annotation] else {
-            return false
-        }
+       
         
-        if TikTokOpenSDKApplicationDelegate.sharedInstance().application(application, open: url, sourceApplication: sourceApplication, annotation: annotation) {
-            return true
-        }
-        
-        ApplicationDelegate.shared.application(
-            application,
-            open: url,
-            sourceApplication: options[UIApplication.OpenURLOptionsKey.sourceApplication] as? String,
-            annotation: options[UIApplication.OpenURLOptionsKey.annotation]
-        )
         return GIDSignIn.sharedInstance.handle(url)
     }
     
     func application(_ application: UIApplication, open url: URL, sourceApplication: String?, annotation: Any) -> Bool {
-        if TikTokOpenSDKApplicationDelegate.sharedInstance().application(application, open: url, sourceApplication: sourceApplication, annotation: annotation) {
-            return true
-        }
+        
         return false
     }
     
     func application(_ application: UIApplication, handleOpen url: URL) -> Bool {
-        if TikTokOpenSDKApplicationDelegate.sharedInstance().application(application, open: url, sourceApplication: nil, annotation: "") {
-            return true
-        }
+        
         return false
     }
     
@@ -577,7 +544,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
             if let vc = UIViewController.currentViewController() {
                 
                 
-                if vc is FeedViewController || vc is TrendingVC || vc is MainMessageVC || vc is ProfileViewController {
+                if vc is ParentViewController || vc is TrendingVC || vc is MainMessageVC || vc is ProfileViewController {
                     
                     if let nav = vc.navigationController {
                         
@@ -617,7 +584,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
     
     func openPost(post: PostModel) {
         
-        if let SPVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "SelectedPostVC") as? SelectedPostVC {
+        if let SPVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "SelectedParentVC") as? SelectedParentVC {
             
             if let vc = UIViewController.currentViewController() {
                 
@@ -625,15 +592,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
                 
                 // Set the user ID, nickname, and onPresent properties of UPVC
                 SPVC.onPresent = true
-                SPVC.selectedPost = [post]
+                SPVC.posts = [post]
                 SPVC.startIndex = 0
                 
-                
-                // Customize the navigation bar appearance
-                nav.navigationBar.barTintColor = .background
-                nav.navigationBar.tintColor = .white
-                nav.navigationBar.titleTextAttributes = [.foregroundColor: UIColor.white]
-                
+              
                 nav.modalPresentationStyle = .fullScreen
                 vc.present(nav, animated: true, completion: nil)
                 
@@ -738,21 +700,58 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
     func applicationDidBecomeActive(_ application: UIApplication) {
         UIApplication.shared.applicationIconBadgeNumber = 0
         requestAppleReview()
-        if _AppCoreData.userDataSource.value?.userID != "" {
-            requestTrackingAuthorization(userId: _AppCoreData.userDataSource.value?.userID ?? "")
+        
+        do {
+            let maxSizeInBytes: UInt64 = UInt64(0.5 * 1024 * 1024 * 1024)  // 1GB
+            try maintainTmpDirectory(maxSizeInBytes: maxSizeInBytes)
+        } catch {
+            print("Failed to maintain tmp directory with error: \(error)")
         }
-        
-        
+
     }
     
-    func registerAppsFlyer() {
+    func maintainTmpDirectory(maxSizeInBytes: UInt64) throws {
+        let tmpURL = URL(fileURLWithPath: NSTemporaryDirectory())
+        let fileManager = FileManager.default
         
-        AppsFlyerLib.shared().appsFlyerDevKey = "sumV9RMiJVui7vtQoBVEx"
-        AppsFlyerLib.shared().appleAppID = "1660843872"
-        
+        do {
+            let tmpFiles = try fileManager.contentsOfDirectory(at: tmpURL, includingPropertiesForKeys: nil, options: [])
+            
+            var totalSize: UInt64 = 0
+            var fileAttributesMap: [URL: (UInt64, Date)] = [:]
+            
+            for fileURL in tmpFiles {
+                let attributes = try fileManager.attributesOfItem(atPath: fileURL.path)
+                if let fileSize = attributes[.size] as? UInt64,
+                   let modificationDate = attributes[.modificationDate] as? Date {
+                    totalSize += fileSize
+                    fileAttributesMap[fileURL] = (fileSize, modificationDate)
+                }
+            }
+            
+            if totalSize > maxSizeInBytes {
+                let sortedFiles = fileAttributesMap.sorted { $0.1.1 < $1.1.1 }
+                
+                var bytesToDelete = totalSize - maxSizeInBytes
+                for (fileURL, (fileSize, _)) in sortedFiles {
+                    try fileManager.removeItem(at: fileURL)
+                    
+                    if fileSize >= bytesToDelete {
+                        break
+                    }
+                    
+                    bytesToDelete -= fileSize
+                }
+            }
+            
+            print("Successfully maintained tmp directory.")
+        } catch {
+            print("Error maintaining tmp directory: \(error)")
+            throw error
+        }
     }
-    
-     
+
+
     
 }
 

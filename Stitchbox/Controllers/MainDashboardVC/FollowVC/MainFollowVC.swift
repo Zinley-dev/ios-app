@@ -6,7 +6,6 @@
 //
 
 import UIKit
-import FLAnimatedImage
 
 class MainFollowVC: UIViewController, UINavigationBarDelegate, UINavigationControllerDelegate, UISearchBarDelegate {
     
@@ -23,6 +22,9 @@ class MainFollowVC: UIViewController, UINavigationBarDelegate, UINavigationContr
     @IBOutlet weak var contentViewTopConstant: NSLayoutConstraint!
     @IBOutlet weak var buttonStackView: UIStackView!
     
+    var followerBorder = CALayer()
+    var followingBorder = CALayer()
+    
     var searchController: UISearchController?
     var showFollowerFirst = false
     var type = ""
@@ -33,9 +35,7 @@ class MainFollowVC: UIViewController, UINavigationBarDelegate, UINavigationContr
     var followingCount = 0
     var userId: String?
     
-    @IBOutlet weak var loadingImage: FLAnimatedImageView!
-    @IBOutlet weak var loadingView: UIView!
-    
+
     // to override search task
     lazy var delayItem = workItem()
     
@@ -81,6 +81,10 @@ class MainFollowVC: UIViewController, UINavigationBarDelegate, UINavigationContr
         // Do any additional setup after loading the view.
         setupButtons()
         
+        followerBorder = followerBtn.addBottomBorderWithColor(color: .secondary, height: 2.0, width: self.view.frame.width * (180/375))
+        followingBorder = followingBtn.addBottomBorderWithColor(color: .secondary, height: 2.0, width: self.view.frame.width * (180/375))
+       
+        
         if showFollowerFirst
         {
             setupFollowersView()
@@ -94,14 +98,15 @@ class MainFollowVC: UIViewController, UINavigationBarDelegate, UINavigationContr
         if let user = self.userId {
             
             countFollowers(userId: user) {
-                Dispatch.main.async {
-                    
+                Dispatch.main.async { [weak self] in
+                    guard let self = self else { return }
                     self.followerBtn.setTitle("\(formatPoints(num: Double(self.followerCount))) Followers", for: .normal)
                 }
             }
             
             countFollowings(userId: user) {
-                Dispatch.main.async {
+                Dispatch.main.async { [weak self] in
+                    guard let self = self else { return }
                     self.followingBtn.setTitle("\(formatPoints(num: Double(self.followingCount))) Followings", for: .normal)
                 }
             }
@@ -114,46 +119,7 @@ class MainFollowVC: UIViewController, UINavigationBarDelegate, UINavigationContr
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        self.loadingView.isHidden = true
-        /*
-        do {
-            
-            let path = Bundle.main.path(forResource: "fox2", ofType: "gif")!
-            let gifData = try NSData(contentsOfFile: path) as Data
-            let image = FLAnimatedImage(animatedGIFData: gifData)
-            
-            
-            self.loadingImage.animatedImage = image
-            
-        } catch {
-            print(error.localizedDescription)
-        }
-        
-        loadingView.backgroundColor = self.view.backgroundColor
-        
-        
-        delay(0.75) {
-            
-            UIView.animate(withDuration: 0.5) {
-                
-                self.loadingView.alpha = 0
-                
-            }
-            
-            
-            DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
-                
-                if self.loadingView.alpha == 0 {
-                    
-                    self.loadingView.isHidden = true
-                    
-                }
-                
-            }
-            
-        } */
-        
-        
+       
         let navigationBarAppearance = UINavigationBarAppearance()
         navigationBarAppearance.configureWithOpaqueBackground()
         navigationBarAppearance.backgroundColor = .white
@@ -304,11 +270,7 @@ extension MainFollowVC {
             self.navigationItem.title = self.username ?? ""
             
         }
-        
-        
-        
-        
-        
+
     }
     
     func setupSearchBar() {
@@ -331,13 +293,12 @@ extension MainFollowVC {
     
     func setupFollowersView() {
         
-        followerBtn.setTitleColor(UIColor.white, for: .normal)
+        followerBtn.setTitleColor(UIColor.black, for: .normal)
         followingBtn.setTitleColor(UIColor.lightGray, for: .normal)
         
+        followerBtn.layer.addSublayer(followerBorder)
         
-        followerBtn.backgroundColor = UIColor.darkGray
-        followingBtn.backgroundColor = UIColor.clear
-        
+        followingBorder.removeFromSuperlayer()
         
         FollowerVC.view.isHidden = false
         FollowingVC.view.isHidden = true
@@ -349,12 +310,12 @@ extension MainFollowVC {
     func setupFollowingView() {
         
         followerBtn.setTitleColor(UIColor.lightGray, for: .normal)
-        followingBtn.setTitleColor(UIColor.white, for: .normal)
+        followingBtn.setTitleColor(UIColor.black, for: .normal)
         
+        followingBtn.layer.addSublayer(followingBorder)
         
-        followerBtn.backgroundColor = UIColor.clear
-        followingBtn.backgroundColor = UIColor.darkGray
-        
+        followerBorder.removeFromSuperlayer()
+      
         
         FollowerVC.view.isHidden = true
         FollowingVC.view.isHidden = false
@@ -504,16 +465,16 @@ extension MainFollowVC {
             
             if !FollowerVC.view.isHidden {
                 
-                delayItem.perform(after: 0.35) {
+                delayItem.perform(after: 0.35) { [weak self] in
                     print("Search followers using api")
-                    self.searchFollowers(for: searchText)
+                    self?.searchFollowers(for: searchText)
                 }
                 
             } else {
                 
-                delayItem.perform(after: 0.35) {
+                delayItem.perform(after: 0.35) { [weak self] in
                     print("Search following using api")
-                    self.searchFollowings(for: searchText)
+                    self?.searchFollowings(for: searchText)
                 }
             }
             
@@ -541,7 +502,8 @@ extension MainFollowVC {
                         return FollowModel(JSON: item)!
                     }
                     
-                    DispatchQueue.main.async {
+                    DispatchQueue.main.async { [weak self] in
+                        guard let self = self else { return }
                         self.FollowerVC.searchUserList = list
                         self.FollowerVC.tableNode.reloadData()
                     }
@@ -578,7 +540,8 @@ extension MainFollowVC {
                         return FollowModel(JSON: item)!
                     }
                     
-                    DispatchQueue.main.async {
+                    DispatchQueue.main.async { [weak self] in
+                        guard let self = self else { return }
                         self.FollowingVC.searchUserList = list
                         self.FollowingVC.tableNode.reloadData()
                     }
@@ -601,9 +564,9 @@ extension MainFollowVC {
             buttonStackView.isHidden = true
             navigationItem.searchController = searchController
             searchController?.searchBar.isHidden = false
-            
-            delay(0.025) {
-                self.searchController?.searchBar.becomeFirstResponder()
+             
+            delay(0.025) { [weak self] in
+                self?.searchController?.searchBar.becomeFirstResponder()
             }
             
         } else {
@@ -647,9 +610,5 @@ extension MainFollowVC {
         childViewController.view.removeFromSuperview()
         childViewController.removeFromParent()
     }
-    
-}
-
-extension MainFollowVC {
     
 }

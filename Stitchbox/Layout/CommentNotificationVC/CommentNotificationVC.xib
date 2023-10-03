@@ -22,8 +22,6 @@
                 <outlet property="cmtTxtView" destination="gNP-l1-M9o" id="SfZ-O5-GtT"/>
                 <outlet property="commentBottomConstraint" destination="GBw-aQ-wPG" id="1f8-6d-QSo"/>
                 <outlet property="commentBtn" destination="wSF-lX-jrg" id="GSi-Y3-JRt"/>
-                <outlet property="loadingImage" destination="FrG-sU-cxq" id="3xD-Kb-mcM"/>
-                <outlet property="loadingView" destination="rES-uX-LTZ" id="hLF-mR-oBU"/>
                 <outlet property="tView" destination="pS5-Ly-Vhd" id="hUY-nC-tTf"/>
                 <outlet property="textConstraint" destination="m7v-eD-DXt" id="YgR-b7-qJ2"/>
                 <outlet property="view" destination="iN0-l3-epB" id="iL1-jj-XRB"/>
@@ -104,46 +102,24 @@
                         <constraint firstAttribute="bottom" secondItem="gNP-l1-M9o" secondAttribute="bottom" constant="30" id="m7v-eD-DXt"/>
                     </constraints>
                 </view>
-                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="rES-uX-LTZ">
-                    <rect key="frame" x="0.0" y="0.0" width="414" height="635"/>
-                    <subviews>
-                        <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="FrG-sU-cxq" customClass="FLAnimatedImageView">
-                            <rect key="frame" x="169.5" y="280" width="75" height="75"/>
-                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                            <constraints>
-                                <constraint firstAttribute="height" constant="75" id="cy3-mX-70l"/>
-                                <constraint firstAttribute="width" constant="75" id="xSZ-9s-SWv"/>
-                            </constraints>
-                        </imageView>
-                    </subviews>
-                    <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                    <constraints>
-                        <constraint firstItem="FrG-sU-cxq" firstAttribute="centerX" secondItem="rES-uX-LTZ" secondAttribute="centerX" id="FAG-Ch-aCq"/>
-                        <constraint firstItem="FrG-sU-cxq" firstAttribute="centerY" secondItem="rES-uX-LTZ" secondAttribute="centerY" id="K7e-ho-cSW"/>
-                    </constraints>
-                </view>
             </subviews>
             <viewLayoutGuide key="safeArea" id="vUN-kp-3ea"/>
             <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
             <constraints>
                 <constraint firstItem="ibi-1l-CRx" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" id="65C-Rl-pdO"/>
                 <constraint firstItem="ibi-1l-CRx" firstAttribute="trailing" secondItem="vUN-kp-3ea" secondAttribute="trailing" id="8Uc-pg-ird"/>
-                <constraint firstItem="rES-uX-LTZ" firstAttribute="trailing" secondItem="vUN-kp-3ea" secondAttribute="trailing" id="DJQ-vc-LRi"/>
                 <constraint firstItem="ibi-1l-CRx" firstAttribute="leading" secondItem="vUN-kp-3ea" secondAttribute="leading" id="I89-ou-brJ"/>
                 <constraint firstAttribute="trailing" secondItem="GO5-u0-Eg2" secondAttribute="trailing" id="IgK-Ga-c0u"/>
                 <constraint firstItem="XhS-Kc-9f5" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" id="NBX-qf-ONV"/>
                 <constraint firstItem="vUN-kp-3ea" firstAttribute="bottom" secondItem="pS5-Ly-Vhd" secondAttribute="bottom" constant="50" id="Nj8-3Y-EJf"/>
                 <constraint firstItem="pS5-Ly-Vhd" firstAttribute="top" secondItem="GO5-u0-Eg2" secondAttribute="bottom" id="Q2b-Ld-RDP"/>
-                <constraint firstItem="rES-uX-LTZ" firstAttribute="leading" secondItem="vUN-kp-3ea" secondAttribute="leading" id="SXW-wz-ccj"/>
                 <constraint firstItem="GO5-u0-Eg2" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" id="cX2-pO-kcR"/>
                 <constraint firstItem="vUN-kp-3ea" firstAttribute="trailing" secondItem="XhS-Kc-9f5" secondAttribute="trailing" id="hTt-VC-Dej"/>
                 <constraint firstItem="GO5-u0-Eg2" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" id="iJR-kw-oM2"/>
                 <constraint firstItem="vUN-kp-3ea" firstAttribute="trailing" secondItem="pS5-Ly-Vhd" secondAttribute="trailing" id="osO-s2-pHb"/>
-                <constraint firstAttribute="bottom" secondItem="rES-uX-LTZ" secondAttribute="bottom" id="qM4-Xj-n6a"/>
                 <constraint firstItem="ibi-1l-CRx" firstAttribute="bottom" secondItem="vUN-kp-3ea" secondAttribute="bottom" id="tce-ft-BKd"/>
                 <constraint firstAttribute="bottom" secondItem="XhS-Kc-9f5" secondAttribute="bottom" id="vZf-za-e5S"/>
                 <constraint firstItem="pS5-Ly-Vhd" firstAttribute="leading" secondItem="vUN-kp-3ea" secondAttribute="leading" id="yDM-NY-2Re"/>
-                <constraint firstItem="rES-uX-LTZ" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" id="ztL-hf-8zh"/>
             </constraints>
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
             <point key="canvasLocation" x="137.68115942028987" y="140.95982142857142"/>

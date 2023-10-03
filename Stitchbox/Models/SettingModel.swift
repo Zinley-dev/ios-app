@@ -37,6 +37,10 @@ class SettingModel: Mappable {
     private(set) var EnablePhoneTwoFactor: Bool?
     private(set) var Notifications: NotificationModel?
     private(set) var AllowStitch: Bool?
+    private(set) var ClearMode: Bool?
+    private(set) var PublicStitch: Bool?
+   
+
     
     required init?(map: Map) {
         //
@@ -49,5 +53,8 @@ class SettingModel: Mappable {
         Notifications <- map["notifications"]
         EnablePhoneTwoFactor <- map["enablePhoneTwoFactor"]
         EnableEmailTwoFactor <- map["enableEmailTwoFactor"]
+        ClearMode <- map["clearMode"]
+        PublicStitch <- map["publicStitch"]
+    
     }
 }

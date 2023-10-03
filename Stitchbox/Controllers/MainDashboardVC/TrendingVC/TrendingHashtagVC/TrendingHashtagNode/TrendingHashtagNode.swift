@@ -19,13 +19,13 @@ class TrendingHashtagNode: ASCellNode {
         print("TrendingHashtagNode is being deallocated.")
     }
     
-    var trendingHashtag: TrendingHashtag!
+    private var trendingHashtag: TrendingHashtag!
     var rank: Int!
 
     var rankNode: ASTextNode!
     var hashtagTextNode: ASTextNode!
     var viewsNode: ASTextNode!
-   
+    private var didSetup = false
     
     init(with trendingHashtag: TrendingHashtag, rank: Int) {
         
@@ -40,16 +40,31 @@ class TrendingHashtagNode: ASCellNode {
         
         self.selectionStyle = .none
 
+        rankNode.isLayerBacked = true
+        viewsNode.isLayerBacked = true
         hashtagTextNode.isLayerBacked = true
         hashtagTextNode.backgroundColor = UIColor.clear
         
         automaticallyManagesSubnodes = true
         
+
+    }
+    
+    override func didEnterVisibleState() {
+            
+            if !didSetup {
+                setupLayout()
+            }
+            
+        }
+    
+    func setupLayout() {
+        didSetup = true
         let paragraphStyles = NSMutableParagraphStyle()
         paragraphStyles.alignment = .left
 
         rankNode.attributedText = NSAttributedString(
-            string: "\(rank).",
+            string: "\(rank ?? 0).",
             attributes: [
                 NSAttributedString.Key.font: FontManager.shared.roboto(.Bold, size: FontSize + 5),
                 NSAttributedString.Key.foregroundColor: UIColor.black,
@@ -76,7 +91,11 @@ class TrendingHashtagNode: ASCellNode {
         )
 
         viewsNode.backgroundColor = UIColor.clear
+        
+        
     }
+    
+
     
     
     override func layoutSpecThatFits(_ constrainedSize: ASSizeRange) -> ASLayoutSpec {
@@ -105,6 +124,5 @@ class TrendingHashtagNode: ASCellNode {
 
         return ASInsetLayoutSpec(insets: UIEdgeInsets(top: 16.0, left: 16, bottom: 16, right: 20), child: headerStack)
     }
-
 
 }

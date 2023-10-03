@@ -28,7 +28,7 @@ class FindFriendsNode: ASCellNode {
     var followBtnNode: ASButtonNode!
    
     var desc = ""
-    
+    private var didSetup = false
     
     init(with user: FindFriendsModel) {
         
@@ -40,8 +40,7 @@ class FindFriendsNode: ASCellNode {
         
         super.init()
         
-        let paragraphStyles = NSMutableParagraphStyle()
-        paragraphStyles.alignment = .left
+
         
         self.backgroundColor = UIColor.clear
         
@@ -51,6 +50,7 @@ class FindFriendsNode: ASCellNode {
         userNameNode.isLayerBacked = true
         AvatarNode.shouldRenderProgressImages = true
         AvatarNode.isLayerBacked = true
+        NameNode.isLayerBacked = true
 
         //self.backgroundColor = UIColor.red
         userNameNode.backgroundColor = UIColor.clear
@@ -64,6 +64,24 @@ class FindFriendsNode: ASCellNode {
        //
         
         automaticallyManagesSubnodes = true
+        
+         
+        
+        
+    }
+    
+    override func didEnterVisibleState() {
+            
+            if !didSetup {
+                setupLayout()
+            }
+            
+        }
+    
+    func setupLayout() {
+        didSetup = true
+        let paragraphStyles = NSMutableParagraphStyle()
+        paragraphStyles.alignment = .left
         
         if user._userUID != nil {
             
@@ -173,8 +191,6 @@ class FindFriendsNode: ASCellNode {
 
             
         }
-         
-        
         
     }
     

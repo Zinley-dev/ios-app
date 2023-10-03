@@ -18,6 +18,13 @@ fileprivate let HorizontalBuffer: CGFloat = 10
 
 class CommentNode: ASCellNode {
     
+    
+    deinit {
+        print("CommentNode is being deallocated.")
+        NotificationCenter.default.removeObserver(self)
+        
+    }
+    
     var replyUsername = ""
     var finalText: NSAttributedString!
     var replyUID = ""
@@ -37,10 +44,9 @@ class CommentNode: ASCellNode {
     var replyBtn : ((ASCellNode) -> Void)?
     var reply : ((ASCellNode) -> Void)?
     var isLiked = false
-   
-    
-    var like : ((ASCellNode) -> Void)?
-    
+    var label: ActiveLabel!
+    private var didSetup = false
+
     init(with post: CommentModel) {
         
         self.post = post
@@ -54,227 +60,200 @@ class CommentNode: ASCellNode {
         self.timeNode = ASTextNode()
         self.replyBtnNode = ASButtonNode()
         self.replyToNode = ASTextNode()
-        
+      
         super.init()
         
-        self.replyBtnNode.setTitle("Reply", with: FontManager.shared.roboto(.Medium, size: FontSize), with: UIColor.darkGray, for: .normal)
 
+        // Configure the reply button.
+        self.replyBtnNode.setTitle("Reply", with: FontManager.shared.roboto(.Medium, size: FontSize), with: UIColor.darkGray, for: .normal)
         self.replyBtnNode.addTarget(self, action: #selector(CommentNode.replyBtnPressed), forControlEvents: .touchUpInside)
+
+        // Set selection style and avatar properties.
         self.selectionStyle = .none
         avatarNode.contentMode = .scaleAspectFill
-        avatarNode.cornerRadius = OrganizerImageSize/2
+        avatarNode.cornerRadius = OrganizerImageSize / 2
         avatarNode.clipsToBounds = true
-        cmtNode.truncationMode = .byTruncatingTail
-       
+        avatarNode.shouldRenderProgressImages = true
+
+        // Configure text alignment.
         let paragraphStyles = NSMutableParagraphStyle()
         paragraphStyles.alignment = .left
-        
-        avatarNode.shouldRenderProgressImages = true
-        
-        
-        let textAttributes: [NSAttributedString.Key: Any] = [
-            NSAttributedString.Key.font: FontManager.shared.roboto(.Regular, size: FontSize), // Using the Roboto Light style
-            NSAttributedString.Key.foregroundColor: UIColor.black
-        ]
 
-        let timeAttributes: [NSAttributedString.Key: Any] = [
-            NSAttributedString.Key.font: FontManager.shared.roboto(.Regular, size: FontSize), // Using the Roboto Light style
-            NSAttributedString.Key.foregroundColor: UIColor.darkGray
-        ]
-
-        
-        if self.post.reply_to != "" {
-           
-            if let username = self.post.reply_to_username {
-                                
-               let username = "\(username)"
-                self.replyUsername = username
-               
-                if self.post.createdAt != nil {
-                    
-                    let user = NSMutableAttributedString()
-              
-                    let username = NSAttributedString(string: "@\(username): ", attributes: textAttributes)
-                    let text = NSAttributedString(string: self.post.text, attributes: textAttributes)
-                    var time: NSAttributedString?
-                    
-                    
-                    
-                    
-                    if self.post.is_title == true {
-                    
-                        if self.post.updatedAt != Date() {
-                            
-                            time = NSAttributedString(string: "\(timeAgoSinceDate(self.post.updatedAt, numericDates: true))", attributes: timeAttributes)
-                            
-                        } else {
-                            
-                            time = NSAttributedString(string: "\(timeAgoSinceDate(self.post.createdAt, numericDates: true))", attributes: timeAttributes)
-                            
-                        }
-                        
-                    } else {
-                        
-                        time = NSAttributedString(string: "\(timeAgoSinceDate(self.post.createdAt, numericDates: true))", attributes: timeAttributes)
-                    }
-                      
-                    user.append(username)
-                    user.append(text)
-                    
-                    
-                    
-                    self.timeNode.attributedText = time
-                    self.cmtNode.attributedText = user
-                    
-                    
-                }  else {
-                                               
-                    
-                    let user = NSMutableAttributedString()
-              
-                    let username = NSAttributedString(string: "@\(username): ", attributes: textAttributes)
-                    
-                    let text = NSAttributedString(string: self.post.text, attributes: textAttributes)
-                   
-                    let time = NSAttributedString(string: "Just now", attributes: timeAttributes)
-                    
-                    user.append(username)
-                    user.append(text)
-                    
-                    
-                    self.timeNode.attributedText = time
-                    self.cmtNode.attributedText = user
-                   
-                    
-                }
-                
-                                  
-                
-            }
-           
-          
-        } else {
-            
-            
-            if self.post.createdAt != nil {
-                
-            
-                let user = NSMutableAttributedString()
-                
-                let text = NSAttributedString(string: self.post.text, attributes: textAttributes)
-              
-                var time: NSAttributedString?
-                
-                if self.post.is_title == true {
-                    
-                    if self.post.updatedAt != Date() {
-                        
-                        time = NSAttributedString(string: "\(timeAgoSinceDate(self.post.updatedAt, numericDates: true))", attributes: timeAttributes)
-                        
-                    } else {
-                        
-                        time = NSAttributedString(string: "\(timeAgoSinceDate(self.post.createdAt, numericDates: true))", attributes: timeAttributes)
-                        
-                    }
-                    
-                } else {
-                    
-                    time = NSAttributedString(string: "\(timeAgoSinceDate(self.post.createdAt, numericDates: true))", attributes: timeAttributes)
-                    
-                }
-                
-               
-                
-                user.append(text)
-                
-                
-                DispatchQueue.main.async { [self] in
-                    timeNode.attributedText = time
-                    cmtNode.attributedText = user
-                }
-                
-                
-            } else {
-                
-                
-                let user = NSMutableAttributedString()
-             
-                let text = NSAttributedString(string: self.post.text, attributes: textAttributes)
-               
-                let time = NSAttributedString(string: "Just now", attributes: timeAttributes)
-                
-                user.append(text)
-                
-                DispatchQueue.main.async { [self] in
-                    timeNode.attributedText = time
-                    cmtNode.attributedText = user
-                }
-               
-            }
-            
-        }
-        
+        // Set background colors.
         DispatchQueue.main.async {
             self.view.backgroundColor = .white
         }
-       
+
         infoNode.backgroundColor = UIColor.clear
-        
         loadReplyBtnNode.backgroundColor = UIColor.clear
         cmtNode.backgroundColor = UIColor.clear
         replyToNode.backgroundColor = UIColor.clear
         userNameNode.backgroundColor = UIColor.clear
-        
-        imageView.contentMode = .scaleAspectFit
-        imageView.frame = CGRect(x: 2, y: 2, width: 25, height: 25)
-    
-    
-        textNode.isLayerBacked = true
-    
         textNode.backgroundColor = UIColor.clear
         imageView.backgroundColor = UIColor.clear
+
+        // Set content modes.
         imageView.contentMode = .scaleAspectFit
-                                                     
+        cmtNode.truncationMode = .byTruncatingTail
+
+        // Set frames.
+        imageView.frame = CGRect(x: 2, y: 2, width: 25, height: 25)
         textNode.frame = CGRect(x: 0, y: 30, width: 30, height: 20)
-       
+
+        // Configure button.
         let button = ASButtonNode()
         button.frame = CGRect(x: 0, y: 0, width: 30, height: 60)
         button.backgroundColor = UIColor.clear
-        
-        
         infoNode.addSubnode(imageView)
         infoNode.addSubnode(textNode)
         infoNode.addSubnode(button)
-   
         button.addTarget(self, action: #selector(CommentNode.LikedBtnPressed), forControlEvents: .touchUpInside)
+
+        // Add more targets.
         loadReplyBtnNode.addTarget(self, action: #selector(CommentNode.repliedBtnPressed), forControlEvents: .touchUpInside)
-        
-        
-        loadInfo(uid: self.post.comment_uid)
-        
-        
-        if self.post.has_reply == true {
+        userNameNode.addTarget(self, action: #selector(CommentNode.usernameBtnPressed), forControlEvents: .touchUpInside)
+        avatarNode.addTarget(self, action: #selector(CommentNode.usernameBtnPressed), forControlEvents: .touchUpInside)
+
+        // Other configurations.
+        textNode.isLayerBacked = true
+        automaticallyManagesSubnodes = true
+
+
+          
+    }
+    
+    
+    override func didEnterVisibleState() {
             
-            loadCmtCount()
+            if !didSetup {
+                setupLayout()
+            }
             
+        }
+    
+    func setupLayout() {
+        didSetup = true
+        label = ActiveLabel()
+          
+        cmtNode.view.addSubview(self.label)
+        cmtNode.view.isUserInteractionEnabled = true
+                          
+        label.enabledTypes = [.mention, .hashtag, .url]
+        label.mentionColor = .secondary
+                  
+        // A blue color for hashtags
+        label.hashtagColor = UIColor(red: 0.0/255, green: 204.0/255, blue: 255.0/255, alpha: 1)
+
+
+        // A contrasting green color for URLs
+        label.URLColor = UIColor(red: 30/255, green: 85/255, blue: 150/255, alpha: 1)
+
+        
+        self.label.customize { [weak self] label in
+            guard let self = self else { return }
+            if self.post.reply_to != "" {
+                self.addReplyUIDBtn()
+            }
+            
+            label.handleMentionTap { [weak self] mention in
+                guard let self = self else { return }
+                guard let mentionArr = self.post.mention else { return }
+                
+                for item in mentionArr {
+                    guard let username = item["username"] as? String, username == mention,
+                          let id = item["_id"] as? String else { continue }
+                    
+                    self.moveToViewController(id: id, identifier: "UserProfileVC")
+                }
+            }
+            
+            label.handleHashtagTap { [weak self] hashtag in
+                guard let self = self else { return }
+                let selectedHashtag = "#" + hashtag
+                if let viewController = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "PostListWithHashtagVC") as? PostListWithHashtagVC {
+                    viewController.searchHashtag = selectedHashtag
+                    viewController.onPresent = true
+                    self.present(viewController)
+                }
+            }
+            
+            label.handleURLTap { [weak self] string in
+                guard let self = self else { return }
+                
+                let url = string.absoluteString
+                if url.contains("https://stitchbox.net/app/account/") {
+                    self.moveToUserProfileVC(id: self.getUIDParameter(from: url)!)
+                } else if url.contains("https://stitchbox.net/app/post/") {
+                    self.openPost(id: self.getUIDParameter(from: url)!)
+                } else if let requestUrl = URL(string: url), UIApplication.shared.canOpenURL(requestUrl) {
+                    UIApplication.shared.open(requestUrl, options: [:], completionHandler: nil)
+                }
+            }
         }
         
         
+        let textAttributes: [NSAttributedString.Key: Any] = [
+            .font: FontManager.shared.roboto(.Regular, size: FontSize),
+            .foregroundColor: UIColor.black
+        ]
+
+        let timeAttributes: [NSAttributedString.Key: Any] = [
+            .font: FontManager.shared.roboto(.Regular, size: FontSize),
+            .foregroundColor: UIColor.darkGray
+        ]
+
+        let clearTextAttributes: [NSAttributedString.Key: Any] = [
+            .font: FontManager.shared.roboto(.Regular, size: FontSize),
+            .foregroundColor: UIColor.clear
+        ]
+
+
+        
+        if let replyToUsername = self.post.reply_to_username, !self.post.reply_to.isEmpty {
+            self.replyUsername = replyToUsername
+            let username = "\(replyToUsername): " // Remove "@" symbol here
+            let clearUser = createAttributedString(username: username, text: self.post.text, clear: true, clearTextAttributes: clearTextAttributes, textAttributes: textAttributes)
+            let user = createAttributedString(username: username, text: self.post.text, clear: false, clearTextAttributes: clearTextAttributes, textAttributes: textAttributes)
+            let time = createTimeAttributedString(createdAt: self.post.createdAt, updatedAt: self.post.is_title == true ? self.post.updatedAt : nil, timeAttributes: timeAttributes)
+            updateUI(username: username, clearUser: clearUser, user: user, time: time)
+        } else {
+            let clearUser = createAttributedString(username: nil, text: self.post.text, clear: true, clearTextAttributes: clearTextAttributes, textAttributes: textAttributes)
+            let user = createAttributedString(username: nil, text: self.post.text, clear: false, clearTextAttributes: clearTextAttributes, textAttributes: textAttributes)
+            let time = createTimeAttributedString(createdAt: self.post.createdAt, updatedAt: self.post.is_title == true ? self.post.updatedAt : nil, timeAttributes: timeAttributes)
+            updateUI(username: nil, clearUser: clearUser, user: user, time: time)
+        }
+        
+        
+        // Load content based on the post.
+        loadInfo(uid: self.post.comment_uid)
+        if self.post.has_reply == true {
+            loadCmtCount()
+        }
         checkLikeCmt()
         cmtCount()
         
-        //
-        
-        
-        automaticallyManagesSubnodes = true
-        
-        // add Button
-        
-        //userNameNode
-        userNameNode.addTarget(self, action: #selector(CommentNode.usernameBtnPressed), forControlEvents: .touchUpInside)
-        avatarNode.addTarget(self, action: #selector(CommentNode.usernameBtnPressed), forControlEvents: .touchUpInside)
-          
     }
+    
+
+    
+    func present(_ viewController: UIViewController, animated: Bool = true) {
+        if let vc = UIViewController.currentViewController() {
+            let nav = UINavigationController(rootViewController: viewController)
+            nav.navigationBar.barTintColor = .white
+            nav.navigationBar.titleTextAttributes = [.foregroundColor: UIColor.black]
+            nav.modalPresentationStyle = .fullScreen
+            vc.present(nav, animated: animated, completion: nil)
+        }
+    }
+
+    func moveToViewController(id: String, identifier: String) {
+        if let viewController = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: identifier) as? UserProfileVC {
+            viewController.userId = id
+            viewController.onPresent = true
+            present(viewController)
+        }
+    }
+
     
     @objc func replyToBtnPressed() {
         
@@ -366,7 +345,8 @@ class CommentNode: ASCellNode {
                 
                 if checkIsLike {
                     
-                    DispatchQueue.main.async {
+                    DispatchQueue.main.async { [weak self] in
+                        guard let self = self else { return }
                         self.imageView.image = likeImage
                     }
                     
@@ -376,7 +356,8 @@ class CommentNode: ASCellNode {
             
                 } else {
                     
-                    DispatchQueue.main.async {
+                    DispatchQueue.main.async { [weak self] in
+                        guard let self = self else { return }
                         self.imageView.image = emptyLikeImageLM
                     }
             
@@ -384,7 +365,8 @@ class CommentNode: ASCellNode {
                 
                 
             case .failure(let error):
-                DispatchQueue.main.async {
+                DispatchQueue.main.async { [weak self] in
+                    guard let self = self else { return }
                     self.imageView.image = emptyLikeImageLM
                 }
                 print(error)
@@ -425,7 +407,8 @@ class CommentNode: ASCellNode {
                 let like = NSMutableAttributedString(string: "\(formatPoints(num: Double(likeCount)))", attributes: LikeAttributes)
                 
                 
-                DispatchQueue.main.async {
+                DispatchQueue.main.async { [weak self] in
+                    guard let self = self else { return }
                     self.textNode.attributedText = like
                 }
                
@@ -473,9 +456,10 @@ class CommentNode: ASCellNode {
     }
 
     
-    func addReplyUIDBtn(label: ActiveLabel) {
+    func addReplyUIDBtn() {
         
-        DispatchQueue.main.async {
+        DispatchQueue.main.async { [weak self] in
+            guard let self = self else { return }
         
             
             self.replyToNode.attributedText = NSAttributedString(
@@ -495,6 +479,7 @@ class CommentNode: ASCellNode {
             
             userButton.addTarget(self, action: #selector(CommentNode.replyToBtnPressed), forControlEvents: .touchUpInside)
             
+            
         
         }
         
@@ -511,164 +496,20 @@ class CommentNode: ASCellNode {
     
     
     override func layout() {
-        delay(0.025) {
-            self.addActiveLabelToCmtNode()
-        }
-    }
-    
-    
-    func addActiveLabelToCmtNode() {
-        
-        DispatchQueue.main.async {
-            
-            self.cmtNode.view.isUserInteractionEnabled = true
-            
-            
-            let label = ActiveLabel()
-            
-            //
-            self.cmtNode.view.addSubview(label)
-            
-            label.translatesAutoresizingMaskIntoConstraints = false
-            label.topAnchor.constraint(equalTo: self.cmtNode.view.topAnchor, constant: 0).isActive = true
-            label.leadingAnchor.constraint(equalTo: self.cmtNode.view.leadingAnchor, constant: 0).isActive = true
-            label.trailingAnchor.constraint(equalTo: self.cmtNode.view.trailingAnchor, constant: 0).isActive = true
-            label.bottomAnchor.constraint(equalTo: self.cmtNode.view.bottomAnchor, constant: 0).isActive = true
-            
-                    
-            label.customize { label in
-                
-               
-                label.numberOfLines = Int(self.cmtNode.lineCount)
-                label.enabledTypes = [.mention, .hashtag, .url]
-                
-                label.attributedText = self.cmtNode.attributedText
-                //label.attributedText = textAttributes
-            
-                label.hashtagColor = UIColor(red: 85.0/255, green: 172.0/255, blue: 238.0/255, alpha: 1)
-                label.mentionColor = .secondary
-                label.URLColor = UIColor(red: 135/255, green: 206/255, blue: 250/255, alpha: 1)
-                
-                if self.post.reply_to != "" {
-                    self.addReplyUIDBtn(label: label)
-                }
-                
-                
-                label.handleMentionTap {  mention in
-                    
-                  
-                    if let mentionArr = self.post.mention {
-                        
-                        for item in mentionArr {
-                            
-                            if let username = item["username"] as? String, username == mention {
-                                
-                                if let id = item["_id"] as? String {
-                                    
-                                    if let UPVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "UserProfileVC") as? UserProfileVC {
-                                        
-                                        if let vc = UIViewController.currentViewController() {
-                                            
-                                            let nav = UINavigationController(rootViewController: UPVC)
-
-                                            // Set the user ID, nickname, and onPresent properties of UPVC
-                                            UPVC.userId = id
-                                            UPVC.nickname = username
-                                            UPVC.onPresent = true
-
-                                            // Customize the navigation bar appearance
-                                            nav.navigationBar.barTintColor = .white
-                                            nav.navigationBar.titleTextAttributes = [.foregroundColor: UIColor.black]
-
-                                            nav.modalPresentationStyle = .fullScreen
-                                            vc.present(nav, animated: true, completion: nil)
-                                            return
-
-
-                                        }
-                                    }
-                                    
-                                }
-                                
-                              
-                            }
-                                
-                            
-                        }
-                        
-                    }
-                    
-                }
-                
-                label.handleHashtagTap { hashtag in
-                          
-                    var selectedHashtag = hashtag
-                    selectedHashtag.insert("#", at: selectedHashtag.startIndex)
-                    
-                
-                    if let PLHVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "PostListWithHashtagVC") as? PostListWithHashtagVC {
-                        
-                        if let vc = UIViewController.currentViewController() {
-                            
-                            let nav = UINavigationController(rootViewController: PLHVC)
-
-                            // Set the user ID, nickname, and onPresent properties of UPVC
-                            PLHVC.searchHashtag = selectedHashtag
-                            PLHVC.onPresent = true
-
-                            // Customize the navigation bar appearance
-                            nav.navigationBar.barTintColor = .white
-                            nav.navigationBar.titleTextAttributes = [.foregroundColor: UIColor.black]
-
-                            nav.modalPresentationStyle = .fullScreen
-                            vc.present(nav, animated: true, completion: nil)
-                   
-                        }
-                    }
-                    
-                    
-                    
-                    
-                }
-                
-                label.handleURLTap { [weak self] string in
-                    
-                    
-                    let url = string.absoluteString
-                    
-                    if url.contains("https://stitchbox.net/app/account/") {
-                        
-                        if let id = self?.getUIDParameter(from: url) {
-                            self?.moveToUserProfileVC(id: id)
-                        }
-            
-                    } else if url.contains("https://stitchbox.net/app/post/") {
-                    
-                        if let id = self?.getUIDParameter(from: url) {
-                            self?.openPost(id: id)
-                        }
-
-                    } else {
-                        
-                        guard let requestUrl = URL(string: url) else {
-                            return
-                        }
-
-                        if UIApplication.shared.canOpenURL(requestUrl) {
-                             UIApplication.shared.open(requestUrl, options: [:], completionHandler: nil)
-                        }
-                    }
-                    
-                    
-                }
-                
-                
-                
+        super.layout()
+        if self.label != nil {
+            self.label.frame = self.cmtNode.bounds
+            self.label.numberOfLines = Int(self.cmtNode.lineCount)
+        } else {
+            delay(1) { [weak self] in
+                guard let self = self else { return }
+                self.label.frame = self.cmtNode.bounds
+                self.label.numberOfLines = Int(self.cmtNode.lineCount)
             }
-            
         }
-            
+        
     }
+    
     
     func moveToUserProfileVC(id: String) {
         
@@ -712,19 +553,21 @@ class CommentNode: ASCellNode {
             switch result {
             case .success(let apiResponse):
                 guard let data = apiResponse.body else {
-                    Dispatch.main.async {
+                    Dispatch.main.async { [weak self] in
+                        guard let self = self else { return }
                         SwiftLoader.hide()
                     }
                   return
                 }
                
                 if !data.isEmpty {
-                    Dispatch.main.async {
+                    Dispatch.main.async { [weak self] in
+                        guard let self = self else { return }
                         SwiftLoader.hide()
                         
                         if let post = PostModel(JSON: data) {
                             
-                            if let RVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "SelectedPostVC") as? SelectedPostVC {
+                            if let RVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "SelectedParentVC") as? SelectedParentVC {
                                 
                                 if let vc = UIViewController.currentViewController() {
                                 
@@ -742,7 +585,7 @@ class CommentNode: ASCellNode {
 
                                     // Set the user ID, nickname, and onPresent properties of UPVC
                                     RVC.posts = [post]
-                              
+                                    RVC.startIndex = 0
 
                                     nav.modalPresentationStyle = .fullScreen
                                     
@@ -756,14 +599,16 @@ class CommentNode: ASCellNode {
                     }
                     
                 } else {
-                    Dispatch.main.async {
+                    Dispatch.main.async { [weak self] in
+                        guard let self = self else { return }
                         SwiftLoader.hide()
                     }
                 }
 
             case .failure(let error):
                 print(error)
-                Dispatch.main.async {
+                Dispatch.main.async { [weak self] in
+                    guard let self = self else { return }
                     SwiftLoader.hide()
                 }
                 
@@ -846,7 +691,8 @@ class CommentNode: ASCellNode {
 extension CommentNode {
     
     func likeComment() {
-        DispatchQueue.main.async {
+        DispatchQueue.main.async { [weak self] in
+            guard let self = self else { return }
             self.imageView.image = likeImage
         }
         
@@ -861,7 +707,8 @@ extension CommentNode {
         
         self.count += 1
         let like = NSMutableAttributedString(string: "\(formatPoints(num: Double(self.count)))", attributes: LikeAttributes)
-        DispatchQueue.main.async {
+        DispatchQueue.main.async { [weak self] in
+            guard let self = self else { return }
             self.textNode.attributedText = like
         }
         
@@ -874,7 +721,8 @@ extension CommentNode {
                 self.isLiked = true
 
             case .failure(let error):
-                DispatchQueue.main.async {
+                DispatchQueue.main.async { [weak self] in
+                    guard let self = self else { return }
                     self.imageView.image = emptyLikeImageLM
                 }
                 
@@ -889,7 +737,8 @@ extension CommentNode {
                 
                 self.count -= 1
                 let like = NSMutableAttributedString(string: "\(formatPoints(num: Double(self.count)))", attributes: LikeAttributes)
-                DispatchQueue.main.async {
+                DispatchQueue.main.async { [weak self] in
+                    guard let self = self else { return }
                     self.textNode.attributedText = like
                 }
                 
@@ -900,7 +749,8 @@ extension CommentNode {
 
     
     func unlikeComment() {
-        DispatchQueue.main.async {
+        DispatchQueue.main.async { [weak self] in
+            guard let self = self else { return }
             self.imageView.image = emptyLikeImageLM
         }
         
@@ -916,7 +766,8 @@ extension CommentNode {
         self.count -= 1
         let like = NSMutableAttributedString(string: "\(formatPoints(num: Double(self.count)))", attributes: LikeAttributes)
         
-        DispatchQueue.main.async {
+        DispatchQueue.main.async { [weak self] in
+            guard let self = self else { return }
             self.textNode.attributedText = like
         }
         
@@ -929,7 +780,8 @@ extension CommentNode {
                 self.isLiked = false
 
             case .failure(let error):
-                DispatchQueue.main.async {
+                DispatchQueue.main.async { [weak self] in
+                    guard let self = self else { return }
                     self.imageView.image = likeImage
                 }
                 
@@ -944,7 +796,8 @@ extension CommentNode {
                 
                 self.count += 1
                 let like = NSMutableAttributedString(string: "\(formatPoints(num: Double(self.count)))", attributes: LikeAttributes)
-                DispatchQueue.main.async {
+                DispatchQueue.main.async { [weak self] in
+                    guard let self = self else { return }
                     self.textNode.attributedText = like
                 }
                 
@@ -971,6 +824,44 @@ extension CommentNode {
         }
     }
 
+    func createTimeAttributedString(createdAt: Date?, updatedAt: Date?, timeAttributes: [NSAttributedString.Key: Any]) -> NSAttributedString? {
+        var dateToUse: Date? = createdAt
+
+        if let updatedAt = updatedAt, updatedAt != Date() {
+            dateToUse = updatedAt
+        }
+
+        if let date = dateToUse {
+            return NSAttributedString(string: timeAgoSinceDate(date, numericDates: true), attributes: timeAttributes)
+        }
+
+        return nil
+    }
+
+
+
+    func createAttributedString(username: String?, text: String, clear: Bool, clearTextAttributes: [NSAttributedString.Key: Any], textAttributes: [NSAttributedString.Key: Any]) -> NSMutableAttributedString {
+        let attributes = clear ? clearTextAttributes : textAttributes
+        let user = NSMutableAttributedString()
+        
+        if let username = username {
+            user.append(NSAttributedString(string: "@\(username)", attributes: attributes)) // Append "@" symbol here
+        }
+        
+        user.append(NSAttributedString(string: text, attributes: attributes))
+        return user
+    }
+
+
+
+    func updateUI(username: String?, clearUser: NSMutableAttributedString, user: NSMutableAttributedString, time: NSAttributedString?) {
+        DispatchQueue.main.async { [weak self] in
+            guard let self = self else { return }
+            timeNode.attributedText = time
+            cmtNode.attributedText = clearUser
+            label.attributedText = user
+        }
+    }
 
     
 }

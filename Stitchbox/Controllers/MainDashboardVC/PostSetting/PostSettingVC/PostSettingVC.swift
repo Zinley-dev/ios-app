@@ -28,12 +28,25 @@ class PostSettingVC: UIViewController{
     
     @IBOutlet weak var deleteBtn: UIButton!
     
-
+    @IBOutlet weak var showInfoStack: UIStackView!
+    
+    @IBOutlet weak var showInfoBtn: UIButton!
+    
+    @IBOutlet weak var showInfoLbl: UILabel!
+    
+    var isInformationHidden = false
+    var isSelected = false
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
         emptyLbl()
         
+        if isInformationHidden {
+            showInfoLbl.text = "Show video information"
+        } else {
+            showInfoLbl.text = "Hide video information"
+        }
 
     }
     
@@ -47,18 +60,59 @@ class PostSettingVC: UIViewController{
         cancelBtn.setTitle("", for: .normal)
         sendBtn.setTitle("", for: .normal)
         copyLinkBtn.setTitle("", for: .normal)
+        showInfoBtn.setTitle("", for: .normal)
+    }
+    
+    
+    @IBAction func showVideoInfoBtnPressed(_ sender: Any) {
+        
+        if isSelected {
+            
+            if isInformationHidden {
+                NotificationCenter.default.post(name: (NSNotification.Name(rawValue: "showInfo_selected")), object: nil)
+            } else {
+                NotificationCenter.default.post(name: (NSNotification.Name(rawValue: "hideInfo_selected")), object: nil)
+            }
+            
+        } else {
+           
+            if isInformationHidden {
+                NotificationCenter.default.post(name: (NSNotification.Name(rawValue: "showInfo")), object: nil)
+            } else {
+                NotificationCenter.default.post(name: (NSNotification.Name(rawValue: "hideInfo")), object: nil)
+            }
+            
+        }
+        
+        self.dismiss(animated: true)
+        
     }
     
     @IBAction func editBtnPressed(_ sender: Any) {
         
-        NotificationCenter.default.post(name: (NSNotification.Name(rawValue: "edit")), object: nil)
+        if isSelected {
+            NotificationCenter.default.post(name: (NSNotification.Name(rawValue: "edit_selected")), object: nil)
+        } else {
+           
+            NotificationCenter.default.post(name: (NSNotification.Name(rawValue: "edit")), object: nil)
+            
+        }
+        
+       
         self.dismiss(animated: true)
         
     }
     
     @IBAction func downloadBtnPressed(_ sender: Any) {
         
-        NotificationCenter.default.post(name: (NSNotification.Name(rawValue: "download")), object: nil)
+        if isSelected {
+            NotificationCenter.default.post(name: (NSNotification.Name(rawValue: "download_selected")), object: nil)
+        } else {
+           
+            NotificationCenter.default.post(name: (NSNotification.Name(rawValue: "download")), object: nil)
+            
+        }
+        
         self.dismiss(animated: true)
         
     }
@@ -71,14 +125,30 @@ class PostSettingVC: UIViewController{
     
     @IBAction func statsBtnPressed(_ sender: Any) {
         
-        NotificationCenter.default.post(name: (NSNotification.Name(rawValue: "stats")), object: nil)
+       
+        
+        if isSelected {
+            NotificationCenter.default.post(name: (NSNotification.Name(rawValue: "stats_selected")), object: nil)
+        } else {
+           
+            NotificationCenter.default.post(name: (NSNotification.Name(rawValue: "stats")), object: nil)
+            
+        }
+        
         self.dismiss(animated: true)
         
     }
     
     @IBAction func deleteBtnPressed(_ sender: Any) {
         
-        NotificationCenter.default.post(name: (NSNotification.Name(rawValue: "delete")), object: nil)
+        if isSelected {
+            NotificationCenter.default.post(name: (NSNotification.Name(rawValue: "delete_selected")), object: nil)
+        } else {
+           
+            NotificationCenter.default.post(name: (NSNotification.Name(rawValue: "delete")), object: nil)
+            
+        }
+        
         self.dismiss(animated: true)
         
     }
@@ -86,7 +156,15 @@ class PostSettingVC: UIViewController{
     
     @IBAction func copyLinkBtnPressed(_ sender: Any) {
         
-        NotificationCenter.default.post(name: (NSNotification.Name(rawValue: "copyLink")), object: nil)
+        if isSelected {
+            NotificationCenter.default.post(name: (NSNotification.Name(rawValue: "copy_post_selected")), object: nil)
+        } else {
+           
+            NotificationCenter.default.post(name: (NSNotification.Name(rawValue: "copyLink")), object: nil)
+            
+        }
+        
+        
         self.dismiss(animated: true)
         
     }
@@ -94,7 +172,15 @@ class PostSettingVC: UIViewController{
     
     @IBAction func sendBtnPressed(_ sender: Any) {
         
-        NotificationCenter.default.post(name: (NSNotification.Name(rawValue: "share")), object: nil)
+        if isSelected {
+            NotificationCenter.default.post(name: (NSNotification.Name(rawValue: "share_post_selected")), object: nil)
+        } else {
+           
+            NotificationCenter.default.post(name: (NSNotification.Name(rawValue: "share")), object: nil)
+            
+        }
+        
+      
         self.dismiss(animated: true)
         
     }

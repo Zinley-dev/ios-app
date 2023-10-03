@@ -26,6 +26,7 @@ class ProfileHeaderCell: UICollectionViewCell {
 
     @IBOutlet weak var followerStack: UIStackView!
     @IBOutlet weak var followingStack: UIStackView!
+    @IBOutlet weak var stitchStack: UIStackView!
    
     let kCONTENT_XIB_NAME = "ProfileView"
     

@@ -14,11 +14,17 @@ import ZSWTaggedString
 import SafariServices
 import AuthenticationServices
 import ObjectMapper
-import AppsFlyerLib
+
 
 
 class StartViewController: UIViewController, ControllerType, ZSWTappableLabelTapDelegate, ASAuthorizationControllerDelegate, ASAuthorizationControllerPresentationContextProviding {
     
+    
+    deinit {
+        print("StartViewController is being deallocated.")
+        NotificationCenter.default.removeObserver(self)
+    }
+
     
     func presentationAnchor(for controller: ASAuthorizationController) -> ASPresentationAnchor {
         return self.view.window!
@@ -86,8 +92,53 @@ class StartViewController: UIViewController, ControllerType, ZSWTappableLabelTap
             
         }
         
+        startLayout()
         
-      buildUI()
+        
+    } else {
+        
+        self.loadNewestCoreData { [weak self] in
+            self?.loadSettings { [weak self] in
+                
+                
+                if globalSetting == nil {
+                    
+                    self?.logout()
+                    
+                } else {
+                    
+                    if !UserDefaults.standard.bool(forKey: "hasShowCleaned") {
+                        UserDefaults.standard.set(true, forKey: "hasShowCleaned")
+                        
+                        DispatchQueue.main.async { [weak self] in
+                            if let vc = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "ShowCleanModeVC") as? ShowCleanModeVC {
+                                vc.modalPresentationStyle = .fullScreen
+                                SwiftLoader.hide()
+                                self?.present(vc, animated: true)
+                            }
+                        }
+                        
+                        
+                    } else {
+                        RedirectionHelper.redirectToDashboard()
+                    }
+                    
+                }
+                
+               
+                
+            }
+        }
+    
+    }
+      
+      setupNavBar()
+  }
+    
+    func startLayout() {
+        
+        buildUI()
+        
       bindingUI()
       
       termOfUseLbl.tapDelegate = self
@@ -113,22 +164,83 @@ class StartViewController: UIViewController, ControllerType, ZSWTappableLabelTap
         
       termOfUseLbl.attributedText = try? ZSWTaggedString(string: string).attributedString(with: options)
         
+    }
+    
+    func loadSettings(completed: @escaping DownloadComplete) {
         
-        
-        
-    } else {
-        
-        self.loadNewestCoreData {
-            self.loadSettings {
-                RedirectionHelper.redirectToDashboard()
+        APIManager.shared.getSettings { [weak self] result in
+            guard let self = self else { return }
+
+            switch result {
+            case .success(let apiResponse):
+            
+                guard let data = apiResponse.body else {
+                    completed()
+                    return
+                }
                 
+                let settings =  Mapper<SettingModel>().map(JSONObject: data)
+                globalSetting = settings
+                globalIsSound = settings?.AutoPlaySound ?? false
+                globalClear = settings?.ClearMode ?? false
+                
+                completed()
+                
+            case .failure(let error):
+                print(error)
+                
+        
+                completed()
+               
             }
         }
-    
+        
     }
-      
-      setupNavBar()
-  }
+    
+    
+    
+    
+    
+    func loadNewestCoreData(completed: @escaping DownloadComplete) {
+        
+        APIManager.shared.getme { [weak self] result in
+            guard let self = self else { return }
+
+            switch result {
+            case .success(let response):
+                
+                if let data = response.body {
+                    
+                  
+                    
+                    if !data.isEmpty {
+                    
+                        if let newUserData = Mapper<UserDataSource>().map(JSON: data) {
+                            _AppCoreData.reset()
+                            _AppCoreData.userDataSource.accept(newUserData)
+                            completed()
+                        } else {
+                            completed()
+                        }
+                        
+                      
+                    } else {
+                        completed()
+                    }
+                    
+                } else {
+                    completed()
+                }
+                
+                
+            case .failure(let error):
+                print("Error loading profile: ", error)
+                completed()
+            }
+        }
+        
+        
+    }
     
     func setupNavBar() {
         
@@ -155,31 +267,64 @@ class StartViewController: UIViewController, ControllerType, ZSWTappableLabelTap
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
-        
         if player != nil {
             player!.play()
             
-            delay(1) {
-                NotificationCenter.default.addObserver(self, selector: #selector(self.playVideoDidReachEnd), name: NSNotification.Name.AVPlayerItemDidPlayToEndTime, object: self.player!.currentItem)
-            }
-        
+            // Add observer here
+            NotificationCenter.default.addObserver(self, selector: #selector(self.playVideoDidReachEnd), name: NSNotification.Name.AVPlayerItemDidPlayToEndTime, object: self.player!.currentItem)
         }
         
         setupNavBar()
-        
     }
+
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
-        
-        
+
         if player != nil {
             player!.pause()
-            
+
+            // Remove observer here
             NotificationCenter.default.removeObserver(self, name: NSNotification.Name.AVPlayerItemDidPlayToEndTime, object: player!.currentItem)
         }
-
     }
+
+    
+    
+    func buildUI() {
+        DispatchQueue.global(qos: .userInitiated).async { [weak self] in
+            guard let self = self else { return }
+            let path = Bundle.main.path(forResource: "bg", ofType: ".mp4")
+            self.player = AVPlayer(url: URL(fileURLWithPath: path!))
+            self.player?.actionAtItemEnd = AVPlayer.ActionAtItemEnd.none
+            let playerLayer = AVPlayerLayer(player: self.player)
+            playerLayer.frame = self.view.frame
+            playerLayer.videoGravity = AVLayerVideoGravity.resizeAspectFill
+            self.player?.seek(to: CMTime.zero)
+            self.player?.play()
+            self.player?.isMuted = true
+            
+            // Add observer here
+            NotificationCenter.default.addObserver(self, selector: #selector(self.playVideoDidReachEnd), name: NSNotification.Name.AVPlayerItemDidPlayToEndTime, object: self.player!.currentItem)
+
+            // Dispatch UI updates to the main thread
+            DispatchQueue.main.async { [weak self] in
+                guard let self = self else { return }
+                self.contentView.layer.insertSublayer(playerLayer, at: 0)
+                //btnLetStart.layer.cornerRadius = btnLetStart.frame.height / 2
+                self.btnLetStart.setTitle("", for: .normal)
+                self.collectionLoginProviders.forEach { (btn) in
+                    btn.setTitle("", for: .normal)
+                }
+            }
+        }
+    }
+    
+    @objc func playVideoDidReachEnd() {
+        player?.seek(to: CMTime.zero)
+    }
+
+
 
     
     func tappableLabel(_ tappableLabel: ZSWTappableLabel, tappedAt idx: Int, withAttributes attributes: [NSAttributedString.Key : Any] = [:]) {
@@ -205,49 +350,47 @@ class StartViewController: UIViewController, ControllerType, ZSWTappableLabelTap
     vm.output.errorsObservable
       .subscribe(onNext: { (error) in
         
-        DispatchQueue.main.async {
+        DispatchQueue.main.async { [weak self] in
           if (error._code == 401) {
-            self.navigationController?.pushViewController(LastStepViewController.create(), animated: true)
+            self?.navigationController?.pushViewController(LastStepViewController.create(), animated: true)
           } else {
-            self.presentError(error: error)
+            self?.presentError(error: error)
           }
         }
       })
       .disposed(by: disposeBag)
-    
+
     vm.output.loginResultObservable.subscribe(onNext: { isTrue in
       if (isTrue) {
-          RedirectionHelper.redirectToDashboard()
+          
+          if !UserDefaults.standard.bool(forKey: "hasShowCleaned") {
+              UserDefaults.standard.set(true, forKey: "hasShowCleaned")
+              
+              DispatchQueue.main.async { [weak self] in
+                  if let vc = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "ShowCleanModeVC") as? ShowCleanModeVC {
+                      vc.modalPresentationStyle = .fullScreen
+                      SwiftLoader.hide()
+                      self?.present(vc, animated: true)
+                  }
+              }
+              
+              
+          } else {
+              RedirectionHelper.redirectToDashboard()
+          }
+          
+        
       }
     })
     .disposed(by: disposeBag)
   }
-  
-  func buildUI() {
-    let path = Bundle.main.path(forResource: "bg", ofType: ".mp4")
-    player = AVPlayer(url: URL(fileURLWithPath: path!))
-    player?.actionAtItemEnd = AVPlayer.ActionAtItemEnd.none
-    let playerLayer = AVPlayerLayer(player: player)
-    playerLayer.frame = self.view.frame
-    playerLayer.videoGravity = AVLayerVideoGravity.resizeAspectFill
-    self.contentView.layer.insertSublayer(playerLayer, at: 0)
-    player!.seek(to: CMTime.zero)
-    player!.play()
-    self.player?.isMuted = true
-    
-    //btnLetStart.layer.cornerRadius = btnLetStart.frame.height / 2
-    btnLetStart.setTitle("", for: .normal)
-    collectionLoginProviders.forEach { (btn) in
-      btn.setTitle("", for: .normal)
-    }
-  
-  }
+
   
   @IBAction func didTapLetStart(_ sender: UIButton) {
 //    self.presentLoading()
 
-      UIView.animate(withDuration: 0.3) {
-          self.collectionLoginStackProviders.forEach { item in
+      UIView.animate(withDuration: 0.3) { [weak self] in
+          self?.collectionLoginStackProviders.forEach { item in
               item.isHidden = !item.isHidden
               item.alpha = item.isHidden ? 0 : 1
           }
@@ -316,11 +459,6 @@ class StartViewController: UIViewController, ControllerType, ZSWTappableLabelTap
     }
   
   
-  @objc func playVideoDidReachEnd() {
-    player!.seek(to: CMTime.zero)
-  }
-    
-    
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         super.touchesBegan(touches, with: event)
         
@@ -330,8 +468,8 @@ class StartViewController: UIViewController, ControllerType, ZSWTappableLabelTap
         
         if !termOfUseLbl.frame.contains(location) {
             
-            UIView.animate(withDuration: 0.3) {
-                self.collectionLoginStackProviders.forEach { item in
+            UIView.animate(withDuration: 0.3) { [weak self] in
+                self?.collectionLoginStackProviders.forEach { item in
                     item.isHidden = !item.isHidden
                     item.alpha = item.isHidden ? 0 : 1
                 }
@@ -353,81 +491,22 @@ class StartViewController: UIViewController, ControllerType, ZSWTappableLabelTap
         
     }
     
-}
-
-extension StartViewController {
-    
-    
-    func loadSettings(completed: @escaping DownloadComplete) {
+    func logout() {
         
-        APIManager.shared.getSettings { [weak self] result in
-            guard let self = self else { return }
-
-            switch result {
-            case .success(let apiResponse):
+        sendbirdLogout()
+        IAPManager.shared.signout()
+        removeAllUserDefaults()
+        
+        delay(1) { [weak self] in
+        guard let self = self else { return }
             
-                guard let data = apiResponse.body else {
-                    completed()
-                    return
-                }
-                
-                let settings =  Mapper<SettingModel>().map(JSONObject: data)
-                globalSetting = settings
-                globalIsSound = settings?.AutoPlaySound ?? false
-                
-                completed()
-                
-            case .failure(let error):
-                print(error)
-                completed()
-               
-            }
-        }
-        
-    }
-    
-    
-    func loadNewestCoreData(completed: @escaping DownloadComplete) {
-        
-        APIManager.shared.getme { [weak self] result in
-            guard let self = self else { return }
-
-            switch result {
-            case .success(let response):
-                
-                if let data = response.body {
-                    
-                  
-                    
-                    if !data.isEmpty {
-                    
-                        if let newUserData = Mapper<UserDataSource>().map(JSON: data) {
-                            _AppCoreData.reset()
-                            _AppCoreData.userDataSource.accept(newUserData)
-                            completed()
-                        } else {
-                            completed()
-                        }
-                        
-                      
-                    } else {
-                        completed()
-                    }
-                    
-                } else {
-                    completed()
-                }
-                
-                
-            case .failure(let error):
-                print("Error loading profile: ", error)
-                completed()
-            }
+            SwiftLoader.hide()
+            CacheManager.shared.clearAllCache()
+            _AppCoreData.signOut()
+            self.launchingView.isHidden = true
         }
         
         
     }
-    
     
 }
-

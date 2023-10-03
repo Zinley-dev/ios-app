@@ -11,6 +11,11 @@ import Combine
 
 
 class SB_ChatBot: UIViewController {
+    
+    deinit {
+        NotificationCenter.default.removeObserver(self)
+        print("SB_ChatBot is being deallocated.")
+    }
 
     let backButton: UIButton = UIButton(type: .custom)
     let gptButton = UIButton(type: .custom)
@@ -35,15 +40,17 @@ class SB_ChatBot: UIViewController {
         super.viewDidLoad()
 
         setupButtons()
-
-        presentSwiftLoader()
-        setupWithoutMeta()
-        
         setupNavBar()
+        presentSwiftLoader()
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.01) { [weak self] in
+            self?.setupWithoutMeta()
+        }
+        
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        
         
         setupNavBar()
         
@@ -68,6 +75,7 @@ class SB_ChatBot: UIViewController {
             checkPlanForToken()
             
         }
+        
     }
     
     
@@ -168,6 +176,7 @@ extension SB_ChatBot {
                     let imageSize = CGSize(width: 15, height: 15)
                     let resizedImage = clearImage.resize(targetSize: imageSize)
                     let clearButton = UIButton(type: .system)
+                    clearButton.tintColor = .black
                     clearButton.setImage(resizedImage, for: [])
                     clearButton.addTarget(self, action: #selector(self?.clearTapped), for: .touchUpInside)
                     clearButton.isEnabled = !isDisabled

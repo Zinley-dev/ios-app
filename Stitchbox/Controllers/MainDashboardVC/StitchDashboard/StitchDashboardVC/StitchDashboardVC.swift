@@ -96,24 +96,29 @@ class StitchDashboardVC: UIViewController {
         super.viewWillAppear(animated)
         setupNavBar()
         showMiddleBtn(vc: self)
-        do {
-            
-            let path = Bundle.main.path(forResource: "fox2", ofType: "gif")!
-            let gifData = try NSData(contentsOfFile: path) as Data
-            let image = FLAnimatedImage(animatedGIFData: gifData)
-            
-            
-            self.loadingImage.animatedImage = image
-            
-        } catch {
-            print(error.localizedDescription)
-        }
+        
+        DispatchQueue.global(qos: .background).async {
+                do {
+                    if let path = Bundle.main.path(forResource: "fox2", ofType: "gif") {
+                        let gifData = try Data(contentsOf: URL(fileURLWithPath: path))
+                        let image = FLAnimatedImage(animatedGIFData: gifData)
+                        
+                        DispatchQueue.main.async { [weak self] in
+                            self?.loadingImage.animatedImage = image
+                            self?.loadingView.backgroundColor = self?.view.backgroundColor
+                        }
+                    }
+                } catch {
+                    print(error.localizedDescription)
+                }
+            }
         
         loadingView.backgroundColor = self.view.backgroundColor
         navigationController?.setNavigationBarHidden(false, animated: true)
   
         
-        delay(1.5) {
+        delay(1.5) { [weak self] in
+            guard let self = self else { return }
             
             UIView.animate(withDuration: 0.5) {
                 
@@ -122,12 +127,16 @@ class StitchDashboardVC: UIViewController {
             }
             
             
-            DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) { [weak self] in
+                guard let self = self else { return }
                 
                 if self.loadingView.alpha == 0 {
                     
                     self.loadingView.isHidden = true
-                    
+                    self.loadingImage.stopAnimating()
+                    self.loadingImage.animatedImage = nil
+                    self.loadingImage.image = nil
+                    self.loadingImage.removeFromSuperview()
                 }
                 
             }
@@ -198,7 +207,7 @@ class StitchDashboardVC: UIViewController {
         self.navigationController?.navigationBar.standardAppearance = navigationBarAppearance
         self.navigationController?.navigationBar.scrollEdgeAppearance = navigationBarAppearance
         
-        navigationItem.title = "Stitch Dashboard"
+        navigationItem.title = "Stitch dashboard"
     }
     
     func setupLayers() {

@@ -90,14 +90,17 @@ class CreateAccountViewModel: ViewModelProtocol {
         return input.passwordSubject.map { $0 ~= ".*[@!#$%^&*~]+.*" }
     }
     
+    
+    
     func logic() {
         
-        self.usernameExistSubject.subscribe { isExist in
+        self.usernameExistSubject.subscribe { [weak self] isExist in
+            guard let self = self else { return }
             self.usernameExist = isExist
         }
         
-        input.usernameSubject.subscribe(onNext: { uname in
-            
+        input.usernameSubject.subscribe(onNext: { [weak self] uname in
+            guard let self = self else { return }
             
             print("SUBCRIBE>...")
             if uname.count >= 3 {
@@ -124,7 +127,8 @@ class CreateAccountViewModel: ViewModelProtocol {
         })
         .disposed(by: disposeBag)
         
-        submitDidTapSubject.subscribe(onNext: { (username, password, ref) in
+        submitDidTapSubject.subscribe(onNext: { [weak self] (username, password, ref) in
+            guard let self = self else { return }
             print("Register with uname: \(username) and pwd: \(password) and ref: \(ref)")
             // get phone
             if let phone = _AppCoreData.userDataSource.value?.phone, phone != "" {

@@ -67,8 +67,10 @@ public struct MarkdownAttributedStringParser: MarkupVisitor {
     }
     
     mutating public func visitText(_ text: Text) -> NSAttributedString {
-        return NSAttributedString(string: text.plainText, attributes: [.font: UIFont.systemFont(ofSize: baseFontSize, weight: .regular)])
+        let font = FontManager.shared.roboto(.Regular, size: baseFontSize)
+        return NSAttributedString(string: text.plainText, attributes: [.font: font])
     }
+
     
     mutating public func visitEmphasis(_ emphasis: Emphasis) -> NSAttributedString {
         let result = NSMutableAttributedString()
@@ -167,7 +169,8 @@ public struct MarkdownAttributedStringParser: MarkupVisitor {
     mutating public func visitUnorderedList(_ unorderedList: UnorderedList) -> NSAttributedString {
         let result = NSMutableAttributedString()
         
-        let font = UIFont.systemFont(ofSize: baseFontSize, weight: .regular)
+        let font = FontManager.shared.roboto(.Regular, size: baseFontSize)
+
                 
         for listItem in unorderedList.listItems {
             var listItemAttributes: [NSAttributedString.Key: Any] = [:]
@@ -189,7 +192,7 @@ public struct MarkdownAttributedStringParser: MarkupVisitor {
             listItemParagraphStyle.headIndent = secondTabLocation
             
             listItemAttributes[.paragraphStyle] = listItemParagraphStyle
-            listItemAttributes[.font] = UIFont.systemFont(ofSize: baseFontSize, weight: .regular)
+            listItemAttributes[.font] = FontManager.shared.roboto(.Regular, size: baseFontSize)
             listItemAttributes[.listDepth] = unorderedList.listDepth
             
             let listItemAttributedString = visit(listItem).mutableCopy() as! NSMutableAttributedString
@@ -225,7 +228,7 @@ public struct MarkdownAttributedStringParser: MarkupVisitor {
         for (index, listItem) in orderedList.listItems.enumerated() {
             var listItemAttributes: [NSAttributedString.Key: Any] = [:]
             
-            let font = UIFont.systemFont(ofSize: baseFontSize, weight: .regular)
+            let font = FontManager.shared.roboto(.Regular, size: baseFontSize)
             let numeralFont = UIFont.monospacedDigitSystemFont(ofSize: baseFontSize, weight: .regular)
             
             let listItemParagraphStyle = NSMutableParagraphStyle()
@@ -288,7 +291,7 @@ public struct MarkdownAttributedStringParser: MarkupVisitor {
             quoteParagraphStyle.headIndent = leftMarginOffset
             
             quoteAttributes[.paragraphStyle] = quoteParagraphStyle
-            quoteAttributes[.font] = UIFont.systemFont(ofSize: baseFontSize, weight: .regular)
+            quoteAttributes[.font] = FontManager.shared.roboto(.Regular, size: baseFontSize)
             quoteAttributes[.listDepth] = blockQuote.quoteDepth
             
             let quoteAttributedString = visit(child).mutableCopy() as! NSMutableAttributedString
@@ -441,11 +444,14 @@ extension Markup {
 
 extension NSAttributedString {
     static func singleNewline(withFontSize fontSize: CGFloat) -> NSAttributedString {
-        return NSAttributedString(string: "\n", attributes: [.font: UIFont.systemFont(ofSize: fontSize, weight: .regular)])
+        let font = FontManager.shared.roboto(.Regular, size: fontSize)
+        return NSAttributedString(string: "\n", attributes: [.font: font])
     }
     
     static func doubleNewline(withFontSize fontSize: CGFloat) -> NSAttributedString {
-        return NSAttributedString(string: "\n\n", attributes: [.font: UIFont.systemFont(ofSize: fontSize, weight: .regular)])
+        let font = FontManager.shared.roboto(.Regular, size: fontSize)
+        return NSAttributedString(string: "\n\n", attributes: [.font: font])
     }
 }
+
 

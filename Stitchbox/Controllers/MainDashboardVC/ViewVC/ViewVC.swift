@@ -26,7 +26,7 @@ class ViewVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
    
     var window: UIWindow?
     
-    var sections = [setting(name:"Views", items: ["Total views", "Views in 60 mins", "Views in 24 hours"]), setting(name:"GG!", items: ["Total GG!","GG! in 60 mins", "GG! in 24 hours"]), setting(name:"Streamlink", items: ["Total clicked","Clicked in 60 mins", "Clicked in 24 hours"])]
+    var sections = [setting(name:"Views", items: ["Total views", "Views in 60 mins", "Views in 24 hours"]), setting(name:"GG!", items: ["Total likes!","Likes in 60 mins", "Likes in 24 hours"])]
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -36,9 +36,24 @@ class ViewVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
         self.tableView.delegate = self
         self.tableView.dataSource = self
         self.tableView.allowsSelection = false
-      
+        self.tableView.backgroundColor = .white
+        self.view.backgroundColor = .white
         
         loadPostStats()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+       
+        let navigationBarAppearance = UINavigationBarAppearance()
+        navigationBarAppearance.configureWithOpaqueBackground()
+        navigationBarAppearance.backgroundColor = .white
+        navigationBarAppearance.titleTextAttributes = [.foregroundColor: UIColor.black]
+        navigationBarAppearance.largeTitleTextAttributes = [.foregroundColor: UIColor.black]
+        
+        self.navigationController?.navigationBar.standardAppearance = navigationBarAppearance
+        self.navigationController?.navigationBar.scrollEdgeAppearance = navigationBarAppearance
+        
     }
     
     func loadPostStats() {
@@ -80,8 +95,8 @@ class ViewVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, willDisplayHeaderView view: UIView, forSection section: Int) {
          
-        (view as! UITableViewHeaderFooterView).contentView.backgroundColor = UIColor.background
-        (view as! UITableViewHeaderFooterView).textLabel?.textColor = UIColor.white
+        (view as! UITableViewHeaderFooterView).contentView.backgroundColor = UIColor.white
+        (view as! UITableViewHeaderFooterView).textLabel?.textColor = UIColor.black
         
         if let frame = (view as! UITableViewHeaderFooterView).textLabel?.frame {
             
@@ -214,7 +229,7 @@ extension ViewVC {
         backButton.frame = back_frame
         backButton.contentMode = .center
 
-        if let backImage = UIImage(named: "back_icn_white") {
+        if let backImage = UIImage(named: "back-black") {
             let imageSize = CGSize(width: 13, height: 23)
             let padding = UIEdgeInsets(top: (back_frame.height - imageSize.height) / 2,
                                        left: (back_frame.width - imageSize.width) / 2 - horizontalPadding,

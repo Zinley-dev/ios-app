@@ -16,15 +16,14 @@ import AVFAudio
 import ObjectMapper
 import AppTrackingTransparency
 import AdSupport
-import AppsFlyerLib
 import AsyncDisplayKit
 
 
 let incomingCallGreen = UIColor(red: 76.0/255.0, green: 217.0/255.0, blue: 100.0/255.0, alpha: 1.0)
 let hashtagPurple = UIColor(red: 88.0/255.0, green: 86.0/255.0, blue: 214.0/255.0, alpha: 1.0)
 let alertColor = UIColor(red: 0.8, green: 0.2, blue: 0.2, alpha: 1.0)
-
-
+var mainRootId = ""
+var mainSeletedId = ""
 let saveImage = UIImage.init(named: "saved.filled")?.resize(targetSize: CGSize(width: 16, height: 20.3125))
 let unsaveImage = UIImage.init(named: "save")?.resize(targetSize: CGSize(width: 16, height: 20.3125))
 
@@ -56,6 +55,7 @@ var newSlogan = ""
 var didChanged = false
 var reloadAddedGame = false
 var globalIsSound = false
+var globalClear = false
 var shouldMute: Bool?
 var globalSetting: SettingModel!
 var navigationControllerHeight:CGFloat = 0.0
@@ -64,21 +64,12 @@ let horizontalPadding: CGFloat = 12
 let bottomValue: CGFloat = 40
 let bottomValueNoHide: CGFloat = 0
 
-let data1 = StreamingDomainModel(postKey: "1", streamingDomainModel: ["company": "Stitchbox", "domain": ["stitchbox.gg"], "status": true])
-let data2 = StreamingDomainModel(postKey: "2", streamingDomainModel: ["company": "YouTube Gaming", "domain": ["youtube.com, m.youtube.com"], "status": true])
-let data3 = StreamingDomainModel(postKey: "3", streamingDomainModel: ["company": "Twitch", "domain": ["twitch.tv", "m.twitch.tv"], "status": true])
-let data4 = StreamingDomainModel(postKey: "4", streamingDomainModel: ["company": "Facebook gaming", "domain": ["facebook.com", "m.facebook.com"], "status": true])
-let data5 = StreamingDomainModel(postKey: "5", streamingDomainModel: ["company": "Bigo Live", "domain": ["bigo.tv"], "status": true])
-let data6 = StreamingDomainModel(postKey: "6", streamingDomainModel: ["company": "Nonolive", "domain": ["nonolive.com"], "status": true])
-let data7 = StreamingDomainModel(postKey: "7", streamingDomainModel: ["company": "Afreeca", "domain": ["afreecatv.com"], "status": true])
 
 var emptyimage = "https://img.freepik.com/premium-photo/gray-wall-empty-room-with-concrete-floor_53876-70804.jpg?w=1380"
 var emptySB = "https://stitchbox-app-images.s3.us-east-1.amazonaws.com/adf94fba-69a1-4dc3-b934-003a04265c39.png"
 let xBtn = UIImage(named: "1024x")?.resize(targetSize: CGSize(width: 12, height: 12))
 
-var streaming_domain = [data1, data2, data3, data4, data5, data6, data7]
 var back_frame = CGRect(x: 0, y: 0, width: 44, height: 44)
-var discord_domain = ["discordapp.com", "discord.com", "discord.co", "discord.gg", "watchanimeattheoffice.com", "dis.gd", "discord.media", "discordapp.net", "discordstatus.com" ]
 
 let muteImage = UIImage.init(named: "3xmute")?.resize(targetSize: CGSize(width: 26, height: 26)).withRenderingMode(.alwaysOriginal)
 let unmuteImage = UIImage.init(named: "3xunmute")?.resize(targetSize: CGSize(width: 26, height: 26)).withRenderingMode(.alwaysOriginal)
@@ -302,9 +293,6 @@ extension UICollectionReusableView {
 }
 
 
-func check_Url(host: String) -> Bool {
-    return streaming_domain.contains { $0.domain.contains(host) }
-}
 
 extension UITextView {
     
@@ -329,32 +317,6 @@ extension UITextView {
         return newFrame.height
     }
 }
-
-
-func handlePauseVideoInCell(_ cell: ReelNode) {
-    cell.videoNode.player?.seek(to: CMTime.zero)
-    cell.videoNode.pause()
-}
-
-func handlePauseVideoInReelCell(_ cell: ReelNode) {
-    cell.videoNode.player?.seek(to: CMTime.zero)
-    cell.videoNode.pause()
-}
-
-func handleVideoNodeInCell(_ cell: ReelNode, muteStatus: Bool) {
-    guard !cell.videoNode.isPlaying() else { return }
-    
-    cell.videoNode.muted = muteStatus
-    cell.videoNode.play()
-}
-
-func handleVideoNodeInReelCell(_ cell: ReelNode, muteStatus: Bool) {
-    guard !cell.videoNode.isPlaying() else { return }
-    cell.videoNode.muted = muteStatus
-    cell.videoNode.play()
-    
-}
-
 
 
 class ImageSaver: NSObject {
@@ -388,16 +350,6 @@ func presentSwiftLoader() {
     
     SwiftLoader.show(title: "", animated: true)
 
-}
-
-
-func discord_verify(host: String) -> Bool  {
-    
-    if discord_domain.contains(host) {
-        return true
-    }
-    
-    return false
 }
 
 
@@ -547,7 +499,6 @@ func reloadGlobalSettings() {
             }
 
             globalSetting =  Mapper<SettingModel>().map(JSONObject: data)
-           
       
         case .failure(let error):
         
@@ -560,51 +511,76 @@ func reloadGlobalSettings() {
 
 func unmuteVideoIfNeed() {
   
+    
     if let vc = UIViewController.currentViewController() {
          
-        if vc is FeedViewController {
+        if vc is ParentViewController {
             
-            if let update1 = vc as? FeedViewController {
+            if let update1 = vc as? ParentViewController {
                 
-                if update1.currentIndex != nil {
+                
+                if update1.isFeed {
                     
-                    if let cell = update1.collectionNode.nodeForItem(at: IndexPath(row: update1.currentIndex!, section: 0)) as? OriginalNode {
+                    if update1.feedViewController.currentIndex == nil {
+                        update1.feedViewController.currentIndex = 0
+                    }
+                    
+                    if let cell2 = update1.feedViewController.collectionNode.nodeForItem(at: IndexPath(row: update1.feedViewController.currentIndex!, section: 0)) as? VideoNode {
                         
-                        if let cell2 = cell.collectionNode.nodeForItem(at: IndexPath(row: cell.newPlayingIndex!, section: 0)) as? ReelNode {
-                            
-                            cell2.videoNode.muted = false
-                            shouldMute = false
-                        }
+                        cell2.unmuteVideo()
+                        shouldMute = false
                         
+                    }
+                    
+                } else {
+                    
+                    if update1.stitchViewController.currentIndex == nil {
+                        update1.stitchViewController.currentIndex = 0
+                    }
+                    
+                    if let cell2 = update1.stitchViewController.collectionNode.nodeForItem(at: IndexPath(row: update1.stitchViewController.currentIndex!, section: 0)) as? VideoNode {
+                        
+                        cell2.unmuteVideo()
+                        shouldMute = false
                         
                     }
                     
                 }
-                
-               
-                
+                 
             }
             
-        } else if vc is SelectedPostVC {
+        } else if vc is SelectedParentVC {
             
-            if let update1 = vc as? SelectedPostVC {
+            if let update1 = vc as? SelectedParentVC {
                 
-                if update1.currentIndex != nil {
+                
+                if update1.isRoot {
                     
-                    if let cell = update1.collectionNode.nodeForItem(at: IndexPath(row: update1.currentIndex!, section: 0)) as? OriginalNode {
+                    if update1.selectedRootPostVC.currentIndex == nil {
+                        update1.selectedRootPostVC.currentIndex = 0
+                    }
+                    
+                    if let cell2 = update1.selectedRootPostVC.collectionNode.nodeForItem(at: IndexPath(row: update1.selectedRootPostVC.currentIndex!, section: 0)) as? VideoNode {
                         
-                        if let cell2 = cell.collectionNode.nodeForItem(at: IndexPath(row: cell.newPlayingIndex!, section: 0)) as? ReelNode {
-                            
-                            cell2.videoNode.muted = false
-                            shouldMute = false
-                        }
+                        cell2.unmuteVideo()
+                        shouldMute = false
                         
+                    }
+                    
+                } else {
+                    
+                    if update1.stitchViewController.currentIndex == nil {
+                        update1.stitchViewController.currentIndex = 0
+                    }
+                    
+                    if let cell2 = update1.stitchViewController.collectionNode.nodeForItem(at: IndexPath(row: update1.stitchViewController.currentIndex!, section: 0)) as? VideoNode {
+                        
+                        cell2.unmuteVideo()
+                        shouldMute = false
                         
                     }
                     
                 }
-                
-               
                 
             }
             
@@ -614,20 +590,14 @@ func unmuteVideoIfNeed() {
                 
                 if update1.currentIndex != nil {
                     
-                    if let cell = update1.collectionNode.nodeForItem(at: IndexPath(row: update1.currentIndex!, section: 0)) as? OriginalNode {
+                    if let cell2 = update1.collectionNode.nodeForItem(at: IndexPath(row: update1.currentIndex!, section: 0)) as? VideoNode {
                         
-                        if let cell2 = cell.collectionNode.nodeForItem(at: IndexPath(row: cell.newPlayingIndex!, section: 0)) as? ReelNode {
-                            
-                            cell2.videoNode.muted = false
-                            shouldMute = false
-                        }
-                        
+                        cell2.unmuteVideo()
+                        shouldMute = false
                         
                     }
                     
                 }
-                
-               
                 
             }
             
@@ -643,8 +613,9 @@ func unmuteVideoIfNeed() {
                         
                         if let cell = update1.PendingVC.waitCollectionNode.nodeForItem(at: IndexPath(row: update1.PendingVC.currentIndex!, section: 0)) as? PendingNode {
                             
-                            cell.videoNode.muted = false
+                            cell.unmuteVideo()
                             shouldMute = false
+                            
                         }
                         
                     }
@@ -655,8 +626,9 @@ func unmuteVideoIfNeed() {
                         
                         if let cell = update1.StitchToVC.waitCollectionNode.nodeForItem(at: IndexPath(row: update1.StitchToVC.currentIndex!, section: 0)) as? StitchControlForRemoveNode {
                             
-                            cell.videoNode.muted = false
+                            cell.unmuteVideo()
                             shouldMute = false
+                            
                         }
                         
                     }
@@ -668,8 +640,9 @@ func unmuteVideoIfNeed() {
                         
                         if let cell = update1.ApprovedStitchVC.waitCollectionNode.nodeForItem(at: IndexPath(row: update1.ApprovedStitchVC.currentIndex!, section: 0)) as? StitchControlForRemoveNode {
                             
-                            cell.videoNode.muted = false
+                            cell.unmuteVideo()
                             shouldMute = false
+                            
                         }
                         
                     }
@@ -686,75 +659,7 @@ func unmuteVideoIfNeed() {
 }
 
 
-func muteVideoIfNeed() {
-  
-    if let vc = UIViewController.currentViewController() {
-         
-        if vc is FeedViewController {
-            
-            if let update1 = vc as? FeedViewController {
-                
-                if update1.currentIndex != nil {
-                    
-                    if let cell = update1.collectionNode.nodeForItem(at: IndexPath(row: update1.currentIndex!, section: 0)) as? OriginalNode {
-                        
-                        if let cell2 = cell.collectionNode.nodeForItem(at: IndexPath(row: cell.newPlayingIndex!, section: 0)) as? ReelNode {
-                            
-                            
-                            if cell2.videoNode.isPlaying() {
-                                
-                                cell2.videoNode.muted = true
-                                shouldMute = true
-                                
-                                
-                            }
-                            
-                        }
-
-                        
-                    }
-                    
-                }
-                
-               
-                
-            }
-            
-        } else if vc is SelectedPostVC {
-            
-            if let update1 = vc as? SelectedPostVC {
-                
-                if update1.currentIndex != nil {
-                    
-                    if let cell = update1.collectionNode.nodeForItem(at: IndexPath(row: update1.currentIndex!, section: 0)) as? OriginalNode {
-                        
-                        if let cell2 = cell.collectionNode.nodeForItem(at: IndexPath(row: cell.newPlayingIndex!, section: 0)) as? ReelNode {
-                            
-                            
-                            if cell2.videoNode.isPlaying() {
-                                
-                                cell2.videoNode.muted = true
-                                shouldMute = true
-                                
-                                
-                            }
-                            
-                        }
-
-                        
-                    }
-                    
-                }
-                  
-            }
-            
-        }
-        
-    }
-    
-}
-
-func resetView(cell: ReelNode) {
+func resetView(cell: VideoNode) {
     
     if cell.isViewed == true {
         
@@ -774,25 +679,6 @@ func resetView(cell: ReelNode) {
     
 }
 
-func resetViewForReel(cell: ReelNode) {
-    
-    if cell.isViewed == true {
-        
-        let currentTime = NSDate().timeIntervalSince1970
-        
-        let change = currentTime - cell.last_view_timestamp
-        
-        if change > 30.0 {
-            
-            cell.isViewed = false
-            cell.time = 0
-        
-        }
-        
-    }
-    
-    
-}
 
 extension UIView {
     
@@ -930,73 +816,67 @@ func requestAppleReview() {
 
 class CustomSlider: UISlider {
     
-    @IBInspectable var trackHeight: CGFloat = 1.67
+    @IBInspectable var trackHeight: CGFloat = 1
     @IBInspectable var highlightedTrackHeight: CGFloat = 7.0
-    @IBInspectable var thumbRadius: CGFloat = 3
+    @IBInspectable var thumbRadius: CGFloat = 2
     @IBInspectable var highlightedThumbRadius: CGFloat = 10
     @IBInspectable var hitBoxSize: CGFloat = 40 // Size of hit box area
+    private var thumbImageCache: [CGFloat: UIImage] = [:]
+
     
-    private lazy var thumbView: UIView = {
+    lazy var thumbView: UIView = {
         let thumb = UIView()
-        thumb.backgroundColor = .white
+        thumb.backgroundColor = .clear
         return thumb
     }()
     
-    override func awakeFromNib() {
-        super.awakeFromNib()
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        setupSlider()
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+        super.init(coder: aDecoder)
+      
+    }
+    
+    private func setupSlider() {
         let thumb = thumbImage(radius: thumbRadius)
         setThumbImage(thumb, for: .normal)
         
-        self.addTarget(self, action: #selector(sliderDidStartSliding), for: .touchDown)
-        self.addTarget(self, action: #selector(sliderDidEndSliding), for: [.touchUpInside, .touchUpOutside])
-        self.addTarget(self, action: #selector(sliderValueDidChange), for: .valueChanged)
+        self.maximumTrackTintColor = .darkGray
+        self.minimumTrackTintColor = .secondary
+        
     }
     
+    func thumbImage(radius: CGFloat) -> UIImage {
+        // Check for a cached image for the given radius
+        if let cachedImage = thumbImageCache[radius] {
+            return cachedImage
+        }
+        
+        // If there's no cached image, generate a new one
+        thumbView.frame = CGRect(x: 0, y: 0, width: radius * 2, height: radius * 2)
+        thumbView.layer.cornerRadius = radius
+        thumbView.layer.masksToBounds = true
+        
+        let renderer = UIGraphicsImageRenderer(bounds: thumbView.bounds)
+        let generatedImage = renderer.image { rendererContext in
+            thumbView.layer.render(in: rendererContext.cgContext)
+        }
+        
+        // Cache the generated image for the current radius
+        thumbImageCache[radius] = generatedImage
+        
+        return generatedImage
+    }
+
     
     // Override hit test to expand touch area
     override func point(inside point: CGPoint, with event: UIEvent?) -> Bool {
         let expandedBounds = bounds.insetBy(dx: -(hitBoxSize / 2 - thumbRadius), dy: -(hitBoxSize / 2 - thumbRadius))
         return expandedBounds.contains(point)
     }
-
-    
-    private func thumbImage(radius: CGFloat) -> UIImage {
-            thumbView.frame = CGRect(x: 0, y: radius / 2, width: radius * 2, height: radius * 2)
-            thumbView.layer.cornerRadius = radius
-            
-            let renderer = UIGraphicsImageRenderer(bounds: thumbView.bounds)
-            return renderer.image { rendererContext in
-                thumbView.layer.render(in: rendererContext.cgContext)
-            }
-        }
-
-    
-    @objc func sliderDidStartSliding() {
-        processOnSliding()
-        startLayout()
-    }
-    
-    @objc func sliderDidEndSliding() {
-        processEndedSliding()
-        endLayout()
-    }
-    
-    func startLayout() {
-        let thumb = thumbImage(radius: highlightedThumbRadius)
-        setThumbImage(thumb, for: .normal)
-        trackHeight = highlightedTrackHeight
-        hitBoxSize = highlightedThumbRadius * 2 + 40 // You might want to adjust this value
-        setNeedsDisplay()
-    }
-
-    func endLayout() {
-        let thumb = thumbImage(radius: thumbRadius)
-        setThumbImage(thumb, for: .normal)
-        trackHeight = 2
-        hitBoxSize = thumbRadius * 2 + 40 // You might want to adjust this value
-        setNeedsDisplay()
-    }
-
     
     override func trackRect(forBounds bounds: CGRect) -> CGRect {
         var newRect = super.trackRect(forBounds: bounds)
@@ -1004,222 +884,22 @@ class CustomSlider: UISlider {
         return newRect
     }
     
-    @objc func sliderValueDidChange() {
-        // Get the new video time
-        
-        if let vc = UIViewController.currentViewController() {
-            
-            if let update1 = vc as? FeedViewController {
-                
-                update1.timeLbl.text = processTime()
-
-                
-            } else if let update1 = vc as? SelectedPostVC {
-                
-                update1.timeLbl.text = processTime()
-                
-            }
-            
+    func startLayout() {
+            let thumb = thumbImage(radius: highlightedThumbRadius)
+            setThumbImage(thumb, for: .normal)
+            trackHeight = highlightedTrackHeight
+            hitBoxSize = highlightedThumbRadius * 2 + 40 // You might want to adjust this value
+            setNeedsDisplay()
         }
-        
-    }
 
+        func endLayout() {
+            let thumb = thumbImage(radius: thumbRadius)
+            setThumbImage(thumb, for: .normal)
+            trackHeight = 1
+            hitBoxSize = thumbRadius * 2 + 40 // You might want to adjust this value
+            setNeedsDisplay()
+        }
     
-    func processTime() -> String {
-        
-        let newVideoTime = CMTimeMakeWithSeconds(Float64(self.value), preferredTimescale: Int32(NSEC_PER_SEC))
-
-        // Calculate the minutes and seconds
-        let totalSeconds = Int(CMTimeGetSeconds(newVideoTime))
-        let seconds = totalSeconds % 60
-        let minutes = totalSeconds / 60
-
-        // Calculate total duration minutes and seconds
-        let totalDurationSeconds = Int(self.maximumValue)
-        let durationSeconds = totalDurationSeconds % 60
-        let durationMinutes = totalDurationSeconds / 60
-
-        // Print the time in the format 00:00 / 00:00
-        return String(format: "%02d:%02d / %02d:%02d", minutes, seconds, durationMinutes, durationSeconds)
-        
-    }
-    
-    func processOnSliding() {
-        
-        if let vc = UIViewController.currentViewController() {
-            
-            if let update1 = vc as? FeedViewController {
-                
-                if update1.tabBarController?.tabBar.isTranslucent == false {
-                    update1.bottomConstraint.constant = 10
-                }
-                
-                if update1.currentIndex != nil {
-                    //update1.pauseVideo(index: update1.currentIndex!)
-                    
-                    if let currentCell = update1.collectionNode.nodeForItem(at: IndexPath(item: update1.currentIndex!, section: 0)) as? OriginalNode {
-                        
-                        currentCell.pauseVideo(index: currentCell.currentIndex!)
-                        
-                        
-                    }
-                    
-                }
-                
-                update1.timeLbl.text = processTime()
-                update1.timeLbl.isHidden = false
-                update1.blurView.isHidden = false
-                
-                
-            }  else if let update1 = vc as? SelectedPostVC {
-                
-               
-                if update1.currentIndex != nil {
-                    update1.pauseVideo(index: update1.currentIndex!)
-                } else if update1.startIndex != nil {
-                    update1.pauseVideo(index: update1.startIndex!)
-                }
-                
-                if update1.currentIndex != nil {
-                    //update1.pauseVideo(index: update1.currentIndex!)
-                    
-                    if let currentCell = update1.collectionNode.nodeForItem(at: IndexPath(item: update1.currentIndex!, section: 0)) as? OriginalNode {
-                        
-                        currentCell.pauseVideo(index: currentCell.currentIndex!)
-                        
-                        
-                    }
-                    
-                } else {
-                    
-                    if update1.startIndex != nil {
-                        //update1.pauseVideo(index: update1.currentIndex!)
-                        
-                        if let currentCell = update1.collectionNode.nodeForItem(at: IndexPath(item: update1.startIndex!, section: 0)) as? OriginalNode {
-                            
-                            currentCell.pauseVideo(index: currentCell.currentIndex!)
-                            
-                            
-                        }
-                        
-                    }
-                    
-                    
-                }
-                
-                update1.timeLbl.text = processTime()
-                update1.timeLbl.isHidden = false
-                update1.blurView.isHidden = false
-                
-            } else if let update1 = vc as? PreviewVC {
-                
-                if update1.currentIndex != nil {
-                    update1.pauseVideo(index: update1.currentIndex!)
-                }
-                
-                update1.timeLbl.text = processTime()
-                update1.timeLbl.isHidden = false
-                update1.blurView.isHidden = false
-                
-                
-            }
-            
-        }
-        
-    }
-
-    func processEndedSliding() {
-        
-        if let vc = UIViewController.currentViewController() {
-            
-            if let update1 = vc as? FeedViewController {
-                
-                if update1.tabBarController?.tabBar.isTranslucent == false {
-                    update1.bottomConstraint.constant = bottomValueNoHide
-                } else {
-                    update1.bottomConstraint.constant = bottomValue
-                }
-                
-              
-                if update1.currentIndex != nil {
-                    //newPlayingIndex
-                    
-                    let newVideoTime = CMTimeMakeWithSeconds(Float64(self.value), preferredTimescale: Int32(NSEC_PER_SEC))
-                    
-                    if let currentCell = update1.collectionNode.nodeForItem(at: IndexPath(item: update1.currentIndex!, section: 0)) as? OriginalNode {
-                        
-                        currentCell.seekVideo(index: currentCell.currentIndex!, time: newVideoTime)
-                        currentCell.playVideo(index: currentCell.currentIndex!)
-                        
-                        
-                    }
-
-                }
-                
-                update1.timeLbl.isHidden = true
-                update1.blurView.isHidden = true
-                
-            } else if let update1 = vc as? SelectedPostVC {
-                
-               
-                if update1.currentIndex != nil {
-                    //newPlayingIndex
-                    
-                    let newVideoTime = CMTimeMakeWithSeconds(Float64(self.value), preferredTimescale: Int32(NSEC_PER_SEC))
-                    
-                    if let currentCell = update1.collectionNode.nodeForItem(at: IndexPath(item: update1.currentIndex!, section: 0)) as? OriginalNode {
-                        
-                        currentCell.seekVideo(index: currentCell.currentIndex!, time: newVideoTime)
-                        currentCell.playVideo(index: currentCell.currentIndex!)
-                        
-                        
-                    }
-
-                } else {
-                    
-                    if update1.startIndex != nil {
-                        //newPlayingIndex
-                        
-                        let newVideoTime = CMTimeMakeWithSeconds(Float64(self.value), preferredTimescale: Int32(NSEC_PER_SEC))
-                        
-                        if let currentCell = update1.collectionNode.nodeForItem(at: IndexPath(item: update1.startIndex!, section: 0)) as? OriginalNode {
-                            
-                            currentCell.seekVideo(index: currentCell.currentIndex!, time: newVideoTime)
-                            currentCell.playVideo(index: currentCell.currentIndex!)
-                            
-                            
-                        }
-
-                    }
-                    
-                }
-                
-                update1.timeLbl.isHidden = true
-                update1.blurView.isHidden = true
-                
-            } else if let update1 = vc as? PreviewVC {
-                
-                if update1.currentIndex != nil {
-                    //newPlayingIndex
-                    
-                    let newVideoTime = CMTimeMakeWithSeconds(Float64(self.value), preferredTimescale: Int32(NSEC_PER_SEC))
-
-                    
-                    update1.seekVideo(index: update1.currentIndex!, time: newVideoTime)
-                    update1.playVideo(index: update1.currentIndex!)
-                    
-                }
-                
-                update1.timeLbl.isHidden = true
-                update1.blurView.isHidden = true
-                
-                
-            }
-            
-        }
-        
-    }
-
 }
 
 
@@ -1232,46 +912,17 @@ func removeAllUserDefaults() {
 
 
 func requestTrackingAuthorization(userId: String) {
-    AppsFlyerLib.shared().waitForATTUserAuthorization(timeoutInterval: 60)
-    ATTrackingManager.requestTrackingAuthorization { status in
-        switch status {
-        case .authorized:
-            // User has authorized tracking.
-            print("User has authorized tracking.")
-            AppsFlyerLib.shared().customerUserID = userId
-            AppsFlyerLib.shared().start(completionHandler: { (dictionary, error) in
-                        if (error != nil){
-                            print(error ?? "")
-                            return
-                        } else {
-                            print(dictionary ?? "")
-                            return
-                        }
-                    })
-        case .denied:
-            // User has denied tracking.
-            print("User has denied tracking.")
-        case .notDetermined:
-            // User has not yet made a choice.
-            print("User has not yet made a choice.")
-        case .restricted:
-            // The device is restricted from tracking.
-            print("The device is restricted from tracking.")
-        @unknown default:
-            // Handle other cases.
-            print("Unknown case.")
-        }
-    }
+
 }
 
 extension UIView {
     func pinToSuperviewEdges() {
-        guard let superview = self.superview else { return }
-        self.translatesAutoresizingMaskIntoConstraints = false
-        self.topAnchor.constraint(equalTo: superview.topAnchor).isActive = true
-        self.bottomAnchor.constraint(equalTo: superview.bottomAnchor).isActive = true
-        self.leadingAnchor.constraint(equalTo: superview.leadingAnchor).isActive = true
-        self.trailingAnchor.constraint(equalTo: superview.trailingAnchor).isActive = true
+        guard let superview = superview else { return }
+        translatesAutoresizingMaskIntoConstraints = false
+        topAnchor.constraint(equalTo: superview.topAnchor).isActive = true
+        bottomAnchor.constraint(equalTo: superview.bottomAnchor).isActive = true
+        leadingAnchor.constraint(equalTo: superview.leadingAnchor).isActive = true
+        trailingAnchor.constraint(equalTo: superview.trailingAnchor).isActive = true
     }
 }
 
@@ -1280,11 +931,71 @@ class ShadowedView: UIView {
     
     override func layoutSubviews() {
         super.layoutSubviews()
-        self.layer.shadowColor = UIColor.black.cgColor
-        self.layer.shadowOpacity = 0.5
-        self.layer.shadowOffset = CGSize(width: 0, height: 2)
-        self.layer.shadowRadius = 5
-        self.layer.masksToBounds = false
+        layer.shadowColor = UIColor.black.cgColor
+        layer.shadowOpacity = 0.5
+        layer.shadowOffset = CGSize(width: 0, height: 2)
+        layer.shadowRadius = 5
+        layer.masksToBounds = false
     }
 
+}
+
+extension UITabBarController {
+    
+    func changeTabBar(hidden: Bool, animated: Bool) {
+        let tabBar = self.tabBar
+
+        if tabBar.isHidden == hidden {
+            return
+        }
+
+        let duration: TimeInterval = (animated ? 0.25 : 0.0)
+
+        if hidden {
+            UIView.animate(withDuration: duration, animations: {
+                tabBar.alpha = 0
+            }, completion: { _ in
+                tabBar.isHidden = true
+                tabBar.alpha = 1 // Reset the alpha back to 1
+            })
+        } else {
+            tabBar.isHidden = false
+            tabBar.alpha = 0
+
+            UIView.animate(withDuration: duration) {
+                tabBar.alpha = 1
+            }
+        }
+    }
+}
+
+
+protocol PostManaging {
+    var editeddPost: PostModel? { get }
+    var posts: [PostModel] { get set }
+    var collectionNode: ASCollectionNode { get } // Replace with your collection node type
+}
+
+
+func requestTrackingAuthorization() {
+    ATTrackingManager.requestTrackingAuthorization(completionHandler: { status in
+        switch status {
+        case .authorized:
+            // User has granted permission to track
+            // You can now access the IDFA
+            let idfa = ASIdentifierManager.shared().advertisingIdentifier.uuidString
+            print("IDFA: \(idfa)")
+        case .denied:
+            // User has denied permission to track
+            print("Tracking denied")
+        case .restricted:
+            // Tracking capability is restricted
+            print("Tracking restricted")
+        case .notDetermined:
+            // User has not been asked for tracking permission
+            print("Tracking not determined")
+        @unknown default:
+            print("Unknown tracking status")
+        }
+    })
 }
