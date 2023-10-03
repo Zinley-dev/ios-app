@@ -407,6 +407,14 @@ extension APIManager {
         }
       }
   
+  func updateLocation(lat: String, lng: String, completion: @escaping APICompletion) {
+    var params = ["lat": lat, "lng": lng];
+    userManager.request(.updateLocation(params: params)){
+      result in
+      completion(result)
+    }
+  }
+  
     func updatePhone(phone: String, completion: @escaping APICompletion) {
       userManager.request(.updatePhone(params: ["phone": phone])){
           result in
