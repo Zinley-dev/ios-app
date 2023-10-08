@@ -154,7 +154,7 @@ class PendingNode: ASCellNode, ASVideoNodeDelegate {
         self.label.customColor[customType] = .lightGray
         self.label.enabledTypes = [.hashtag, .url, customType]
        
-        self.label.hashtagColor = UIColor(red: 0.0/255, green: 204.0/255, blue: 255.0/255, alpha: 1)
+        self.label.hashtagColor = UIColor(red: 208/255, green: 223/255, blue: 252/255, alpha: 1)
 
         self.label.URLColor = UIColor(red: 60/255, green: 115/255, blue: 180/255, alpha: 1)
 

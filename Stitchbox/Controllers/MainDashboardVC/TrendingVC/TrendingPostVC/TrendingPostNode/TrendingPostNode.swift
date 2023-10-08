@@ -108,7 +108,7 @@ class TrendingPostNode: ASCellNode {
         ])
 
         // Color for hashtags
-        let hashtagColor = UIColor(red: 85.0/255, green: 172.0/255, blue: 238.0/255, alpha: 1)
+        let hashtagColor = UIColor(red: 208/255, green: 223/255, blue: 252/255, alpha: 1)
         for word in combinedString.split(separator: " ") {
             if word.hasPrefix("#"), let range = String(combinedString).range(of: String(word)) {
                 attributedString.addAttribute(.foregroundColor, value: hashtagColor, range: NSRange(range, in: combinedString))

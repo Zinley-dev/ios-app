@@ -186,7 +186,7 @@ class OwnerPostSearchNode: ASCellNode {
             let attributedString = NSMutableAttributedString(string: textToDisplay, attributes: textAttributes)
 
             // Hashtag color
-            let hashtagColor = UIColor(red: 85.0/255, green: 172.0/255, blue: 238.0/255, alpha: 1)
+            let hashtagColor = UIColor(red: 208/255, green: 223/255, blue: 252/255, alpha: 1)
 
             // Iterate over all words in the string
             for word in textToDisplay.split(separator: " ") {
