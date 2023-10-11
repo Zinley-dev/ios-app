@@ -10,14 +10,11 @@ import AsyncDisplayKit
 import Alamofire
 import ActiveLabel
 
-
 fileprivate let FontSize: CGFloat = 13
 fileprivate let OrganizerImageSize: CGFloat = 30
 fileprivate let HorizontalBuffer: CGFloat = 10
 
-
 class CommentNode: ASCellNode {
-    
     
     deinit {
         print("CommentNode is being deallocated.")
@@ -45,6 +42,7 @@ class CommentNode: ASCellNode {
     var reply : ((ASCellNode) -> Void)?
     var isLiked = false
     var label: ActiveLabel!
+    
     private var didSetup = false
 
     init(with post: CommentModel) {
@@ -117,19 +115,16 @@ class CommentNode: ASCellNode {
         // Other configurations.
         textNode.isLayerBacked = true
         automaticallyManagesSubnodes = true
-
-
-          
+        
     }
-    
     
     override func didEnterVisibleState() {
             
-            if !didSetup {
-                setupLayout()
-            }
-            
+        if !didSetup {
+            setupLayout()
         }
+            
+    }
     
     func setupLayout() {
         didSetup = true
