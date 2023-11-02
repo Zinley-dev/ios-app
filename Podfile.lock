@@ -19,7 +19,7 @@ PODS:
     - AppAuth/Core (~> 1.6)
     - GTMSessionFetcher/Core (< 4.0, >= 1.5)
   - GTMSessionFetcher/Core (3.1.1)
-  - MarqueeLabel (4.3.1)
+  - MarqueeLabel (4.4.0)
   - NVActivityIndicatorView (5.1.1):
     - NVActivityIndicatorView/Base (= 5.1.1)
   - NVActivityIndicatorView/Base (5.1.1)
@@ -31,15 +31,15 @@ PODS:
     - NYTPhotoViewer/Core
   - NYTPhotoViewer/Core (1.1.0)
   - ObjectMapper (3.5.3)
-  - OneSignalXCFramework (3.12.6):
-    - OneSignalXCFramework/OneSignalCore (= 3.12.6)
-    - OneSignalXCFramework/OneSignalExtension (= 3.12.6)
-    - OneSignalXCFramework/OneSignalOutcomes (= 3.12.6)
-  - OneSignalXCFramework/OneSignalCore (3.12.6)
-  - OneSignalXCFramework/OneSignalExtension (3.12.6):
+  - OneSignalXCFramework (3.12.7):
+    - OneSignalXCFramework/OneSignalCore (= 3.12.7)
+    - OneSignalXCFramework/OneSignalExtension (= 3.12.7)
+    - OneSignalXCFramework/OneSignalOutcomes (= 3.12.7)
+  - OneSignalXCFramework/OneSignalCore (3.12.7)
+  - OneSignalXCFramework/OneSignalExtension (3.12.7):
     - OneSignalXCFramework/OneSignalCore
     - OneSignalXCFramework/OneSignalOutcomes
-  - OneSignalXCFramework/OneSignalOutcomes (3.12.6):
+  - OneSignalXCFramework/OneSignalOutcomes (3.12.7):
     - OneSignalXCFramework/OneSignalCore
   - PINCache (3.0.3):
     - PINCache/Arc-exception-safe (= 3.0.3)
@@ -71,16 +71,16 @@ PODS:
   - SCLAlertView (0.8)
   - SendBirdCalls (1.9.7):
     - SendBirdWebRTC (~> 1.6.0)
-  - SendBirdSDK (3.1.51)
+  - SendBirdSDK (3.1.53)
   - SendBirdUIKit (2.2.14):
     - SendBirdSDK (>= 3.1.39)
   - SendBirdWebRTC (1.6.1)
-  - Sentry (8.9.6):
-    - Sentry/Core (= 8.9.6)
-    - SentryPrivate (= 8.9.6)
-  - Sentry/Core (8.9.6):
-    - SentryPrivate (= 8.9.6)
-  - SentryPrivate (8.9.6)
+  - Sentry (8.14.2):
+    - Sentry/Core (= 8.14.2)
+    - SentryPrivate (= 8.14.2)
+  - Sentry/Core (8.14.2):
+    - SentryPrivate (= 8.14.2)
+  - SentryPrivate (8.14.2)
   - SwiftEntryKit (1.2.6):
     - QuickLayout (= 3.0.0)
   - SwiftLint (0.50.3)
@@ -198,11 +198,11 @@ SPEC CHECKSUMS:
   GoogleSignIn: b232380cf495a429b8095d3178a8d5855b42e842
   GTMAppAuth: 99fb010047ba3973b7026e45393f51f27ab965ae
   GTMSessionFetcher: e8647203b65cee28c5f73d0f473d096653945e72
-  MarqueeLabel: da4b9cf619fe70c75d7bab4580b0b4a0b868aa6b
+  MarqueeLabel: d2388949ac58d587303178d56a792ba8a001b037
   NVActivityIndicatorView: 1f6c5687f1171810aa27a3296814dc2d7dec3667
   NYTPhotoViewer: e80e8767f3780d2df37c6f72cbab15d6c7232911
   ObjectMapper: 97111c97e054a6ee25917662106689f0b4127b37
-  OneSignalXCFramework: ff1c970b7aeb4ac0fe48fb35393eb5d8bf378135
+  OneSignalXCFramework: 0fca311799488cb50419c0b96594aa8df4300115
   PINCache: 7a8fc1a691173d21dbddbf86cd515de6efa55086
   PINOperation: daa34d4aa1d8449089be7d405b9d974abc4724c6
   PINRemoteImage: f1295b29f8c5e640e25335a1b2bd9d805171bd01
@@ -216,11 +216,11 @@ SPEC CHECKSUMS:
   RxSwift: 5710a9e6b17f3c3d6e40d6e559b9fa1e813b2ef8
   SCLAlertView: 6a77bb2edfc65e04dbe57725546cb4107a506b85
   SendBirdCalls: 738efdd2a21e3ff0cf058477f1c612d59cd73510
-  SendBirdSDK: 01092b289923a8311e404950ed1994e3641aebb8
+  SendBirdSDK: b247b5b0b8546170dc20dfb1985ae0309fab34bd
   SendBirdUIKit: 0f3d085f0aa42fc1be87140eb33d0d6d5dd844ee
   SendBirdWebRTC: d848df17569ecb607d0c5503b726bae3ce3dcf68
-  Sentry: 806829626b2e264d40d2d30735e9ee38209ed77e
-  SentryPrivate: b283d59b0baadcbb513205f919f41d261028351b
+  Sentry: e0ea366f95ebb68f26d6030d8c22d6b2e6d23dd0
+  SentryPrivate: 949a21fa59872427edc73b524c3ec8456761d97f
   SwiftEntryKit: 96a2fa90b2631bbbfac50d18449e9ca3d0635f13
   SwiftLint: 77f7cb2b9bb81ab4a12fcc86448ba3f11afa50c6
   SwipeTransition: 2d35c95dcb4c47a6a1cc530235a3cbf7114b5670
@@ -230,6 +230,6 @@ SPEC CHECKSUMS:
   ZSWTaggedString: 1a6aab3143188634c1e5dfe9383ce754c1fb5fe2
   ZSWTappableLabel: cff84c0a55e30f2141f7dac24e5903302a7e35ec
 
-PODFILE CHECKSUM: 430bc233e0ceb5faec1b06fc83125374ae92850f
+PODFILE CHECKSUM: 74b77b46ccb4c7eb3758ad3e993ed7db90a66149
 
-COCOAPODS: 1.12.1
+COCOAPODS: 1.14.2

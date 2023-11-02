@@ -24,7 +24,7 @@ class ToolbarActions: ObservableObject {
 struct ChatBotView: View {
     
     
-    @StateObject var vm = ViewModel(api: ChatGPTAPI(apiKey: "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"))
+    @StateObject var vm = ViewModel(api: ChatGPTAPI(apiKey: "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"))
     @ObservedObject var toolbarActions: ToolbarActions
     @State private var scrollToLastMessage: Bool = false
     @State private var didLoadHistory: Bool = false
