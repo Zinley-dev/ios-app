@@ -19,7 +19,6 @@ class CommentNode: ASCellNode {
     deinit {
         print("CommentNode is being deallocated.")
         NotificationCenter.default.removeObserver(self)
-        
     }
     
     var replyUsername = ""

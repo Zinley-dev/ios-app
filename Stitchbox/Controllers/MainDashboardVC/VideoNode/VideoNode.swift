@@ -79,7 +79,7 @@ class VideoNode: ASCellNode, ASVideoNodeDelegate {
     private var likeCount = 0
     private var isLike = false
     private var allowProcess = true
-    fileprivate let FontSize: CGFloat = 13
+    fileprivate let FontSize: CGFloat = 12
     private var index: Int!
     private var isPreview: Bool!
     private var playTimeBar: CustomSlider!
@@ -417,7 +417,6 @@ extension VideoNode {
                 endVideo(watchTime: Double(totalWatchedTime))
             }
             
-        
             updateSlider(currentTime: timeInterval)
             
         }
@@ -427,8 +426,7 @@ extension VideoNode {
     func videoDidPlay(toEnd videoNode: ASVideoNode) {
     
         shouldCountView = true
-       
-        
+    
     }
     
     @objc func endVideo(watchTime: Double) {
@@ -699,7 +697,7 @@ extension VideoNode: UIGestureRecognizerDelegate {
         self.label.customColor[customType] = .lightGray
         self.label.enabledTypes = [.hashtag, .url, customType]
        
-        self.label.hashtagColor = UIColor(red: 208/255, green: 223/255, blue: 252/255, alpha: 1)
+        self.label.hashtagColor = UIColor(red: 0.0/255, green: 204.0/255, blue: 255.0/255, alpha: 1)
 
         self.label.URLColor = UIColor(red: 60/255, green: 115/255, blue: 180/255, alpha: 1)
 
@@ -1620,7 +1618,7 @@ extension VideoNode {
         guard let userId = post.owner?.id else { return }
 
         DispatchQueue.main.async { [weak self] in
-            self?.headerView.followBtn.setTitle("    Follow    ", for: .normal)
+            self?.headerView.followBtn.setTitle("Follow", for: .normal)
         }
 
         APIManager.shared.unFollow(params: ["FollowId": userId]) { [weak self] result in
@@ -1636,7 +1634,7 @@ extension VideoNode {
                 DispatchQueue.main.async {[weak self] in
                     guard let self = self else { return }
                     self.allowProcess = true
-                    self.headerView.followBtn.setTitle("    Following    ", for: .normal)
+                    self.headerView.followBtn.setTitle("Following", for: .normal)
                     showNote(text: "Something happened!")
                 }
             }
@@ -1647,7 +1645,7 @@ extension VideoNode {
         guard let userId = post.owner?.id else { return }
 
         DispatchQueue.main.async { [weak self] in
-            self?.headerView.followBtn.setTitle("    Following    ", for: .normal)
+            self?.headerView.followBtn.setTitle("Following", for: .normal)
         }
 
         APIManager.shared.insertFollows(params: ["FollowId": userId]) { [weak self] result in
@@ -1662,7 +1660,7 @@ extension VideoNode {
                 DispatchQueue.main.async { [weak self] in
                     guard let self = self else { return }
                     self.allowProcess = true
-                    self.headerView.followBtn.setTitle("    Follow    ", for: .normal)
+                    self.headerView.followBtn.setTitle("Follow", for: .normal)
                     showNote(text: "Something happened!")
                 }
             }

@@ -72,7 +72,6 @@ class ChatGPTAPI: @unchecked Sendable {
     private func appendToHistoryList(userText: String, responseText: String) {
         
         
-        
         let conversation = ["conversationId": "null", "prompt": userText, "response": responseText, "gameCategory": chatbot_id]
     
         if tokenManager.historyList.count <= 2 {

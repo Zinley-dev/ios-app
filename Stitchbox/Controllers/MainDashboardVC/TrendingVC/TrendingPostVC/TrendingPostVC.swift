@@ -140,7 +140,7 @@ extension TrendingPostVC: ASCollectionDataSource {
         
         if self.posts.count == 0 {
             
-            collectionNode.view.setEmptyMessage("Trending video will be shown here", color: .black)
+            collectionNode.view.setEmptyMessage("Trending content will be shown here", color: .black)
             
         } else {
             collectionNode.view.restore()

@@ -27,9 +27,7 @@ class TrendingVC: UIViewController {
     var hashTagBorder = CALayer()
     var selectedTrendingMode = TrendingMode.posts
     
-    
     lazy var SuggestFollowVC: SuggestFollowVC = {
-        
         
         if let controller = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "SuggestFollowVC") as? SuggestFollowVC {
             
