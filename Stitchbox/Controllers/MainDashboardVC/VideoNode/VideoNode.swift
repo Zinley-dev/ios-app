@@ -14,6 +14,8 @@ import AVKit
 import ActiveLabel
 import NVActivityIndicatorView
 
+
+
 class VideoNode: ASCellNode, ASVideoNodeDelegate {
 
     deinit {
@@ -43,8 +45,6 @@ class VideoNode: ASCellNode, ASVideoNodeDelegate {
     //------------------------------------------//
 
     var isFirstItem = false
-    var pinchGestureRecognizer: UIPinchGestureRecognizer!
-    var panGestureRecognizer: UIPanGestureRecognizer!
     var selectedStitch = false
  
     private var timeLbl: UILabel!
@@ -186,8 +186,8 @@ class VideoNode: ASCellNode, ASVideoNodeDelegate {
             sideButtonsView.stickStack.isHidden = true
             sideButtonsView.backToOriginalBtn.isHidden = true
 
-            let pushToStitch = UITapGestureRecognizer(target: self, action: #selector(VideoNode.pushToStitchView))
-            sideButtonsView.originalStack.addGestureRecognizer(pushToStitch)
+           
+            
             sideButtonsView.originalStack.isUserInteractionEnabled = true
             sideButtonsView.originalStitchCount.text = "\(formatPoints(num: Double(finalTotal)))"
         } else {
@@ -202,11 +202,6 @@ class VideoNode: ASCellNode, ASVideoNodeDelegate {
         sideButtonsView.stickStack.isHidden = false
         sideButtonsView.backToOriginalBtn.isHidden = false
         
-        let viewStitchTap = UITapGestureRecognizer(target: self, action: #selector(VideoNode.viewStitchTapped))
-        //sideButtonsView.viewStitchBtn.addGestureRecognizer(viewStitchTap)
-
-        //let backToOriginal = UITapGestureRecognizer(target: self, action: #selector(VideoNode.backToOriginal))
-        sideButtonsView.backToOriginalBtn.addGestureRecognizer(viewStitchTap)
         
         sideButtonsView.statusImg.image = UIImage(named: "partner white")
         
@@ -230,7 +225,7 @@ class VideoNode: ASCellNode, ASVideoNodeDelegate {
         
         cellVideoNode.shouldAutoplay = false
         cellVideoNode.shouldAutorepeat = true
-        
+        cellVideoNode.backgroundColor = .red
         if !isPreview {
             cellVideoNode.delegate = self
         }
@@ -276,18 +271,7 @@ class VideoNode: ASCellNode, ASVideoNodeDelegate {
         cellVideoNode.gravity = AVLayerVideoGravity.resizeAspect.rawValue
     }
 
-    private func addPinchGestureRecognizer() {
-        let pinchGestureRecognizer = UIPinchGestureRecognizer(target: self, action: #selector(handlePinchGesture(_:)))
-        view.addGestureRecognizer(pinchGestureRecognizer)
-    }
-
-    private func addPanGestureRecognizer() {
-        let panGestureRecognizer = UIPanGestureRecognizer(target: self, action: #selector(handlePanGesture(_:)))
-        panGestureRecognizer.delegate = self
-        panGestureRecognizer.minimumNumberOfTouches = 2
-        view.addGestureRecognizer(panGestureRecognizer)
-    }
-
+   
     func getThumbnailURL(post: PostModel) -> URL? {
         if post.muxPlaybackId != "" {
             
@@ -304,6 +288,7 @@ class VideoNode: ASCellNode, ASVideoNodeDelegate {
         if post.muxPlaybackId != "" {
             
             let urlString = "https://stream.mux.com/\(post.muxPlaybackId).m3u8?redundant_streams=true&max_resolution=1080p"
+            
             return URL(string: urlString)
             
         } else {
@@ -467,225 +452,8 @@ extension VideoNode {
     
 }
 
-extension VideoNode {
-    
-    @objc private func handlePinchGesture(_ recognizer: UIPinchGestureRecognizer) {
-        //guard let view = videoNode.view else { return }
-    
-        if recognizer.state == .began {
-            disableScroll()
-        }
-
-        if recognizer.state == .changed {
-            let scale = recognizer.scale
-            let scaleTransform = CGAffineTransform(scaleX: scale, y: scale)
-          
-            
-            if post.muxPlaybackId != "" {
-                let tempTransform = cellVideoNode.view.transform.concatenating(scaleTransform)
-                cellVideoNode.view.transform = tempTransform
-            }
-            
-        
-            recognizer.scale = 1
-        }
-
-        if recognizer.state == .ended || recognizer.state == .cancelled || recognizer.state == .failed {
-            
-            let scale = recognizer.scale
-            let scaleTransform = CGAffineTransform(scaleX: scale, y: scale)
-            
-            if post.muxPlaybackId != "" {
-                let tempTransform = cellVideoNode.view.transform.concatenating(scaleTransform)
-                
-                UIView.animate(withDuration: 0.2, animations: {
-                    if tempTransform.a < 1.0 {
-                        self.cellVideoNode.view.transform = CGAffineTransform.identity
-                        //self.videoNode.view.center = self.originalCenter!
-                    }
-                        }, completion: { [weak self]_ in
-                            self?.enableScroll()
-                })
-            }
-  
-        
-        }
-    }
-    
-    
-    @objc private func handlePanGesture(_ recognizer: UIPanGestureRecognizer) {
-        //guard let view = recognizer.view else { return }
-
-        if recognizer.state == .began {
-            disableScroll()
-           
-        }
-
-        if recognizer.state == .changed {
-            
-            if post.muxPlaybackId != "" {
-                
-                let translation = recognizer.translation(in: cellVideoNode.view)
-                cellVideoNode.view.center = CGPoint(x: cellVideoNode.view.center.x + translation.x, y: cellVideoNode.view.center.y + translation.y)
-                recognizer.setTranslation(.zero, in: cellVideoNode.view)
-                
-            }
-            
-            
-        }
-
-        if recognizer.state == .ended || recognizer.state == .cancelled || recognizer.state == .failed {
-           
-            UIView.animate(withDuration: 0.2, animations: {
-                        
-                    }, completion: { [weak self] _ in
-                        self?.enableScroll()
-                    })
-            
-        }
-    }
-    
-    func setScrollEnabled(_ isEnabled: Bool) {
-        if let vc = UIViewController.currentViewController() {
-            switch vc {
-            case let parentVC as ParentViewController:
-                if parentVC.isFeed {
-                    parentVC.feedViewController.collectionNode.view.isScrollEnabled = isEnabled
-                } else {
-                    parentVC.stitchViewController.collectionNode.view.isScrollEnabled = isEnabled
-                }
-            case let selectedPostVC as SelectedParentVC:
-                if selectedPostVC.isRoot {
-                    selectedPostVC.selectedRootPostVC.collectionNode.view.isScrollEnabled = isEnabled
-                } else {
-                    selectedPostVC.stitchViewController.collectionNode.view.isScrollEnabled = isEnabled
-                }
-            default:
-                break
-            }
-        }
-    }
-
-    func disableScroll() {
-        setScrollEnabled(false)
-    }
-
-    func enableScroll() {
-        setScrollEnabled(true)
-    }
-
-
-    
-}
-
 
 extension VideoNode: UIGestureRecognizerDelegate {
-    
-    func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
-            if gestureRecognizer is UIPinchGestureRecognizer || otherGestureRecognizer is UIPinchGestureRecognizer {
-                return true
-            }
-
-            // Check for the collectionNode's panGestureRecognizer
-            if let collectionNodePanGestureRecognizer = self.panGestureRecognizer, otherGestureRecognizer == collectionNodePanGestureRecognizer {
-                return true
-            }
-            
-            if gestureRecognizer is UIPanGestureRecognizer || otherGestureRecognizer is UIPanGestureRecognizer {
-                return true
-            }
-
-            return false
-        }
-    
-    @objc func pushToStitchView() {
-        if let vc = UIViewController.currentViewController() {
-            if vc is ParentViewController {
-                if let update1 = vc as? ParentViewController {
-                    if update1.isFeed {
-                        // Calculate the next page index
-                       
-                        let offset = CGFloat(1) * update1.scrollView.bounds.width
-                        
-                        // Scroll to the next page
-                        update1.scrollView.setContentOffset(CGPoint(x: offset, y: 0), animated: true)
-                        update1.showStitch()
-                      
-                    }
-                }
-            } else if vc is SelectedParentVC {
-                if let update1 = vc as? SelectedParentVC {
-                    if update1.isRoot {
-                        // Calculate the next page index
-                       
-                        let offset = CGFloat(1) * update1.scrollView.bounds.width
-                        
-                        // Scroll to the next page
-                        update1.scrollView.setContentOffset(CGPoint(x: offset, y: 0), animated: true)
-                        update1.showStitch()
-                      
-                    }
-                }
-            }
-        }
-    }
-    
-    
-    @objc func viewStitchTapped() {
-            if let vc = UIViewController.currentViewController() {
-                if vc is ParentViewController {
-                    if let update1 = vc as? ParentViewController {
-                        if !update1.isFeed {
-                            hideAllInfo()
-                            update1.stitchViewController.selectPostCollectionView.isHidden = false
-                          
-                        }
-                    } else if let update1 = vc as? SelectedParentVC {
-                        if !update1.isRoot {
-                            // Calculate the next page index
-                           
-                            hideAllInfo()
-                            update1.stitchViewController.selectPostCollectionView.isHidden = false
-                           
-                        }
-                    }
-                }
-            }
-        }
-    
-    @objc func backToOriginal() {
-        if let vc = UIViewController.currentViewController() {
-            if vc is ParentViewController {
-                if let update1 = vc as? ParentViewController {
-                    if !update1.isFeed {
-                        // Calculate the next page index
-                       
-                        let offset = CGFloat(0) * update1.scrollView.bounds.width
-        
-                        // Scroll to the next page
-                        update1.scrollView.setContentOffset(CGPoint(x: offset, y: 0), animated: true)
-                        //update1.feedViewController.currentIndex = 0
-                        update1.showFeed()
-                        update1.currentPageIndex = 0
-                       
-                    }
-                } else if let update1 = vc as? SelectedParentVC {
-                    if !update1.isRoot {
-                        // Calculate the next page index
-                       
-                        let offset = CGFloat(0) * update1.scrollView.bounds.width
-        
-                        // Scroll to the next page
-                        update1.scrollView.setContentOffset(CGPoint(x: offset, y: 0), animated: true)
-                        //update1.selectedRootPostVC.currentIndex = 0
-                        update1.showRoot()
-                        update1.currentPageIndex = 0
-                       
-                    }
-                }
-            }
-        }
-    }
 
     func setupLabel() {
         self.label = ActiveLabel()
@@ -797,7 +565,6 @@ extension VideoNode: UIGestureRecognizerDelegate {
             self.headerView.stackConstant.constant = 0
         }
         // Gesture Recognizers
-        setupGestureRecognizers()
         fillStats()
         loadReaction()
     }
@@ -1853,6 +1620,7 @@ extension VideoNode {
 extension VideoNode {
 
     func playVideo() {
+        /*
         // Check if video is already playing
         if cellVideoNode.isPlaying() {
             return
@@ -1881,6 +1649,7 @@ extension VideoNode {
                 }
             }
         }
+        */
     }
 
     func addObservers() {
@@ -2131,20 +1900,12 @@ extension VideoNode {
     
     func setupAllViews() {
         
-        addPinchGestureRecognizer()
-        addPanGestureRecognizer()
-        setupViews()
+     
+        //setupViews()
          
         if !isPreview {
             setupTimeView()
             setupFunction()
-            
-            if isOriginal {
-                // Handle count stitch if not then hide
-                addSideButtons(isOwned: true, total: post.totalStitchTo + post.totalMemberStitch)
-            } else {
-                addSideButtons(isOwned: false)
-            }
             
         } else {
             playTimeBar = CustomSlider()

@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="21701" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="zfi-ic-Dzc">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="22155" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="zfi-ic-Dzc">
     <device id="retina5_9" orientation="portrait" appearance="dark"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21679"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="22131"/>
         <capability name="Named colors" minToolsVersion="9.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
@@ -82,7 +82,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="W1f-2E-fwc">
-                                <rect key="frame" x="0.0" y="0.0" width="375" height="778"/>
+                                <rect key="frame" x="0.0" y="50" width="375" height="728"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             </view>
                             <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="5Ka-uz-Tfa">
@@ -137,7 +137,7 @@
                         <viewLayoutGuide key="safeArea" id="0Z6-8G-TMT"/>
                         <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
-                            <constraint firstItem="W1f-2E-fwc" firstAttribute="top" secondItem="1Fc-76-Mf6" secondAttribute="top" id="83o-bF-YC1"/>
+                            <constraint firstItem="W1f-2E-fwc" firstAttribute="top" secondItem="0Z6-8G-TMT" secondAttribute="top" id="83o-bF-YC1"/>
                             <constraint firstItem="W1f-2E-fwc" firstAttribute="leading" secondItem="1Fc-76-Mf6" secondAttribute="leading" id="ETX-Hi-Lv1"/>
                             <constraint firstItem="5Ka-uz-Tfa" firstAttribute="leading" secondItem="0Z6-8G-TMT" secondAttribute="leading" id="R16-ET-Y3N"/>
                             <constraint firstItem="5Ka-uz-Tfa" firstAttribute="trailing" secondItem="0Z6-8G-TMT" secondAttribute="trailing" id="byK-fJ-jAF"/>
@@ -163,15 +163,15 @@
             <objects>
                 <viewController storyboardIdentifier="FeedViewController" id="Y6W-OH-hqX" customClass="FeedViewController" customModule="Stitchbox" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="5EZ-qb-Rvc">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="729"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="htG-J3-w8j">
-                                <rect key="frame" x="0.0" y="0.0" width="375" height="778"/>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="htG-J3-w8j" customClass="VerticalCardSwiper" customModule="Stitchbox" customModuleProvider="target">
+                                <rect key="frame" x="0.0" y="94" width="375" height="635"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             </view>
                             <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="QjB-Ff-npc" customClass="ProgressBar" customModule="Stitchbox" customModuleProvider="target">
-                                <rect key="frame" x="16" y="62" width="35" height="35"/>
+                                <rect key="frame" x="16" y="106" width="35" height="35"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="35" id="XuL-D6-Oyi"/>
@@ -191,10 +191,10 @@
                                 </userDefinedRuntimeAttributes>
                             </view>
                             <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Rla-m0-I86">
-                                <rect key="frame" x="0.0" y="50" width="375" height="762"/>
+                                <rect key="frame" x="0.0" y="94" width="375" height="635"/>
                                 <subviews>
                                     <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="pQ7-eE-6yk" customClass="FLAnimatedImageView">
-                                        <rect key="frame" x="150" y="343.66666666666669" width="75" height="75"/>
+                                        <rect key="frame" x="150" y="280" width="75" height="75"/>
                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <constraints>
                                             <constraint firstAttribute="width" constant="75" id="IjP-RR-Bpf"/>
@@ -212,7 +212,7 @@
                         <viewLayoutGuide key="safeArea" id="vDu-zF-Fre"/>
                         <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
-                            <constraint firstItem="htG-J3-w8j" firstAttribute="top" secondItem="5EZ-qb-Rvc" secondAttribute="top" id="6LN-sT-Cqd"/>
+                            <constraint firstItem="htG-J3-w8j" firstAttribute="top" secondItem="vDu-zF-Fre" secondAttribute="top" id="6LN-sT-Cqd"/>
                             <constraint firstItem="htG-J3-w8j" firstAttribute="leading" secondItem="5EZ-qb-Rvc" secondAttribute="leading" id="9JM-0r-hrq"/>
                             <constraint firstItem="Rla-m0-I86" firstAttribute="top" secondItem="vDu-zF-Fre" secondAttribute="top" id="9el-ci-5qP"/>
                             <constraint firstItem="QjB-Ff-npc" firstAttribute="top" secondItem="vDu-zF-Fre" secondAttribute="top" constant="12" id="FAH-dq-see"/>
@@ -9021,7 +9021,7 @@
             <objects>
                 <viewController storyboardIdentifier="ParentViewController" id="4Hk-iM-1Wz" customClass="ParentViewController" customModule="Stitchbox" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="cCg-da-Ykr">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="729"/>
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <viewLayoutGuide key="safeArea" id="H6M-p9-bo4"/>
                         <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -9053,7 +9053,7 @@
                     </navigationBar>
                     <nil name="viewControllers"/>
                     <connections>
-                        <segue destination="4Hk-iM-1Wz" kind="relationship" relationship="rootViewController" id="5jN-jP-6Sn"/>
+                        <segue destination="Y6W-OH-hqX" kind="relationship" relationship="rootViewController" id="EV2-lz-x2S"/>
                     </connections>
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="VEU-cO-ufV" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>

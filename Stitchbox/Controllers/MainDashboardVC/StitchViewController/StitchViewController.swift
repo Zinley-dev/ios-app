@@ -11,7 +11,7 @@ import AlamofireImage
 import Alamofire
 import FLAnimatedImage
 import ObjectMapper
-import MarqueeLabel
+
 
 class StitchViewController: UIViewController, UICollectionViewDelegateFlowLayout, UIAdaptivePresentationControllerDelegate {
     
@@ -27,7 +27,6 @@ class StitchViewController: UIViewController, UICollectionViewDelegateFlowLayout
     var isDraggingEnded: Bool = false
     let homeButton: UIButton = UIButton(type: .custom)
    
-    
     var posts = [PostModel]()
     var selectedIndexPath = 0
     var selected_item: PostModel!
@@ -45,7 +44,7 @@ class StitchViewController: UIViewController, UICollectionViewDelegateFlowLayout
     var lastLoadTime: Date?
     var isPromote = false
     var rootId = ""
-    var animatedLabel: MarqueeLabel!
+    
     
     private var pullControl = UIRefreshControl()
     @IBOutlet weak var selectPostCollectionView: UIView!
@@ -63,7 +62,7 @@ class StitchViewController: UIViewController, UICollectionViewDelegateFlowLayout
 
         setupCollectionNode()
         setupGalleryNode()
-        addAnimatedLabelToTop()
+    
         collectionNode.dataSource = self
         collectionNode.delegate = self
         
@@ -73,59 +72,7 @@ class StitchViewController: UIViewController, UICollectionViewDelegateFlowLayout
        
     }
 
-    
-    func addAnimatedLabelToTop() {
-        animatedLabel = MarqueeLabel(frame: CGRect.zero, rate: 30.0, fadeLength: 10.0)
-        animatedLabel.translatesAutoresizingMaskIntoConstraints = false
-        animatedLabel.backgroundColor = UIColor.clear
-        animatedLabel.type = .continuous
-        animatedLabel.leadingBuffer = 15.0
-        animatedLabel.trailingBuffer = 10.0
-        animatedLabel.animationDelay = 0.0
-        animatedLabel.textAlignment = .center
-        animatedLabel.font = FontManager.shared.roboto(.Bold, size: 16)
-        animatedLabel.textColor = UIColor.white
-        animatedLabel.layer.masksToBounds = true
-        animatedLabel.layer.cornerRadius = 10 // Round the corners for a cleaner look
 
-        let container = UIView()
-        container.translatesAutoresizingMaskIntoConstraints = false
-        self.view.addSubview(container)
-        container.addSubview(animatedLabel)
-        
-        NSLayoutConstraint.activate([
-            container.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: 100),
-            container.trailingAnchor.constraint(equalTo: self.view.trailingAnchor, constant: -100),
-            container.topAnchor.constraint(equalTo: self.view.topAnchor),
-            container.bottomAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.topAnchor, constant: 55),
-            animatedLabel.leadingAnchor.constraint(equalTo: container.leadingAnchor, constant: 10), // Add padding around the text
-            animatedLabel.trailingAnchor.constraint(equalTo: container.trailingAnchor, constant: -10), // Add padding around the text
-            animatedLabel.topAnchor.constraint(equalTo: container.topAnchor, constant: 10), // Add padding around the text
-            animatedLabel.bottomAnchor.constraint(equalTo: container.bottomAnchor, constant: -10) // Add padding around the text
-        ])
-        
-        // Make the label tappable
-        container.isUserInteractionEnabled = true
-        let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(StitchViewController.labelTapped))
-        tap.numberOfTapsRequired = 1
-        container.addGestureRecognizer(tap)
-        
-    }
-    
-    func applyAnimationText(text: String) {
-        if text == "Back to original!" {
-            animatedLabel.text = text + "                                 "
-            //animatedLabel.restartLabel()
-        } else if text != ""  {
-            animatedLabel.text = text + "                   "
-            //animatedLabel.restartLabel()
-        } else {
-            animatedLabel.text = text
-        }
-           
-    }
-    
-    
     @IBAction func hideBtnPressed(_ sender: Any) {
         
         hideStitchView()
@@ -319,29 +266,7 @@ extension StitchViewController {
 
     }
     
-    func handleAnimationTextAndImage(for index: Int) {
-        
-        let nextIndex = index + 1
-        let postCount = self.posts.count
-        
-        if nextIndex < postCount {
-            let item = self.posts[nextIndex]
-            if let nextUsername = item.owner?.username {
-                
-                if item.stitchedTo {
-                    self.applyAnimationText(text: "Up next: @\(nextUsername)'s original!")
-                } else {
-                    self.applyAnimationText(text: "Up next: @\(nextUsername)'s stitch!")
-                }
-               
-            }
-        } else if nextIndex == self.posts.count {
-            self.applyAnimationText(text: "Back to original!")
-        }
-        
-        
-    }
-    
+
 }
 
 extension StitchViewController: ASCollectionDelegate {
@@ -651,7 +576,6 @@ extension StitchViewController {
     @objc func clearAllData() {
         guard rootId != "" else { return }
 
-        animatedLabel?.text = ""
         refresh_request = true
         currentIndex = 0
         curPage = 1
@@ -751,7 +675,7 @@ extension StitchViewController {
             }
             
             cell.isActive = true
-            handleAnimationTextAndImage(for: index)
+            
             
             if globalSetting.ClearMode == true {
                 

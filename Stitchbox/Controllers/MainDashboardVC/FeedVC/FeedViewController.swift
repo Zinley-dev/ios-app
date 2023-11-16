@@ -11,15 +11,16 @@ import AlamofireImage
 import Alamofire
 import FLAnimatedImage
 import ObjectMapper
-import MarqueeLabel
 
 class FeedViewController: UIViewController, UICollectionViewDelegateFlowLayout, UIAdaptivePresentationControllerDelegate {
     
-    var timer: Timer?
+    let homeButton: UIButton = UIButton(type: .custom)
+    let notiButton = UIButton(type: .custom)
+    let searchButton = UIButton(type: .custom)
     var isDraggingEnded: Bool = false
     @IBOutlet weak var progressBar: ProgressBar!
     @IBOutlet weak var contentView: UIView!
-    var lastContentOffsetY: CGFloat = 0
+    
     @IBOutlet weak var loadingImage: FLAnimatedImageView!
     @IBOutlet weak var loadingView: UIView!
     var currentIndex: Int? = 0
@@ -39,10 +40,9 @@ class FeedViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
     let backButton: UIButton = UIButton(type: .custom)
     lazy var delayItem = workItem()
     lazy var delayItem3 = workItem()
-    var firstAnimated = true
+    
     var lastLoadTime: Date?
-    var animatedLabel: MarqueeLabel!
-    var readyToLoad = false
+    var readyToLoad = true
     private var pullControl = UIRefreshControl()
   
     
@@ -51,7 +51,6 @@ class FeedViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
         
 
         setupCollectionNode()
-        addAnimatedLabelToTop()
         
         pullControl.tintColor = .secondary
         pullControl.addTarget(self, action: #selector(refreshListData(_:)), for: .valueChanged)
@@ -71,58 +70,8 @@ class FeedViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
         
         NotificationCenter.default.addObserver(self, selector: #selector(FeedViewController.updateProgressBar), name: (NSNotification.Name(rawValue: "updateProgressBar2")), object: nil)
         
+        setupNavBar()
         
-    }
-
-    
-    
-    func addAnimatedLabelToTop() {
-        animatedLabel = MarqueeLabel(frame: CGRect.zero, rate: 30.0, fadeLength: 10.0)
-        animatedLabel.translatesAutoresizingMaskIntoConstraints = false
-        animatedLabel.backgroundColor = UIColor.clear
-        animatedLabel.type = .continuous
-        animatedLabel.leadingBuffer = 15.0
-        animatedLabel.trailingBuffer = 10.0
-        animatedLabel.animationDelay = 0.0
-        animatedLabel.textAlignment = .center
-        animatedLabel.font = FontManager.shared.roboto(.Bold, size: 16)
-        animatedLabel.textColor = UIColor.white
-        animatedLabel.layer.masksToBounds = true
-        animatedLabel.layer.cornerRadius = 10 // Round the corners for a cleaner look
-
-        let container = UIView()
-        container.translatesAutoresizingMaskIntoConstraints = false
-        self.view.addSubview(container)
-        container.addSubview(animatedLabel)
-        
-        NSLayoutConstraint.activate([
-            container.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: 100),
-            container.trailingAnchor.constraint(equalTo: self.view.trailingAnchor, constant: -100),
-            container.topAnchor.constraint(equalTo: self.view.topAnchor),
-            container.bottomAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.topAnchor, constant: 55),
-            animatedLabel.leadingAnchor.constraint(equalTo: container.leadingAnchor, constant: 10), // Add padding around the text
-            animatedLabel.trailingAnchor.constraint(equalTo: container.trailingAnchor, constant: -10), // Add padding around the text
-            animatedLabel.topAnchor.constraint(equalTo: container.topAnchor, constant: 10), // Add padding around the text
-            animatedLabel.bottomAnchor.constraint(equalTo: container.bottomAnchor, constant: -10) // Add padding around the text
-        ])
-        
-        // Make the label tappable
-        container.isUserInteractionEnabled = true
-        let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(FeedViewController.labelTapped))
-        tap.numberOfTapsRequired = 1
-        container.addGestureRecognizer(tap)
-        
-    }
-    
-    func applyAnimationText(text: String) {
-        if text != "" {
-            animatedLabel.text = text + "                   "
-            //animatedLabel.restartLabel()
-        } else {
-            //animatedLabel.pauseLabel()
-            animatedLabel.text = text
-        }
-           
     }
     
     @objc private func refreshListData(_ sender: Any) {
@@ -132,7 +81,250 @@ class FeedViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
         
     }
     
+
+}
+
+extension FeedViewController {
+   
     
+    func setupTabBar() {
+        
+        if let tabbar = self.tabBarController as? DashboardTabBarController {
+            
+            tabbar.setupBlackTabBar()
+            
+        }
+        
+    }
+
+    
+    func setupNavBar() {
+        
+        let navigationBarAppearance = UINavigationBarAppearance()
+        navigationBarAppearance.configureWithDefaultBackground()
+        navigationBarAppearance.backgroundColor = .clear
+        navigationBarAppearance.titleTextAttributes = [.foregroundColor: UIColor.white]
+        navigationBarAppearance.largeTitleTextAttributes = [.foregroundColor: UIColor.white]
+        navigationBarAppearance.backgroundImage = UIImage()
+        navigationBarAppearance.shadowImage = UIImage()
+        navigationBarAppearance.shadowColor = .clear
+        navigationBarAppearance.backgroundEffect = nil
+
+        self.navigationController?.navigationBar.standardAppearance = navigationBarAppearance
+        self.navigationController?.navigationBar.compactAppearance = navigationBarAppearance
+        self.navigationController?.navigationBar.scrollEdgeAppearance = navigationBarAppearance
+        self.navigationController?.navigationBar.isTranslucent = true
+
+        
+        navigationController?.setNavigationBarHidden(false, animated: true)
+        
+    }
+    
+    
+    
+}
+
+extension FeedViewController: UINavigationBarDelegate, UINavigationControllerDelegate {
+    
+    func navigationControllerDelegate() {
+        self.navigationController?.delegate = self
+    }
+    
+}
+
+extension FeedViewController {
+    
+    func setupButtons() {
+        
+        setupHomeButton()
+        
+    }
+    
+    func setupHomeButton() {
+        
+        // Do any additional setup after loading the view.
+        homeButton.setImage(UIImage.init(named: "stitchboxlogonew")?.resize(targetSize: CGSize(width: 19.27, height: 30)), for: [])
+        homeButton.addTarget(self, action: #selector(openChatBot(_:)), for: .touchUpInside)
+        homeButton.frame = back_frame
+        homeButton.setTitleColor(UIColor.white, for: .normal)
+        homeButton.setTitle("", for: .normal)
+        homeButton.sizeToFit()
+        let homeButtonBarButton = UIBarButtonItem(customView: homeButton)
+        
+        self.navigationItem.leftBarButtonItem = homeButtonBarButton
+        
+    }
+    
+    
+    func setupEmptyNotiButton() {
+        
+    
+        notiButton.setImage(UIImage.init(named: "noNoti")?.resize(targetSize: CGSize(width: 30, height: 30)), for: [])
+        notiButton.addTarget(self, action: #selector(onClickNoti(_:)), for: .touchUpInside)
+        notiButton.frame = CGRect(x: -1, y: 0, width: 30, height: 30)
+        let notiBarButton = UIBarButtonItem(customView: notiButton)
+        
+       
+        searchButton.setImage(UIImage(named: "search")?.resize(targetSize: CGSize(width: 20, height: 20)), for: [])
+        searchButton.addTarget(self, action: #selector(onClickSearch(_:)), for: .touchUpInside)
+        searchButton.frame = CGRect(x: -1, y: 0, width: 30, height: 30)
+        let searchBarButton = UIBarButtonItem(customView: searchButton)
+        
+        
+        let fixedSpace = UIBarButtonItem(barButtonSystemItem: .fixedSpace, target: nil, action: nil)
+        fixedSpace.width = 2
+        
+        //let promotionBarButton = self.createPromotionButton()
+        self.navigationItem.rightBarButtonItems = [notiBarButton, fixedSpace, searchBarButton]
+        
+        
+    }
+    
+    
+    func setupHasNotiButton() {
+        
+        notiButton.setImage(UIImage.init(named: "homeNoti")?.resize(targetSize: CGSize(width: 30, height: 30)), for: [])
+        notiButton.addTarget(self, action: #selector(onClickNoti(_:)), for: .touchUpInside)
+        notiButton.frame = CGRect(x: -1, y: 0, width: 30, height: 30)
+        let notiBarButton = UIBarButtonItem(customView: notiButton)
+        
+        
+        searchButton.setImage(UIImage(named: "search")?.resize(targetSize: CGSize(width: 20, height: 20)), for: [])
+        searchButton.addTarget(self, action: #selector(onClickSearch(_:)), for: .touchUpInside)
+        searchButton.frame = CGRect(x: -1, y: 0, width: 30, height: 30)
+        let searchBarButton = UIBarButtonItem(customView: searchButton)
+        
+        let fixedSpace = UIBarButtonItem(barButtonSystemItem: .fixedSpace, target: nil, action: nil)
+        fixedSpace.width = 2
+        
+        
+        //let promotionBarButton = self.createPromotionButton()
+        self.navigationItem.rightBarButtonItems = [notiBarButton, fixedSpace, searchBarButton]
+        
+    }
+    
+
+}
+
+
+extension FeedViewController {
+    
+    @objc func openChatBot(_ sender: AnyObject) {
+        if let SBCB = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "SB_ChatBot") as? SB_ChatBot {
+            
+            SBCB.hidesBottomBarWhenPushed = true
+            hideMiddleBtn(vc: self)
+            self.navigationController?.pushViewController(SBCB, animated: true)
+    
+        }
+    }
+    
+    
+    @objc func onClickNoti(_ sender: AnyObject) {
+        if let NVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "NotificationVC") as? NotificationVC {
+            
+            resetNoti()
+            NVC.hidesBottomBarWhenPushed = true
+            hideMiddleBtn(vc: self)
+            self.navigationController?.pushViewController(NVC, animated: true)
+            
+        }
+    }
+    
+    @objc func onClickSearch(_ sender: AnyObject) {
+        if let SVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "SearchViewController") as? SearchViewController {
+            
+            SVC.hidesBottomBarWhenPushed = true
+            hideMiddleBtn(vc: self)
+            self.navigationController?.pushViewController(SVC, animated: true)
+            
+        }
+    }
+    
+    
+}
+
+
+extension FeedViewController {
+    
+    func switchToProfileVC() {
+        
+        self.tabBarController?.selectedViewController = self.tabBarController?.viewControllers![4]
+        
+    }
+    
+    
+    func resetNoti() {
+        
+        APIManager.shared.resetBadge { [weak self] result in
+            guard let self = self else { return }
+            
+            switch result {
+            case .success(_):
+                
+                Dispatch.main.async {
+                    self.setupEmptyNotiButton()
+                }
+                
+            case .failure(let error):
+                
+                print(error)
+                
+            }
+        }
+        
+        
+    }
+    
+    
+    func checkNotification() {
+        
+        APIManager.shared.getBadge { [weak self] result in
+            guard let self = self else { return }
+            
+            switch result {
+            case .success(let apiResponse):
+                
+                if let data = apiResponse.body {
+                    
+                    if let badge = data["badge"] as? Int {
+                        
+                        if badge == 0 {
+                            
+                            Dispatch.main.async {
+                                self.setupEmptyNotiButton()
+                            }
+                            
+                        } else {
+                            Dispatch.main.async {
+                                self.setupHasNotiButton()
+                            }
+                        }
+                        
+                    } else {
+                        
+                        Dispatch.main.async {
+                            self.setupEmptyNotiButton()
+                        }
+                        
+                    }
+                    
+                }
+                
+            case .failure(let error):
+                Dispatch.main.async {
+                    self.setupEmptyNotiButton()
+                }
+                print(error)
+                
+            }
+        }
+        
+        
+    }
+    
+
+
 }
 
 extension FeedViewController {
@@ -304,37 +496,13 @@ extension FeedViewController: ASCollectionDataSource {
     
     func collectionNode(_ collectionNode: ASCollectionNode, nodeBlockForItemAt indexPath: IndexPath) -> ASCellNodeBlock {
         let post = self.posts[indexPath.row]
-        
-        return { [weak self] in
-            guard let self = self else {
-                return ASCellNode()
-            }
             
-            let node = VideoNode(with: post, at: indexPath.row, isPreview: false, vcType: "mainFeed", selectedStitch: false)
+        return {
+            let node = RootNode(with: post)
             node.neverShowPlaceholders = true
             node.debugName = "Node \(indexPath.row)"
-           
-            node.isOriginal = true
             node.automaticallyManagesSubnodes = true
-            
-            if isfirstLoad, indexPath.row == 0 {
-                isfirstLoad = false
-                node.isFirstItem = true
-                mainRootId = post.id
-                currentIndex = 0
-                NotificationCenter.default.post(name: (NSNotification.Name(rawValue: "observeRootChangeForFeed")), object: nil)
-                
-                Dispatch.main.async() { [weak self] in
-                    guard let self = self else {
-                        return
-                    }
-                    handleAnimationTextAndImage(post: post)
-                }
-               
-            
-            }
-            
-            
+                  
             return node
         }
     }
@@ -487,37 +655,6 @@ extension FeedViewController {
     
 }
 
-
-extension FeedViewController {
-    
-    func switchToProfileVC() {
-    
-        self.tabBarController?.selectedViewController = self.tabBarController?.viewControllers![4]
-        
-    }
-    
-    func handleAnimationTextAndImage(post: PostModel) {
-        
-        let total = post.totalStitchTo + post.totalMemberStitch
-        
-        if total > 0 {
-            if total == 1 {
-                applyAnimationText(text: "Up next: one new stitch!")
-            } else {
-                applyAnimationText(text: "Up next: \(total) stitches!")
-            }
-            
-           
-        } else {
-            applyAnimationText(text: "")
-        }
-         
-    }
-
-
-}
-
-
 extension FeedViewController {
     
     func pauseVideoOnScrolling(index: Int) {
@@ -544,7 +681,7 @@ extension FeedViewController {
     func playVideo(index: Int) {
         print("VideoNode: \(posts.count)")
         if let cell = self.collectionNode.nodeForItem(at: IndexPath(row: index, section: 0)) as? VideoNode {
-            handleAnimationTextAndImage(post: cell.post)
+           
             cell.isActive = true
             cell.playVideo()
             mainRootId = cell.post.id
@@ -599,27 +736,6 @@ extension FeedViewController {
         
         SwiftLoader.show(title: progress, animated: true)
         
-        
-    }
-    
-    @objc func labelTapped() {
-        
-        if let vc = UIViewController.currentViewController() {
-            if vc is ParentViewController {
-                if let update1 = vc as? ParentViewController {
-                    if update1.isFeed {
-                        // Calculate the next page index
-                       
-                        let offset = CGFloat(1) * update1.scrollView.bounds.width
-                        
-                        // Scroll to the next page
-                        update1.scrollView.setContentOffset(CGPoint(x: offset, y: 0), animated: true)
-                        update1.showStitch()
-                      
-                    }
-                }
-            }
-        }
         
     }
     

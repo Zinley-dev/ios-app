@@ -58,7 +58,7 @@ class ParentViewController: UIViewController {
             requestTrackingAuthorization(userId: _AppCoreData.userDataSource.value?.userID ?? "")
         }
      
-        setupCategoryIfNeed()
+        //setupCategoryIfNeed()
         firstLoadDone = true
         
     }
@@ -109,26 +109,10 @@ class ParentViewController: UIViewController {
     
     func setupCategoryIfNeed() {
         
-        if _AppCoreData.userDataSource.value?.isCategorySet != true {
-            //UserDefaults.standard.set(true, forKey: "setupCategory")
-            
-            guard let CVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "CategoryVC") as? CategoryVC
-                 else { return }
-            
-            NotificationCenter.default.addObserver(self, selector: #selector(ParentViewController.reloadFeedAfterSetCategory), name: (NSNotification.Name(rawValue: "reloadFeedAfterSetCategory")), object: nil)
-            
-            
-            let nav = UINavigationController(rootViewController: CVC)
-            nav.modalPresentationStyle = .fullScreen
-            self.present(nav, animated: true, completion: nil)
-            
-            
-        } else {
-            
-            feedViewController.readyToLoad = true
-            feedViewController.collectionNode.reloadData()
-            
-        }
+        /*
+        feedViewController.readyToLoad = true
+        feedViewController.collectionNode.reloadData()
+         */
         
         
     }
@@ -279,7 +263,7 @@ extension ParentViewController {
     func setupHomeButton() {
         
         // Do any additional setup after loading the view.
-        homeButton.setImage(UIImage.init(named: "gpt-white")?.resize(targetSize: CGSize(width: 30, height: 30)), for: [])
+        homeButton.setImage(UIImage.init(named: "stitchboxlogonew")?.resize(targetSize: CGSize(width: 19.27, height: 30)), for: [])
         homeButton.addTarget(self, action: #selector(openChatBot(_:)), for: .touchUpInside)
         homeButton.frame = back_frame
         homeButton.setTitleColor(UIColor.white, for: .normal)
