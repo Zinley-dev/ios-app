@@ -81,25 +81,9 @@ class StitchViewController: UIViewController, UICollectionViewDelegateFlowLayout
     
     func hideStitchView() {
         
-        selectPostCollectionView.isHidden = true
         
-        if let index = currentIndex {
             
-            if let cell = self.collectionNode.nodeForItem(at: IndexPath(row: index, section: 0)) as? VideoNode {
-
-                if globalSetting.ClearMode == true {
-                    
-                    cell.hideAllInfo()
-                    
-                } else {
-                    
-                    cell.showAllInfo()
-                    
-                }
-                
-            }
-            
-        }
+        
         
     }
     
@@ -372,7 +356,7 @@ extension StitchViewController: ASCollectionDataSource {
                     return ASCellNode()
                 }
                 
-                let node = VideoNode(with: post, at: indexPath.row, isPreview: false, vcType: "stitch", selectedStitch: selectedStitch)
+                let node = VideoNode(with: post, isPreview: false)
                 node.neverShowPlaceholders = true
                 node.debugName = "Node \(indexPath.row)"
                 
@@ -677,17 +661,7 @@ extension StitchViewController {
             cell.isActive = true
             
             
-            if globalSetting.ClearMode == true {
-                
-                cell.hideAllInfo()
-                
-            } else {
-                
-                cell.showAllInfo()
-                
-            }
             
-            cell.updateStitchCount(text: "\(index + 1)/\(posts.count)")
             cell.playVideo()
             
         }
@@ -697,7 +671,7 @@ extension StitchViewController {
     func seekToZero(index: Int) {
       
         if let cell = self.collectionNode.nodeForItem(at: IndexPath(row: index, section: 0)) as? VideoNode {
-            cell.seekToZero()
+            //cell.seekToZero()
             
         }
         

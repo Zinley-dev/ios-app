@@ -1199,7 +1199,7 @@ extension UserProfileVC {
     
     @objc func report() {
         
-        let slideVC =  reportView()
+        let slideVC = ReportView()
         
         slideVC.user_report = true
         slideVC.userId = self.userId!

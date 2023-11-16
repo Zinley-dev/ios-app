@@ -334,11 +334,10 @@ extension PreviewVC: ASCollectionDataSource {
             guard let self = self else {
                 return ASCellNode()
             }
-            let node = VideoNode(with: post, at: indexPath.row, isPreview: true, vcType: "preview", selectedStitch: false)
+            let node = VideoNode(with: post, isPreview: true)
             //node.collectionNode = self.collectionNode
             node.neverShowPlaceholders = true
             node.debugName = "Node \(indexPath.row)"
-            node.isOriginal = true
             node.automaticallyManagesSubnodes = true
             //
             
@@ -418,8 +417,6 @@ extension PreviewVC {
     func playVideo(index: Int) {
         
         if let cell = self.collectionNode.nodeForItem(at: IndexPath(row: index, section: 0)) as? VideoNode {
-            
-            cell.disableTouching()
             
             cell.setNeedsLayout()
             cell.playVideo()

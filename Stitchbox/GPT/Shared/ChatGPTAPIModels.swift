@@ -2,7 +2,7 @@
 //  ChatGPTAPIModels.swift
 //  XCAChatGPT
 //
-//  Created by Alfian Losari on 03/03/23.
+//  Created by Khoi Nguyen on 03/03/23.
 //
 
 import Foundation

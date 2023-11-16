@@ -1,3 +1,11 @@
+//
+//  ContentView.swift
+//  XCAChatGPT
+//
+//  Created by Khoi Nguyen on 02/02/23.
+//
+
+
 import SwiftUI
 import AVKit
 import SendBirdUIKit

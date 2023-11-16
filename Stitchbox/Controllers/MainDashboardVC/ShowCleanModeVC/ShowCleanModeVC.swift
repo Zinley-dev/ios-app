@@ -25,7 +25,7 @@ class ShowCleanModeVC: UIViewController {
     private var videoNode: ASVideoNode!
     private var gradientNode: GradienView!
     private var headerView: PostHeader!
-    private var sideButtonsView: ButtonSideList!
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -105,83 +105,18 @@ class ShowCleanModeVC: UIViewController {
     
     private func setupHeader() {
         
-        headerView = PostHeader()
-        headerView.translatesAutoresizingMaskIntoConstraints = false
-        videoView.addSubview(self.headerView)
-        
-        NSLayoutConstraint.activate([
-            headerView.trailingAnchor.constraint(equalTo: videoView.trailingAnchor, constant: 0),
-            headerView.bottomAnchor.constraint(equalTo: videoView.bottomAnchor, constant: 0),
-            headerView.leadingAnchor.constraint(equalTo: videoView.leadingAnchor, constant: 0),
-            headerView.topAnchor.constraint(equalTo: videoView.topAnchor, constant: 0),
-            
-        ])
-        
-        headerView.shareBtn.setImage(shareImage, for: .normal)
-        headerView.saveBtn.setImage(unsaveImage, for: .normal)
-        headerView.commentBtn.setImage(cmtImage, for: .normal)
-        
-        headerView.likeCountLbl.text = "10M"
-        headerView.shareCountLbl.text = "2M"
-        headerView.commentCountLbl.text = "20k"
-        headerView.saveCountLbl.text = "1M"
-        
-        headerView.usernameLbl.text = "@StitchboxTeam"
-        headerView.contentLbl.text = "Thanks for joining us! We value you. 🌟"
-        headerView.usernameLbl.font = FontManager.shared.roboto(.Medium, size: 14)
-        headerView.contentLbl.font = FontManager.shared.roboto(.Regular, size: 13)
-        headerView.createStitchView.isHidden = true
-        self.headerView.setNeedsLayout()
-        self.headerView.layoutIfNeeded()
         
     }
     
     
     private func setupSideButtonsView() {
-        sideButtonsView = ButtonSideList()
-        sideButtonsView.backgroundColor = .clear
-        sideButtonsView.translatesAutoresizingMaskIntoConstraints = false
-        videoView.addSubview(sideButtonsView)
-        
-        sideButtonsView.statusImg.isHidden = false
-        
-        NSLayoutConstraint.activate([
-            sideButtonsView.trailingAnchor.constraint(equalTo: videoView.trailingAnchor, constant: -8),
-            sideButtonsView.bottomAnchor.constraint(equalTo: videoView.bottomAnchor, constant: -55),
-            sideButtonsView.widthAnchor.constraint(equalToConstant: 55),
-            sideButtonsView.heightAnchor.constraint(equalTo: videoView.heightAnchor)
-        ])
-        
-        
-        sideButtonsView.isHidden = false
-        sideButtonsView.originalStack.isHidden = false
-        sideButtonsView.stickStack.isHidden = true
-        sideButtonsView.originalStitchCount.text = "\(formatPoints(num: Double(1000)))"
+       
         
     }
     
     private func setupSpace(width: CGFloat) {
         
-        if let buttonsView = self.headerView {
-         
-            let leftAndRightPadding: CGFloat = 10 * 2 // Padding for both sides
-            let itemWidth: CGFloat = 65
-            let numberOfItems: CGFloat = 4 // Number of items in the stack view
-            let superViewWidth: CGFloat = width // Assuming this is the superview's width
-            
-            // Calculate the total width of items
-            let totalItemWidth: CGFloat = numberOfItems * itemWidth
-            
-            // Calculate the total space we have left for spacing after subtracting the item widths and paddings
-            let totalSpacingWidth: CGFloat = superViewWidth - totalItemWidth - leftAndRightPadding
-            
-            // Calculate the spacing by dividing the total space by the number of spaces (which is 3, for 4 items)
-            let spacing: CGFloat = totalSpacingWidth / (numberOfItems - 1)
-            
-            // Set the calculated spacing
-            print(width, spacing, totalItemWidth)
-            buttonsView.stackView.spacing = spacing
-        }
+      
     }
 
     @IBAction func ClearSwitchPressed(_ sender: Any) {
@@ -226,19 +161,13 @@ class ShowCleanModeVC: UIViewController {
     }
     
     private func showAllInfo() {
-        
-        gradientNode.isHidden = false
-        headerView.isHidden = false
-        sideButtonsView.isHidden = false
+      
         
     }
     
     
     private func hideAllInfo() {
-        
-        gradientNode.isHidden = true
-        headerView.isHidden = true
-        sideButtonsView.isHidden = true
+       
     }
     
     func showErrorAlert(_ title: String, msg: String) {

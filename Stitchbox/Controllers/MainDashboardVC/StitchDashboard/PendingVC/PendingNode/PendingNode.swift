@@ -88,14 +88,7 @@ class PendingNode: ASCellNode, ASVideoNodeDelegate {
         spinner = NVActivityIndicatorView(frame:  CGRect(x: 0, y: 0, width: 75, height: 75), type: .ballScale, color: .secondary, padding: 0)
     }
 
-    override func layout() {
-        super.layout()
-        if self.label != nil, self.headerView != nil {
-            self.label.frame = self.headerView.contentLbl.bounds
-            self.label.numberOfLines = Int(self.headerView.contentLbl.numberOfLines)
-        }
-        
-    }
+    
     
     private func configureGradientNode() {
         gradientNode.isLayerBacked = true
@@ -146,8 +139,6 @@ class PendingNode: ASCellNode, ASVideoNodeDelegate {
         self.label = ActiveLabel()
     
         self.label.backgroundColor = .clear
-        self.headerView.contentLbl.addSubview(self.label)
-        self.headerView.contentLbl.isUserInteractionEnabled = true
         
       
         let customType = ActiveType.custom(pattern: "\\*more\\b|\\*hide\\b")
@@ -188,16 +179,7 @@ class PendingNode: ASCellNode, ASVideoNodeDelegate {
         
         addConstraints(to: self.headerView, within: self.view)
     
-        self.headerView.contentLbl.numberOfLines = 0
-        self.headerView.contentLbl.lineBreakMode = .byWordWrapping
-        
-        self.headerView.contentLbl.setContentHuggingPriority(.defaultHigh, for: .vertical)
-        self.headerView.contentLbl.setContentCompressionResistancePriority(.defaultHigh, for: .vertical)
-
-
-        self.headerView.usernameLbl.text = "@\(post.owner?.username ?? "")"
-        self.headerView.stackView.isHidden = true
-        self.headerView.stackConstant.constant = 0
+     
         
         //
         self.pendingView = HandlePendingView()
@@ -237,13 +219,7 @@ class PendingNode: ASCellNode, ASVideoNodeDelegate {
     
     func setupGestureRecognizers() {
         
-        let vidTap = createTapGestureRecognizer(target: self, action: #selector(PendingNode.tapProcess))
-        self.headerView.restView.isUserInteractionEnabled = true
-        self.headerView.restView.addGestureRecognizer(vidTap)
-     
-        let usernameTap = createTapGestureRecognizer(target: self, action: #selector(PendingNode.userTapped))
-        self.headerView.usernameLbl.isUserInteractionEnabled = true
-        self.headerView.usernameLbl.addGestureRecognizer(usernameTap)
+
 
         
     }
@@ -316,7 +292,7 @@ class PendingNode: ASCellNode, ASVideoNodeDelegate {
             NSAttributedString.Key.foregroundColor: UIColor.white
         ])
             
-        self.headerView.contentLbl.attributedText = attr1
+       
         label.attributedText = attr2
           
         self.headerView.setNeedsLayout()
@@ -351,7 +327,7 @@ class PendingNode: ASCellNode, ASVideoNodeDelegate {
         ])
             
             
-        self.headerView.contentLbl.attributedText = attr1
+        
         label.attributedText = attr2
             
         self.headerView.setNeedsLayout()

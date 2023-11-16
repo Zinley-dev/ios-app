@@ -1435,7 +1435,7 @@ extension CommentNotificationVC {
         
         if let index = editedIndexpath?.row {
             
-            let slideVC =  reportView()
+            let slideVC = ReportView()
             
             slideVC.commentId = self.commentList[index].comment_id
             slideVC.comment_report = true

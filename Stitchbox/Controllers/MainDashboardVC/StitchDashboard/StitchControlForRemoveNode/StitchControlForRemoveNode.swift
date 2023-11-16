@@ -89,16 +89,7 @@ class StitchControlForRemoveNode: ASCellNode, ASVideoNodeDelegate {
     }
     
 
-    
-
-    override func layout() {
-        super.layout()
-        if self.label != nil, self.headerView != nil {
-            self.label.frame = self.headerView.contentLbl.bounds
-            self.label.numberOfLines = Int(self.headerView.contentLbl.numberOfLines)
-        }
-        
-    }
+   
     
     private func configureGradientNode() {
         gradientNode.isLayerBacked = true
@@ -167,79 +158,12 @@ class StitchControlForRemoveNode: ASCellNode, ASVideoNodeDelegate {
 
     
     func setupLabel() {
-        self.label = ActiveLabel()
-    
-        self.label.backgroundColor = .clear
-        self.headerView.contentLbl.addSubview(self.label)
-        self.headerView.contentLbl.isUserInteractionEnabled = true
         
-      
-        let customType = ActiveType.custom(pattern: "\\*more\\b|\\*hide\\b")
-        self.label.customColor[customType] = .lightGray
-        self.label.enabledTypes = [.hashtag, .url, customType]
-       
-        self.label.hashtagColor = UIColor(red: 208/255, green: 223/255, blue: 252/255, alpha: 1)
-
-        self.label.URLColor = UIColor(red: 60/255, green: 115/255, blue: 180/255, alpha: 1)
-
-        
-        self.label.handleCustomTap(for: customType) { [weak self] element in
-            guard let self = self else { return }
-            element == "*more" ? self.seeMore() : self.hideContent()
-        }
-        
-        self.label.handleHashtagTap { [weak self] hashtag in
-            guard let self = self else { return }
-            self.presentPostListWithHashtagVC(for: "#" + hashtag)
-        }
-
-        self.label.handleURLTap { [weak self] string in
-            guard let self = self else { return }
-            self.handleURLTap(url: string.absoluteString)
-        }
-    
-        
-    
-        setupDefaultContent()
         
     }
     
     func setupViews() {
-        // Header View Setup
-        
-        self.headerView = PostHeader()
-        self.view.addSubview(self.headerView)
-        
-        addConstraints(to: self.headerView, within: self.view)
-    
-        self.headerView.contentLbl.numberOfLines = 0
-        self.headerView.contentLbl.lineBreakMode = .byWordWrapping
-        
-        self.headerView.contentLbl.setContentHuggingPriority(.defaultHigh, for: .vertical)
-        self.headerView.contentLbl.setContentCompressionResistancePriority(.defaultHigh, for: .vertical)
-
-
-        self.headerView.usernameLbl.text = "@\(post.owner?.username ?? "")"
-        self.headerView.stackView.isHidden = true
-        self.headerView.stackConstant.constant = 0
-        
-        //
-        self.stitchView = UnStitchView()
-        self.stitchView.backgroundColor = .clear
-        self.buttonNode.view.addSubview(self.stitchView)
-        self.stitchView.translatesAutoresizingMaskIntoConstraints = false
-        self.stitchView.topAnchor.constraint(equalTo: self.buttonNode.view.topAnchor, constant: 0).isActive = true
-        self.stitchView.bottomAnchor.constraint(equalTo: self.buttonNode.view.bottomAnchor, constant: 0).isActive = true
-        self.stitchView.leadingAnchor.constraint(equalTo: self.buttonNode.view.leadingAnchor, constant: 0).isActive = true
-        self.stitchView.trailingAnchor.constraint(equalTo: self.buttonNode.view.trailingAnchor, constant: 0).isActive = true
-        
-        let unstitchTap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(StitchControlForRemoveNode.unstitchBtnTapped))
-        unstitchTap.numberOfTapsRequired = 1
-        self.stitchView.unstitchBtn.addGestureRecognizer(unstitchTap)
-        
-        
-        // Gesture Recognizers
-        setupGestureRecognizers()
+       
         
     }
 
@@ -257,14 +181,6 @@ class StitchControlForRemoveNode: ASCellNode, ASVideoNodeDelegate {
     
     func setupGestureRecognizers() {
         
-        let vidTap = createTapGestureRecognizer(target: self, action: #selector(StitchControlForRemoveNode.tapProcess))
-        self.headerView.restView.isUserInteractionEnabled = true
-        self.headerView.restView.addGestureRecognizer(vidTap)
-     
-        let usernameTap = createTapGestureRecognizer(target: self, action: #selector(StitchControlForRemoveNode.userTapped))
-        self.headerView.usernameLbl.isUserInteractionEnabled = true
-        self.headerView.usernameLbl.addGestureRecognizer(usernameTap)
-
         
     }
     
@@ -314,68 +230,12 @@ class StitchControlForRemoveNode: ASCellNode, ASVideoNodeDelegate {
 
     func setupDefaultContent() {
 
-        headerView.backgroundColor = UIColor.clear
-
-        let hashtagsText = post.hashtags?.joined(separator: " ")
-        let finalText = post.content + " " + (hashtagsText ?? "")
-        var truncatedText: String
-            
-        if post.content == "" {
-            truncatedText = truncateTextIfNeeded(hashtagsText ?? "")
-        } else {
-            truncatedText = truncateTextIfNeeded(finalText)
-        }
-            
-        let attr1 = NSAttributedString(string: truncatedText, attributes: [
-            NSAttributedString.Key.font: FontManager.shared.roboto(.Regular, size: FontSize), // Using the Roboto Regular style as an example
-            NSAttributedString.Key.foregroundColor: UIColor.clear
-        ])
-
-        let attr2 = NSAttributedString(string: truncatedText, attributes: [
-            NSAttributedString.Key.font: FontManager.shared.roboto(.Regular, size: FontSize), // Using the Roboto Regular style as an example
-            NSAttributedString.Key.foregroundColor: UIColor.white
-        ])
-            
-        self.headerView.contentLbl.attributedText = attr1
-        label.attributedText = attr2
-          
-        self.headerView.setNeedsLayout()
-        self.headerView.layoutIfNeeded()
             
             
-            
-        }
+    }
         
     func setupHideContent() {
             
-        headerView.backgroundColor = UIColor.clear
-            
-        let hashtagsText = post.hashtags?.joined(separator: " ")
-        let finalText = post.content + " " + (hashtagsText ?? "")
-        var contentText: String
-
-        if post.content == "" {
-            contentText = processTextForHiding(hashtagsText ?? "")
-        } else {
-            contentText = processTextForHiding(finalText)
-        }
-            
-        let attr1 = NSAttributedString(string: contentText, attributes: [
-            NSAttributedString.Key.font: FontManager.shared.roboto(.Regular, size: FontSize), // Using the Roboto Regular style as an example
-            NSAttributedString.Key.foregroundColor: UIColor.clear
-        ])
-            
-        let attr2 = NSAttributedString(string: contentText, attributes: [
-            NSAttributedString.Key.font: FontManager.shared.roboto(.Regular, size: FontSize), // Using the Roboto Regular style as an example
-            NSAttributedString.Key.foregroundColor: UIColor.white
-        ])
-            
-            
-        self.headerView.contentLbl.attributedText = attr1
-        label.attributedText = attr2
-            
-        self.headerView.setNeedsLayout()
-        self.headerView.layoutIfNeeded()
 
            
     }

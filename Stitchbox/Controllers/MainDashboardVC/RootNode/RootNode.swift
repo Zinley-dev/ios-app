@@ -146,10 +146,9 @@ extension RootNode: ASCollectionDelegate, ASCollectionDataSource {
                 }
                 
                 // Create and configure a VideoNode for the main collection node
-                let node = VideoNode(with: post, at: indexPath.row, isPreview: false, vcType: "mainFeed", selectedStitch: false)
+                let node = VideoNode(with: post, isPreview: false)
                 node.neverShowPlaceholders = true
                 node.debugName = "Node \(indexPath.row)"
-                node.isOriginal = true
                 node.automaticallyManagesSubnodes = true
                 return node
             }

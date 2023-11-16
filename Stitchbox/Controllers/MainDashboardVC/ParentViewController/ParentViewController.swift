@@ -899,11 +899,11 @@ extension ParentViewController {
         
         if isFeed, let index = feedViewController.currentIndex, !feedViewController.posts.isEmpty {
             if let node = feedViewController.collectionNode.nodeForItem(at: IndexPath(row: index, section: 0)) as? VideoNode {
-                node.showAllInfo()
+                //node.showAllInfo()
             }
         } else if let index = stitchViewController.currentIndex, !stitchViewController.posts.isEmpty {
             if let node = stitchViewController.collectionNode.nodeForItem(at: IndexPath(row: index, section: 0)) as? VideoNode {
-                node.showAllInfo()
+                //node.showAllInfo()
             }
         }
         
@@ -914,11 +914,11 @@ extension ParentViewController {
         
         if isFeed, let index = feedViewController.currentIndex, !feedViewController.posts.isEmpty {
             if let node = feedViewController.collectionNode.nodeForItem(at: IndexPath(row: index, section: 0)) as? VideoNode {
-                node.hideAllInfo()
+                //node.hideAllInfo()
             }
         } else if let index = stitchViewController.currentIndex, !stitchViewController.posts.isEmpty {
             if let node = stitchViewController.collectionNode.nodeForItem(at: IndexPath(row: index, section: 0)) as? VideoNode {
-                node.hideAllInfo()
+                //node.hideAllInfo()
             }
         }
     }
@@ -1029,7 +1029,7 @@ extension ParentViewController {
     
     
     @objc func reportPost() {
-        let slideVC = reportView()
+        let slideVC = ReportView()
         slideVC.post_report = true
         slideVC.postId = isFeed ? feedViewController.editeddPost?.id ?? "" : stitchViewController.editeddPost?.id ?? ""
         slideVC.modalPresentationStyle = .custom

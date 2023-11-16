@@ -372,11 +372,11 @@ extension SelectedRootPostVC: ASCollectionDataSource {
         
         return {
             
-            let node = VideoNode(with: post, at: indexPath.row, isPreview: false, vcType: "selectedRoot", selectedStitch: false)
+            let node = VideoNode(with: post, isPreview: false)
             node.neverShowPlaceholders = true
             node.debugName = "Node \(indexPath.row)"
            
-            node.isOriginal = true
+            
             node.automaticallyManagesSubnodes = true
             
             return node
@@ -537,7 +537,7 @@ extension SelectedRootPostVC {
     func seekToZero(index: Int) {
       
         if let cell = self.collectionNode.nodeForItem(at: IndexPath(row: index, section: 0)) as? VideoNode {
-            cell.seekToZero()
+            //cell.seekToZero()
             
         }
         
