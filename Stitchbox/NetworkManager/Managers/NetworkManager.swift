@@ -8,39 +8,35 @@
 import Foundation
 import UIKit
 
-// Define type aliases for different completion handlers.
 typealias APICompletion = (Result) -> Void
 typealias UploadInprogress = (Float) -> Void
 typealias DataTaskResponse = (Data?, URLResponse?, Error?) -> Void
 
-// Protocol defining the requirements for a request manager.
 protocol RequestManager {
     associatedtype EndPoint: EndPointType
     func request(_ route: EndPoint, completion: @escaping APICompletion)
 }
 
-// Delegate class to handle URLSessionTask events, particularly for tracking upload progress.
 class RequestDelegate: NSObject, URLSessionTaskDelegate {
     var process: UploadInprogress?
 
-    // This method is called periodically during the data upload, allowing progress tracking.
     func urlSession(_ session: URLSession, task: URLSessionTask, didSendBodyData bytesSent: Int64, totalBytesSent: Int64, totalBytesExpectedToSend: Int64) {
         let uploadProgress = Float(totalBytesSent) / Float(totalBytesExpectedToSend) * 100
         process?(uploadProgress)
     }
 }
 
-// Generic class to manage network requests for a given endpoint type.
 class Manager<EndPoint: EndPointType>: RequestManager {
+    
     deinit {
         print("Manager is being deinitialized")
     }
 
+    
     private var task: URLSessionDataTaskProtocol?
     private let session: URLSessionProtocol
     private let requestDelegate: RequestDelegate
 
-    // Initialize with a custom or shared URLSession.
     init(session: URLSessionProtocol = URLSession.shared) {
         let configuration = URLSessionConfiguration.default
         configuration.waitsForConnectivity = true
@@ -50,20 +46,18 @@ class Manager<EndPoint: EndPointType>: RequestManager {
         }
         self.session = URLSession(configuration: configuration, delegate: requestDelegate, delegateQueue: nil)
     }
-
-    // Several methods to upload different types of content (images, videos, etc.) using multipart/form-data.
-    // Each method prepares the request and handles the response accordingly.
-
-    // Upload a single image.
+    
+    
     func upload(_ route: EndPoint, image: UIImage, completion: @escaping APICompletion) {
+        
         if var request = buildRequest(from: route) {
+            
             let uploadData = builđData(for: image, request: &request)
             
             task = session.uploadTask(with: request, from: uploadData, completionHandler: { [weak self] data, response, error in
                 guard let self = self else { return }
                 if error != nil {
                     completion(.failure(ErrorType.noInternet))
-                    return
                 }
                 if let response = response as? HTTPURLResponse {
                     let result = self.handleNetworkResponse(data, response)
@@ -72,22 +66,19 @@ class Manager<EndPoint: EndPointType>: RequestManager {
             })
             
             task?.resume()
-        } else {
-            completion(.failure(ErrorType.badRequest))
         }
     }
-
-
-    // Upload multiple images with additional content.
+    
     func upload(_ route: EndPoint, images: [UIImage], content: String, completion: @escaping APICompletion) {
+        
         if var request = buildRequest(from: route) {
+            
             let uploadData = buildData(for: images, for: content, request: &request)
             
             task = session.uploadTask(with: request, from: uploadData, completionHandler: { [weak self] data, response, error in
                 guard let self = self else { return }
                 if error != nil {
                     completion(.failure(ErrorType.noInternet))
-                    return
                 }
                 if let response = response as? HTTPURLResponse {
                     let result = self.handleNetworkResponse(data, response)
@@ -96,23 +87,22 @@ class Manager<EndPoint: EndPointType>: RequestManager {
             })
             
             task?.resume()
-        } else {
-            completion(.failure(ErrorType.badRequest))
+            
         }
     }
-
-
-    // Upload a video with progress tracking.
+    
     func upload(_ route: EndPoint, video: Data, completion: @escaping APICompletion, inprogress: @escaping UploadInprogress) {
+        
         if var request = buildRequest(from: route) {
+            
             let uploadData = builđData(for: video, request: &request)
+            
             requestDelegate.process = inprogress
             
             task = session.uploadTask(with: request, from: uploadData, completionHandler: { [weak self] data, response, error in
                 guard let self = self else { return }
                 if error != nil {
                     completion(.failure(ErrorType.noInternet))
-                    return
                 }
                 if let response = response as? HTTPURLResponse {
                     let result = self.handleNetworkResponse(data, response)
@@ -121,23 +111,24 @@ class Manager<EndPoint: EndPointType>: RequestManager {
             })
             
             task?.resume()
-        } else {
-            completion(.failure(ErrorType.badRequest))
+            
         }
     }
-
-
-
-    // Standard request method.
+    
     func request(_ route: EndPoint, completion: @escaping APICompletion) {
+        
         guard let request = buildRequest(from: route) else {
             completion(.failure(ErrorType.badRequest))
             return
         }
 
+        
         self.task = session.dataTask(with: request, completionHandler: { [weak self] data, response, error in
             guard let self = self else { return }
+            // Now use `strongSelf` instead of `self` inside the closure.
+            // Ensure we are on the main thread
             if let error = error {
+                print(error.localizedDescription)
                 completion(.failure(ErrorType.badRequest))
                 return
             }
@@ -149,15 +140,14 @@ class Manager<EndPoint: EndPointType>: RequestManager {
             
             let result = self.handleNetworkResponse(data, response)
             completion(result)
+            
         })
 
         task?.resume()
+
     }
 
-
-    // Helper methods to build and configure requests, handle network responses, etc.
-
-    // Build multipart/form-data for image upload.
+    
     fileprivate func builđData(for image: UIImage, request: inout URLRequest) -> Data {
         let boundary = UUID().uuidString
         request.setValue("multipart/form-data; boundary=\(boundary)", forHTTPHeaderField: "Content-Type")
@@ -170,96 +160,114 @@ class Manager<EndPoint: EndPointType>: RequestManager {
         uploadData.append("\r\n--\(boundary)--\r\n".data(using: .utf8)!)
         return uploadData
     }
-
-
-    // Build multipart/form-data for video upload.
+    
     fileprivate func builđData(for video: Data, request: inout URLRequest) -> Data {
         let boundary = UUID().uuidString
         request.setValue("multipart/form-data; boundary=\(boundary)", forHTTPHeaderField: "Content-Type")
         let filename = "video.mp4"
         var uploadData = Data()
         uploadData.append("\r\n--\(boundary)\r\n".data(using: .utf8)!)
-        uploadData.append("Content-Disposition: form-data; name=\"file\"; filename=\"\(filename)\"\r\n".data(using: .utf8)!)
+        uploadData.append("Content-Disposition: form-data; name=\"file[]\"; filename=\"\(filename)\"\r\n".data(using: .utf8)!)
         uploadData.append("Content-Type: video/mp4\r\n\r\n".data(using: .utf8)!)
         uploadData.append(video)
         uploadData.append("\r\n--\(boundary)--\r\n".data(using: .utf8)!)
         return uploadData
     }
-
-
-    // Build multipart/form-data for multiple images and additional content.
+    
     fileprivate func buildData(for images: [UIImage], for content: String, request: inout URLRequest) -> Data {
+        
         let boundary = UUID().uuidString
         request.setValue("multipart/form-data; boundary=\(boundary)", forHTTPHeaderField: "Content-Type")
         var uploadData = Data()
-
-        // Append images to the upload data.
+        
+        var imagesData = Data()
+        // build uploadData images
         for image in images {
-            let filename = UUID().uuidString + ".png"
-            uploadData.append("\r\n--\(boundary)\r\n".data(using: .utf8)!)
-            uploadData.append("Content-Disposition: form-data; name=\"file[]\"; filename=\"\(filename)\"\r\n".data(using: .utf8)!)
-            uploadData.append("Content-Type: image/png\r\n\r\n".data(using: .utf8)!)
-            uploadData.append(image.jpegData(compressionQuality: 0.5)!)
+            imagesData.append("\r\n--\(boundary)\r\n".data(using: .utf8)!)
+            imagesData.append("Content-Disposition: form-data; name=\"file[]\"; filename=\"\(UUID().uuidString)\"\r\n".data(using: .utf8)!)
+            imagesData.append("Content-Type: image/png\r\n\r\n".data(using: .utf8)!)
+            imagesData.append(image.jpegData(compressionQuality: 0.5)!)
         }
-
-        // Append additional content to the upload data.
-        uploadData.append("\r\n--\(boundary)\r\n".data(using: .utf8)!)
-        uploadData.append("Content-Disposition: form-data; name=\"content\"\r\n".data(using: .utf8)!)
-        uploadData.append("Content-Type: text/plain\r\n\r\n".data(using: .utf8)!)
-        uploadData.append(content.data(using: .utf8)!)
-        uploadData.append("\r\n--\(boundary)--\r\n".data(using: .utf8)!)
+        uploadData.append(imagesData)
+        
+        // build uploadData content
+        var contentData = ""
+        contentData += "\r\n--\(boundary)\r\n"
+        contentData += "Content-Disposition:form-data; name=\"content\""
+        contentData += "\r\nContent-Type: text"
+        contentData += "\r\n\r\n\(content)\r\n"
+        
+        contentData += "--\(boundary)\r\n"
+        uploadData.append(contentData.data(using: .utf8)!)
 
         return uploadData
     }
 
-
-    // Build a URLRequest based on the provided endpoint.
     fileprivate func buildRequest(from route: EndPoint) -> URLRequest? {
-        guard let url = URL(string: APIBuilder.baseURL + route.path) else { return nil }
-        var request = URLRequest(url: url)
-        request.httpMethod = route.httpMethod.rawValue
+        // Check API endpoint is valid
+        let encodedChar = String(APIBuilder.baseURL + route.module + route.path).addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)
 
-        switch route.task {
-        case .request:
-            // No additional configuration required.
-            break
-        case .requestParameters(let parameters):
-            if let parameters = parameters {
-                request.httpBody = try? JSONSerialization.data(withJSONObject: parameters, options: [])
-            }
-        case .requestParametersAndHeaders(let parameters, let headers):
-            if let parameters = parameters {
-                request.httpBody = try? JSONSerialization.data(withJSONObject: parameters, options: [])
-            }
-            if let headers = headers {
-                for (headerField, headerValue) in headers {
-                    request.setValue(headerValue, forHTTPHeaderField: headerField)
-                }
-            }
+        guard let endpointUrl = URL(string: encodedChar!) else {
+            return nil
         }
 
-        // Add any additional headers that are always required.
-        // For example, authentication tokens, content-type etc.
-        // request.setValue("application/json", forHTTPHeaderField: "Content-Type")
-        // request.setValue("Bearer <token>", forHTTPHeaderField: "Authorization")
+        var request = URLRequest(url: endpointUrl,
+                                 cachePolicy: .reloadIgnoringLocalAndRemoteCacheData,
+                                 timeoutInterval: 30.0)
+
+        // Define or compute the User-Agent string
+        let userAgent = "Stitchbox/\(Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "1.0")"
+        request.setValue(userAgent, forHTTPHeaderField: "User-Agent")
+
+        // Define a constant for the key or fetch it from a proper location
+        if let clientIp = UserDefaults.standard.object(forKey: kUserIp) as? String {
+            request.setValue(clientIp, forHTTPHeaderField: "Sb-Client-Ip")
+        }
+
+        // Get the current device's preferred language
+        let language = Locale.current.languageCode ?? "en"
+        let region = Locale.current.regionCode ?? "US"
+        let deviceLanguage = "\(language)-\(region)"
+
+        // Get the current device model
+        let device = UIDevice.current.model
+
+        // Get the current operating system version
+        let currentOS = UIDevice.current.systemVersion
+
+        request.setValue(deviceLanguage, forHTTPHeaderField: "Sb-Client-Language")
+        request.setValue(device, forHTTPHeaderField: "Sb-Client-Device")
+        request.setValue(currentOS, forHTTPHeaderField: "Sb-Client-OS")
+
+        request.httpMethod = route.httpMethod.rawValue
+        switch route.task {
+        case .request:
+            request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+            if route.headers != nil {
+                self.addAdditionalHeaders(route.headers, request: &request)
+            }
+        case .requestParameters(let parameters):
+            request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+            if route.headers != nil {
+                self.addAdditionalHeaders(route.headers, request: &request)
+            }
+            self.configureParameters(parameters: parameters, request: &request)
+        case .requestParametersAndHeaders(let parameters, let additionalHeaders):
+            self.addAdditionalHeaders(additionalHeaders, request: &request)
+            self.configureParameters(parameters: parameters, request: &request)
+        }
 
         return request
     }
 
 
-    // Configure parameters for a URLRequest.
+    
     fileprivate func configureParameters(parameters: [String: Any]?, request: inout URLRequest) {
         guard let parameters = parameters else { return }
-        do {
-            let jsonData = try JSONSerialization.data(withJSONObject: parameters, options: [])
-            request.httpBody = jsonData
-        } catch {
-            print("Error in JSON serialization of parameters")
-        }
+        let jsonData = try? JSONSerialization.data(withJSONObject: parameters)
+        request.httpBody = jsonData
     }
 
-
-    // Add additional headers to a URLRequest.
     fileprivate func addAdditionalHeaders(_ additionalHeaders: [String: String]?, request: inout URLRequest) {
         guard let headers = additionalHeaders else { return }
         for (key, value) in headers {
@@ -267,8 +275,7 @@ class Manager<EndPoint: EndPointType>: RequestManager {
         }
     }
 
-
-    // Handle the network response and categorize it into success or failure.
+    
     fileprivate func handleNetworkResponse(_ data: Data?, _ response: HTTPURLResponse) -> Result {
         switch response.statusCode {
         case 200...299: return .success(getAPIResponseFor(data, response))
@@ -278,26 +285,25 @@ class Manager<EndPoint: EndPointType>: RequestManager {
         default: return .failure(ErrorType.requestFailed(body: getAPIResponseFor(data, response).body))
         }
     }
-
-    // Create an APIResponse object from Data and HTTPURLResponse.
+    
     fileprivate func getAPIResponseFor(_ data: Data?, _ response: HTTPURLResponse) -> APIResponse {
         do {
             guard let responseData = data else {
-                return APIResponse(body: nil, header: response.allHeaderFields as? [String: Any], statusCode: response.statusCode, errorMessage: ErrorMessage.kNoData)
+                return getAPIResponseWithErrorMessage(errorMessage: ErrorMessage.kNoData)
             }
-            let json = try JSONSerialization.jsonObject(with: responseData, options: [])
-            return APIResponse(body: json as? [String: Any], header: response.allHeaderFields as? [String: Any], statusCode: response.statusCode, errorMessage: nil)
-        } catch {
-            return APIResponse(body: nil, header: response.allHeaderFields as? [String: Any], statusCode: response.statusCode, errorMessage: error.localizedDescription)
+            guard let json = try JSONSerialization.jsonObject(with: responseData, options: []) as? [String: Any] else {
+                return getAPIResponseWithErrorMessage(errorMessage: ErrorMessage.kConversionFailed)
+            }
+            return APIResponse(body: json, header: nil, statusCode: response.statusCode, errorMessage: nil)
+        } catch let error as NSError {
+            return getAPIResponseWithErrorMessage(errorMessage: error.debugDescription)
         }
     }
-
-
-    // Create an APIResponse object with an error message.
+    
     fileprivate func getAPIResponseWithErrorMessage(errorMessage: String) -> APIResponse {
-        return APIResponse(body: nil, header: nil, statusCode: nil, errorMessage: errorMessage)
+        let apiResponse = APIResponse(body: nil, header: nil, statusCode: nil, errorMessage: errorMessage)
+        return apiResponse
     }
-
     
 }
 
