@@ -10,8 +10,10 @@ import RxSwift
 import ObjectMapper
 import OneSignal
 
+/// ViewModel for handling start screen logic, including social sign-ins and API interactions.
 class StartViewModel: ViewModelProtocol {
     
+    // MARK: - Nested Types
     struct Input {}
     struct Action {}
     struct Output {
@@ -19,6 +21,7 @@ class StartViewModel: ViewModelProtocol {
         let errorsObservable: Observable<Error>
     }
     
+    // MARK: - Properties
     let input: Input
     let action: Action
     let output: Output
@@ -29,7 +32,8 @@ class StartViewModel: ViewModelProtocol {
     private let errorsSubject = PublishSubject<Error>()
     
     public var selectedSignInMethod: SocialLoginType!
-    
+
+    // MARK: - Computed Properties
     private var currentSignInService: LoginCoordinatorProtocol {
         switch selectedSignInMethod {
         case .google: return GoogleSignInService(vm: self)
@@ -41,6 +45,7 @@ class StartViewModel: ViewModelProtocol {
         }
     }
     
+    // MARK: - Initialization
     public init(vc: UIViewController) {
         self.vc = vc
         input = Input()
@@ -49,10 +54,10 @@ class StartViewModel: ViewModelProtocol {
                         errorsObservable: errorsSubject.asObservable())
     }
     
-    func logic() {
-    }
-    
-    /// Triggered when authentication succeeded from related provider.
+    // Additional logic functions can be added here
+
+    // MARK: - Sign In Completion
+    /// Completes the sign-in process with the given authentication result.
     open func completeSignIn(with authResult: AuthResult) {
         
         // call api --> check auth
@@ -135,13 +140,14 @@ class StartViewModel: ViewModelProtocol {
                     self.showAlert(title: "Error", message: "No Data Received")
                 }
 
-
-                
             }
         }
         
     }
-    
+
+
+    // MARK: - Account Creation
+    /// Creates a new account with the given authentication result and parameters.
     func createNewAccount(with authResult: AuthResult, params: [String:Any]) {
         
         
@@ -157,7 +163,9 @@ class StartViewModel: ViewModelProtocol {
         self.errorsSubject.onNext(NSError(domain: "Login fail", code: 401))
         
     }
-    
+
+    // MARK: - Alert Presentation
+    /// Presents an alert with the specified title and message.
     func showAlert(title: String, message: String) {
         DispatchQueue.main.async { [weak self] in
             guard let self = self else { return }
@@ -168,23 +176,25 @@ class StartViewModel: ViewModelProtocol {
         }
     }
 
-
-    
-    /// Trigger this method (from related provider's button action) to start process.
+    // MARK: - Sign In Process
+    /// Starts the sign-in process with the given social login method.
     open func startSignInProcess(with method: SocialLoginType) {
         switch method {
-        case .apple: selectedSignInMethod = .apple
-        case .google: selectedSignInMethod = .google
-        case .facebook: selectedSignInMethod = .facebook
-        case .twitter: selectedSignInMethod = .twitter
-        case .tiktok: selectedSignInMethod = .tiktok
+            case .apple: selectedSignInMethod = .apple
+            case .google: selectedSignInMethod = .google
+            case .facebook: selectedSignInMethod = .facebook
+            case .twitter: selectedSignInMethod = .twitter
+            case .tiktok: selectedSignInMethod = .tiktok
         }
-        
         currentSignInService.triggerSignIn()
     }
-    
+
+    // MARK: - Logout
+    /// Logs out the user from the current sign-in service.
     open func logout() {
-        //        signInSucceeded = false
         currentSignInService.logout()
     }
+
+    // Additional utility and helper functions can be added here
 }
+

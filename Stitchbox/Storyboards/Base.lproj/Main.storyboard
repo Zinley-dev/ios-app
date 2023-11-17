@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="21701" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="paH-cP-umD">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="22155" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="paH-cP-umD">
     <device id="retina4_7" orientation="portrait" appearance="dark"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21679"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="22131"/>
         <capability name="Named colors" minToolsVersion="9.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
@@ -393,7 +393,7 @@
                                 <nil key="highlightedColor"/>
                             </label>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Select a country and enter your phone number" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="glN-0O-4Qu">
-                                <rect key="frame" x="65" y="153.5" width="245" height="20"/>
+                                <rect key="frame" x="62.5" y="153.5" width="250" height="20"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="20" id="ZfE-AC-8bQ"/>
@@ -456,7 +456,7 @@
                                 <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Logo" translatesAutoresizingMaskIntoConstraints="NO" id="znR-BX-pDM">
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="stitchboxlogonew" translatesAutoresizingMaskIntoConstraints="NO" id="znR-BX-pDM">
                                 <rect key="frame" x="147.5" y="413" width="80" height="79.5"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="80" id="KhQ-8E-XXP"/>
@@ -993,16 +993,16 @@
                                 </userDefinedRuntimeAttributes>
                             </button>
                             <stackView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="jtN-NS-ShK">
-                                <rect key="frame" x="64.5" y="304.5" width="246" height="32"/>
+                                <rect key="frame" x="60.5" y="304.5" width="254" height="31.5"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Didn’t get the code? " textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="1o4-Va-dmC">
-                                        <rect key="frame" x="0.0" y="0.0" width="135" height="32"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="141" height="31.5"/>
                                         <fontDescription key="fontDescription" name="Roboto-Regular" family="Roboto" pointSize="15"/>
                                         <color key="textColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="tHb-sh-gLQ">
-                                        <rect key="frame" x="135" y="0.0" width="111" height="32"/>
+                                        <rect key="frame" x="141" y="0.0" width="113" height="31.5"/>
                                         <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <state key="normal" title="Button"/>
                                         <buttonConfiguration key="configuration" style="plain" title="Resend code">
@@ -1107,7 +1107,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="bG4-CS-dnF">
-                                <rect key="frame" x="32" y="52" width="300" height="41.5"/>
+                                <rect key="frame" x="32" y="52" width="300" height="41"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Last Step" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="zGh-mb-25v">
                                         <rect key="frame" x="0.0" y="0.0" width="300" height="23.5"/>
@@ -1116,7 +1116,7 @@
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="We can't wait to get you in!" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="mmK-9S-k0r">
-                                        <rect key="frame" x="0.0" y="23.5" width="300" height="18"/>
+                                        <rect key="frame" x="0.0" y="23.5" width="300" height="17.5"/>
                                         <fontDescription key="fontDescription" name="Roboto-Regular" family="Roboto" pointSize="15"/>
                                         <color key="textColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <nil key="highlightedColor"/>
@@ -1127,7 +1127,7 @@
                                 </constraints>
                             </stackView>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="50" translatesAutoresizingMaskIntoConstraints="NO" id="FnM-TD-jg3">
-                                <rect key="frame" x="32" y="125.5" width="311" height="355"/>
+                                <rect key="frame" x="32" y="125" width="311" height="355"/>
                                 <subviews>
                                     <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="VMy-Qd-jOQ">
                                         <rect key="frame" x="0.0" y="0.0" width="311" height="59.5"/>
@@ -1258,7 +1258,7 @@
                                 </subviews>
                             </stackView>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="vVK-GS-M7L">
-                                <rect key="frame" x="127.5" y="520.5" width="120" height="44"/>
+                                <rect key="frame" x="127.5" y="520" width="120" height="44"/>
                                 <color key="backgroundColor" name="Secondary"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="44" id="iJH-0Z-Imn"/>
@@ -1319,16 +1319,16 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="lTn-Yf-FSb">
-                                <rect key="frame" x="32" y="52" width="311" height="55"/>
+                                <rect key="frame" x="32" y="52" width="311" height="54.5"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="New Password" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="gf2-JT-oed">
-                                        <rect key="frame" x="0.0" y="0.0" width="311" height="28.5"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="311" height="28"/>
                                         <fontDescription key="fontDescription" name="Roboto-Bold" family="Roboto" pointSize="24"/>
                                         <color key="textColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Don’t worry! We’ll get you in ASAP" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="G6M-1P-msb">
-                                        <rect key="frame" x="0.0" y="38.5" width="311" height="16.5"/>
+                                        <rect key="frame" x="0.0" y="38" width="311" height="16.5"/>
                                         <fontDescription key="fontDescription" name="Roboto-Regular" family="Roboto" pointSize="14"/>
                                         <color key="textColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <nil key="highlightedColor"/>
@@ -1336,7 +1336,7 @@
                                 </subviews>
                             </stackView>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="50" translatesAutoresizingMaskIntoConstraints="NO" id="7AR-gn-ZLp">
-                                <rect key="frame" x="32" y="139" width="311" height="271"/>
+                                <rect key="frame" x="32" y="138.5" width="311" height="271"/>
                                 <subviews>
                                     <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="1Ng-Dp-nWM">
                                         <rect key="frame" x="0.0" y="0.0" width="311" height="161.5"/>
@@ -1431,7 +1431,7 @@
                                 </subviews>
                             </stackView>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Dlf-TU-NMz">
-                                <rect key="frame" x="127.5" y="450" width="120" height="44"/>
+                                <rect key="frame" x="127.5" y="449.5" width="120" height="44"/>
                                 <color key="backgroundColor" name="Secondary"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="120" id="MmH-pd-Khp"/>
@@ -1492,16 +1492,16 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="MoI-xH-XZ6">
-                                <rect key="frame" x="59.5" y="52" width="256.5" height="55"/>
+                                <rect key="frame" x="57.5" y="52" width="260" height="54.5"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Reset Successful!" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="8lo-i1-JEZ">
-                                        <rect key="frame" x="0.0" y="0.0" width="256.5" height="28.5"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="260" height="28"/>
                                         <fontDescription key="fontDescription" name="Roboto-Bold" family="Roboto" pointSize="24"/>
                                         <color key="textColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Congratulations! You can now log back in" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="GIA-6s-OKC">
-                                        <rect key="frame" x="0.0" y="38.5" width="256.5" height="16.5"/>
+                                        <rect key="frame" x="0.0" y="38" width="260" height="16.5"/>
                                         <fontDescription key="fontDescription" name="Roboto-Regular" family="Roboto" pointSize="14"/>
                                         <color key="textColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <nil key="highlightedColor"/>
@@ -1509,7 +1509,7 @@
                                 </subviews>
                             </stackView>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="pkL-H8-rYU">
-                                <rect key="frame" x="127.5" y="147" width="120" height="44"/>
+                                <rect key="frame" x="127.5" y="146.5" width="120" height="44"/>
                                 <color key="backgroundColor" name="Secondary"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="44" id="TWL-l0-mVz"/>
@@ -1949,7 +1949,7 @@
                                 </subviews>
                             </stackView>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Select a country and enter your phone number" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="AZP-Xl-kHt">
-                                <rect key="frame" x="65" y="98" width="245" height="20"/>
+                                <rect key="frame" x="62.5" y="98" width="250" height="20"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="20" id="LiH-kV-W4t"/>
@@ -1992,13 +1992,13 @@
     </designables>
     <resources>
         <image name="Launch 2" width="390" height="830"/>
-        <image name="Logo" width="56.5" height="52"/>
         <image name="Tiktok" width="53" height="52"/>
         <image name="apple" width="53" height="52"/>
         <image name="clear-mode" width="256" height="256"/>
         <image name="fb" width="53" height="52"/>
         <image name="gg" width="64" height="52"/>
         <image name="normal" width="53" height="52"/>
+        <image name="stitchboxlogonew" width="582" height="906"/>
         <image name="ttw" width="53" height="53"/>
         <namedColor name="Secondary">
             <color red="1" green="0.3411764705882353" blue="0.37254901960784315" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>

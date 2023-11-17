@@ -8,29 +8,37 @@
 import SwiftUI
 import Markdown
 
+// Constants for the code block view.
 enum HighlighterConstants {
-    static let color = Color(red: 244/255, green: 244/255, blue: 244/255) // Light Gray
+    static let color = Color(red: 244/255, green: 244/255, blue: 244/255) // Light gray color
 }
 
+// MARK: - CodeBlockView
+// A view for displaying a code block with syntax highlighting and copy functionality.
 struct CodeBlockView: View {
     
+    // The result of parsing the code block.
     let parserResult: ParserResult
+
+    // State to track if the code block has been copied to the clipboard.
     @State var isCopied = false
     
     var body: some View {
         VStack(alignment: .leading) {
+            // Header view displaying the language of the code block.
             header
                 .padding(.horizontal)
                 .padding(.vertical, 8)
                 .background(Color.white)
-                .font(.roboto(.Regular, size: 15)) // Replace here
+                .font(.system(size: 15)) // Replace with desired font
                 .foregroundColor(.black)
             
+            // Scrollable view containing the code block.
             ScrollView(.horizontal, showsIndicators: true) {
                 Text(parserResult.attributedString)
                     .padding(.horizontal, 16)
                     .textSelection(.enabled)
-                    .font(.roboto(.Regular, size: 15)) // Replace here
+                    .font(.system(size: 15, design: .monospaced)) // Replace with desired font
                     .foregroundColor(.black)
             }
         }
@@ -38,22 +46,26 @@ struct CodeBlockView: View {
         .cornerRadius(8)
     }
 
-    
+    // Header view containing the language label and copy button.
     var header: some View {
         HStack {
+            // Language label.
             if let codeBlockLanguage = parserResult.codeBlockLanguage {
                 Text(codeBlockLanguage.capitalized)
                     .font(.headline.monospaced())
                     .foregroundColor(.black)
             }
             Spacer()
+            // Copy button.
             button
         }
     }
     
+    // Copy button view.
     @ViewBuilder
     var button: some View {
         if isCopied {
+            // View showing "Copied" status.
             HStack {
                 Text("Copied")
                     .foregroundColor(.black)
@@ -64,7 +76,9 @@ struct CodeBlockView: View {
             }
             .frame(alignment: .trailing)
         } else {
+            // Button for copying the code.
             Button {
+                // Copy the code to the clipboard.
                 let string = NSAttributedString(parserResult.attributedString).string
                 UIPasteboard.general.string = string
                 withAnimation {
@@ -83,25 +97,17 @@ struct CodeBlockView: View {
     }
 }
 
+// MARK: - CodeBlockView_Previews
+// Preview provider for the CodeBlockView.
 struct CodeBlockView_Previews: PreviewProvider {
-    
+    // Sample Markdown string containing a Swift code block.
     static var markdownString = """
     ```swift
-    let api = ChatGPTAPI(apiKey: "API_KEY")
-
-    Task {
-        do {
-            let stream = try await api.sendMessageStream(text: "What is ChatGPT?")
-            for try await line in stream {
-                print(line)
-            }
-        } catch {
-            print(error.localizedDescription)
-        }
-    }
+    // Sample Swift code here.
     ```
     """
     
+    // Sample ParserResult for the preview.
     static let parserResult: ParserResult = {
         let document = Document(parsing: markdownString)
         var parser = MarkdownAttributedStringParser()

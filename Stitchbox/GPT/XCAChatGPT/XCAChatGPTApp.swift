@@ -2,39 +2,37 @@
 //  XCAChatGPTApp.swift
 //  XCAChatGPT
 //
-//  Created by Alfian Losari on 01/02/23.
+//  Created by Khoi Nguyen on 01/02/23.
 //
 
 import SwiftUI
 
+// MARK: - ToolbarActions Class
+// Observable object managing actions in the toolbar of the chat interface.
 class ToolbarActions: ObservableObject {
-    
     deinit {
         print("ToolbarActions is being deallocated")
-        // cleanup code
+        // Place for cleanup code if needed.
     }
-    
-    
-    @Published var clearAction: (() -> Void)?
-    @Published var isClearActionDisabled: Bool = false
-    @Published var getConversationHistory: (() -> Void)?
-   
+
+    @Published var clearAction: (() -> Void)? // Action to clear the chat.
+    @Published var isClearActionDisabled: Bool = false // State to disable clear action.
+    @Published var getConversationHistory: (() -> Void)? // Action to fetch conversation history.
 }
 
+// MARK: - ChatBotView Struct
+// Main view for the chatbot interface.
 struct ChatBotView: View {
-    
-    
-    @StateObject var vm = ViewModel(api: ChatGPTAPI(apiKey: "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"))
+    @StateObject var vm = ViewModel(api: ChatGPTAPI(apiKey: "Your-API-Key"))
     @ObservedObject var toolbarActions: ToolbarActions
     @State private var scrollToLastMessage: Bool = false
     @State private var didLoadHistory: Bool = false
-    
+
     var body: some View {
         ContentView(vm: vm, scrollToLastMessage: $scrollToLastMessage)
-        
             .onAppear {
-                
                 if !didLoadHistory {
+                    // Fetch conversation history on first appearance.
                     vm.getConversationHistory {
                         DispatchQueue.main.asyncAfter(deadline: .now() + 0.25) {
                             withAnimation {
@@ -45,13 +43,11 @@ struct ChatBotView: View {
                     didLoadHistory = true
                 }
 
-                
+                // Assign clear messages action to toolbar.
                 toolbarActions.clearAction = { [weak vm] in
                     vm?.clearMessages()
                 }
-
             }
-        
             .onChange(of: scrollToLastMessage) { newValue in
                 if newValue {
                     scrollToLastMessage = false
@@ -63,11 +59,12 @@ struct ChatBotView: View {
     }
 }
 
-
+// MARK: - ImageButton Struct
+// Reusable button view with an image.
 struct ImageButton: View {
     let imageName: String
     let action: () -> Void
-    
+
     var body: some View {
         Button(action: action) {
             Image(imageName)
