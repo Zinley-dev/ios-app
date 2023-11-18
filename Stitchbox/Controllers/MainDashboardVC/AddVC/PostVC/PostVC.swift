@@ -692,8 +692,6 @@ extension PostVC {
 
         self.navigationItem.leftBarButtonItem = backButtonBarButton
 
-
-        
     }
 
     
@@ -862,7 +860,7 @@ extension PostVC: UITextViewDelegate {
         
         if textView == descTxtView {
             
-            if textView.text == "Hi, let's share something fun!" {
+            if textView.text == "Got something fun to share? Keep it snappy – max 80 characters! 😊" {
                 
                 textView.text = ""
                 
@@ -877,7 +875,7 @@ extension PostVC: UITextViewDelegate {
             
             if textView.text == "" {
                 
-                textView.text = "Hi, let's share something fun!"
+                textView.text = "Got something fun to share? Keep it snappy – max 80 characters! 😊"
                 
             } else {
                 selectedDescTxtView = textView.text
@@ -892,7 +890,7 @@ extension PostVC: UITextViewDelegate {
     func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
         let newText = (textView.text as NSString).replacingCharacters(in: range, with: text)
         let numberOfChars = newText.count
-        return numberOfChars <= 500    // 200 Limit Value
+        return numberOfChars <= 80    // 80 Limit Value
     }
     
     

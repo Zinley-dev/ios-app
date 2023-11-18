@@ -30,7 +30,7 @@ let unsaveImage = UIImage.init(named: "save")?.resize(targetSize: CGSize(width: 
 //heart-darkmode
 let emptyLikeImageLM = UIImage.init(named: "heart-lightmode")?.resize(targetSize: CGSize(width: 25, height: 20.3125))
 let cmtImage = UIImage.init(named: "cmt")?.resize(targetSize: CGSize(width: 23, height: 23))
-let shareImage = UIImage.init(named: "share")?.resize(targetSize: CGSize(width: 25, height: 20.3125))
+let playListImage = UIImage.init(named: "playlist 1")?.resize(targetSize: CGSize(width: 25, height: 20.3125))
 let likeImage = UIImage.init(named: "liked")?.resize(targetSize: CGSize(width: 25, height: 20.3125))
 let emptyLikeImage = UIImage.init(named: "likeEmpty")?.resize(targetSize: CGSize(width: 25, height: 20.3125))
 let popupLikeImage = UIImage.init(named: "likePopUp")?.resize(targetSize: CGSize(width: 100, height: 81.25))
@@ -665,7 +665,7 @@ func resetView(cell: VideoNode) {
         
         let currentTime = NSDate().timeIntervalSince1970
         
-        let change = currentTime - cell.last_view_timestamp
+        let change = currentTime - cell.lastViewTimestamp
         
         if change > 30.0 {
             

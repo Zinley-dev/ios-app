@@ -16,12 +16,12 @@ class PostInteractionButtons: UIView {
     // MARK: - Outlets
     @IBOutlet weak var stackView: UIStackView!
     @IBOutlet weak var contentView: UIView!
-    @IBOutlet weak var shareBtn: UIButton!
+    @IBOutlet weak var playListBtn: UIButton!
     @IBOutlet weak var commentBtn: UIButton!
     @IBOutlet weak var commentCountLbl: UILabel!
     @IBOutlet weak var likeBtn: UIButton!
     @IBOutlet weak var likeCountLbl: UILabel!
-    @IBOutlet weak var shareCountLbl: UILabel!
+    @IBOutlet weak var playListCountLbl: UILabel!
     @IBOutlet weak var saveBtn: UIButton!
     @IBOutlet weak var saveCountLbl: UILabel!
 
@@ -49,7 +49,80 @@ class PostInteractionButtons: UIView {
         contentView.fixInView(self) // Helper method to fit the content view in this view's bounds.
 
         // Further customization and setup for buttons and labels can be done here.
+        setupImage()
+    }
+    
+    
+}
+
+// MARK: - UI Updates
+
+extension PostInteractionButtons {
+
+    /// Sets up images for various buttons.
+    /// This method asynchronously updates the images for playlist, save, and comment buttons.
+    func setupImage() {
+        DispatchQueue.main.async { [weak self] in
+            guard let strongSelf = self else { return }
+            strongSelf.playListBtn.setImage(playListImage, for: .normal)
+            strongSelf.saveBtn.setImage(unsaveImage, for: .normal)
+            strongSelf.commentBtn.setImage(cmtImage, for: .normal)
+        }
+    }
+    
+    /// Updates the information labels for likes, comments, saves, and playlist count.
+    /// - Parameters:
+    ///   - likeCount: Number of likes.
+    ///   - cmtCount: Number of comments.
+    ///   - saveCount: Number of saves.
+    ///   - playlistCount: Number of playlist additions.
+    func fillInformation(likeCount: Int, cmtCount: Int, saveCount: Int, playlistCount: Int) {
+        DispatchQueue.main.async { [weak self] in
+            guard let strongSelf = self else { return }
+            strongSelf.likeCountLbl.text = "\(formatPoints(num: Double(likeCount)))"
+            strongSelf.saveCountLbl.text = "\(formatPoints(num: Double(saveCount)))"
+            strongSelf.commentCountLbl.text = "\(formatPoints(num: Double(cmtCount)))"
+            strongSelf.playListCountLbl.text = "\(formatPoints(num: Double(playlistCount)))"
+        }
+    }
+    
+    /// Sets the like button's image.
+    /// - Parameter image: The image to be set for the like button.
+    func setLikeImage(image: UIImage) {
+        DispatchQueue.main.async { [weak self] in
+            self?.likeBtn.setImage(image, for: .normal)
+        }
+    }
+    
+    /// Sets the save button's image.
+    /// - Parameter image: The image to be set for the save button.
+    func setSaveImage(image: UIImage) {
+        DispatchQueue.main.async { [weak self] in
+            self?.saveBtn.setImage(image, for: .normal)
+        }
     }
 
-    // Additional methods and configurations for PostInteractionButtons can be added here.
+    /// Sets the save count label's text.
+    /// - Parameter saveCount: The number to display for save count.
+    func setSaveCount(saveCount: Int) {
+        DispatchQueue.main.async { [weak self] in
+            self?.saveCountLbl.text = "\(formatPoints(num: Double(saveCount)))"
+        }
+    }
+
+    /// Sets the like count label's text.
+    /// - Parameter likeCount: The number to display for like count.
+    func setLikeCount(likeCount: Int) {
+        DispatchQueue.main.async { [weak self] in
+            self?.likeCountLbl.text = "\(formatPoints(num: Double(likeCount)))"
+        }
+    }
+
+    /// Sets the comment count label's text.
+    /// - Parameter cmtCount: The number to display for comment count.
+    func setCmtCount(cmtCount: Int) {
+        DispatchQueue.main.async { [weak self] in
+            self?.commentCountLbl.text = "\(formatPoints(num: Double(cmtCount)))"
+        }
+    }
 }

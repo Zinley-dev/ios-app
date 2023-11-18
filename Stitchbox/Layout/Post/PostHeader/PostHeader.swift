@@ -19,6 +19,7 @@ class PostHeader: UIView {
     @IBOutlet weak var postDate: UILabel!
     @IBOutlet weak var postTime: UILabel!
     @IBOutlet weak var settingBtn: UIButton!
+    @IBOutlet weak var followBtn: UIButton!
     @IBOutlet var contentView: UIView!
     
     fileprivate var avatarNode = ASNetworkImageNode()
@@ -66,13 +67,31 @@ class PostHeader: UIView {
     }
 
     // MARK: - Function to Assign Post Information
-    func setHeaderInfo(username: String, postDate: String, postTime: String, avatarURL: URL?) {
+    func setHeaderInfo(username: String, postTime: Date, avatarURL: String?) {
         self.username.text = username
-        self.postDate.text = postDate
-        self.postTime.text = postTime
 
-        if let url = avatarURL {
+        // DateFormatter for the date
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "MMMM d, yyyy" // format: May 15, 2023
+        let date = dateFormatter.string(from: postTime)
+        
+        // DateFormatter for the time
+        let timeFormatter = DateFormatter()
+        timeFormatter.dateFormat = "HH:mm" // format: 17:40
+        let time = timeFormatter.string(from: postTime)
+        
+        // Now you can use 'date' and 'time' as needed
+        // For example, setting them to some labels
+        self.postDate.text = date
+        self.postTime.text = time
+
+        // Load the avatar image using avatarURL if available
+        if let avatarURL = avatarURL, let url = URL(string: avatarURL) {
+            // Load the image from the URL
             loadAvatarImage(from: url)
+        } else {
+            avatarNode.image = UIImage(named: "defaultuser")
         }
     }
+
 }

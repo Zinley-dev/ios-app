@@ -11,6 +11,7 @@ import AlamofireImage
 import Alamofire
 import FLAnimatedImage
 import ObjectMapper
+import AnimatedCollectionViewLayout
 
 class FeedViewController: UIViewController, UICollectionViewDelegateFlowLayout, UIAdaptivePresentationControllerDelegate {
     
@@ -51,6 +52,7 @@ class FeedViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
     // Delay Items
     lazy var delayItem = workItem()
     lazy var delayItem3 = workItem()
+    
 
     // MARK: - View Lifecycle
 
@@ -89,16 +91,7 @@ class FeedViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
         checkNotification()    // Checks for new notifications.
         showMiddleBtn(vc: self) // Shows a middle button, if applicable.
 
-        // Registering for a notification to scroll to the top.
-        // Delaying the registration to avoid any initial conflicts or unwanted triggers.
-        delay(1.25) {
-            NotificationCenter.default.addObserver(
-                self,
-                selector: #selector(ParentViewController.shouldScrollToTop),
-                name: NSNotification.Name(rawValue: "scrollToTop"),
-                object: nil
-            )
-        }
+        
     }
 
     // Additional utility method for delay.
@@ -511,7 +504,10 @@ extension FeedViewController {
 
     // Sets up the collection node with specific layout and configuration.
     func setupCollectionNode() {
-        let flowLayout = UICollectionViewFlowLayout()
+        
+        
+        let flowLayout = AnimatedCollectionViewLayout()
+        flowLayout.animator = ZoomInOutAttributesAnimator()
         flowLayout.minimumLineSpacing = 0.0
         flowLayout.scrollDirection = .vertical
         self.collectionNode = ASCollectionNode(collectionViewLayout: flowLayout)

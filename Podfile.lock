@@ -3,6 +3,7 @@ PODS:
   - Alamofire (5.6.4)
   - AlamofireImage (4.2.0):
     - Alamofire (~> 5.4)
+  - AnimatedCollectionViewLayout (1.1.0)
   - AppAuth (1.6.2):
     - AppAuth/Core (= 1.6.2)
     - AppAuth/ExternalUserAgent (= 1.6.2)
@@ -118,6 +119,7 @@ DEPENDENCIES:
   - ActiveLabel
   - Alamofire (~> 5.6.4)
   - AlamofireImage
+  - AnimatedCollectionViewLayout
   - Cache (~> 5.3.0)
   - FLAnimatedImage (~> 1.0)
   - GoogleSignIn (~> 7.0.0)
@@ -150,6 +152,7 @@ SPEC REPOS:
     - ActiveLabel
     - Alamofire
     - AlamofireImage
+    - AnimatedCollectionViewLayout
     - AppAuth
     - Cache
     - FLAnimatedImage
@@ -192,6 +195,7 @@ SPEC CHECKSUMS:
   ActiveLabel: 5e3f4de79a1952d4604b845a0610d4776e4b82b3
   Alamofire: 4e95d97098eacb88856099c4fc79b526a299e48c
   AlamofireImage: 34a2d90b0e5fe6a5605f85ae4b7b01e784c60192
+  AnimatedCollectionViewLayout: 0c1a38c4be115c525c887be183fc91ef65737c5d
   AppAuth: 3bb1d1cd9340bd09f5ed189fb00b1cc28e1e8570
   Cache: 48762993ec44e1d93483c4d4a13edd18452326f4
   FLAnimatedImage: bbf914596368867157cc71b38a8ec834b3eeb32b
@@ -230,6 +234,6 @@ SPEC CHECKSUMS:
   ZSWTaggedString: 1a6aab3143188634c1e5dfe9383ce754c1fb5fe2
   ZSWTappableLabel: cff84c0a55e30f2141f7dac24e5903302a7e35ec
 
-PODFILE CHECKSUM: 74b77b46ccb4c7eb3758ad3e993ed7db90a66149
+PODFILE CHECKSUM: 4a8ab35efc05b4ca10ed4fbfeed4f426bc4fc5d6
 
 COCOAPODS: 1.14.2

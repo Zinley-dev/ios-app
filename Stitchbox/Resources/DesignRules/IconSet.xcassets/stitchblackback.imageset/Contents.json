@@ -1,11 +1,11 @@
 {
   "images" : [
     {
-      "filename" : "newplusblack.svg",
       "idiom" : "universal",
       "scale" : "1x"
     },
     {
+      "filename" : "stitchblackback.svg",
       "idiom" : "universal",
       "scale" : "2x"
     },
