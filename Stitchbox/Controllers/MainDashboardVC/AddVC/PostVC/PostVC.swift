@@ -860,7 +860,7 @@ extension PostVC: UITextViewDelegate {
         
         if textView == descTxtView {
             
-            if textView.text == "Got something fun to share? Keep it snappy – max 80 characters! 😊" {
+            if textView.text == "Got something fun to share? Keep it snappy – max 100 characters! 😊" {
                 
                 textView.text = ""
                 
@@ -875,7 +875,7 @@ extension PostVC: UITextViewDelegate {
             
             if textView.text == "" {
                 
-                textView.text = "Got something fun to share? Keep it snappy – max 80 characters! 😊"
+                textView.text = "Got something fun to share? Keep it snappy – max 100 characters! 😊"
                 
             } else {
                 selectedDescTxtView = textView.text
@@ -890,7 +890,7 @@ extension PostVC: UITextViewDelegate {
     func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
         let newText = (textView.text as NSString).replacingCharacters(in: range, with: text)
         let numberOfChars = newText.count
-        return numberOfChars <= 80    // 80 Limit Value
+        return numberOfChars <= 100    // 80 Limit Value
     }
     
     

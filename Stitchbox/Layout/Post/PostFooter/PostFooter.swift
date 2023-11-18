@@ -20,7 +20,8 @@ class PostFooter: UIView {
     @IBOutlet var stitchBtn: UIButton!
     @IBOutlet var descriptionLbl: UILabel!
     
-    private var label: ActiveLabel!
+    var label: ActiveLabel!
+    var customType: ActiveType!
 
     // Constant for the XIB file name.
     let kCONTENT_XIB_NAME = "PostFooter"
@@ -57,8 +58,23 @@ class PostFooter: UIView {
     private func setupActiveLabel() {
         label = ActiveLabel()
         label.backgroundColor = .clear
-        label.enabledTypes = [.hashtag]
-        label.hashtagColor = UIColor(red: 208/255, green: 223/255, blue: 252/255, alpha: 1)
+
+        // Define a custom regular expression for hashtags.
+        // This pattern matches a hashtag followed by a non-word character (like a space or end of line) or another hashtag.
+        let hashtagPattern = "#\\w+\\b(?=\\s|#|$)"
+        customType = ActiveType.custom(pattern: hashtagPattern) // Custom type for hashtags
+
+        // Enable the custom type for hashtag detection.
+        label.enabledTypes = [customType]
+
+        // Customization for hashtag appearance.
+        label.customColor[customType] = UIColor(red: 208/255, green: 223/255, blue: 252/255, alpha: 1)
+        label.customSelectedColor[customType] = UIColor.gray // Customize this color as needed
+
+        // Handle hashtag tap.
+        label.handleCustomTap(for: customType) { hashtag in
+            print("Hashtag tapped: \(hashtag)")
+        }
     }
 
     // Add the ActiveLabel as a subview and disable autoresizing mask constraints.
@@ -86,10 +102,10 @@ class PostFooter: UIView {
         let attributedString: NSAttributedString
         let processedTitle: String
 
-        // Check if the title is longer than 80 characters
-        if title.count > 80 {
+        // Check if the title is longer than 100 characters
+        if title.count > 100 {
             // Get the first 80 characters of the title
-            let index = title.index(title.startIndex, offsetBy: 80)
+            let index = title.index(title.startIndex, offsetBy: 100)
             processedTitle = String(title[..<index])
         } else {
             // If the title is 80 characters or less, use it as is
@@ -103,7 +119,7 @@ class PostFooter: UIView {
 
         // Create the attributes for the attributed string
         let attributes: [NSAttributedString.Key: Any] = [
-            .font: FontManager.shared.roboto(.Bold, size: 14), // Using the Roboto Bold style
+            .font: FontManager.shared.roboto(.Bold, size: 13), // Using the Roboto Bold style
             .foregroundColor: UIColor.white,
             .paragraphStyle: paragraphStyle
         ]

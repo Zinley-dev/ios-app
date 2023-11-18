@@ -656,6 +656,7 @@ extension VideoNode {
         fillPostFooterInfo()
         loadReaction()
         setupGestureRecognizers()
+        setupCustomTap()
     }
     
     /// Sets up the header views.
@@ -841,8 +842,42 @@ extension VideoNode {
         return tap
     }
 
+    // MARK: - Custom Tap Setup
 
-    
+    /// Sets up a custom tap gesture for the footer view.
+    func setupCustomTap() {
+        // Configuring a custom tap handler for the label in the footer view.
+        // The handler is specifically for the type of custom interaction defined in footerView.customType.
+        footerView.label.handleCustomTap(for: footerView.customType) { [weak self] hashtag in
+            // The closure is called with the tapped hashtag.
+            // 'self' is captured weakly to prevent retain cycles.
+            self?.presentPostListWithHashtagVC(for: hashtag)
+        }
+    }
+
+    /// Presents the `PostListWithHashtagVC` for the given hashtag.
+    /// - Parameter selectedHashtag: The hashtag selected by the user.
+    func presentPostListWithHashtagVC(for selectedHashtag: String) {
+        // Using guard for safe unwrapping and to handle potential errors.
+        guard let PLHVC = UIStoryboard(name: "Dashboard", bundle: nil)
+                .instantiateViewController(withIdentifier: "PostListWithHashtagVC") as? PostListWithHashtagVC,
+              let vc = UIViewController.currentViewController() else {
+            // Error handling if the view controller could not be instantiated.
+            print("Error: Unable to instantiate PostListWithHashtagVC from storyboard.")
+            return
+        }
+        
+        // Configuring the view controller with the selected hashtag.
+        PLHVC.searchHashtag = selectedHashtag
+        PLHVC.onPresent = true
+
+        // Setting the modal presentation style and presenting the view controller.
+        let navController = UINavigationController(rootViewController: PLHVC)
+        navController.modalPresentationStyle = .fullScreen
+        vc.present(navController, animated: true, completion: nil)
+    }
+
+
 }
 
 
