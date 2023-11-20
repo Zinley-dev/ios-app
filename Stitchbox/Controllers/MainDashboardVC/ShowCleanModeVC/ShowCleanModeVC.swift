@@ -23,7 +23,7 @@ class ShowCleanModeVC: UIViewController {
     @IBOutlet weak var mainStackWidth: NSLayoutConstraint!
     
     private var videoNode: ASVideoNode!
-    private var gradientNode: GradienView!
+    private var gradientNode: GradientView!
     private var headerView: PostHeader!
     
     
@@ -85,7 +85,7 @@ class ShowCleanModeVC: UIViewController {
     
     private func setupGradientView() {
         
-        gradientNode = GradienView()
+        gradientNode = GradientView()
         
         //gradientNode.isLayerBacked = true
         gradientNode.isOpaque = false

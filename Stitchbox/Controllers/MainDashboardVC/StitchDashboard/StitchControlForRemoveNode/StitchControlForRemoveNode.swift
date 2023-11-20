@@ -35,7 +35,7 @@ class StitchControlForRemoveNode: ASCellNode, ASVideoNodeDelegate {
     private var cellVideoNode: ASVideoNode
     var headerView: PostHeader!
    
-    var gradientNode: GradienView
+    var gradientNode: GradientView
     var label: ActiveLabel!
     var stitchView: UnStitchView!
     var infoNode: ASTextNode!
@@ -51,7 +51,7 @@ class StitchControlForRemoveNode: ASCellNode, ASVideoNodeDelegate {
         self.post = post
         self.stitchTo = stitchTo
         self.cellVideoNode = ASVideoNode()
-        self.gradientNode = GradienView()
+        self.gradientNode = GradientView()
         self.buttonNode = ASDisplayNode()
         self.infoNode = ASTextNode()
         super.init()

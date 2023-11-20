@@ -37,7 +37,7 @@ class PendingNode: ASCellNode, ASVideoNodeDelegate {
     var headerView: PostHeader!
     var spinnerRemoved = true
     var assetReset = false
-    var gradientNode: GradienView
+    var gradientNode: GradientView
     var label: ActiveLabel!
     var pendingView: HandlePendingView!
     
@@ -51,7 +51,7 @@ class PendingNode: ASCellNode, ASVideoNodeDelegate {
         self.post = post
       
         self.cellVideoNode = ASVideoNode()
-        self.gradientNode = GradienView()
+        self.gradientNode = GradientView()
         self.buttonNode = ASDisplayNode()
         
         super.init()

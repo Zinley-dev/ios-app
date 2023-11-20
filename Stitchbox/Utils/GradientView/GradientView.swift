@@ -1,5 +1,5 @@
 //
-//  GradienView.swift
+//  GradientView.swift
 //  Dual
 //
 //  Created by Khoi Nguyen on 6/20/22.
@@ -11,7 +11,7 @@ import AsyncDisplayKit
 // MARK: - GradienView Class
 // A custom ASDisplayNode subclass that renders a linear gradient.
 
-class GradienView: ASDisplayNode {
+class GradientView: ASDisplayNode {
     
     // Cached gradient. The color space is managed by ARC.
     private static let myGradient: CGGradient? = {
@@ -29,7 +29,7 @@ class GradienView: ASDisplayNode {
     // Custom drawing method for the node.
     override class func draw(_ bounds: CGRect, withParameters parameters: Any?, isCancelled isCancelledBlock: () -> Bool, isRasterizing: Bool) {
         // Ensuring the drawing context and gradient are available.
-        guard let myContext = UIGraphicsGetCurrentContext(), let myGradient = GradienView.myGradient else { return }
+        guard let myContext = UIGraphicsGetCurrentContext(), let myGradient = GradientView.myGradient else { return }
         
         // Save the current state before modifying the context.
         myContext.saveGState()

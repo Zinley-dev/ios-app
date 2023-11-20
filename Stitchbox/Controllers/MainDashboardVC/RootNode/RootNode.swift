@@ -139,7 +139,9 @@ extension RootNode {
         // Setting the overall background color of the node and the scroll indicator style.
         // These visual properties enhance the user interface.
         self.backgroundColor = .black
-        self.mainCollectionNode.view.indicatorStyle = .white
+        self.mainCollectionNode.view.showsVerticalScrollIndicator = false
+        self.mainCollectionNode.view.showsHorizontalScrollIndicator = false
+
     }
 }
 

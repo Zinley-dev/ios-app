@@ -33,7 +33,7 @@ class VideoNode: ASCellNode, ASVideoNodeDelegate {
     
     // UI components and layout related properties.
     private var cellVideoNode: ASVideoNode
-    private var gradientNode: GradienView
+    private var gradientNode: GradientView
     private var timeLbl: UILabel!
     private var blurView: UIView!
     private var spinner: NVActivityIndicatorView!
@@ -73,7 +73,7 @@ class VideoNode: ASCellNode, ASVideoNodeDelegate {
 
     init(with post: PostModel, isPreview: Bool) {
         self.post = post
-        self.gradientNode = GradienView()
+        self.gradientNode = GradientView()
         self.cellVideoNode = ASVideoNode()
         self.isPreview = isPreview
         super.init()
@@ -139,6 +139,9 @@ class VideoNode: ASCellNode, ASVideoNodeDelegate {
     private func configureGradientNode() {
         gradientNode.isLayerBacked = true // Improves performance by using the layer for rendering instead of creating a separate view.
         gradientNode.isOpaque = false     // Ensures that the gradient can have transparent areas.
+        gradientNode.cornerRadius = 12
+        gradientNode.clipsToBounds = true
+        gradientNode.isHidden = true
     }
 
 
@@ -162,18 +165,19 @@ class VideoNode: ASCellNode, ASVideoNodeDelegate {
         
         // Padding for cellVideoNode
         let videoPadding = UIEdgeInsets(top: 8, left: 8, bottom: 35, right: 8)
-        let paddedVideoSpec = ASInsetLayoutSpec(insets: videoPadding, child: cellVideoNode)
         
-        // Overlay the gradient node directly on the padded video node
-        let gradientOverlaySpec = ASOverlayLayoutSpec(child: paddedVideoSpec, overlay: gradientNode)
+        // Apply padding directly to the cellVideoNode
+        let paddedVideoSpec = ASInsetLayoutSpec(insets: videoPadding, child: cellVideoNode)
         
         // Main view inset (with original bottom inset)
         let mainViewInset = UIEdgeInsets(top: 0, left: 0, bottom: 8, right: 0)
-        let insetSpec = ASInsetLayoutSpec(insets: mainViewInset, child: gradientOverlaySpec)
+        let insetSpec = ASInsetLayoutSpec(insets: mainViewInset, child: paddedVideoSpec)
 
         return insetSpec
         
     }
+
+
 
     // MARK: - User Interaction
 
