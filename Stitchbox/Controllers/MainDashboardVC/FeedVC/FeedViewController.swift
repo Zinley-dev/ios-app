@@ -703,4 +703,3 @@ extension FeedViewController {
         SwiftLoader.show(title: progress, animated: true)
     }
 }
-

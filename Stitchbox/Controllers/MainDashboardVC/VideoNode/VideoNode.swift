@@ -33,7 +33,7 @@ class VideoNode: ASCellNode, ASVideoNodeDelegate {
     
     // UI components and layout related properties.
     private var cellVideoNode: ASVideoNode
-    private var gradientNode: GradientView
+    private var cellImageNode: ASNetworkImageNode
     private var timeLbl: UILabel!
     private var blurView: UIView!
     private var spinner: NVActivityIndicatorView!
@@ -70,16 +70,32 @@ class VideoNode: ASCellNode, ASVideoNodeDelegate {
     var statusObservation: NSKeyValueObservation?
 
     // MARK: - Initializer
-
+    
+    /// Initializes the cell with the provided post model and preview flag.
+    /// - Parameters:
+    ///   - post: The `PostModel` instance containing the data for the cell.
+    ///   - isPreview: A Boolean flag indicating if this is a preview.
     init(with post: PostModel, isPreview: Bool) {
+        // Assign the provided post and preview flag.
         self.post = post
-        self.gradientNode = GradientView()
-        self.cellVideoNode = ASVideoNode()
         self.isPreview = isPreview
+
+        // Initialize the image and video nodes.
+        self.cellImageNode = ASNetworkImageNode()
+        self.cellVideoNode = ASVideoNode()
+
+        // Call the superclass initializer.
         super.init()
-        configureGradientNode()
-        configureVideoNode(with: post)
+
+        // Configure the node based on the presence of a muxPlaybackId.
+        // This approach avoids duplicate checks and makes the decision point clear.
+        if !post.muxPlaybackId.isEmpty {
+            configureVideoNode(with: post)
+        } else {
+            configureImageNode(with: post)
+        }
     }
+
 
     // MARK: - Node Lifecycle
 
@@ -133,18 +149,7 @@ class VideoNode: ASCellNode, ASVideoNodeDelegate {
     }
 
     // MARK: - Configuration
-
-    /// Configures the gradient node.
-    /// This method sets up the visual properties of the gradient node.
-    private func configureGradientNode() {
-        gradientNode.isLayerBacked = true // Improves performance by using the layer for rendering instead of creating a separate view.
-        gradientNode.isOpaque = false     // Ensures that the gradient can have transparent areas.
-        gradientNode.cornerRadius = 12
-        gradientNode.clipsToBounds = true
-        gradientNode.isHidden = true
-    }
-
-
+    
     /// Sets up the spinner used for indicating loading or processing states.
     /// This method initializes the spinner with specific properties like frame, type, and color.
     private func setupSpinner() {
@@ -163,20 +168,29 @@ class VideoNode: ASCellNode, ASVideoNodeDelegate {
 
     override func layoutSpecThatFits(_ constrainedSize: ASSizeRange) -> ASLayoutSpec {
         
-        // Padding for cellVideoNode
-        let videoPadding = UIEdgeInsets(top: 8, left: 8, bottom: 35, right: 8)
+        // Define common padding values for the video or image node within the cell.
+        let videoPadding = UIEdgeInsets(top: 4, left: 8, bottom: 37, right: 8)
+
+        // Determine the child node based on the presence of a muxPlaybackId.
+        // Using ternary operator for concise conditional assignment.
+        let childNode = post.muxPlaybackId.isEmpty ? cellImageNode : cellVideoNode
+
+        // Apply padding to the chosen child node using ASInsetLayoutSpec.
+        // This approach avoids redundant code and enhances readability.
+        let paddedVideoSpec = ASInsetLayoutSpec(insets: videoPadding, child: childNode)
         
-        // Apply padding directly to the cellVideoNode
-        let paddedVideoSpec = ASInsetLayoutSpec(insets: videoPadding, child: cellVideoNode)
-        
-        // Main view inset (with original bottom inset)
+        // Set the main view inset, keeping the original bottom inset.
+        // Using UIEdgeInsets for consistency and clarity.
         let mainViewInset = UIEdgeInsets(top: 0, left: 0, bottom: 8, right: 0)
+
+        // Create an inset layout spec for the main view.
+        // This approach provides a clear structure for the layout, making it easy to adjust in the future.
         let insetSpec = ASInsetLayoutSpec(insets: mainViewInset, child: paddedVideoSpec)
 
+        // Return the final layout spec.
         return insetSpec
         
     }
-
 
 
     // MARK: - User Interaction
@@ -563,6 +577,69 @@ extension VideoNode {
 }
 
 
+extension VideoNode {
+    
+    /// Configures the image node with a given post model.
+    /// - Parameter post: The post model used to configure the image node.
+    private func configureImageNode(with post: PostModel) {
+        
+        // Set up the cell image node's appearance and behavior.
+        setupImageNodeAppearance()
+        
+        // Determine and set the image content mode based on post's metadata.
+        determineAndSetImageContentMode(with: post)
+        
+        // Load the image asset asynchronously.
+        loadImageAssetAsync(with: post)
+    }
+    
+    /// Sets up the appearance of cellImageNode.
+    private func setupImageNodeAppearance() {
+        cellImageNode.cornerRadius = 12
+        cellImageNode.clipsToBounds = true
+        cellImageNode.backgroundColor = .black
+    }
+    
+    /// Determines and sets the image content mode based on post's metadata.
+    /// - Parameter post: The post model with metadata to determine content mode.
+    private func determineAndSetImageContentMode(with post: PostModel) {
+        if let width = post.metadata?.width, let height = post.metadata?.height, width != 0, height != 0 {
+            setImageContentModeFor(width: width, height: height)
+        } else {
+            setDefaultImageContentMode()
+        }
+    }
+    
+    /// Asynchronously loads the image asset for the cellImageNode.
+    /// - Parameter post: The post model containing the image URL.
+    private func loadImageAssetAsync(with post: PostModel) {
+        DispatchQueue.main.async() { [weak self] in
+            guard let self = self else { return }
+            self.cellImageNode.url = URL(string: post.imageUrl.absoluteString)
+        }
+    }
+    
+    /// Sets the image content mode based on the given dimensions.
+    /// - Parameters:
+    ///   - width: The width of the image.
+    ///   - height: The height of the image.
+    func setImageContentModeFor(width: CGFloat, height: CGFloat) {
+        let aspectRatio = width / height
+        // Check for a 9:16 aspect ratio with a margin for error.
+        if abs(aspectRatio - (9.0/16.0)) < 0.01 {
+            cellImageNode.contentMode = .scaleAspectFill
+        } else {
+            setDefaultImageContentMode()
+        }
+    }
+
+    /// Sets the default image content mode for the cellImageNode.
+    func setDefaultImageContentMode() {
+        cellImageNode.contentMode = .scaleAspectFit
+    }
+    
+}
+
 
 extension VideoNode {
     
@@ -651,17 +728,30 @@ extension VideoNode {
     /// Sets up child views of the VideoNode.
     /// This function orchestrates the setup of various subviews including header, footer, and interaction buttons.
     func setupChildView() {
+        // Setup different view components of the VideoNode.
         setupHeaderViews()
         setupFooterViews()
         setupInteractionButtonViews()
+
+        // Adjust space based on the width of the view.
         setupSpace(width: self.view.frame.width)
+
+        // Populate the VideoNode with relevant post information.
         fillPostStats()
         fillPostHeaderInfo()
         fillPostFooterInfo()
+
+        // Load and setup reactions and gesture recognizers.
         loadReaction()
         setupGestureRecognizers()
         setupCustomTap()
+        
+        // Setup the time view if the post contains a muxPlaybackId.
+        if !post.muxPlaybackId.isEmpty {
+            setupTimeView()
+        }
     }
+
     
     /// Sets up the header views.
     /// This method adds the header view to the node and applies necessary constraints.
@@ -694,7 +784,7 @@ extension VideoNode {
     private func addButtonsConstraints(to childView: UIView, within parentView: UIView, constant: CGFloat = 0) {
         childView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            childView.bottomAnchor.constraint(equalTo: parentView.bottomAnchor, constant: -4),
+            childView.bottomAnchor.constraint(equalTo: parentView.bottomAnchor, constant: -2),
             childView.leadingAnchor.constraint(equalTo: parentView.leadingAnchor, constant: constant),
             childView.trailingAnchor.constraint(equalTo: parentView.trailingAnchor, constant: constant),
             childView.heightAnchor.constraint(equalToConstant: 30) // Height of the button view.
@@ -712,7 +802,7 @@ extension VideoNode {
             childView.topAnchor.constraint(equalTo: parentView.topAnchor, constant: constant),
             childView.leadingAnchor.constraint(equalTo: parentView.leadingAnchor, constant: constant),
             childView.trailingAnchor.constraint(equalTo: parentView.trailingAnchor, constant: constant),
-            childView.heightAnchor.constraint(equalToConstant: 50) // Height of the header view.
+            childView.heightAnchor.constraint(equalToConstant: 70) // Height of the header view.
         ])
     }
 
@@ -802,9 +892,19 @@ extension VideoNode {
         self.headerView.avatarImg.isUserInteractionEnabled = true
         self.headerView.avatarImg.addGestureRecognizer(usernameTap2)
         
-        // Settings Button Tap Gesture
+        // Settings Button1 Tap Gesture
         let settingTap = createTapGestureRecognizer(target: self, action: #selector(VideoNode.settingTapped))
         self.headerView.settingBtn.addGestureRecognizer(settingTap)
+        
+        // Settings Button2 Tap Gesture
+        let settingTap2 = createTapGestureRecognizer(target: self, action: #selector(VideoNode.settingTapped))
+        self.headerView.postTime.addGestureRecognizer(settingTap2)
+        self.headerView.postTime.isUserInteractionEnabled = true
+        
+        // Settings Button3 Tap Gesture
+        let settingTap3 = createTapGestureRecognizer(target: self, action: #selector(VideoNode.settingTapped))
+        self.headerView.postDate.addGestureRecognizer(settingTap3)
+        self.headerView.postDate.isUserInteractionEnabled = true
 
         // Like Button Tap Gesture
         let likeTap = createTapGestureRecognizer(target: self, action: #selector(VideoNode.likeTapped))
@@ -944,11 +1044,7 @@ extension VideoNode {
     /// Processes the status of stitch (following) based on various conditions.
     /// - Parameter isFollowingMe: Boolean indicating if the user is following me.
     func processStitchStatus(isFollowingMe: Bool) {
-        if let myUserId = _AppCoreData.userDataSource.value?.userID {
-            footerView.stitchBtn.isHidden = !(isFollowingMe && post.owner?.id != myUserId)
-        } else {
-            footerView.stitchBtn.isHidden = true
-        }
+        footerView.stitchBtn.isHidden = false
     }
 
     // MARK: - Follow Button Management
@@ -1250,10 +1346,10 @@ extension VideoNode {
             // Present PostSettingVC for the post owner.
             presentVC(vc, using: PostSettingVC())
             // Update global presenting rate for the owner.
-            global_presetingRate = 0.40
+            global_presetingRate = 0.35
         } else {
             // Update global presenting rate for non-owners.
-            global_presetingRate = 0.36
+            global_presetingRate = 0.30
 
             // Configure and present NewsFeedSettingVC for non-owners.
             let newsFeedSettingVC = NewsFeedSettingVC()
@@ -1501,3 +1597,154 @@ extension VideoNode {
     }
 
 }
+
+// MARK: - VideoNode Extension
+
+extension VideoNode {
+    
+    /// Sets up the time view for the video node.
+    func setupTimeView() {
+        // Initialize and configure the time label.
+        timeLbl = UILabel()
+        timeLbl.isHidden = true
+        timeLbl.textColor = .white
+        timeLbl.font = FontManager.shared.roboto(.Bold, size: 17)
+        timeLbl.translatesAutoresizingMaskIntoConstraints = false
+
+        // Initialize and configure the blur view.
+        blurView = UIView()
+        blurView.isHidden = true
+        blurView.backgroundColor = .black
+        blurView.alpha = 0.6
+        blurView.translatesAutoresizingMaskIntoConstraints = false
+
+        // Initialize the play time bar with updated constraints.
+        playTimeBar = CustomSlider()
+        playTimeBar.translatesAutoresizingMaskIntoConstraints = false
+
+        // Add subviews to the video node's view.
+        [blurView, timeLbl, playTimeBar].forEach { self.view.addSubview($0) }
+
+        // Activate constraints in a batch.
+        NSLayoutConstraint.activate([
+            // Constraints for the blur view.
+            blurView.bottomAnchor.constraint(equalTo: self.view.bottomAnchor),
+            blurView.leadingAnchor.constraint(equalTo: self.view.leadingAnchor),
+            blurView.trailingAnchor.constraint(equalTo: self.view.trailingAnchor),
+            blurView.topAnchor.constraint(equalTo: self.view.topAnchor),
+            
+            // Constraints for the time label.
+            timeLbl.bottomAnchor.constraint(equalTo: self.view.bottomAnchor, constant: -100),
+            timeLbl.centerXAnchor.constraint(equalTo: self.view.centerXAnchor),
+
+            // Updated constraints for the play time bar.
+            playTimeBar.bottomAnchor.constraint(equalTo: self.view.bottomAnchor, constant: -37),
+            playTimeBar.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: 8),
+            playTimeBar.trailingAnchor.constraint(equalTo: self.view.trailingAnchor, constant: -8),
+            playTimeBar.heightAnchor.constraint(equalToConstant: 1)
+        ])
+    }
+
+    /// Handles the video node's playback to a specific time interval.
+    /// - Parameters:
+    ///   - videoNode: The `ASVideoNode` instance playing the video.
+    ///   - timeInterval: The current playback time interval.
+    func videoNode(_ videoNode: ASVideoNode, didPlayToTimeInterval timeInterval: TimeInterval) {
+        // Perform certain actions only under specific conditions.
+        if didSlideEnd, !isPreview, let _ = blurView, let _ = videoNode.currentItem {
+            // Initialize video duration if not already set.
+            if videoDuration == 0 {
+                videoDuration = videoNode.currentItem?.duration.seconds ?? 0
+            }
+
+            // Update the total watched time.
+            if timeInterval >= previousTimeStamp {
+                totalWatchedTime += timeInterval - previousTimeStamp
+            }
+            previousTimeStamp = timeInterval
+
+            // Calculate watched percentage and define minimum watched percentage.
+            let watchedPercentage = totalWatchedTime / videoDuration
+            let minimumWatchedPercentage = determineMinimumWatchedPercentage(forDuration: videoDuration)
+            
+            // Check for minimum watched criteria and count the view if criteria are met.
+            let minimumWatchedTime = 5.0
+            if shouldCountView && totalWatchedTime >= minimumWatchedTime && watchedPercentage >= minimumWatchedPercentage {
+                shouldCountView = false
+                endVideo(watchTime: Double(totalWatchedTime))
+            }
+            
+            // Update the slider with the current time.
+            updateSlider(currentTime: timeInterval)
+        }
+    }
+
+    /// Handles actions when the video plays to its end.
+    func videoDidPlay(toEnd videoNode: ASVideoNode) {
+        shouldCountView = true
+    }
+
+    /// Ends the video playback and performs necessary actions.
+    /// - Parameter watchTime: The total watch time of the video.
+    func endVideo(watchTime: Double) {
+        // Perform actions if certain conditions are met.
+        guard let _ = _AppCoreData.userDataSource.value, time < 2 else { return }
+        
+        time += 1
+        lastViewTimestamp = NSDate().timeIntervalSince1970
+        isViewed = true
+        
+        // Call API to create a view record.
+        APIManager.shared.createView(post: post.id, watchTime: watchTime) { result in
+            switch result {
+            case .success(let apiResponse):
+                print(apiResponse)
+            case .failure(let error):
+                print(error)
+            }
+        }
+    }
+
+    /// Updates the slider to reflect the current playback time.
+    /// - Parameter currentTime: The current time of the video playback.
+    func updateSlider(currentTime: TimeInterval) {
+        // Ensure that playTimeBar is available.
+        guard let playTimeBar = playTimeBar else { return }
+
+        // Set the maximum value of the slider if it hasn't been set yet.
+        if !setupMaxVal, let max = cellVideoNode.currentItem?.duration {
+            let maxDurationSeconds = CMTimeGetSeconds(max)
+            // Check if max duration is a valid number and set it as the maximum value of the slider.
+            if !maxDurationSeconds.isNaN {
+                playTimeBar.maximumValue = Float(maxDurationSeconds)
+                setupMaxVal = true
+            }
+        }
+        
+        // Set the current value of the slider to the current playback time.
+        playTimeBar.setValue(Float(currentTime), animated: false)
+    }
+
+
+    /// Determines the minimum watched percentage for counting a view, based on video duration.
+    /// - Parameter duration: The total duration of the video in seconds.
+    /// - Returns: The minimum percentage of the video that should be watched.
+    private func determineMinimumWatchedPercentage(forDuration duration: Double) -> Double {
+        switch duration {
+        case 0..<15:
+            return 0.8 // 80% for videos shorter than 15 seconds.
+        case 15..<30:
+            return 0.7 // 70% for videos between 15 and 30 seconds.
+        case 30..<60:
+            return 0.6 // 60% for videos between 30 and 60 seconds.
+        case 60..<90:
+            return 0.5 // 50% for videos between 60 and 90 seconds.
+        case 90..<120:
+            return 0.4 // 40% for videos between 90 and 120 seconds.
+        default:
+            return 0.5 // A default value for videos longer than 120 seconds.
+        }
+    }
+
+}
+
