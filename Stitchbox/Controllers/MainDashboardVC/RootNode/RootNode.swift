@@ -351,7 +351,6 @@ extension RootNode {
     // Plays the video at a specified index and updates the root ID for notification.
     func playVideo(index: Int) {
         if let cell = self.mainCollectionNode.nodeForItem(at: IndexPath(row: index, section: 0)) as? VideoNode {
-            cell.isActive = true
             cell.playVideo()
         }
     }
@@ -448,6 +447,13 @@ extension RootNode {
         }
     }
 
+    /// Clears existing posts from the collection node.
+    func clearExistingPosts() {
+        // Clear the posts array for each cell.
+        posts.removeAll()
+        // Reload the collection node within the cell to reflect the changes.
+        mainCollectionNode.reloadData()
+    }
     
     
 }

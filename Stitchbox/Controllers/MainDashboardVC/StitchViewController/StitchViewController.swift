@@ -658,7 +658,7 @@ extension StitchViewController {
                 print("Couldn't cast ?")
             }
             
-            cell.isActive = true
+           
             
             
             

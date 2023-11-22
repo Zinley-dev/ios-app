@@ -47,7 +47,6 @@ class VideoNode: ASCellNode, ASVideoNodeDelegate {
     // Flags and counters for various states.
     var didSlideEnd = true
     var setupMaxVal = false
-    var isActive = false
     var firstSetup = false
     var spinnerRemoved = true
     var assetReset = false
@@ -121,9 +120,6 @@ class VideoNode: ASCellNode, ASVideoNodeDelegate {
     /// Called when the view controller’s view becomes visible.
     override func didEnterVisibleState() {
         super.didEnterVisibleState() // Always call the super implementation of lifecycle methods
-
-        // Setting the active state to true when the view becomes visible.
-        isActive = true
 
         // Check if the initial setup for the view controller is completed.
         if !firstSetup {
@@ -450,7 +446,6 @@ extension VideoNode {
     /// Pauses the video playback and seeks to start if required.
     /// - Parameter shouldSeekToStart: Indicates if the video should seek to the beginning.
     func pauseVideo(shouldSeekToStart: Bool) {
-        isActive = false
         cellVideoNode.pause()
         removeObservers()
 
@@ -1733,14 +1728,14 @@ extension VideoNode {
     /// - Parameter watchTime: The total watch time of the video.
     func endVideo(watchTime: Double) {
         // Perform actions if certain conditions are met.
-        guard let _ = _AppCoreData.userDataSource.value, time < 2 else { return }
+        guard let finalPost = post, let _ = _AppCoreData.userDataSource.value, time < 2 else { return }
         
         time += 1
         lastViewTimestamp = NSDate().timeIntervalSince1970
         isViewed = true
         
         // Call API to create a view record.
-        APIManager.shared.createView(post: post.id, watchTime: watchTime) { result in
+        APIManager.shared.createView(post: finalPost.id, watchTime: watchTime) { result in
             switch result {
             case .success(let apiResponse):
                 print(apiResponse)

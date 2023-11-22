@@ -42,6 +42,7 @@ class FeedViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
     var readyToLoad = true
     var hasViewAppeared = false
     var firstLoadDone = false
+    var isScrollToTop = false
     // Time Management
     var lastScrollTime: TimeInterval = 0
     var throttleTime: TimeInterval = 0.5 // Time in seconds
@@ -415,7 +416,7 @@ extension FeedViewController {
     /// Handles video playback logic based on the current scroll position.
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         
-        if !posts.isEmpty, scrollView == collectionNode.view, !refresh_request {
+        if !posts.isEmpty, scrollView == collectionNode.view, !refresh_request, !isScrollToTop {
             
             if isDraggingEnded {
                     // Skip scrollViewDidScroll logic if we have just ended dragging
@@ -637,6 +638,7 @@ extension FeedViewController {
         refresh_request = true
         currentIndex = 0
         isFirstLoad = true
+        isScrollToTop = false
         updateData() // Call to update the data
     }
 
@@ -710,11 +712,26 @@ extension FeedViewController {
     }
 
     // MARK: - Clear Existing Posts
+
     /// Clears existing posts from the collection node.
     func clearExistingPosts() {
-        posts.removeAll() // Clear the posts array
-        collectionNode.reloadData() // Reload the collection node to reflect the changes
+        // Calculate the total number of posts before removal.
+        let total = posts.count
+
+        // Iterate through each index and clear posts in each cell.
+        for index in 0..<total {
+            if let cell = collectionNode.nodeForItem(at: IndexPath(row: index, section: 0)) as? RootNode {
+                // Clear the posts array for each cell.
+                cell.clearExistingPosts()
+            }
+        }
+
+        // Clear the main posts array.
+        posts.removeAll()
+        // Reload the main collection node to reflect the changes.
+        collectionNode.reloadData()
     }
+
 }
 
 
@@ -829,6 +846,8 @@ extension FeedViewController {
         }
     }
 
+    // MARK: - Scrolling Management
+
     /// Scrolls to an appropriate item in the collection node based on the current index.
     /// - Parameter currentIndex: The current index of the collection node.
     private func scrollToAppropriateItemBasedOnCurrentIndex(_ currentIndex: Int) {
@@ -837,18 +856,39 @@ extension FeedViewController {
             return
         }
 
-        let targetRow = currentIndex == 1 ? 0 : 1
-        let targetIndexPath = IndexPath(row: targetRow, section: 0)
-        let scrollPosition: UICollectionView.ScrollPosition = currentIndex == 1 ? .centeredVertically : .top
+        // Flag indicating the start of scrolling to the top.
+        isScrollToTop = true
+        // Pause video at currentIndex.
+        pauseVideoOnScrolling(index: currentIndex)
 
-        // Perform the scrolling.
-        collectionNode.scrollToItem(at: targetIndexPath, at: scrollPosition, animated: true)
-        
-        // Additional scroll if the target index is not 1.
-        if currentIndex != 1 {
-            collectionNode.scrollToItem(at: IndexPath(row: 0, section: 0), at: .centeredVertically, animated: true)
+        if currentIndex > 1 {
+            // If the current index is greater than 1, scroll first to index 1 without animation.
+            collectionNode.scrollToItem(at: IndexPath(row: 1, section: 0), at: .top, animated: false)
+
+            // Then, scroll to index 0 with animation.
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) { [weak self] in
+                self?.collectionNode.scrollToItem(at: IndexPath(row: 0, section: 0), at: .top, animated: true)
+
+                // Update current index and play video after scrolling.
+                self?.finishScrollToTopActions()
+            }
+        } else if currentIndex == 1 {
+            // If the current index is 1, scroll directly to the top with animation.
+            collectionNode.scrollToItem(at: IndexPath(row: 0, section: 0), at: .top, animated: true)
+
+            // Update current index and play video after scrolling.
+            finishScrollToTopActions()
         }
     }
+
+    /// Finalizes actions after scrolling to the top, such as updating the current index and playing a video.
+    private func finishScrollToTopActions() {
+        currentIndex = 0
+        pauseVideoOnScrolling(index: 1)
+        playVideo(index: currentIndex!)
+        isScrollToTop = false
+    }
+    
 
 }
 
@@ -1252,32 +1292,16 @@ extension FeedViewController {
     /// Resets the feed by refreshing the content and clearing existing data.
     func resetFeed() {
         // Refresh the feed content.
-        refreshFeed()
+        scrollToAppropriateItemBasedOnCurrentIndex(currentIndex!)
 
         // Clear existing posts and any related data.
-        clearExistingPosts()
+        hardReset()
+    }
+    
+    func hardReset() {
+        // Clear existing posts and any related data.
         clearAllData()
-    }
-
-    /// Refreshes the feed view.
-    private func refreshFeed() {
-        if currentIndex == 1 {
-            scrollToTopItem(animated: true)
-        } else {
-            scrollToSecondItemThenTop()
-        }
-    }
-
-    /// Scrolls to the top item in the collection node.
-    /// - Parameter animated: Indicates if the scrolling should be animated.
-    private func scrollToTopItem(animated: Bool) {
-        collectionNode.scrollToItem(at: IndexPath(row: 0, section: 0), at: .centeredVertically, animated: animated)
-    }
-
-    /// Scrolls to the second item and then to the top in the collection node.
-    private func scrollToSecondItemThenTop() {
-        collectionNode.scrollToItem(at: IndexPath(row: 1, section: 0), at: .centeredVertically, animated: false)
-        scrollToTopItem(animated: true)
+        clearExistingPosts()
     }
     
     /// Instantiates a view controller from a storyboard.
