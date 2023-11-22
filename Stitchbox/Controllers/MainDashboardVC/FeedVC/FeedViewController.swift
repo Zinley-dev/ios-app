@@ -42,7 +42,7 @@ class FeedViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
     var readyToLoad = true
     var hasViewAppeared = false
     var firstLoadDone = false
-    var isScrollToTop = false
+    var isScrollingToTop = false
     // Time Management
     var lastScrollTime: TimeInterval = 0
     var throttleTime: TimeInterval = 0.5 // Time in seconds
@@ -416,13 +416,17 @@ extension FeedViewController {
     /// Handles video playback logic based on the current scroll position.
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         
-        if !posts.isEmpty, scrollView == collectionNode.view, !refresh_request, !isScrollToTop {
+        if !posts.isEmpty, scrollView == collectionNode.view, !refresh_request {
+            
+            if isScrollingToTop {
+                return
+            }
             
             if isDraggingEnded {
-                    // Skip scrollViewDidScroll logic if we have just ended dragging
-                    isDraggingEnded = false
-                    return
-                }
+                // Skip scrollViewDidScroll logic if we have just ended dragging
+                isDraggingEnded = false
+                return
+            }
 
             // Get the visible rect of the collection view.
             let visibleRect = CGRect(origin: scrollView.contentOffset, size: scrollView.bounds.size)
@@ -462,6 +466,7 @@ extension FeedViewController {
                     }
                     // Play the new video.
                     currentIndex = newPlayingIndex
+                    print(currentIndex)
                     playVideo(index: currentIndex!)
                     isVideoPlaying = true
                 
@@ -638,7 +643,7 @@ extension FeedViewController {
         refresh_request = true
         currentIndex = 0
         isFirstLoad = true
-        isScrollToTop = false
+        isScrollingToTop = false
         updateData() // Call to update the data
     }
 
@@ -857,7 +862,7 @@ extension FeedViewController {
         }
 
         // Flag indicating the start of scrolling to the top.
-        isScrollToTop = true
+        isScrollingToTop = true
         // Pause video at currentIndex.
         pauseVideoOnScrolling(index: currentIndex)
 
@@ -884,9 +889,12 @@ extension FeedViewController {
     /// Finalizes actions after scrolling to the top, such as updating the current index and playing a video.
     private func finishScrollToTopActions() {
         currentIndex = 0
-        pauseVideoOnScrolling(index: 1)
         playVideo(index: currentIndex!)
-        isScrollToTop = false
+        
+        delay(0.5) { [weak self] in
+            self?.isScrollingToTop = false
+        }
+
     }
     
 
