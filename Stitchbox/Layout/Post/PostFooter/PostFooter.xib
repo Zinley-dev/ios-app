@@ -30,7 +30,7 @@
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" verticalCompressionResistancePriority="749" text="" lineBreakMode="wordWrap" numberOfLines="5" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="F6g-v5-FbM">
-                    <rect key="frame" x="20" y="83" width="175" height="0.0"/>
+                    <rect key="frame" x="20" y="88" width="175" height="0.0"/>
                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                     <constraints>
                         <constraint firstAttribute="width" constant="175" id="5CY-mI-sCb"/>
@@ -50,7 +50,7 @@
                     <nil key="highlightedColor"/>
                 </label>
                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="wUq-iG-3yI">
-                    <rect key="frame" x="442" y="48" width="35" height="35"/>
+                    <rect key="frame" x="442" y="53" width="35" height="35"/>
                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                     <constraints>
                         <constraint firstAttribute="height" constant="35" id="2Bg-X0-5RF"/>
@@ -73,11 +73,11 @@
             <viewLayoutGuide key="safeArea" id="vUN-kp-3ea"/>
             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
             <constraints>
-                <constraint firstItem="vUN-kp-3ea" firstAttribute="bottom" secondItem="wUq-iG-3yI" secondAttribute="bottom" constant="30" id="Gej-al-MIS"/>
+                <constraint firstItem="vUN-kp-3ea" firstAttribute="bottom" secondItem="wUq-iG-3yI" secondAttribute="bottom" constant="25" id="Gej-al-MIS"/>
                 <constraint firstItem="F6g-v5-FbM" firstAttribute="leading" secondItem="vUN-kp-3ea" secondAttribute="leading" constant="20" id="Jdn-aH-KWG"/>
                 <constraint firstItem="vUN-kp-3ea" firstAttribute="bottom" secondItem="gGP-iA-NdH" secondAttribute="bottom" constant="-5" id="K0f-ga-V1k"/>
                 <constraint firstItem="vUN-kp-3ea" firstAttribute="trailing" secondItem="wUq-iG-3yI" secondAttribute="trailing" constant="20" id="OPi-nU-rba"/>
-                <constraint firstItem="vUN-kp-3ea" firstAttribute="bottom" secondItem="F6g-v5-FbM" secondAttribute="bottom" constant="30" id="S6D-jZ-MCc"/>
+                <constraint firstItem="vUN-kp-3ea" firstAttribute="bottom" secondItem="F6g-v5-FbM" secondAttribute="bottom" constant="25" id="S6D-jZ-MCc"/>
                 <constraint firstItem="vUN-kp-3ea" firstAttribute="trailing" secondItem="gGP-iA-NdH" secondAttribute="trailing" constant="32" id="esu-Vd-8au"/>
                 <constraint firstItem="gGP-iA-NdH" firstAttribute="leading" secondItem="vUN-kp-3ea" secondAttribute="leading" constant="32" id="hvi-zJ-THc"/>
             </constraints>

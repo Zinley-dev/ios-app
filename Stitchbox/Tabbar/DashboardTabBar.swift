@@ -37,7 +37,7 @@ import Alamofire
             button.backgroundColor = .clear
         case .white:
             if cachedResizedImage == nil {
-                cachedResizedImage = UIImage(named: "Add 2")?.resize(targetSize: CGSize(width: 32, height: 32))
+                cachedResizedImage = UIImage(named: "Add 2")?.resize(targetSize: CGSize(width: 26, height: 26))
             }
             button.setImage(cachedResizedImage, for: .normal)
             button.backgroundColor = .clear
@@ -53,7 +53,7 @@ import Alamofire
         // Only calculate if the button hasn't been added yet
         if button.superview == nil {
             let tabBarHeight = self.tabBar.frame.height
-            let buttonSize = CGSize(width: 37.5, height: 37.5)
+            let buttonSize = CGSize(width: 30.5, height: 30.5)
             let buttonFrame = CGRect(
                 x: (self.tabBar.frame.width / 2) - (buttonSize.width / 2),
                 y: (tabBarHeight - buttonSize.height) / 2,
@@ -67,7 +67,7 @@ import Alamofire
 
     private func checkButtonFitInTabBar() {
         let tabBarHeight = self.tabBar.frame.height
-        let buttonSize = CGSize(width: 37.5, height: 37.5)
+        let buttonSize = CGSize(width: 30.5, height: 30.5)
         if buttonSize.height > tabBarHeight {
             print("Warning: button size is larger than tab bar height. Button will not fit in tab bar.")
         }
@@ -109,7 +109,7 @@ import Alamofire
         self.tabBar.standardAppearance = tabBarAppearance
         self.view.backgroundColor = .black
         setupImageForTabbar()
-        button.setImage(UIImage(named: "Add 2")?.resize(targetSize: CGSize(width: 32, height: 32)), for: .normal)
+        button.setImage(UIImage(named: "Add 2")?.resize(targetSize: CGSize(width: 26, height: 26)), for: .normal)
     }
 
    
@@ -122,7 +122,7 @@ import Alamofire
         self.tabBar.standardAppearance = tabBarAppearance
         self.view.backgroundColor = .white
         setupImageForTabbar(isLight: true)
-        button.setImage(UIImage(named: "Add 3")?.resize(targetSize: CGSize(width: 32, height: 32)), for: .normal)
+        button.setImage(UIImage(named: "Add 3")?.resize(targetSize: CGSize(width: 26, height: 26)), for: .normal)
     }
     
     // Create an image cache
@@ -159,7 +159,7 @@ import Alamofire
         }
         
         for (index, (unfilledName, filledName)) in names {
-            let size = index == 0 ? CGSize(width: 30, height: 30) : CGSize(width: 27, height: 27)
+            let size = index == 0 ? CGSize(width: 28, height: 28) : CGSize(width: 25, height: 25)
             
             items[index].image = cachedImage(named: unfilledName, targetSize: size)!.withRenderingMode(.alwaysOriginal)
             items[index].selectedImage = cachedImage(named: filledName, targetSize: size)!.withRenderingMode(.alwaysOriginal)
@@ -179,14 +179,14 @@ import Alamofire
             let thirdTabBarItem = items[3]
             
             
-            let homeImg = UIImage.init(named: "home")?.resize(targetSize: CGSize(width: 27, height: 27)).withRenderingMode(.alwaysOriginal)
-            let homefilledImg = UIImage.init(named: "home.filled")?.resize(targetSize: CGSize(width: 27, height: 27)).withRenderingMode(.alwaysOriginal)
+            let homeImg = UIImage.init(named: "home")?.resize(targetSize: CGSize(width: 25, height: 25)).withRenderingMode(.alwaysOriginal)
+            let homefilledImg = UIImage.init(named: "home.filled")?.resize(targetSize: CGSize(width: 25, height: 25)).withRenderingMode(.alwaysOriginal)
             
-            let trendingImg = UIImage.init(named: "trendingWhite")?.resize(targetSize: CGSize(width: 27, height: 27)).withRenderingMode(.alwaysOriginal)
-            let trendingfilledImg = UIImage.init(named: "trendingFilled")?.resize(targetSize: CGSize(width: 27, height: 27)).withRenderingMode(.alwaysOriginal)
+            let trendingImg = UIImage.init(named: "trendingWhite")?.resize(targetSize: CGSize(width: 25, height: 25)).withRenderingMode(.alwaysOriginal)
+            let trendingfilledImg = UIImage.init(named: "trendingFilled")?.resize(targetSize: CGSize(width: 25, height: 25)).withRenderingMode(.alwaysOriginal)
             
-            let chatImg = UIImage.init(named: "chat")?.resize(targetSize: CGSize(width: 27, height: 27)).withRenderingMode(.alwaysOriginal)
-            let chatfilledImg = UIImage.init(named: "chat.filled")?.resize(targetSize: CGSize(width: 27, height: 27)).withRenderingMode(.alwaysOriginal)
+            let chatImg = UIImage.init(named: "chat")?.resize(targetSize: CGSize(width: 25, height: 25)).withRenderingMode(.alwaysOriginal)
+            let chatfilledImg = UIImage.init(named: "chat.filled")?.resize(targetSize: CGSize(width: 25, height: 25)).withRenderingMode(.alwaysOriginal)
             
             firstTabBarItem.image = homeImg
             firstTabBarItem.selectedImage = homefilledImg
@@ -201,13 +201,13 @@ import Alamofire
 
     
     func createCustomImageView(with image: UIImage) -> UIImage {
-        let circularImage = image.circularImage(size: CGSize(width: 37.5, height: 37.5))
+        let circularImage = image.circularImage(size: CGSize(width: 32.5, height: 32.5))
         let imageWithBorder = circularImage.withBorder(width: 1.0, color: .black)
         return imageWithBorder.withRenderingMode(.alwaysOriginal)
     }
         
     func createCustomSelectedImageView(with image: UIImage) -> UIImage {
-        let circularImage = image.circularImage(size: CGSize(width: 37.5, height: 37.5))
+        let circularImage = image.circularImage(size: CGSize(width: 32.5, height: 32.5))
         let imageWithBorder = circularImage.withBorder(width: 1.0, color: .secondary)
         return imageWithBorder.withRenderingMode(.alwaysOriginal)
     }

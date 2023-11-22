@@ -25,7 +25,7 @@ class RootNode: ASCellNode, UICollectionViewDelegateFlowLayout, UIAdaptivePresen
     var rootPost: PostModel! // The main post object for the view controller.
     var posts = [PostModel]() // Array to hold related posts.
     var page = 1 // Current page index for pagination or similar use.
-
+    
     // UI elements
     var galleryCollectionNode: ASCollectionNode! // Collection node for displaying a gallery of items.
     var mainCollectionNode: ASCollectionNode! // Main collection node for primary content display.
@@ -33,14 +33,22 @@ class RootNode: ASCellNode, UICollectionViewDelegateFlowLayout, UIAdaptivePresen
     // Size properties
     var saveMin = CGSize(width: 0, height: 0) // Minimum size for some UI or layout purpose (context not clear from snippet).
     var saveMax = CGSize(width: 0, height: 0) // Maximum size for the same purpose as saveMin.
-    
+
+    // Data and State Management
+    var currentIndex: Int? = 0
+    var newPlayingIndex: Int? = 0
+    var isVideoPlaying = false
+    var isDraggingEnded: Bool = false
+    var isfirstLoad = true
+    var firstItem = false
     
     // MARK: - Initializer
 
     /// Initializes the view controller with a given post.
     /// This initializer sets up collection nodes and various properties required for the view controller.
     /// - Parameter post: The main post model around which this view controller is based.
-    init(with post: PostModel) {
+    init(with post: PostModel, firstItem: Bool) {
+        self.firstItem = firstItem
         // Assigning the passed post to rootPost, which acts as the primary data model for this controller.
         self.rootPost = post
 
@@ -167,36 +175,51 @@ extension RootNode: ASCollectionDelegate, ASCollectionDataSource {
         return posts.count // The number of items is equal to the number of posts.
     }
 
+    // MARK: - ASCollectionDataSource
+
     /// Provides a node block for each item in the collection node.
-    /// This method decides which type of node (e.g., VideoNode, StitchControlNode) to use based on the collection node.
+    /// Decides which type of node (e.g., VideoNode, StitchControlNode) to use based on the collection node.
     /// - Parameters:
     ///   - collectionNode: The collection node requesting the node.
     ///   - indexPath: The index path of the item.
-    /// - Returns: A block that creates and returns an ASCellNode.
+    /// - Returns: A block that creates and returns an `ASCellNode`.
     func collectionNode(_ collectionNode: ASCollectionNode, nodeBlockForItemAt indexPath: IndexPath) -> ASCellNodeBlock {
         let post = posts[indexPath.row]
 
+        // Determine the type of collection node to handle.
         if collectionNode == galleryCollectionNode {
             // Handling gallery collection node.
             return {
                 let node = StitchControlNode(with: post)
-                node.neverShowPlaceholders = true
-                node.debugName = "Node \(indexPath.row)"
-                node.automaticallyManagesSubnodes = true
+                self.configureNode(node, at: indexPath)
                 return node
             }
         } else {
             // Handling main collection node.
             return { [weak self] in
-                guard self != nil else { return ASCellNode() }
-                let node = VideoNode(with: post, isPreview: false)
-                node.neverShowPlaceholders = true
-                node.debugName = "Node \(indexPath.row)"
-                node.automaticallyManagesSubnodes = true
+                guard let strongSelf = self else { return ASCellNode() }
+                let node = VideoNode(with: post, isPreview: false, firstItem: strongSelf.firstItem)
+                strongSelf.configureNode(node, at: indexPath)
+
+                if strongSelf.firstItem {
+                    strongSelf.firstItem = false
+                }
+
                 return node
             }
         }
     }
+
+    /// Configures properties of a cell node.
+    /// - Parameters:
+    ///   - node: The `ASCellNode` to configure.
+    ///   - indexPath: The index path of the node.
+    private func configureNode(_ node: ASCellNode, at indexPath: IndexPath) {
+        node.neverShowPlaceholders = true
+        node.debugName = "Node \(indexPath.row)"
+        node.automaticallyManagesSubnodes = true
+    }
+
 }
 
 extension RootNode {
@@ -304,3 +327,127 @@ extension RootNode {
     }
 }
 
+
+// MARK: - Video Playback Control Extension
+
+// This extension provides methods to control video playback within the FeedViewController, including pausing and playing videos.
+
+extension RootNode {
+    
+    // Pauses the video at a specific index and optionally seeks to the start.
+    func pauseVideoOnScrolling(index: Int) {
+        if let cell = self.mainCollectionNode.nodeForItem(at: IndexPath(row: index, section: 0)) as? VideoNode {
+            cell.pauseVideo(shouldSeekToStart: true)
+        }
+    }
+    
+    // Pauses the video at a specific index without seeking to the start.
+    func pauseVideoOnAppStage(index: Int) {
+        if let cell = self.mainCollectionNode.nodeForItem(at: IndexPath(row: index, section: 0)) as? VideoNode {
+            cell.pauseVideo(shouldSeekToStart: false)
+        }
+    }
+
+    // Plays the video at a specified index and updates the root ID for notification.
+    func playVideo(index: Int) {
+        if let cell = self.mainCollectionNode.nodeForItem(at: IndexPath(row: index, section: 0)) as? VideoNode {
+            cell.isActive = true
+            cell.playVideo()
+        }
+    }
+    
+    // Seeks the video at a specific index to the beginning (time zero).
+    func seekToZero(index: Int) {
+        if let cell = self.mainCollectionNode.nodeForItem(at: IndexPath(row: index, section: 0)) as? VideoNode {
+            cell.seekToZero()
+        }
+    }
+}
+
+extension RootNode {
+    
+    func scrollViewWillEndDragging(_ scrollView: UIScrollView, withVelocity velocity: CGPoint, targetContentOffset: UnsafeMutablePointer<CGPoint>) {
+        if !posts.isEmpty, scrollView == mainCollectionNode.view {
+            
+            // Define the page width and calculate the new target offset
+            let pageWidth: CGFloat = scrollView.bounds.width
+            let currentOffset: CGFloat = scrollView.contentOffset.x
+            let targetOffset: CGFloat = targetContentOffset.pointee.x
+            var newTargetOffset: CGFloat = targetOffset > currentOffset ?
+                ceil(currentOffset / pageWidth) * pageWidth :
+                floor(currentOffset / pageWidth) * pageWidth
+
+            // Bounds checking for the new target offset
+            newTargetOffset = max(min(newTargetOffset, scrollView.contentSize.width - pageWidth), 0)
+
+            // Adjust the target content offset
+            targetContentOffset.pointee.x = newTargetOffset
+            
+            // Set the flag to indicate dragging has ended
+            isDraggingEnded = true
+        }
+    }
+
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        
+        if !posts.isEmpty, scrollView == mainCollectionNode.view {
+            
+            if isDraggingEnded {
+                // Skip scrollViewDidScroll logic if we have just ended dragging
+                isDraggingEnded = false
+                return
+            }
+
+            // Get the visible rect of the collection view.
+            let visibleRect = CGRect(origin: scrollView.contentOffset, size: scrollView.bounds.size)
+
+            // Calculate the visible cells.
+            let visibleCells = mainCollectionNode.visibleNodes.compactMap { $0 as? VideoNode }
+
+            // Find the index of the visible video that is closest to the center of the screen horizontally.
+            var minDistanceFromCenter = CGFloat.infinity
+            var foundVisibleVideo = false
+            var newPlayingIndex: Int?
+
+            for cell in visibleCells {
+                if let indexPath = cell.indexPath {
+                    let cellRect = cell.view.convert(cell.bounds, to: mainCollectionNode.view)
+                    let cellCenter = CGPoint(x: cellRect.midX, y: cellRect.midY)
+                    let distanceFromCenter = abs(cellCenter.x - visibleRect.midX)
+                    
+                    if distanceFromCenter < minDistanceFromCenter {
+                        newPlayingIndex = indexPath.row
+                        minDistanceFromCenter = distanceFromCenter
+                    }
+                }
+            }
+
+            if let index = newPlayingIndex, !posts[index].muxPlaybackId.isEmpty {
+                foundVisibleVideo = true
+            }
+
+            if foundVisibleVideo {
+                // Start playing the new video if it's different from the current playing video.
+                if let newPlayingIndex = newPlayingIndex, currentIndex != newPlayingIndex {
+            
+                    // Pause the current video, if any.
+                    if let currentIndex = currentIndex {
+                        pauseVideoOnScrolling(index: currentIndex)
+                    }
+                    // Play the new video.
+                    currentIndex = newPlayingIndex
+                    playVideo(index: currentIndex!)
+                    isVideoPlaying = true
+                    
+                    if let node = mainCollectionNode.nodeForItem(at: IndexPath(item: currentIndex!, section: 0)) as? VideoNode {
+                        resetView(cell: node)
+                    }
+                }
+            }
+
+        }
+    }
+
+    
+    
+}

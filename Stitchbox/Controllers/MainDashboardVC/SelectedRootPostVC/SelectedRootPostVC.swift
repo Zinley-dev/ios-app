@@ -372,7 +372,7 @@ extension SelectedRootPostVC: ASCollectionDataSource {
         
         return {
             
-            let node = VideoNode(with: post, isPreview: false)
+            let node = VideoNode(with: post, isPreview: false, firstItem: false)
             node.neverShowPlaceholders = true
             node.debugName = "Node \(indexPath.row)"
            

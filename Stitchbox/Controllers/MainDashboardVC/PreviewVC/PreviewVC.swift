@@ -334,7 +334,7 @@ extension PreviewVC: ASCollectionDataSource {
             guard let self = self else {
                 return ASCellNode()
             }
-            let node = VideoNode(with: post, isPreview: true)
+            let node = VideoNode(with: post, isPreview: true, firstItem: false)
             //node.collectionNode = self.collectionNode
             node.neverShowPlaceholders = true
             node.debugName = "Node \(indexPath.row)"
@@ -346,7 +346,6 @@ extension PreviewVC: ASCollectionDataSource {
         
     }
 
-    
 }
 
 

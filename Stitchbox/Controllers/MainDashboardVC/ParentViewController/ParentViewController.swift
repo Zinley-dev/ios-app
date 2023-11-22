@@ -54,9 +54,6 @@ class ParentViewController: UIViewController {
             navigationController.navigationBar.isTranslucent = false
         }
         
-        if _AppCoreData.userDataSource.value?.userID != "" {
-            requestTrackingAuthorization(userId: _AppCoreData.userDataSource.value?.userID ?? "")
-        }
      
         //setupCategoryIfNeed()
         firstLoadDone = true
@@ -138,6 +135,7 @@ class ParentViewController: UIViewController {
         NotificationCenter.default.addObserver(self, selector: #selector(ParentViewController.onClickHideInfo), name: (NSNotification.Name(rawValue: "hideInfo")), object: nil)
         
     }
+    
     private func setupScrollView() {
         scrollView = UIScrollView()
         scrollView.delegate = self

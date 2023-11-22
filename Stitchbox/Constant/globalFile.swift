@@ -18,22 +18,21 @@ import AppTrackingTransparency
 import AdSupport
 import AsyncDisplayKit
 
+// MARK: - Global Constants
 
 let incomingCallGreen = UIColor(red: 76.0/255.0, green: 217.0/255.0, blue: 100.0/255.0, alpha: 1.0)
 let hashtagPurple = UIColor(red: 88.0/255.0, green: 86.0/255.0, blue: 214.0/255.0, alpha: 1.0)
 let alertColor = UIColor(red: 0.8, green: 0.2, blue: 0.2, alpha: 1.0)
+let horizontalPadding: CGFloat = 12
+let bottomValue: CGFloat = 40
+let bottomValueNoHide: CGFloat = 0
+let emptyimage = "https://img.freepik.com/premium-photo/gray-wall-empty-room-with-concrete-floor_53876-70804.jpg?w=1380"
+let emptySB = "https://stitchbox-app-images.s3.us-east-1.amazonaws.com/adf94fba-69a1-4dc3-b934-003a04265c39.png"
+
+// MARK: - Global Variables
+
 var mainRootId = ""
 var mainSeletedId = ""
-let saveImage = UIImage.init(named: "saved.filled")?.resize(targetSize: CGSize(width: 16, height: 20.3125))
-let unsaveImage = UIImage.init(named: "save")?.resize(targetSize: CGSize(width: 16, height: 20.3125))
-
-//heart-darkmode
-let emptyLikeImageLM = UIImage.init(named: "heart-lightmode")?.resize(targetSize: CGSize(width: 25, height: 20.3125))
-let cmtImage = UIImage.init(named: "cmt")?.resize(targetSize: CGSize(width: 23, height: 23))
-let playListImage = UIImage.init(named: "playlist 1")?.resize(targetSize: CGSize(width: 25, height: 20.3125))
-let likeImage = UIImage.init(named: "liked")?.resize(targetSize: CGSize(width: 25, height: 20.3125))
-let emptyLikeImage = UIImage.init(named: "likeEmpty")?.resize(targetSize: CGSize(width: 25, height: 20.3125))
-let popupLikeImage = UIImage.init(named: "likePopUp")?.resize(targetSize: CGSize(width: 100, height: 81.25))
 var chatbot_id = "64397f3ceff4334484bf537b"
 var general_vc: UIViewController!
 var general_room: Room!
@@ -58,41 +57,82 @@ var globalIsSound = false
 var globalClear = false
 var shouldMute: Bool?
 var globalSetting: SettingModel!
-var navigationControllerHeight:CGFloat = 0.0
-var tabBarControllerHeight:CGFloat = 0.0
-let horizontalPadding: CGFloat = 12
-let bottomValue: CGFloat = 40
-let bottomValueNoHide: CGFloat = 0
+var navigationControllerHeight: CGFloat = 0.0
+var tabBarControllerHeight: CGFloat = 0.0
 
+// MARK: - UI Images
 
-var emptyimage = "https://img.freepik.com/premium-photo/gray-wall-empty-room-with-concrete-floor_53876-70804.jpg?w=1380"
-var emptySB = "https://stitchbox-app-images.s3.us-east-1.amazonaws.com/adf94fba-69a1-4dc3-b934-003a04265c39.png"
-let xBtn = UIImage(named: "1024x")?.resize(targetSize: CGSize(width: 12, height: 12))
+let scaleFactor: CGFloat = 0.8
+let saveScaleFactor: CGFloat = 0.85
+
+let saveImageSize = CGSize(width: 16, height: 20.3125).applyingScaleFactor(saveScaleFactor)
+let saveImage = UIImage(named: "saved.filled")?.resize(targetSize: saveImageSize)
+
+let unsaveImageSize = CGSize(width: 16, height: 20.3125).applyingScaleFactor(saveScaleFactor)
+let unsaveImage = UIImage(named: "save")?.resize(targetSize: unsaveImageSize)
+
+let emptyLikeImageLMSize = CGSize(width: 25, height: 20.3125).applyingScaleFactor(scaleFactor)
+let emptyLikeImageLM = UIImage(named: "heart-lightmode")?.resize(targetSize: emptyLikeImageLMSize)
+
+let cmtImageSize = CGSize(width: 23, height: 23).applyingScaleFactor(scaleFactor)
+let cmtImage = UIImage(named: "cmt")?.resize(targetSize: cmtImageSize)
+
+let playListImageSize = CGSize(width: 25, height: 20.3125).applyingScaleFactor(scaleFactor)
+let playListImage = UIImage(named: "playlist 1")?.resize(targetSize: playListImageSize)
+
+let likeImageSize = CGSize(width: 25, height: 20.3125).applyingScaleFactor(scaleFactor)
+let likeImage = UIImage(named: "liked")?.resize(targetSize: likeImageSize)
+
+let emptyLikeImageSize = CGSize(width: 25, height: 20.3125).applyingScaleFactor(scaleFactor)
+let emptyLikeImage = UIImage(named: "likeEmpty")?.resize(targetSize: emptyLikeImageSize)
+
+let popupLikeImageSize = CGSize(width: 100, height: 81.25)
+let popupLikeImage = UIImage(named: "likePopUp")?.resize(targetSize: popupLikeImageSize)
+
+let xBtnSize = CGSize(width: 12, height: 12)
+let xBtn = UIImage(named: "1024x")?.resize(targetSize: xBtnSize)
+
+let muteImageSize = CGSize(width: 26, height: 26)
+let muteImage = UIImage(named: "3xmute")?.resize(targetSize: muteImageSize).withRenderingMode(.alwaysOriginal)
+
+let unmuteImageSize = CGSize(width: 26, height: 26)
+let unmuteImage = UIImage(named: "3xunmute")?.resize(targetSize: unmuteImageSize).withRenderingMode(.alwaysOriginal)
+
+let speedImageSize = CGSize(width: 25, height: 25)
+let speedImage = UIImage(named: "Speed_4x")?.resize(targetSize: speedImageSize)
+
+// Extension to apply scaling factor to CGSize.
+extension CGSize {
+    func applyingScaleFactor(_ factor: CGFloat) -> CGSize {
+        return CGSize(width: self.width * factor, height: self.height * factor)
+    }
+}
+
 
 var back_frame = CGRect(x: 0, y: 0, width: 44, height: 44)
 
-let muteImage = UIImage.init(named: "3xmute")?.resize(targetSize: CGSize(width: 26, height: 26)).withRenderingMode(.alwaysOriginal)
-let unmuteImage = UIImage.init(named: "3xunmute")?.resize(targetSize: CGSize(width: 26, height: 26)).withRenderingMode(.alwaysOriginal)
-let speedImage = UIImage.init(named: "Speed_4x")?.resize(targetSize: CGSize(width: 25, height: 25))
+// MARK: - Typealias
 
 typealias DownloadComplete = () -> ()
 
+// MARK: - Functions
+
+/// Activates the speaker.
 func activeSpeaker() {
-    
     do {
-                try AVAudioSession.sharedInstance().setCategory(AVAudioSession.Category.playback)
-                print("AVAudioSession Category Playback OK")
-                do {
-                    try AVAudioSession.sharedInstance().setActive(true)
-                    print("AVAudioSession is Active")
-                } catch {
-                    print(error.localizedDescription)
-                }
-            } catch {
-                print(error.localizedDescription)
-            }
-    
+        try AVAudioSession.sharedInstance().setCategory(AVAudioSession.Category.playback)
+        print("AVAudioSession Category Playback OK")
+        do {
+            try AVAudioSession.sharedInstance().setActive(true)
+            print("AVAudioSession is Active")
+        } catch {
+            print(error.localizedDescription)
+        }
+    } catch {
+        print(error.localizedDescription)
+    }
 }
+
 
 func showNote(text: String) {
     
@@ -214,21 +254,22 @@ extension UILabel {
 }
 
 
+// MARK: - Avatar Processing
+
+/// Processes avatar updates for a given SendBird group channel.
+/// - Parameters:
+///   - channel: The SendBird group channel to update.
+///   - image: The new image for the avatar.
 func processUpdateAvatar(channel: SBDGroupChannel, image: UIImage) {
-    
-    
     APIManager.shared.uploadImage(image: image) { result in
-        
         switch result {
         case .success(let apiResponse):
-            
             guard apiResponse.body?["message"] as? String == "avatar uploaded successfully",
-                  let url = apiResponse.body?["url"] as? String  else {
+                  let url = apiResponse.body?["url"] as? String else {
                     return
             }
             
-           
-            // update SBDGroupChannelParams()
+            // Update SBDGroupChannelParams with new cover URL
             let param = SBDGroupChannelParams()
             param.coverUrl = url
             
@@ -237,22 +278,25 @@ func processUpdateAvatar(channel: SBDGroupChannel, image: UIImage) {
                     print(error.localizedDescription, error.code)
                     return
                 }
+                // Handle successful update, if needed
             }
 
-
         case .failure(let error):
-            print(error)
+            print(error.localizedDescription)
         }
-        
-        
     }
-    
 }
 
+// MARK: - Local Notifications
+
+/// Creates and schedules a local notification for active SendBird users.
+/// - Parameters:
+///   - title: Title of the notification.
+///   - body: Body text of the notification.
+///   - channel: The SendBird group channel associated with the notification.
 func createLocalNotificationForActiveSendbirdUsers(title: String, body: String, channel: SBDGroupChannel) {
-    
     // Request permission to display notifications
-    UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .sound, .badge]) { (granted, error) in
+    UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .sound, .badge]) { granted, _ in
         if granted {
             print("Notification permissions granted")
         } else {
@@ -260,202 +304,149 @@ func createLocalNotificationForActiveSendbirdUsers(title: String, body: String, 
         }
     }
 
-    // Define the notification content
     let content = UNMutableNotificationContent()
     content.title = title
     content.body = body
     content.sound = UNNotificationSound.default
-
-    // Add the message text and channel to the userInfo dictionary
     content.userInfo = ["type": "sendbird_localNoti", "channel_url": channel.channelUrl]
 
-    // Create a trigger for the notification
+    // Create and add a notification request
     let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 0.05, repeats: false)
-    
-    // Create a request for the notification
     let request = UNNotificationRequest(identifier: "notification", content: content, trigger: trigger)
-
-    // Add the request to the notification center
-    UNUserNotificationCenter.current().add(request) { (error) in
-        if error != nil {
-            print(error?.localizedDescription)
+    UNUserNotificationCenter.current().add(request) { error in
+        if let error = error {
+            print(error.localizedDescription)
         } else {
             print("Notification scheduled")
         }
     }
-
 }
 
+// MARK: - UI Extensions
+
+// Extension for UICollectionReusableView to provide a default reuseIdentifier
 extension UICollectionReusableView {
     static var reuseIdentifier: String {
         return String(describing: Self.self)
     }
 }
 
-
-
+// Extension for UITextView to calculate new height based on content
 extension UITextView {
-    
-    /**
-     Calculates if new textview height (based on content) is larger than a base height
-     
-     - parameter baseHeight: The base or minimum height
-     
-     - returns: The new height
-     */
     func newHeight(withBaseHeight baseHeight: CGFloat) -> CGFloat {
-        
-        // Calculate the required size of the textview
         let fixedWidth = frame.size.width
         let newSize = sizeThatFits(CGSize(width: fixedWidth, height: .greatestFiniteMagnitude))
-        var newFrame = frame
-        
-        // Height is always >= the base height, so calculate the possible new height
-        let height: CGFloat = newSize.height > baseHeight ? newSize.height : baseHeight
-        newFrame.size = CGSize(width: max(newSize.width, fixedWidth), height: height)
-        
-        return newFrame.height
+        return max(newSize.height, baseHeight)
     }
 }
 
+// MARK: - Image Saving
 
+/// A helper class to save images to the photo album.
 class ImageSaver: NSObject {
     func writeToPhotoAlbum(image: UIImage) {
         UIImageWriteToSavedPhotosAlbum(image, self, #selector(saveCompleted), nil)
     }
 
-    @objc func saveCompleted(_ image: UIImage, didFinishSavingWithError error: Error?, contextInfo: UnsafeRawPointer) {
+    @objc private func saveCompleted(_ image: UIImage, didFinishSavingWithError error: Error?, contextInfo: UnsafeRawPointer) {
+        // Implement handling of the save completion, e.g., show a notification
         showNote(text: "Save finished!")
     }
 }
 
+// MARK: - SwiftLoader Presentation
 
+/// Presents a loading indicator using SwiftLoader.
 func presentSwiftLoader() {
-    
-    var config : SwiftLoader.Config = SwiftLoader.Config()
+    var config = SwiftLoader.Config()
     config.size = 170
-    
     config.backgroundColor = UIColor.clear
     config.spinnerColor = UIColor.white
     config.titleTextColor = UIColor.white
-    
-    
     config.spinnerLineWidth = 3.0
     config.foregroundColor = UIColor.black
     config.foregroundAlpha = 0.7
     
-    
     SwiftLoader.setConfig(config: config)
-    
-    
     SwiftLoader.show(title: "", animated: true)
-
 }
 
 
+// MARK: - Tab Bar Button Visibility
+
+/// Hides the middle button on a DashboardTabBarController.
+/// - Parameter vc: The view controller whose tab bar controller needs modification.
 func hideMiddleBtn(vc: UIViewController) {
-    
-    if let tabbar = vc.tabBarController as? DashboardTabBarController {
-        tabbar.button.isHidden = true
-    }
-    
+    (vc.tabBarController as? DashboardTabBarController)?.button.isHidden = true
 }
 
-
+/// Shows the middle button on a DashboardTabBarController.
+/// - Parameter vc: The view controller whose tab bar controller needs modification.
 func showMiddleBtn(vc: UIViewController) {
-    
-    if let tabbar = vc.tabBarController as? DashboardTabBarController {
-        tabbar.button.isHidden = false
-    }
-    
+    (vc.tabBarController as? DashboardTabBarController)?.button.isHidden = false
 }
 
+// MARK: - 2FA (Two Factor Authentication) Handling
+
+/// Turns on 2FA for email if the current view controller is `TwoFactorAuthVC`.
 func turnOn2FAForEmail() {
-    
-    if let vc = UIViewController.currentViewController() {
-         
-        if vc is TwoFactorAuthVC {
-            
-            if let update1 = vc as? TwoFactorAuthVC {
-                update1.isEmail = true
-                update1.EmailSwitch.setOn(true, animated: true)
-            }
-            
-        }
-             
-        
-    }
-    
+    update2FASetting(isOn: true, isEmail: true)
 }
 
+/// Turns on 2FA for phone if the current view controller is `TwoFactorAuthVC`.
 func turnOn2FAForPhone() {
-    
-    if let vc = UIViewController.currentViewController() {
-         
-        if vc is TwoFactorAuthVC {
-            
-            if let update1 = vc as? TwoFactorAuthVC {
-                update1.isPhone = true
-                update1.PhoneSwitch.setOn(true, animated: true)
-            }
-            
-        }
-             
-        
-    }
-    
+    update2FASetting(isOn: true, isEmail: false)
 }
 
+/// Turns off 2FA for email if the current view controller is `TwoFactorAuthVC`.
 func turnOff2FAForEmail() {
-    
-    if let vc = UIViewController.currentViewController() {
-         
-        if vc is TwoFactorAuthVC {
-            
-            if let update1 = vc as? TwoFactorAuthVC {
-                update1.isEmail = false
-                update1.EmailSwitch.setOn(false, animated: true)
-            }
-            
-        }
-             
-        
-    }
-    
+    update2FASetting(isOn: false, isEmail: true)
 }
 
+/// Turns off 2FA for phone if the current view controller is `TwoFactorAuthVC`.
 func turnOff2FAForPhone() {
-    
-    if let vc = UIViewController.currentViewController() {
-         
-        if vc is TwoFactorAuthVC {
-            
-            if let update1 = vc as? TwoFactorAuthVC {
-                update1.isPhone = false
-                update1.PhoneSwitch.setOn(false, animated: true)
-            }
-            
-        }
-             
-        
-    }
-    
+    update2FASetting(isOn: false, isEmail: false)
 }
 
+/// Updates the 2FA settings for either email or phone.
+/// - Parameters:
+///   - isOn: A boolean indicating whether to turn on or off the setting.
+///   - isEmail: A boolean to determine if the setting is for email or phone.
+private func update2FASetting(isOn: Bool, isEmail: Bool) {
+    if let vc = UIViewController.currentViewController() as? TwoFactorAuthVC {
+        if isEmail {
+            vc.isEmail = isOn
+            vc.EmailSwitch.setOn(isOn, animated: true)
+        } else {
+            vc.isPhone = isOn
+            vc.PhoneSwitch.setOn(isOn, animated: true)
+        }
+    }
+}
 
+// MARK: - Date Transformation
+
+/// Transforms a JSON value into a `Date`.
+/// - Parameter value: The JSON value to be transformed.
+/// - Returns: A `Date` object or `nil` if transformation is not possible.
 func transformFromJSON(_ value: Any?) -> Date? {
+    guard let strValue = value as? String else { return nil }
     let formatter = DateFormatter()
     formatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSZ"
-    
-    guard let strValue = value as? String else { return nil }
     return formatter.date(from: strValue)
 }
 
+// MARK: - Safe Collection Access
+
 extension Collection {
+    /// Safely access elements of the collection.
+    /// - Parameter index: The index of the element to access.
+    /// - Returns: The element at the given index if it exists, otherwise `nil`.
     subscript(safe index: Index) -> Element? {
         return indices.contains(index) ? self[index] : nil
     }
 }
+
 
 
 func reloadGlobalUserInformation() {
@@ -680,251 +671,134 @@ func resetView(cell: VideoNode) {
 }
 
 
+// MARK: - UIView Extension for Spinning Animation
 extension UIView {
-    
+
+    // Static variable to associate each UIView instance with its original transform.
     private static var originalTransformKey: UInt8 = 0
-    
+
+    // Computed property to store and retrieve the original transform of the view.
     private var originalTransform: CGAffineTransform? {
         get {
-            return objc_getAssociatedObject(self, &UIView.originalTransformKey) as? CGAffineTransform
+            objc_getAssociatedObject(self, &UIView.originalTransformKey) as? CGAffineTransform
         }
-        set(newValue) {
+        set {
             objc_setAssociatedObject(self, &UIView.originalTransformKey, newValue, objc_AssociationPolicy.OBJC_ASSOCIATION_RETAIN_NONATOMIC)
         }
     }
     
+    /// Adds a continuous spinning animation to the view.
+    /// - Parameter duration: Duration of one complete spin. Default is 3.5 seconds.
     func spin(duration: Double = 3.5) {
         if originalTransform == nil {
             originalTransform = self.transform
         }
         
-        let rotationAnimation = CABasicAnimation(keyPath: "transform.rotation.z")
-        rotationAnimation.toValue = NSNumber(value: Double.pi * 2)
-        rotationAnimation.duration = duration
-        rotationAnimation.repeatCount = .infinity
+        let rotation = CABasicAnimation(keyPath: "transform.rotation.z")
+        rotation.toValue = NSNumber(value: Double.pi * 2)
+        rotation.duration = duration
+        rotation.repeatCount = .infinity
         
-        self.layer.add(rotationAnimation, forKey: "spinAnimation")
+        self.layer.add(rotation, forKey: "spinAnimation")
     }
     
+    /// Stops the spinning animation and resets the view to its original transform.
     func stopSpin() {
         self.layer.removeAnimation(forKey: "spinAnimation")
-        if let originalTransform = originalTransform {
-            self.transform = originalTransform
+        if let original = originalTransform {
+            self.transform = original
         }
     }
-
-
 }
 
-
+// MARK: - Delayed Pan Gesture Recognizer
 class DelayedPanGestureRecognizer: UIPanGestureRecognizer {
+
     private var touchDownTime: Date?
-    private let delayTime: TimeInterval = 0.25 // Set the delay time to 0.25 seconds
-    
-    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent) {
-        super.touchesBegan(touches, with: event)
-        
+    private let delayTime: TimeInterval = 0.25
+
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        super.touchesBegan(touches, with: event!)
         touchDownTime = Date()
     }
-    
-    override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent) {
-        super.touchesMoved(touches, with: event)
+
+    override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
+        super.touchesMoved(touches, with: event!)
         
-        if let touchDownTime = touchDownTime,
-           Date().timeIntervalSince(touchDownTime) < delayTime {
-            state = .failed // Delay recognition of the pan gesture until the user has held their finger down for at least delayTime
+        if let downTime = touchDownTime, Date().timeIntervalSince(downTime) < delayTime {
+            state = .failed
         }
     }
 }
 
+// MARK: - Password Generation
 func generateRandomPassword() -> String {
     let numbers = Array("0123456789")
-    let upperCaseLetters = Array("ABCDEFGHIJKLMNOPQRSTUVWXYZ")
-    let lowerCaseLetters = Array("abcdefghijklmnopqrstuvwxyz")
-    let specialCharacters = Array("!@#$%^&*()_+-=[]{}|;:,.<>?/`~")
+    let upperCase = Array("ABCDEFGHIJKLMNOPQRSTUVWXYZ")
+    let lowerCase = Array("abcdefghijklmnopqrstuvwxyz")
+    let specialChars = Array("!@#$%^&*()_+-=[]{}|;:,.<>?/`~")
     
-    var passwordCharacters = [Character]()
+    var characters = [Character]()
     
-    // Ensure password has at least one number, one uppercase letter, one lowercase letter, and one special character
-    passwordCharacters.append(numbers.randomElement()!)
-    passwordCharacters.append(upperCaseLetters.randomElement()!)
-    passwordCharacters.append(lowerCaseLetters.randomElement()!)
-    passwordCharacters.append(specialCharacters.randomElement()!)
+    characters.append(contentsOf: [numbers, upperCase, lowerCase, specialChars].compactMap { $0.randomElement() })
     
-    // Generate the rest of the password
     for _ in 4...8 {
-        let allCharacters = numbers + upperCaseLetters + lowerCaseLetters + specialCharacters
-        passwordCharacters.append(allCharacters.randomElement()!)
+        characters.append((numbers + upperCase + lowerCase + specialChars).randomElement()!)
     }
     
-    passwordCharacters.shuffle()
+    characters.shuffle()
     
-    let password = String(passwordCharacters)
-    let modifiedPassword = "sbrpwdfnu-" + password  // Add "sbrpwdfnu-" prefix to the generated password
-    
-    return modifiedPassword
+    return "sbrpwdfnu-" + String(characters)
 }
 
+// MARK: - Review Request Logic
 func requestAppleReview() {
+    guard let userCreation = _AppCoreData.userDataSource.value?.createdAt else { return }
 
-    // Retrieve the date when the user was created
-    guard let userCreationDate = _AppCoreData.userDataSource.value?.createdAt else {
-        return
-    }
-
-    // Get the current date
     let currentDate = Date()
-
-    // Create a Calendar instance
     let calendar = Calendar.current
+    let daysSinceCreation = calendar.dateComponents([.day], from: userCreation, to: currentDate).day ?? 0
 
-    // Calculate the difference in days between the current date and the user creation date
-    let daysSinceCreation = calendar.dateComponents([.day], from: userCreationDate, to: currentDate).day ?? 0
-
-    // Check if the user was created more than 1 days ago
-    if daysSinceCreation >= 1 {
-
-        // Retrieve the date of the last review request from UserDefaults
-        if let lastReviewRequestDate = UserDefaults.standard.object(forKey: "lastReviewRequestDate") as? Date {
-
-            // Calculate the difference in months between the current date and the last review request date
-            let monthsSinceLastRequest = calendar.dateComponents([.month], from: lastReviewRequestDate, to: currentDate).month ?? 0
-
-            // Check if at least a month has passed since the last review request
-            if monthsSinceLastRequest >= 1 {
-                // Request the review
-                if let scene = UIApplication.shared.connectedScenes.first as? UIWindowScene {
-                    AppStoreReviewManager.requestReviewIfAppropriate(inScene: scene)
-                    // Update the date of the last review request
-                    UserDefaults.standard.set(currentDate, forKey: "lastReviewRequestDate")
-                }
-     
-            }
-            
-        } else {
-            
-            // If there's no date of the last review request, it means it's the first time the review is being requested
-            if let scene = UIApplication.shared.connectedScenes.first as? UIWindowScene {
-                AppStoreReviewManager.requestReviewIfAppropriate(inScene: scene)
-                // Store the date of this review request
-                UserDefaults.standard.set(currentDate, forKey: "lastReviewRequestDate")
-            }
-   
+    if daysSinceCreation >= 1, let lastRequest = UserDefaults.standard.object(forKey: "lastReviewRequestDate") as? Date {
+        let monthsSinceLast = calendar.dateComponents([.month], from: lastRequest, to: currentDate).month ?? 0
+        if monthsSinceLast >= 1 {
+            requestReviewAndUpdateDate(currentDate)
         }
+    } else {
+        requestReviewAndUpdateDate(currentDate)
     }
 }
 
-class CustomSlider: UISlider {
-    
-    @IBInspectable var trackHeight: CGFloat = 1
-    @IBInspectable var highlightedTrackHeight: CGFloat = 7.0
-    @IBInspectable var thumbRadius: CGFloat = 2
-    @IBInspectable var highlightedThumbRadius: CGFloat = 10
-    @IBInspectable var hitBoxSize: CGFloat = 40 // Size of hit box area
-    private var thumbImageCache: [CGFloat: UIImage] = [:]
-
-    
-    lazy var thumbView: UIView = {
-        let thumb = UIView()
-        thumb.backgroundColor = .clear
-        return thumb
-    }()
-    
-    override init(frame: CGRect) {
-        super.init(frame: frame)
-        setupSlider()
+private func requestReviewAndUpdateDate(_ currentDate: Date) {
+    if let scene = UIApplication.shared.connectedScenes.first as? UIWindowScene {
+        AppStoreReviewManager.requestReviewIfAppropriate(inScene: scene)
+        UserDefaults.standard.set(currentDate, forKey: "lastReviewRequestDate")
     }
-    
-    required init?(coder aDecoder: NSCoder) {
-        super.init(coder: aDecoder)
-      
-    }
-    
-    private func setupSlider() {
-        let thumb = thumbImage(radius: thumbRadius)
-        setThumbImage(thumb, for: .normal)
-        
-        self.maximumTrackTintColor = .darkGray
-        self.minimumTrackTintColor = .secondary
-        
-    }
-    
-    func thumbImage(radius: CGFloat) -> UIImage {
-        // Check for a cached image for the given radius
-        if let cachedImage = thumbImageCache[radius] {
-            return cachedImage
-        }
-        
-        // If there's no cached image, generate a new one
-        thumbView.frame = CGRect(x: 0, y: 0, width: radius * 2, height: radius * 2)
-        thumbView.layer.cornerRadius = radius
-        thumbView.layer.masksToBounds = true
-        
-        let renderer = UIGraphicsImageRenderer(bounds: thumbView.bounds)
-        let generatedImage = renderer.image { rendererContext in
-            thumbView.layer.render(in: rendererContext.cgContext)
-        }
-        
-        // Cache the generated image for the current radius
-        thumbImageCache[radius] = generatedImage
-        
-        return generatedImage
-    }
-
-    
-    // Override hit test to expand touch area
-    override func point(inside point: CGPoint, with event: UIEvent?) -> Bool {
-        let expandedBounds = bounds.insetBy(dx: -(hitBoxSize / 2 - thumbRadius), dy: -(hitBoxSize / 2 - thumbRadius))
-        return expandedBounds.contains(point)
-    }
-    
-    override func trackRect(forBounds bounds: CGRect) -> CGRect {
-        var newRect = super.trackRect(forBounds: bounds)
-        newRect.size.height = trackHeight
-        return newRect
-    }
-    
-    func startLayout() {
-            let thumb = thumbImage(radius: highlightedThumbRadius)
-            setThumbImage(thumb, for: .normal)
-            trackHeight = highlightedTrackHeight
-            hitBoxSize = highlightedThumbRadius * 2 + 40 // You might want to adjust this value
-            setNeedsDisplay()
-        }
-
-        func endLayout() {
-            let thumb = thumbImage(radius: thumbRadius)
-            setThumbImage(thumb, for: .normal)
-            trackHeight = 1
-            hitBoxSize = thumbRadius * 2 + 40 // You might want to adjust this value
-            setNeedsDisplay()
-        }
-    
 }
 
-
-
+// MARK: - UserDefaults Management
 func removeAllUserDefaults() {
-    for key in UserDefaults.standard.dictionaryRepresentation().keys {
-        UserDefaults.standard.removeObject(forKey: key)
+    UserDefaults.standard.dictionaryRepresentation().keys.forEach {
+        UserDefaults.standard.removeObject(forKey: $0)
     }
 }
 
-
-func requestTrackingAuthorization(userId: String) {
-
-}
-
+// MARK: - UIView Extension for Auto Layout
 extension UIView {
+
+    /// Pins the view to the edges of its superview using Auto Layout constraints.
     func pinToSuperviewEdges() {
         guard let superview = superview else { return }
         translatesAutoresizingMaskIntoConstraints = false
-        topAnchor.constraint(equalTo: superview.topAnchor).isActive = true
-        bottomAnchor.constraint(equalTo: superview.bottomAnchor).isActive = true
-        leadingAnchor.constraint(equalTo: superview.leadingAnchor).isActive = true
-        trailingAnchor.constraint(equalTo: superview.trailingAnchor).isActive = true
+        NSLayoutConstraint.activate([
+            topAnchor.constraint(equalTo: superview.topAnchor),
+            bottomAnchor.constraint(equalTo: superview.bottomAnchor),
+            leadingAnchor.constraint(equalTo: superview.leadingAnchor),
+            trailingAnchor.constraint(equalTo: superview.trailingAnchor)
+        ])
     }
 }
+
 
 
 class ShadowedView: UIView {

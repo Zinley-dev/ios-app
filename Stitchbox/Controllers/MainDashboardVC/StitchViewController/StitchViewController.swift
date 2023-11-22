@@ -356,7 +356,7 @@ extension StitchViewController: ASCollectionDataSource {
                     return ASCellNode()
                 }
                 
-                let node = VideoNode(with: post, isPreview: false)
+                let node = VideoNode(with: post, isPreview: false, firstItem: false)
                 node.neverShowPlaceholders = true
                 node.debugName = "Node \(indexPath.row)"
                 

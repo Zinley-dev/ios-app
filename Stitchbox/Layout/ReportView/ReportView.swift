@@ -147,3 +147,12 @@ class ReportView: UIViewController, UITableViewDelegate, UITableViewDataSource, 
         present(alert, animated: true, completion: nil)
     }
 }
+
+extension ReportView {
+    /// Sets up the view for reporting a post.
+    /// - Parameter postId: The identifier of the post to be reported.
+    func setupForPostReporting(with postId: String) {
+        self.post_report = true
+        self.postId = postId
+    }
+}

@@ -55,11 +55,11 @@ class VideoNode: ASCellNode, ASVideoNodeDelegate {
     var selectedStitch = false
     var isSave = false
     var isFollowingUser = false
-    var allowStitch = false
     var saveCount = 0
     var likeCount = 0
     var isLike = false
     var allowProcess = true
+    var firstItem = false
     private var isPreview: Bool!
     
     // Constants
@@ -75,15 +75,16 @@ class VideoNode: ASCellNode, ASVideoNodeDelegate {
     /// - Parameters:
     ///   - post: The `PostModel` instance containing the data for the cell.
     ///   - isPreview: A Boolean flag indicating if this is a preview.
-    init(with post: PostModel, isPreview: Bool) {
+    init(with post: PostModel, isPreview: Bool, firstItem: Bool) {
         // Assign the provided post and preview flag.
         self.post = post
         self.isPreview = isPreview
+        self.firstItem = firstItem
 
         // Initialize the image and video nodes.
         self.cellImageNode = ASNetworkImageNode()
         self.cellVideoNode = ASVideoNode()
-
+    
         // Call the superclass initializer.
         super.init()
 
@@ -169,7 +170,7 @@ class VideoNode: ASCellNode, ASVideoNodeDelegate {
     override func layoutSpecThatFits(_ constrainedSize: ASSizeRange) -> ASLayoutSpec {
         
         // Define common padding values for the video or image node within the cell.
-        let videoPadding = UIEdgeInsets(top: 4, left: 8, bottom: 37, right: 8)
+        let videoPadding = UIEdgeInsets(top: 2, left: 8, bottom: 37, right: 8)
 
         // Determine the child node based on the presence of a muxPlaybackId.
         // Using ternary operator for concise conditional assignment.
@@ -384,7 +385,7 @@ extension VideoNode {
             
             // Setting buffer duration preference and rechecking status
             cellVideoNode.currentItem?.preferredForwardBufferDuration = 5
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.75) { [weak self] in
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.85) { [weak self] in
                 guard let self = self, let status = self.cellVideoNode.currentItem?.status else {
                     print("Playback status check failed - status unavailable")
                     self?.resetAssets()
@@ -393,51 +394,6 @@ extension VideoNode {
                 self.handlePlaybackBasedOn(status: status, withPrefix: prefix)
             }
         }
-    }
-
-    /// Adds a spinner to indicate loading or buffering.
-    func addSpinner() {
-        // Ensuring spinner is only added once
-        if spinnerRemoved {
-            spinner.center = view.center
-            view.addSubview(spinner)
-            spinner.startAnimating()
-            spinnerRemoved = false
-        }
-
-        // Remove spinner or retry playback based on status after a delay
-        DispatchQueue.main.asyncAfter(deadline: .now() + 2) { [weak self] in
-            guard let self = self else { return }
-
-            // Continue playback if already playing
-            if self.cellVideoNode.isPlaying() {
-                self.removeSpinner()
-                return
-            }
-
-            // Retry or reset based on current item's status and buffer state
-            self.retryOrResetPlaybackBasedOnCurrentStatus()
-        }
-    }
-
-    /// Checks if the buffer is empty.
-    /// - Parameter loadedTimeRanges: Array of loaded time ranges.
-    /// - Returns: Boolean indicating if the buffer is empty.
-    func bufferIsEmpty(loadedTimeRanges: [NSValue]) -> Bool {
-        // Calculating buffer end time and comparing with current time
-        guard let lastTimeRange = loadedTimeRanges.last as? CMTimeRange else {
-            return true
-        }
-        let bufferEndTime = CMTimeAdd(lastTimeRange.start, lastTimeRange.duration)
-        let currentTime = cellVideoNode.player?.currentTime() ?? CMTime.zero
-        return bufferEndTime < currentTime
-    }
-
-    /// Removes the spinner from the view.
-    func removeSpinner() {
-        spinnerRemoved = true
-        spinner.stopAnimating()
-        spinner.removeFromSuperview()
     }
     
     /// Resets the video assets and attempts playback.
@@ -517,6 +473,13 @@ extension VideoNode {
         statusObservation?.invalidate()
         statusObservation = nil
     }
+    
+    /// Seek to zero time
+    func seekToZero() {
+        let time = CMTime(seconds: 0, preferredTimescale: 1)
+        cellVideoNode.player?.seek(to: time)
+        playTimeBar.setValue(Float(0), animated: true)
+    }
 
     /// Handles playback based on the current status of the video node.
     /// - Parameters:
@@ -546,7 +509,7 @@ extension VideoNode {
             resetAssets()
             return
         }
-
+        
         switch status {
         case .readyToPlay:
             startPlayback()
@@ -574,6 +537,55 @@ extension VideoNode {
             return false
         }
     }
+}
+
+extension VideoNode {
+    
+    /// Adds a spinner to indicate loading or buffering.
+    func addSpinner() {
+        // Ensuring spinner is only added once
+        if spinnerRemoved {
+            spinner.center = view.center
+            view.addSubview(spinner)
+            spinner.startAnimating()
+            spinnerRemoved = false
+        }
+
+        // Remove spinner or retry playback based on status after a delay
+        DispatchQueue.main.asyncAfter(deadline: .now() + 2) { [weak self] in
+            guard let self = self else { return }
+
+            // Continue playback if already playing
+            if self.cellVideoNode.isPlaying() {
+                self.removeSpinner()
+                return
+            }
+
+            // Retry or reset based on current item's status and buffer state
+            self.retryOrResetPlaybackBasedOnCurrentStatus()
+        }
+    }
+
+    /// Checks if the buffer is empty.
+    /// - Parameter loadedTimeRanges: Array of loaded time ranges.
+    /// - Returns: Boolean indicating if the buffer is empty.
+    func bufferIsEmpty(loadedTimeRanges: [NSValue]) -> Bool {
+        // Calculating buffer end time and comparing with current time
+        guard let lastTimeRange = loadedTimeRanges.last as? CMTimeRange else {
+            return true
+        }
+        let bufferEndTime = CMTimeAdd(lastTimeRange.start, lastTimeRange.duration)
+        let currentTime = cellVideoNode.player?.currentTime() ?? CMTime.zero
+        return bufferEndTime < currentTime
+    }
+
+    /// Removes the spinner from the view.
+    func removeSpinner() {
+        spinnerRemoved = true
+        spinner.stopAnimating()
+        spinner.removeFromSuperview()
+    }
+    
 }
 
 
@@ -656,6 +668,11 @@ extension VideoNode {
         
         // Load the video asset asynchronously.
         loadVideoAssetAsync(with: post)
+        
+        // Play video if first item on list.
+        if firstItem {
+            playVideo()
+        }
     }
     
     /// Sets up the appearance of cellVideoNode.
@@ -749,6 +766,7 @@ extension VideoNode {
         // Setup the time view if the post contains a muxPlaybackId.
         if !post.muxPlaybackId.isEmpty {
             setupTimeView()
+            setupFunction()
         }
     }
 
@@ -802,7 +820,7 @@ extension VideoNode {
             childView.topAnchor.constraint(equalTo: parentView.topAnchor, constant: constant),
             childView.leadingAnchor.constraint(equalTo: parentView.leadingAnchor, constant: constant),
             childView.trailingAnchor.constraint(equalTo: parentView.trailingAnchor, constant: constant),
-            childView.heightAnchor.constraint(equalToConstant: 70) // Height of the header view.
+            childView.heightAnchor.constraint(equalToConstant: 80) // Height of the header view.
         ])
     }
 
@@ -909,6 +927,11 @@ extension VideoNode {
         // Like Button Tap Gesture
         let likeTap = createTapGestureRecognizer(target: self, action: #selector(VideoNode.likeTapped))
         self.buttonView.likeBtn.addGestureRecognizer(likeTap)
+        
+        // Like Button Tap Gesture
+        let likeTap1 = createTapGestureRecognizer(target: self, action: #selector(VideoNode.likeTapped))
+        self.buttonView.likeCountLbl.addGestureRecognizer(likeTap1)
+        self.buttonView.likeCountLbl.isUserInteractionEnabled = true
 
         // Stitch Button Tap Gesture (Footer View)
         let stitchTap = createTapGestureRecognizer(target: self, action: #selector(VideoNode.stitchTapped))
@@ -917,10 +940,20 @@ extension VideoNode {
         // Save Button Tap Gesture
         let saveTap = createTapGestureRecognizer(target: self, action: #selector(VideoNode.onClickSave))
         self.buttonView.saveBtn.addGestureRecognizer(saveTap)
+        
+        // Save Button Tap Gesture
+        let saveTap1 = createTapGestureRecognizer(target: self, action: #selector(VideoNode.onClickSave))
+        self.buttonView.saveCountLbl.addGestureRecognizer(saveTap1)
+        self.buttonView.saveCountLbl.isUserInteractionEnabled = true
 
         // Comment Button Tap Gesture
         let commentTap = createTapGestureRecognizer(target: self, action: #selector(VideoNode.commentTapped))
         self.buttonView.commentBtn.addGestureRecognizer(commentTap)
+        
+        // Comment Button Tap Gesture
+        let commentTap1 = createTapGestureRecognizer(target: self, action: #selector(VideoNode.commentTapped))
+        self.buttonView.commentCountLbl.addGestureRecognizer(commentTap1)
+        self.buttonView.commentCountLbl.isUserInteractionEnabled = true
 
         // Double Tap Gesture (Like Handler)
         let doubleTap = createTapGestureRecognizer(target: self, action: #selector(VideoNode.likeHandle), taps: 2)
@@ -1017,29 +1050,45 @@ extension VideoNode {
         }
     }
     
-    /// Handles the UI updates based on reaction data.
+    // MARK: - Reaction Handling
+
+    /// Handles updating the UI elements for reactions like follow, like, and save.
     /// - Parameters:
-    ///   - isFollower: Boolean indicating if the user is a follower.
-    ///   - isFollowing: Boolean indicating if the user is following.
-    ///   - isLiked: Boolean indicating if the post is liked.
-    ///   - isSaved: Boolean indicating if the post is saved.
+    ///   - isFollower: Indicates whether the current user is a follower.
+    ///   - isFollowing: Indicates whether the current user is following.
+    ///   - isLiked: Indicates whether the current post is liked.
+    ///   - isSaved: Indicates whether the current post is saved.
     func handleReaction(isFollower: Bool, isFollowing: Bool, isLiked: Bool, isSaved: Bool) {
+        guard let finalPost = post else { return }
+
         // Configuring the follow button based on the follower status.
-        if isFollower || post.owner?.id == _AppCoreData.userDataSource.value?.userID {
-            self.hideFollowBtn()
+        if isFollower || finalPost.owner?.id == _AppCoreData.userDataSource.value?.userID {
+            hideFollowBtn()
         } else {
-            self.setupFollowBtn()
+            setupFollowBtn()
         }
-        
+
         // Updating save status and animation.
-        self.isSave = isSaved
-        isSaved ? self.saveAnimation() : self.unSaveAnimation()
+        isSave = isSaved
+        isSaved ? saveAnimation() : unSaveAnimation()
 
         // Updating like status and image.
-        self.isLike = isLiked
-        let likeImage = isLiked ? likeImage! : emptyLikeImage!
+        isLike = isLiked
+        updateLikeButtonImage(isLiked: isLiked)
+    }
+
+    /// Updates the like button image based on the like status.
+    /// - Parameter isLiked: Indicates whether the current post is liked.
+    private func updateLikeButtonImage(isLiked: Bool) {
+        let likeImageToUse = isLiked ? likeImage : emptyLikeImage
+        guard let likeImage = likeImageToUse else {
+            print("Error: likeImage or emptyLikeImage is nil")
+            return
+        }
+
         buttonView.setLikeImage(image: likeImage)
     }
+
     
     /// Processes the status of stitch (following) based on various conditions.
     /// - Parameter isFollowingMe: Boolean indicating if the user is following me.
@@ -1241,7 +1290,7 @@ extension VideoNode {
 
     /// Handles the stitch action.
     @objc func stitchTapped() {
-        guard let viewController = UIViewController.currentViewController(), allowStitch else {
+        guard let viewController = UIViewController.currentViewController() else {
             showStitchError()
             return
         }
@@ -1265,24 +1314,20 @@ extension VideoNode {
         global_cornerRadius = 35
         
         // Configure view controller based on its type
-        if let parentVC = viewController as? ParentViewController {
-            updateParentViewController(parentVC, with: stitchSettingVC)
+        if let feedVC = viewController as? FeedViewController {
+            updateFeedViewController(feedVC, with: stitchSettingVC)
         } else if let selectedParentVC = viewController as? SelectedParentVC {
-            updateSelectedParentViewController(selectedParentVC, with: stitchSettingVC)
+            updateSelectedViewController(selectedParentVC, with: stitchSettingVC)
         }
     }
 
     // Helper methods to update the view controller
-    private func updateParentViewController(_ viewController: ParentViewController, with stitchSettingVC: StitchSettingVC) {
+    private func updateFeedViewController(_ viewController: FeedViewController, with stitchSettingVC: StitchSettingVC) {
         stitchSettingVC.isSelected = false
-        if viewController.isFeed {
-            viewController.feedViewController.editeddPost = post
-        } else {
-            viewController.stitchViewController.editeddPost = post
-        }
+        viewController.editeddPost = post
     }
 
-    private func updateSelectedParentViewController(_ viewController: SelectedParentVC, with stitchSettingVC: StitchSettingVC) {
+    private func updateSelectedViewController(_ viewController: SelectedParentVC, with stitchSettingVC: StitchSettingVC) {
         stitchSettingVC.isSelected = true
         if viewController.isRoot {
             viewController.selectedRootPostVC.editeddPost = post
@@ -1308,11 +1353,11 @@ extension VideoNode {
             // Construct the error message.
             let message = "@\(stitchUsername) has to follow you to enable stitch or a technical issue has occurred"
             
-            // Show error in the ParentViewController, if applicable.
-            if let update1 = vc as? ParentViewController {
+            // Show error in the viewController, if applicable.
+            if let update1 = vc as? FeedViewController {
                 update1.showErrorAlert(title, msg: message)
-            } else {
-                // Handle the case where vc is not a ParentViewController, if needed.
+            } else if let update1 = vc as? SelectedRootPostVC {
+                update1.showErrorAlert(title, msg: message)
             }
         }
     }
