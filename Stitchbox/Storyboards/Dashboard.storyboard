@@ -1823,40 +1823,18 @@
                                     <constraint firstAttribute="width" constant="25" id="x90-4j-ZtT"/>
                                 </constraints>
                             </imageView>
-                            <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="3l2-q1-4qV">
-                                <rect key="frame" x="0.0" y="50" width="375" height="762"/>
-                                <subviews>
-                                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="mSD-Jp-xqO" customClass="FLAnimatedImageView">
-                                        <rect key="frame" x="150" y="343.66666666666669" width="75" height="75"/>
-                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                        <constraints>
-                                            <constraint firstAttribute="width" constant="75" id="RYU-iz-JP5"/>
-                                            <constraint firstAttribute="height" constant="75" id="ut6-dw-SAe"/>
-                                        </constraints>
-                                    </imageView>
-                                </subviews>
-                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                <constraints>
-                                    <constraint firstItem="mSD-Jp-xqO" firstAttribute="centerX" secondItem="3l2-q1-4qV" secondAttribute="centerX" id="MB0-c2-EsG"/>
-                                    <constraint firstItem="mSD-Jp-xqO" firstAttribute="centerY" secondItem="3l2-q1-4qV" secondAttribute="centerY" id="q3S-ah-kit"/>
-                                </constraints>
-                            </view>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="lse-ae-jQ9"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
-                            <constraint firstAttribute="bottom" secondItem="3l2-q1-4qV" secondAttribute="bottom" id="1c0-VS-JeD"/>
                             <constraint firstItem="DRo-1t-eZk" firstAttribute="centerX" secondItem="l5L-je-ob4" secondAttribute="centerX" id="1wt-mu-RDy"/>
                             <constraint firstItem="l5L-je-ob4" firstAttribute="top" secondItem="lse-ae-jQ9" secondAttribute="top" constant="32" id="AT4-Va-Mrg"/>
-                            <constraint firstItem="3l2-q1-4qV" firstAttribute="leading" secondItem="lse-ae-jQ9" secondAttribute="leading" id="Chd-Fy-JuL"/>
                             <constraint firstItem="ycH-Y1-r4b" firstAttribute="top" secondItem="HUw-30-NcT" secondAttribute="bottom" constant="16" id="O2j-AP-S7B"/>
                             <constraint firstItem="ycH-Y1-r4b" firstAttribute="leading" secondItem="gWG-hK-ALS" secondAttribute="leading" constant="1" id="RK5-Af-Elg"/>
                             <constraint firstItem="HUw-30-NcT" firstAttribute="top" secondItem="l5L-je-ob4" secondAttribute="bottom" constant="16" id="SFN-VI-dK6"/>
                             <constraint firstItem="DRo-1t-eZk" firstAttribute="centerY" secondItem="l5L-je-ob4" secondAttribute="centerY" id="ZVd-0r-Cus"/>
-                            <constraint firstItem="3l2-q1-4qV" firstAttribute="top" secondItem="lse-ae-jQ9" secondAttribute="top" id="k0o-Yw-buO"/>
                             <constraint firstItem="l5L-je-ob4" firstAttribute="centerX" secondItem="gWG-hK-ALS" secondAttribute="centerX" id="kNt-9g-3jY"/>
                             <constraint firstItem="HUw-30-NcT" firstAttribute="leading" secondItem="lse-ae-jQ9" secondAttribute="leading" constant="8" id="kv4-vo-9rR"/>
-                            <constraint firstItem="lse-ae-jQ9" firstAttribute="trailing" secondItem="3l2-q1-4qV" secondAttribute="trailing" id="leh-bt-4p3"/>
                             <constraint firstItem="lse-ae-jQ9" firstAttribute="bottom" secondItem="ycH-Y1-r4b" secondAttribute="bottom" id="mLE-5Y-l4H"/>
                             <constraint firstAttribute="trailing" secondItem="ycH-Y1-r4b" secondAttribute="trailing" constant="1" id="onw-ND-3Df"/>
                         </constraints>
@@ -1866,8 +1844,6 @@
                         <outlet property="imgHeight" destination="wjk-MH-mrp" id="4Ty-nG-Bws"/>
                         <outlet property="imgWidth" destination="mnt-dF-up2" id="5ru-vk-Xgg"/>
                         <outlet property="linkImg" destination="DRo-1t-eZk" id="BPK-kX-1z5"/>
-                        <outlet property="loadingImage" destination="mSD-Jp-xqO" id="kW2-dY-iSm"/>
-                        <outlet property="loadingView" destination="3l2-q1-4qV" id="XLz-2Z-A9c"/>
                         <outlet property="originalImg" destination="X30-QN-l8r" id="rQV-3i-oSb"/>
                         <outlet property="originalUsername" destination="8ju-Et-8NM" id="rVM-bo-hFG"/>
                         <outlet property="originalView" destination="3rH-aL-fDL" id="L0H-nf-t82"/>
@@ -9533,13 +9509,13 @@
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </systemColor>
         <systemColor name="systemBlueColor">
-            <color red="0.0" green="0.47843137254901963" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
         <systemColor name="systemGreenColor">
-            <color red="0.20392156862745098" green="0.7803921568627451" blue="0.34901960784313724" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color red="0.20392156859999999" green="0.78039215689999997" blue="0.34901960780000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
         <systemColor name="systemRedColor">
-            <color red="1" green="0.23137254901960785" blue="0.18823529411764706" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color red="1" green="0.23137254900000001" blue="0.18823529410000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
     </resources>
 </document>

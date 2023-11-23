@@ -523,7 +523,6 @@ extension RootNode {
         }
     }
 
-    
     // Seeks the video at a specific index to the beginning (time zero).
     func seekToZero(index: Int) {
         if let cell = self.mainCollectionNode.nodeForItem(at: IndexPath(row: index, section: 0)) as? VideoNode {
@@ -555,8 +554,6 @@ extension RootNode {
         // Update the cell's internal selected state.
         cell.isSelected = isSelected
     }
-
-
 
 }
 
@@ -715,8 +712,6 @@ extension RootNode {
         node.hideView()
         self.selectPostCollectionView.isHidden = false
     }
-
-
     
     /// Hides the stitched view for a given node.
     /// - Parameter node: The `VideoNode` whose view is to be hidden.

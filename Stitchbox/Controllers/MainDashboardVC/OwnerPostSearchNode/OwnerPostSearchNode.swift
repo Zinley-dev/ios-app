@@ -16,7 +16,7 @@ class OwnerPostSearchNode: ASCellNode {
     var isSave: Bool!
     var nameNode: ASTextNode!
     var imageNode: ASNetworkImageNode!
-    var FontSize: CGFloat = 13
+    var fontSize: CGFloat = 13
     let paragraphStyles = NSMutableParagraphStyle()
     private var didSetup = false
     
@@ -45,7 +45,7 @@ class OwnerPostSearchNode: ASCellNode {
         textNode.attributedText = NSAttributedString(
             string: "0",
             attributes: [
-                NSAttributedString.Key.font: FontManager.shared.roboto(.Regular, size: FontSize - 3), // Using the Roboto Regular style as an example
+                NSAttributedString.Key.font: FontManager.shared.roboto(.Regular, size: fontSize - 3), // Using the Roboto Regular style as an example
                 NSAttributedString.Key.foregroundColor: UIColor.white,
                 NSAttributedString.Key.paragraphStyle: paragraphStyle
             ]
@@ -80,7 +80,7 @@ class OwnerPostSearchNode: ASCellNode {
         textNode.attributedText = NSAttributedString(
             string: "0",
             attributes: [
-                NSAttributedString.Key.font: FontManager.shared.roboto(.Regular, size: FontSize), // Using the Roboto Regular style
+                NSAttributedString.Key.font: FontManager.shared.roboto(.Regular, size: fontSize), // Using the Roboto Regular style
                 NSAttributedString.Key.foregroundColor: UIColor.white,
                 NSAttributedString.Key.paragraphStyle: paragraphStyle
             ]
@@ -99,7 +99,7 @@ class OwnerPostSearchNode: ASCellNode {
         textNode.attributedText = NSAttributedString(
             string: "",
             attributes: [
-                NSAttributedString.Key.font: FontManager.shared.roboto(.Bold, size: FontSize), // Using the Roboto Bold style
+                NSAttributedString.Key.font: FontManager.shared.roboto(.Bold, size: fontSize), // Using the Roboto Bold style
                 NSAttributedString.Key.foregroundColor: UIColor.white,
                 NSAttributedString.Key.paragraphStyle: paragraphStyle
             ]
@@ -160,7 +160,7 @@ class OwnerPostSearchNode: ASCellNode {
                 infoNode.attributedText = NSAttributedString(
                     string: "@\(username)",
                     attributes: [
-                        NSAttributedString.Key.font: FontManager.shared.roboto(.Bold, size: FontSize), // Using the Roboto Bold style
+                        NSAttributedString.Key.font: FontManager.shared.roboto(.Bold, size: fontSize), // Using the Roboto Bold style
                         NSAttributedString.Key.foregroundColor: UIColor.white,
                         NSAttributedString.Key.paragraphStyle: paragraphStyle
                     ]
@@ -177,7 +177,7 @@ class OwnerPostSearchNode: ASCellNode {
             let textToDisplay = String(combinedString.prefix(60))
 
             let textAttributes: [NSAttributedString.Key: Any] = [
-                NSAttributedString.Key.font: FontManager.shared.roboto(.Medium, size: FontSize), // Using the Roboto Medium style
+                NSAttributedString.Key.font: FontManager.shared.roboto(.Medium, size: fontSize), // Using the Roboto Medium style
                 NSAttributedString.Key.foregroundColor: UIColor.black,
                 NSAttributedString.Key.paragraphStyle: paragraphStyles
             ]
@@ -220,7 +220,7 @@ class OwnerPostSearchNode: ASCellNode {
         infoNode.attributedText = NSAttributedString(
             string: "@\(post.owner?.username ?? "")",
             attributes: [
-                NSAttributedString.Key.font: FontManager.shared.roboto(.Bold, size: FontSize), // Using the Roboto Bold style
+                NSAttributedString.Key.font: FontManager.shared.roboto(.Bold, size: fontSize), // Using the Roboto Bold style
                 NSAttributedString.Key.foregroundColor: UIColor.white,
                 NSAttributedString.Key.paragraphStyle: paragraphStyle
             ]
@@ -235,7 +235,7 @@ class OwnerPostSearchNode: ASCellNode {
         self.stitchCountNode.attributedText = NSAttributedString(
             string: "\(formatPoints(num: Double(post.totalStitchTo + post.totalMemberStitch)))",
             attributes: [
-                NSAttributedString.Key.font: FontManager.shared.roboto(.Regular, size: FontSize - 3), // Using the Roboto Regular style
+                NSAttributedString.Key.font: FontManager.shared.roboto(.Regular, size: fontSize - 3), // Using the Roboto Regular style
                 NSAttributedString.Key.foregroundColor: UIColor.white,
                 NSAttributedString.Key.paragraphStyle: paragraphStyle
             ]
@@ -250,7 +250,7 @@ class OwnerPostSearchNode: ASCellNode {
         self.countNode.attributedText = NSAttributedString(
             string: "\(formatPoints(num: Double(post.estimatedCount?.sizeViews ?? 0)))",
             attributes: [
-                NSAttributedString.Key.font: FontManager.shared.roboto(.Regular, size: FontSize - 3), // Using the Roboto Regular style
+                NSAttributedString.Key.font: FontManager.shared.roboto(.Regular, size: fontSize - 3), // Using the Roboto Regular style
                 NSAttributedString.Key.foregroundColor: UIColor.white,
                 NSAttributedString.Key.paragraphStyle: paragraphStyle
             ]
