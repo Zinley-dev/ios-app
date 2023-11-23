@@ -29,6 +29,7 @@ class RootNode: ASCellNode, UICollectionViewDelegateFlowLayout, UIAdaptivePresen
     // UI elements
     var galleryCollectionNode: ASCollectionNode! // Collection node for displaying a gallery of items.
     var mainCollectionNode: ASCollectionNode! // Main collection node for primary content display.
+    var selectPostCollectionView: SelectPostCollectionView!
 
     // Size properties
     var saveMin = CGSize(width: 0, height: 0) // Minimum size for some UI or layout purpose (context not clear from snippet).
@@ -45,43 +46,64 @@ class RootNode: ASCellNode, UICollectionViewDelegateFlowLayout, UIAdaptivePresen
     // MARK: - Initializer
 
     /// Initializes the view controller with a given post.
-    /// This initializer sets up collection nodes and various properties required for the view controller.
-    /// - Parameter post: The main post model around which this view controller is based.
+    /// - Parameters:
+    ///   - post: The main post model around which this view controller is based.
+    ///   - firstItem: A Boolean value indicating if this is the first item in the collection.
     init(with post: PostModel, firstItem: Bool) {
         self.firstItem = firstItem
-        // Assigning the passed post to rootPost, which acts as the primary data model for this controller.
-        self.rootPost = post
+        self.rootPost = post // Storing the provided post model
 
-        // Setting up the main collection node with a custom layout for page-like navigation.
+        // Setting up the main collection node with a custom layout for page-like navigation
         let layout = AnimatedCollectionViewLayout()
-        layout.animator = PageAttributesAnimator() // Using a custom animator for page transitions.
-        layout.minimumLineSpacing = 0.0           // Setting the spacing between lines to zero for a continuous layout.
-        layout.scrollDirection = .horizontal      // Setting the scroll direction to horizontal.
+        layout.animator = PageAttributesAnimator() // Custom animator for page transitions
+        layout.minimumLineSpacing = 0.0 // Zero spacing for a continuous layout
+        layout.scrollDirection = .horizontal // Horizontal scroll direction
 
-        // Initializing mainCollectionNode with the custom layout.
         mainCollectionNode = ASCollectionNode(collectionViewLayout: layout)
 
-        // Setting up galleryCollectionNode with a standard flow layout.
+        // Setting up the gallery collection node with a standard flow layout
         let galleryFlowLayout = UICollectionViewFlowLayout()
-        galleryFlowLayout.scrollDirection = .horizontal       // Horizontal scrolling for a gallery-like layout.
-        galleryFlowLayout.minimumLineSpacing = 12             // Spacing between lines.
-        galleryFlowLayout.minimumInteritemSpacing = 12        // Spacing between items.
+        galleryFlowLayout.scrollDirection = .horizontal // Horizontal scrolling for a gallery-like layout
+        galleryFlowLayout.minimumLineSpacing = 12 // Spacing between lines
+        galleryFlowLayout.minimumInteritemSpacing = 12 // Spacing between items
         galleryCollectionNode = ASCollectionNode(collectionViewLayout: galleryFlowLayout)
 
-        // Calling the superclass initializer.
-        super.init()
+        super.init() // Calling the superclass initializer
 
-        // Adding the root post to the posts array if it's not already present.
+        // Add the root post to the posts array if it's not already present
         if !posts.contains(post) {
             posts.append(post)
         }
 
-        // Setting up delegates for the main collection node.
-        // These delegates will handle events like cell selection, data provision, etc.
-        self.mainCollectionNode.delegate = self
-        self.mainCollectionNode.dataSource = self
+        // Ensure UI updates are on the main thread
+        DispatchQueue.main.async { [weak self] in
+            self?.addSubCollection()
+        }
+
+        // Set up the main collection node's delegate and data source
+        mainCollectionNode.delegate = self
+        mainCollectionNode.dataSource = self
+        
+        // Set up the gallery collection node's delegate and data source
+        galleryCollectionNode.delegate = self
+        galleryCollectionNode.dataSource = self
     }
+
     
+    /// Called just before the object is deallocated.
+    deinit {
+        // Nil out the delegate and dataSource of mainCollectionNode to prevent retain cycles
+        mainCollectionNode.delegate = nil
+        mainCollectionNode.dataSource = nil
+
+        // Nil out the delegate and dataSource of galleryCollectionNode for the same reason
+        galleryCollectionNode.delegate = nil
+        galleryCollectionNode.dataSource = nil
+
+        // Log a message to indicate that the object is being deallocated
+        print("RootNode is being deallocated.")
+    }
+
     /// Called when the view controller’s view is no longer visible.
     override func didExitVisibleState() {
         super.didExitVisibleState() // Always call the super implementation of lifecycle methods
@@ -121,6 +143,7 @@ extension RootNode {
     /// - Parameter constrainedSize: The size range within which the node must layout itself.
     /// - Returns: An ASLayoutSpec that describes the layout of the node.
     override func layoutSpecThatFits(_ constrainedSize: ASSizeRange) -> ASLayoutSpec {
+
         // Defining insets for the layout.
         // Insets can be adjusted to control the padding around the main collection node.
         let insets = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
@@ -128,6 +151,66 @@ extension RootNode {
         // Applying the insets to the mainCollectionNode.
         // ASInsetLayoutSpec wraps the mainCollectionNode with the defined insets.
         return ASInsetLayoutSpec(insets: insets, child: mainCollectionNode)
+    }
+    
+    /// Adds and configures the sub-collection view and gallery collection node to the view.
+    func addSubCollection() {
+        // Initialize and configure the selectPostCollectionView
+        self.selectPostCollectionView = SelectPostCollectionView()
+        self.selectPostCollectionView.translatesAutoresizingMaskIntoConstraints = false
+        self.view.addSubview(self.selectPostCollectionView)
+        self.selectPostCollectionView.isHidden = false
+
+        // Calculate the height for the collection view
+        let height = UIScreen.main.bounds.height * 1 / 4
+
+        // Activate constraints for selectPostCollectionView
+        NSLayoutConstraint.activate([
+            self.selectPostCollectionView.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: 0),
+            self.selectPostCollectionView.trailingAnchor.constraint(equalTo: self.view.trailingAnchor, constant: 0),
+            self.selectPostCollectionView.bottomAnchor.constraint(equalTo: self.view.bottomAnchor, constant: -8),
+            self.selectPostCollectionView.heightAnchor.constraint(equalToConstant: height)
+        ])
+
+        // Add galleryCollectionNode's view to the galleryView of selectPostCollectionView
+        selectPostCollectionView.galleryView.addSubview(galleryCollectionNode.view)
+        galleryCollectionNode.view.translatesAutoresizingMaskIntoConstraints = false
+
+        // Set constraints for galleryCollectionNode's view
+        NSLayoutConstraint.activate([
+            galleryCollectionNode.view.topAnchor.constraint(equalTo: selectPostCollectionView.galleryView.topAnchor, constant: 0),
+            galleryCollectionNode.view.leadingAnchor.constraint(equalTo: selectPostCollectionView.galleryView.leadingAnchor, constant: 0),
+            galleryCollectionNode.view.trailingAnchor.constraint(equalTo: selectPostCollectionView.galleryView.trailingAnchor, constant: 0),
+            galleryCollectionNode.view.bottomAnchor.constraint(equalTo: selectPostCollectionView.galleryView.bottomAnchor, constant: 0)
+        ])
+
+        // Configure the galleryCollectionNode
+        galleryCollectionNode.view.isPagingEnabled = false
+        galleryCollectionNode.view.backgroundColor = UIColor.clear
+        galleryCollectionNode.view.showsVerticalScrollIndicator = false
+        galleryCollectionNode.view.allowsSelection = true
+        galleryCollectionNode.allowsMultipleSelection = false
+        galleryCollectionNode.view.contentInsetAdjustmentBehavior = .never
+        galleryCollectionNode.needsDisplayOnBoundsChange = true
+
+        // Set up a tap gesture recognizer for the hide button
+        let hideTap = UITapGestureRecognizer(target: self, action: #selector(RootNode.hideTapped))
+        hideTap.numberOfTapsRequired = 1
+        self.selectPostCollectionView.hideBtn.addGestureRecognizer(hideTap)
+    }
+
+    
+    @objc func hideTapped() {
+        hideBtnPressed()
+    }
+    
+    func hideBtnPressed() {
+        if let cell = self.mainCollectionNode.nodeForItem(at: IndexPath(row: currentIndex!, section: 0)) as? VideoNode {
+
+            if selectPostCollectionView.isHidden == false {
+                cell.showView()
+            }
+        }
     }
 }
 
@@ -196,7 +279,7 @@ extension RootNode: ASCollectionDelegate, ASCollectionDataSource {
     // MARK: - ASCollectionDataSource
 
     /// Provides a node block for each item in the collection node.
-    /// Decides which type of node (e.g., VideoNode, StitchControlNode) to use based on the collection node.
+    /// Decides which type of node (e.g., VideoNode, StitchGalleryNode) to use based on the collection node.
     /// - Parameters:
     ///   - collectionNode: The collection node requesting the node.
     ///   - indexPath: The index path of the item.
@@ -208,7 +291,7 @@ extension RootNode: ASCollectionDelegate, ASCollectionDataSource {
         if collectionNode == galleryCollectionNode {
             // Handling gallery collection node.
             return {
-                let node = StitchControlNode(with: post)
+                let node = StitchGalleryNode(with: post)
                 self.configureNode(node, at: indexPath)
                 return node
             }
@@ -370,12 +453,35 @@ extension RootNode {
         }
     }
 
-    // Plays the video at a specified index and updates the root ID for notification.
+    /// Plays the video at a specified index and updates the appearance of the gallery collection node.
+    /// - Parameter index: The index of the video to be played.
     func playVideo(index: Int) {
+        // Retrieve the cell at the given index from the main collection node.
         if let cell = self.mainCollectionNode.nodeForItem(at: IndexPath(row: index, section: 0)) as? VideoNode {
+            
+            // Cell selection/deselection logic for the gallery collection node.
+            let indexPath = IndexPath(row: index, section: 0)
+            if let imgCell = galleryCollectionNode.nodeForItem(at: indexPath) as? StitchGalleryNode {
+                // Update the appearance of the selected cell.
+                updateCellAppearance(imgCell, isSelected: true)
+                galleryCollectionNode.selectItem(at: indexPath, animated: false, scrollPosition: [])
+                galleryCollectionNode.scrollToItem(at: indexPath, at: .centeredHorizontally, animated: true)
+
+                // Deselect all other cells in the gallery collection node.
+                for i in 0..<galleryCollectionNode.numberOfItems(inSection: 0) {
+                    if i != index, let otherCell = galleryCollectionNode.nodeForItem(at: IndexPath(row: i, section: 0)) as? StitchGalleryNode {
+                        updateCellAppearance(otherCell, isSelected: false)
+                    }
+                }
+            } else {
+                print("Couldn't cast to expected cell type.")
+            }
+            
+            // Play the video in the selected cell.
             cell.playVideo()
         }
     }
+
     
     // Seeks the video at a specific index to the beginning (time zero).
     func seekToZero(index: Int) {
@@ -383,6 +489,27 @@ extension RootNode {
             cell.seekToZero()
         }
     }
+    
+    /// Updates the appearance of a StitchGalleryNode based on its selection state.
+    /// - Parameters:
+    ///   - cell: The StitchGalleryNode whose appearance is to be updated.
+    ///   - isSelected: A Boolean indicating whether the cell is selected.
+    func updateCellAppearance(_ cell: StitchGalleryNode, isSelected: Bool) {
+        // Set the corner radius for the cell.
+        cell.layer.cornerRadius = 10
+
+        // Update the border width based on the selection state.
+        cell.layer.borderWidth = isSelected ? 2 : 0
+
+        // Update the border color based on the selection state.
+        // Uses a secondary color when selected, clear (no color) when not.
+        cell.layer.borderColor = isSelected ? UIColor.secondary.cgColor : UIColor.clear.cgColor
+
+        // Set the cell's selected state.
+        cell.isSelected = isSelected
+    }
+
+
 }
 
 extension RootNode {

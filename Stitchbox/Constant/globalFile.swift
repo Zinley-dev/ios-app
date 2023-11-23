@@ -377,13 +377,13 @@ func presentSwiftLoader() {
 /// Hides the middle button on a DashboardTabBarController.
 /// - Parameter vc: The view controller whose tab bar controller needs modification.
 func hideMiddleBtn(vc: UIViewController) {
-    (vc.tabBarController as? DashboardTabBarController)?.button.isHidden = true
+    (vc.tabBarController as? DashboardTabBarController)?.actionButton.isHidden = true
 }
 
 /// Shows the middle button on a DashboardTabBarController.
 /// - Parameter vc: The view controller whose tab bar controller needs modification.
 func showMiddleBtn(vc: UIViewController) {
-    (vc.tabBarController as? DashboardTabBarController)?.button.isHidden = false
+    (vc.tabBarController as? DashboardTabBarController)?.actionButton.isHidden = false
 }
 
 // MARK: - 2FA (Two Factor Authentication) Handling

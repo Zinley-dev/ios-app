@@ -25,210 +25,208 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
     
     var window: UIWindow?
     var voipRegistry: PKPushRegistry?
-    var volumeOutputList = [Float]()
-    static let sharedInstance = UIApplication.shared.delegate as! AppDelegate
-    var metricsManager: AppMetrics?
-    private var audioLevel : Float = 0.0
-    
-    private var previousVolume: Float = 0.0
-    private var outputVolumeObserver: NSKeyValueObservation?
-    private var consecutiveVolumeDownPresses: Int = 0
-    
-    func application(
-        _ application: UIApplication,
-        didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?)
-    -> Bool {
-    
-        
-        setupPixelSDK()
-        sendbird_authentication()
-        syncSendbirdAccount()
-        attemptRegisterForNotifications(application: application)
-        setupStyle()
-        setupOneSignal(launchOptions: launchOptions)
-        activeSpeaker()
-        setupVolumeObserver()
-        sentrySetup()
-        CacheManager.shared.asyncRemoveExpiredObjects()
-        metricsManager = AppMetrics()
-        
-        
-        return true
-        
+    var volumeOutputList = [Float]() // List to track volume output levels
+    static let sharedInstance = UIApplication.shared.delegate as! AppDelegate // Singleton instance of AppDelegate
+    var metricsManager: AppMetrics? // Manager for app metrics
+    private var audioLevel: Float = 0.0 // Private variable to track audio level
+
+    private var previousVolume: Float = 0.0 // Stores the previous volume level
+    private var outputVolumeObserver: NSKeyValueObservation? // Observer for volume changes
+    private var consecutiveVolumeDownPresses: Int = 0 // Counter for consecutive volume down button presses
+
+    /// Called when the application on first launch.
+    func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
+        // Set up various components and services used in the app
+        setupPixelSDK() // Setup for Pixel SDK
+        sendbird_authentication() // Authentication for Sendbird
+        syncSendbirdAccount() // Syncing Sendbird account
+        attemptRegisterForNotifications(application: application) // Register for push notifications
+        setupStyle() // Set up UI style
+        setupOneSignal(launchOptions: launchOptions) // Setup for OneSignal
+        activeSpeaker() // Method related to handling the active speaker
+        setupVolumeObserver() // Set up an observer for volume changes
+        sentrySetup() // Setup for Sentry
+        CacheManager.shared.asyncRemoveExpiredObjects() // Clear expired objects from cache
+        metricsManager = AppMetrics() // Initialize the metrics manager
+
+        return true // Indicate successful launch
     }
     
+    /// Called when the application becomes active.
+    /// - Parameter application: The singleton app instance.
+    func applicationDidBecomeActive(_ application: UIApplication) {
+        // Reset the application icon badge number to 0
+        UIApplication.shared.applicationIconBadgeNumber = 0
+
+        // Request an Apple review (implementation details of 'requestAppleReview' are assumed)
+        requestAppleReview()
+
+        // Clean the temporary directory (implementation details of 'cleanTemporaryDirectory' are assumed)
+        cleanTemporaryDirectory()
+    }
+
     
+    /// Initializes and configures Sentry for error tracking and performance monitoring.
     func sentrySetup() {
-        
         SentrySDK.start { options in
-                options.dsn = "https://f303994ce86f5234623d9f66dbe6f6cb@o4505682647646208.ingest.sentry.io/4505682648170496"
-                options.debug = true // Enabled debug when first installing is always helpful
+            // Set the Data Source Name (DSN) to tell the SDK where to send the events
+            options.dsn = "https://f303994ce86f5234623d9f66dbe6f6cb@o4505682647646208.ingest.sentry.io/4505682648170496"
 
-                // Set tracesSampleRate to 1.0 to capture 100% of transactions for performance monitoring.
-                // We recommend adjusting this value in production.
-                options.tracesSampleRate = 1.0
-                options.attachViewHierarchy = true
-                options.enablePreWarmedAppStartTracing = true
-                options.enableMetricKit = true
-               
-               
-            }
+            // Enable debug mode for detailed logging information
+            options.debug = true // Helpful for initial setup and troubleshooting
 
-        
+            // Configure the sample rate for tracing to capture transactions
+            options.tracesSampleRate = 1.0 // Adjust as needed in production for performance
+
+            // Additional configurations for Sentry
+            options.attachViewHierarchy = true // Attach view hierarchy for better context in visual debugging
+            options.enablePreWarmedAppStartTracing = true // Enables tracing for early app initialization stages
+            options.enableMetricKit = true // Utilize MetricKit for enhanced performance metrics (iOS only)
+
+            // Note: Be sure to replace the 'dsn' with your actual Sentry DSN.
+            // Adjust 'tracesSampleRate' in production to balance data collection and performance.
+        }
     }
+
     
+    /// Sets up an observer to monitor changes in the device's output volume.
     private func setupVolumeObserver() {
         let audioSession = AVAudioSession.sharedInstance()
         previousVolume = audioSession.outputVolume
+
+        // Observing the output volume property
         outputVolumeObserver = audioSession.observe(\.outputVolume) { [weak self] _, _ in
+            // Handle the volume change
             self?.handleVolumeChange()
         }
     }
-    
+
+    /// Handles the device's volume changes.
     private func handleVolumeChange() {
         let audioSession = AVAudioSession.sharedInstance()
         let currentVolume = audioSession.outputVolume
-        
-        if currentVolume >= 1.0 {
+
+        // Check the current volume level and respond accordingly
+        if currentVolume >= 1.0 || currentVolume > previousVolume {
             consecutiveVolumeDownPresses = 0
-            unmuteVideoIfNeed()
-        } else if currentVolume > previousVolume {
-            consecutiveVolumeDownPresses = 0
-            unmuteVideoIfNeed()
+            unmuteVideoIfNeed() // Custom function to unmute the video
         } else if currentVolume < previousVolume {
             consecutiveVolumeDownPresses += 1
             if consecutiveVolumeDownPresses >= 2 {
-                // muteVideoIfNeed()
+                // muteVideoIfNeed() // Custom function to mute the video
                 consecutiveVolumeDownPresses = 0
             }
         }
         
-        previousVolume = currentVolume
+        previousVolume = currentVolume // Update the previous volume to the current volume
     }
-
     
-    
+    /// Sets up OneSignal for push notifications.
+    /// - Parameter launchOptions: The launch options passed on app launch.
     func setupOneSignal(launchOptions: [UIApplication.LaunchOptionsKey: Any]?) {
-        // Initialize OneSignal
+        // Initialize OneSignal with launch options
         OneSignal.initWithLaunchOptions(launchOptions)
+        // Set the OneSignal App ID
         OneSignal.setAppId("209c3011-21c8-43ba-aff2-b2865e03aee5")
         
-        // Prompt the user to allow push notifications
+        // Prompt the user for push notification permissions
         OneSignal.promptForPushNotifications(userResponse: { accepted in
             print("User accepted notifications: \(accepted)")
         })
         
-        
-        // Set a notification opened handler
+        // Set a handler for when notifications are opened
         OneSignal.setNotificationOpenedHandler { result in
             let notification: OSNotification = result.notification
-            
-            // Extract the additional data from the notification
+
+            // Process the notification's additional data
             if let additionalData = notification.additionalData,
                let text = additionalData["data"] as? String,
                let data = self.convertStringToDictionary(text: text),
                let metadata = data["metadata"] as? String,
                let metaDataDict = self.convertStringToDictionary(text: metadata) {
-                
+
                 let metaDataOneSignal = OneSignalNotiModel(OneSignalNotiModel: metaDataDict)
                 
-                if let template = metaDataOneSignal.template{
-                    
-                    switch template {
-                        
-                    case "NEW_COMMENT":
-                        if let post = metaDataOneSignal.post {
-                            self.openComment(commentId: metaDataOneSignal.commentId, rootComment: metaDataOneSignal.rootComment, replyToComment: metaDataOneSignal.replyToComment, type: template, post: post)
-                        }
-                        
-                    case "REPLY_COMMENT":
-                        if let post = metaDataOneSignal.post {
-                            self.openComment(commentId: metaDataOneSignal.commentId, rootComment: metaDataOneSignal.rootComment, replyToComment: metaDataOneSignal.replyToComment, type: template, post: post)
-                        }
-                        
-                    case "NEW_FISTBUMP_1":
-                        if let userId = metaDataOneSignal.userId, let username = metaDataOneSignal.username {
-                            self.openUser(userId: userId, username: username)
-                        }
-                    case "NEW_FISTBUMP_2":
-                        self.openFistBumpList()
-                    case "NEW_FOLLOW_1":
-                        
-                        if let userId = metaDataOneSignal.userId, let username = metaDataOneSignal.username {
-                            self.openUser(userId: userId, username: username)
-                        }
-                        
-                    case "NEW_FOLLOW_2":
-                        self.openFollow()
-                    case "NEW_TAG":
-                        if let post = metaDataOneSignal.post {
-                            self.openComment(commentId: metaDataOneSignal.commentId, rootComment: metaDataOneSignal.rootComment, replyToComment: metaDataOneSignal.replyToComment, type: template, post: post)
-                        }
-                    case "NEW_POST":
-                        self.openPost(post: metaDataOneSignal.post)
-                        
-                    case "LIKE_COMMENT":
-                        if let userId = metaDataOneSignal.userId, let username = metaDataOneSignal.username {
-                            self.openUser(userId: userId, username: username)
-                        }
-                    case "LIKE_POST":
-                        if let userId = metaDataOneSignal.userId, let username = metaDataOneSignal.username {
-                            self.openUser(userId: userId, username: username)
-                        }
-                    case "NEW_STITCH":
-                        self.moveToStichDashboard()
-                    case  "APPROVED_STITCH":
-                        self.moveToStichDashboard()
-                    case "DENIED_STITCH":
-                        self.moveToStichDashboard()
-                    default:
-                        print("None")
-                        
+                // Handle different notification templates
+                switch metaDataOneSignal.template {
+                case "NEW_COMMENT", "REPLY_COMMENT", "NEW_TAG":
+                    if let post = metaDataOneSignal.post {
+                        self.openComment(commentId: metaDataOneSignal.commentId, rootComment: metaDataOneSignal.rootComment, replyToComment: metaDataOneSignal.replyToComment, type: metaDataOneSignal.template, post: post)
                     }
-                    
-                    
+                case "NEW_FISTBUMP_1", "LIKE_COMMENT", "LIKE_POST":
+                    if let userId = metaDataOneSignal.userId, let username = metaDataOneSignal.username {
+                        self.openUser(userId: userId, username: username)
+                    }
+                case "NEW_FISTBUMP_2":
+                    // Placeholder for future implementation
+                    print("New Fistbump")
+                case "NEW_FOLLOW_1", "NEW_FOLLOW_2":
+                    self.openFollow()
+                case "NEW_POST":
+                    self.openPost(post: metaDataOneSignal.post)
+                case "NEW_STITCH", "APPROVED_STITCH", "DENIED_STITCH":
+                    self.moveToStichDashboard()
+                default:
+                    print("Unhandled notification template")
                 }
-                
             }
         }
     }
 
-    // Helper function to convert a string to a dictionary
-    func convertStringToDictionary(text: String) -> [String:Any]? {
+
+    /// Converts a JSON string into a dictionary.
+    /// - Parameter text: The JSON string to be converted.
+    /// - Returns: A dictionary if the conversion is successful; otherwise, nil.
+    func convertStringToDictionary(text: String) -> [String: Any]? {
+        // Attempt to convert the string to Data
         if let data = text.data(using: .utf8) {
             do {
-                let json = try JSONSerialization.jsonObject(with: data, options: []) as? [String:Any]
+                // Attempt to serialize the JSON data into a dictionary
+                let json = try JSONSerialization.jsonObject(with: data, options: []) as? [String: Any]
                 return json
             } catch {
+                // Log the error if JSON serialization fails
                 print("Error converting string to dictionary: \(error.localizedDescription)")
             }
+        } else {
+            // Log an error if the string cannot be converted to Data
+            print("Error: String could not be converted to UTF-8 data")
         }
         return nil
     }
     
     
-    func setupPixelSDK() {
-        
+    /// Sets up and configures the Pixel SDK.
+    private func setupPixelSDK() {
+        // Initialize Pixel SDK with the provided key
         PixelSDK.setup(pixel_key)
-        PixelSDK.shared.maxVideoDuration = 120
+
+        // Set the maximum video duration that can be handled by the SDK
+        PixelSDK.shared.maxVideoDuration = 120  // 120 seconds (2 minutes)
+
+        // Configure the primary filters by combining default standard and visual effect filters
         PixelSDK.shared.primaryFilters = PixelSDK.defaultStandardFilters + PixelSDK.defaultVisualEffectFilters
-        
+
+        // Additional configurations or error handling can be placed here if needed
+        // Example: Check for successful setup or log configuration details
     }
     
-    func setupStyle() {
-        
+    /// Sets up the style and appearance for SendBird UIKit components.
+    private func setupStyle() {
+        // Set the overall theme to light
         SBUTheme.set(theme: .light)
         
-        //SBUStringSet.Empty_No_Channels = "No messages"
-        SBUStringSet.User_No_Name = "Stitchbox user"
-        SBUStringSet.User_Operator = "Leader"
-        
-        //
+        // Customize default strings
+        SBUStringSet.User_No_Name = "Stitchbox User"  // Revised to make the naming more formal
+        SBUStringSet.User_Operator = "Group Leader"  // Updated for clarity
+
+        // Global configuration for image handling
         SBUGlobals.UsingImageCompression = true
         SBUGlobals.imageCompressionRate = 0.65
         SBUGlobals.imageResizingSize = CGSize(width: 480, height: 480)
+
+        // Component theme customization for colors
         SBUTheme.componentTheme.barItemTintColor = UIColor.black
-        
         SBUTheme.messageCellTheme.leftBackgroundColor = .normalButtonBackground
         SBUTheme.messageCellTheme.rightBackgroundColor = UIColor(red: 53, green: 46, blue: 113)
         SBUTheme.messageCellTheme.userMessageLeftTextColor = UIColor.black
@@ -236,19 +234,21 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         SBUTheme.overlayTheme.componentTheme.backgroundColor = .white
         SBUTheme.overlayTheme.componentTheme.loadingBackgroundColor = .white
         
+        // Channel theme customization
         SBUTheme.channelTheme.navigationBarTintColor = UIColor.white
         SBUTheme.channelTheme.backgroundColor = .white
-        
         SBUTheme.channelTheme.leftBarButtonTintColor = UIColor.black
         SBUTheme.channelTheme.rightBarButtonTintColor = UIColor.black
-        
+
+        // Additional component theme settings
         SBUTheme.componentTheme.loadingBackgroundColor = .white
         SBUTheme.componentTheme.addReactionTintColor = UIColor.secondary
         SBUTheme.componentTheme.loadingSpinnerColor = UIColor.secondary
         
+        // Message input theme
         SBUTheme.messageInputTheme.buttonTintColor = .black
 
-        
+        // Font customization using a custom FontManager
         SBUFontSet.body1 = FontManager.shared.roboto(.Regular, size: 16)
         SBUFontSet.body2 = FontManager.shared.roboto(.Medium, size: 14)
         SBUFontSet.body3 = FontManager.shared.roboto(.Regular, size: 14)
@@ -256,19 +256,16 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         SBUFontSet.caption2 = FontManager.shared.roboto(.Regular, size: 12)
         SBUFontSet.caption3 = FontManager.shared.roboto(.Medium, size: 11)
         SBUFontSet.caption4 = FontManager.shared.roboto(.Regular, size: 11)
-        
         SBUFontSet.button1 = FontManager.shared.roboto(.Medium, size: 18)
         SBUFontSet.button2 = FontManager.shared.roboto(.Medium, size: 16)
         SBUFontSet.button3 = FontManager.shared.roboto(.Medium, size: 14)
-        
         SBUFontSet.h1 = FontManager.shared.roboto(.Bold, size: 18)
         SBUFontSet.h2 = FontManager.shared.roboto(.Medium, size: 18)
         SBUFontSet.h3 = FontManager.shared.roboto(.Bold, size: 16)
-        
         SBUFontSet.subtitle1 = FontManager.shared.roboto(.Medium, size: 16)
         SBUFontSet.subtitle2 = FontManager.shared.roboto(.Regular, size: 16)
-   
     }
+
     
     // MARK: UISceneSession Lifecycle
     
@@ -285,183 +282,220 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
     }
     
     @available(iOS 9.0, *)
-    func application(
-        _ application: UIApplication,
-        open url: URL,
-        options: [UIApplication.OpenURLOptionsKey: Any])
-    -> Bool {
-        
-        if let scheme = url.scheme,
-           scheme.localizedCaseInsensitiveCompare("stitchbox") == .orderedSame {
-            
+    func application(_ application: UIApplication, open url: URL, options: [UIApplication.OpenURLOptionsKey: Any]) -> Bool {
+        // Check if the URL scheme matches a specific scheme ('stitchbox')
+        if let scheme = url.scheme, scheme.localizedCaseInsensitiveCompare("stitchbox") == .orderedSame {
             var parameters: [String: String] = [:]
+            
+            // Extract query parameters from the URL
             URLComponents(url: url, resolvingAgainstBaseURL: false)?.queryItems?.forEach {
                 parameters[$0.name] = $0.value
             }
             
-            // TODO implement
-            // redirect(to: view, with: parameters)
+            // TODO: Implement redirection or handling based on the extracted parameters
+            // Example: redirect(to: view, with: parameters)
         }
         
-       
-        
+        // Handle the URL with Google SignIn if the URL scheme does not match 'stitchbox'
         return GIDSignIn.sharedInstance.handle(url)
     }
+
     
     func application(_ application: UIApplication, open url: URL, sourceApplication: String?, annotation: Any) -> Bool {
+        // This method is used for handling URLs in iOS versions before 9.0.
+        // The implementation might vary based on specific requirements.
+        // Example: return some URL handling logic or delegate handling to another SDK.
         
         return false
     }
+
     
     func application(_ application: UIApplication, handleOpen url: URL) -> Bool {
-        
+        // This is another legacy method for handling URLs, used before the introduction of options in iOS 9.0.
+        // Similar to the above, implement URL handling logic as required.
+
         return false
     }
-    
-    
-    //
-    
+
+    /// Initializes and configures SendBird for use in the application.
     func sendbird_authentication() {
-        
+        // Initialize SendBird with the application ID
         SBDMain.initWithApplicationId(sendbird_key)
+
+        // Initialize SendBird UIKit
         SBUMain.initialize(applicationId: sendbird_key) { (error) in
             if let error = error {
-                // An error occurred during initialization
+                // If an error occurred during initialization, print it
                 print("Error initializing SendBird UIKit: \(error)")
             } else {
-                // Initialization was successful
+                // If initialization was successful, print a confirmation message
                 print("SendBird UIKit initialized successfully")
             }
         }
+
+        // Configure SendBirdCall with the application ID
         SendBirdCall.configure(appId: sendbird_key)
+
+        // Add the current class as a delegate to SendBirdCall
         SendBirdCall.addDelegate(self, identifier: "com.mobile.gg.Stitchbox1")
+
+        // Set the execution queue for SendBirdCall to the main queue
         SendBirdCall.executeOn(queue: DispatchQueue.main)
+
+        // Store the SendBird application ID in user defaults
         UserDefaults.standard.designatedAppId = sendbird_key
+
+        // Add the current class as a channel delegate to SendBird
         SBDMain.add(self as SBDChannelDelegate, identifier: self.description)
-        
     }
+
     
+    /// Attempts to register the application for push notifications.
+    /// - Parameter application: The singleton app instance.
     private func attemptRegisterForNotifications(application: UIApplication) {
         print("Attempting to register APNS...")
-        
+
         if #available(iOS 10.0, *) {
+            // For iOS 10 and later, use UNUserNotificationCenter to manage notifications
             UNUserNotificationCenter.current().delegate = self
-            // user notifications auth
-            // all of this works for iOS 10+
+
+            // Define authorization options for user notifications (alert, badge, sound)
             let options: UNAuthorizationOptions = [.alert, .badge, .sound]
             UNUserNotificationCenter.current().requestAuthorization(options: options) { (granted, err) in
+                // Handle the authorization response
                 if let err = err {
+                    // Print any error if authorization request fails
                     print("Failed to request auth:", err)
                     return
                 }
                 
                 if granted {
+                    // Authorization granted
                     print("Auth granted.")
-                    
                 } else {
+                    // Authorization denied
                     print("Auth denied")
                 }
             }
         } else {
-            
+            // For iOS versions earlier than 10.0, use UIUserNotificationSettings
             let notificationSettings = UIUserNotificationSettings(types: [.badge, .sound, .alert], categories: nil)
             application.registerUserNotificationSettings(notificationSettings)
-            
-            
         }
-        
-        
+
+        // Register the app to receive remote notifications
         application.registerForRemoteNotifications()
-        
-        
     }
     
     
+    /// Called when a notification is delivered to a foreground app.
+    /// - Parameters:
+    ///   - center: The singleton object that manages notification-related activities for your app.
+    ///   - notification: The notification that is about to be delivered.
+    ///   - completionHandler: The block to execute with the presentation option for the notification.
     func userNotificationCenter(_ center: UNUserNotificationCenter, willPresent notification: UNNotification, withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
+        // Complete with options to show the notification's badge and play a sound
         completionHandler([.badge, .sound])
     }
+
     
-    
+    /// Called when the app successfully registers for remote notifications.
+    /// - Parameters:
+    ///   - application: The singleton app instance.
+    ///   - deviceToken: A token that identifies the device to Apple Push Notification Service (APNS).
     func application(_ application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data) {
+        // Log the device token
         print("Registered for notifications:", deviceToken)
         
+        // Register the device push token with SendBird
         SBDMain.registerDevicePushToken(deviceToken, unique: false) { (status, error) in
+            // Handle the registration result
             if error == nil {
-                if status == SBDPushTokenRegistrationStatus.pending {
+                switch status {
+                case .pending:
                     print("Push registration is pending.")
-                }
-                else {
+                default:
                     print("APNS Token is registered.")
                 }
-            }
-            else {
+            } else {
+                // Log any errors during registration
                 print("APNS registration failed with error: \(String(describing: error))")
             }
         }
-        
-        
     }
+
     
+    /// Called when the application is about to terminate.
+    /// - Parameter application: The singleton app instance.
     func applicationWillTerminate(_ application: UIApplication) {
-        // This method will be called when the app is forcefully terminated.
-        // End all ongoing calls in this method.
+        // This method is called when the app is forcefully terminated.
+
+        // Access the shared instance of the call manager
         let callManager = CXCallManager.shared
+
+        // Retrieve all ongoing calls
         let ongoingCalls = callManager.currentCalls.compactMap { SendBirdCall.getCall(forUUID: $0.uuid) }
         
         ongoingCalls.forEach { directCall in
-            // Sendbird Calls: End call
+            // For each ongoing call, perform the following steps:
+
+            // 1. End the call using SendBird's API
             directCall.end()
             
-            // CallKit: Request End transaction
+            // 2. Request to end the call via CallKit
             callManager.endCXCall(directCall)
             
-            // CallKit: Report End if uuid is valid
+            // 3. Report the call as ended to CallKit, if the UUID is valid
             if let uuid = directCall.callUUID {
                 callManager.endCall(for: uuid, endedAt: Date(), reason: .none)
             }
         }
-        // However, because iOS gives a limited time to perform remaining tasks,
-        // There might be some calls failed to be ended
-        // In this case, I recommend that you register local notification to notify the unterminated calls.
+
+        // Note: iOS provides limited time to perform remaining tasks during app termination.
+        // It's possible that some calls might fail to end.
+        // As a fallback, consider registering a local notification to alert about unterminated calls.
     }
+
     
-    // This method is called when a local notification is received and the user has interacted with it.
-    // It presents a ChannelViewController with the channel specified in the notification.
+    /// Handles user interactions with local notifications.
+    /// - Parameters:
+    ///   - center: The user notification center that received the notification.
+    ///   - response: The user’s response to the notification.
+    ///   - completionHandler: The block to execute when you have finished processing the user’s response.
     func userNotificationCenter(_ center: UNUserNotificationCenter, didReceive response: UNNotificationResponse, withCompletionHandler completionHandler: @escaping () -> Void) {
-        // Extract the user info dictionary and the channel URL from the notification payload.
-        // Return early if the user is not logged in or the required information is not present.
-        
+        // Check the notification type
         if let type = response.notification.request.content.userInfo["type"] as? String, type == "sendbird_localNoti" {
             
-            guard let userUID = _AppCoreData.userDataSource.value?.userID, !userUID.isEmpty, let channelUrl = response.notification.request.content.userInfo["channel_url"] as? String else {
-                return
-            }
-            
-            checkAndPresendChatVC(userUID: userUID, channelUrl: channelUrl)
-            
-            completionHandler()
-            
-            
-        } else if ((response.notification.request.content.userInfo["sendbird"] as? NSDictionary) != nil) {
-            
+            // Guard to ensure the user is logged in and the channel URL is present in the notification payload
             guard let userUID = _AppCoreData.userDataSource.value?.userID, !userUID.isEmpty,
-                  let payload = response.notification.request.content.userInfo["sendbird"] as? NSDictionary,
-                  let channel = payload["channel"] as? NSDictionary,
-                  let channelUrl = channel["channel_url"] as? String else {
+                  let channelUrl = response.notification.request.content.userInfo["channel_url"] as? String else {
+                completionHandler()
                 return
             }
             
+            // Present the chat view controller based on the channel URL from the notification
             checkAndPresendChatVC(userUID: userUID, channelUrl: channelUrl)
-            // Call the completion handler to indicate that the method has finished executing.
             completionHandler()
             
+        } else if let sendbirdInfo = response.notification.request.content.userInfo["sendbird"] as? NSDictionary {
+            // Handle the case where the notification contains a 'sendbird' dictionary payload
+            
+            // Extract user ID and channel URL from the payload
+            guard let userUID = _AppCoreData.userDataSource.value?.userID, !userUID.isEmpty,
+                  let channel = sendbirdInfo["channel"] as? NSDictionary,
+                  let channelUrl = channel["channel_url"] as? String else {
+                completionHandler()
+                return
+            }
+            
+            // Present the chat view controller based on the channel URL from the notification
+            checkAndPresendChatVC(userUID: userUID, channelUrl: channelUrl)
+            completionHandler()
             
         } else {
+            // Handle other types of notifications or cases where the required data is not present
             completionHandler()
         }
-        
-        
-        
     }
     
     func checkAndPresendChatVC(userUID: String, channelUrl: String) {
@@ -515,239 +549,189 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
 
     
     
+    /// Presents a chat interface for a given channel URL in a modal fashion without using the existing navigation stack.
+    /// - Parameters:
+    ///   - vc: The view controller from which to present the chat interface.
+    ///   - channelUrl: The URL of the chat channel to be opened.
     func presentChatWithoutNav(vc: UIViewController, channelUrl: String) {
+        // Initialize message list parameters (assuming 'SBDMessageListParams' is a part of a chat SDK)
+        let messageListParams = SBDMessageListParams()
         
-        let mlsp = SBDMessageListParams()
-        let channelVC = ChannelViewController(channelUrl: channelUrl, messageListParams: mlsp)
+        // Initialize the chat channel view controller with the specified channel URL and message list parameters
+        let channelViewController = ChannelViewController(channelUrl: channelUrl, messageListParams: messageListParams)
         
-        
-        let nav = UINavigationController(rootViewController: channelVC)
+        // Create a new navigation controller with the chat channel view controller as its root
+        let navigationController = UINavigationController(rootViewController: channelViewController)
 
-     
-        // Customize the navigation bar appearance
-        nav.navigationBar.barTintColor = .white
-        nav.navigationBar.titleTextAttributes = [.foregroundColor: UIColor.black]
+        // Customize the appearance of the navigation bar
+        navigationController.navigationBar.barTintColor = .white // Setting the background color to white
+        navigationController.navigationBar.titleTextAttributes = [.foregroundColor: UIColor.black] // Setting the title text color to black
 
-        nav.modalPresentationStyle = .fullScreen
- 
-       // self.navigationController?.pushViewController(channelVC, animated: true)
-        nav.modalPresentationStyle = .fullScreen
-        vc.present(nav, animated: true)
-        
+        // Set the modal presentation style to full screen for both the navigation controller and its root
+        navigationController.modalPresentationStyle = .fullScreen
+
+        // Present the navigation controller modally from the provided view controller
+        vc.present(navigationController, animated: true)
     }
 
+    
+    /// Navigates to the 'StitchDashboardVC' from the current view controller.
     func moveToStichDashboard() {
-        
-        if let PVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "StitchDashboardVC") as? StitchDashboardVC {
+        // Attempt to instantiate 'StitchDashboardVC' from the 'Dashboard' storyboard
+        if let stitchDashboardVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "StitchDashboardVC") as? StitchDashboardVC {
             
-            
-            if let vc = UIViewController.currentViewController() {
+            // Find the currently active view controller
+            if let currentViewController = UIViewController.currentViewController() {
                 
-                
-                if vc is ParentViewController || vc is TrendingVC || vc is MainMessageVC || vc is ProfileViewController {
+                // Check if the current view controller is one of the specified types
+                if currentViewController is ParentViewController || currentViewController is TrendingVC || currentViewController is MainMessageVC || currentViewController is ProfileViewController {
                     
-                    if let nav = vc.navigationController {
-                        
-                        PVC.hidesBottomBarWhenPushed = true
-                        hideMiddleBtn(vc: vc.self)
-                        nav.pushViewController(PVC, animated: true)
-                        
+                    // Get the navigation controller of the current view controller, if any
+                    if let navigationController = currentViewController.navigationController {
+                        // Specific behavior for certain view controller types
+                        stitchDashboardVC.hidesBottomBarWhenPushed = true // Hides the bottom bar when pushed
+                        hideMiddleBtn(vc: currentViewController.self) // Hides the middle button on the tab bar
+
+                        // Navigate to 'StitchDashboardVC'
+                        navigationController.pushViewController(stitchDashboardVC, animated: true)
                     }
-                    
                     
                 } else {
-                    
-                    if let nav = vc.navigationController {
-                        
-                        nav.pushViewController(PVC, animated: true)
-                        
+                    // Behavior for other types of view controllers
+                    if let navigationController = currentViewController.navigationController {
+                        // Navigate to 'StitchDashboardVC' without additional UI modifications
+                        navigationController.pushViewController(stitchDashboardVC, animated: true)
                     }
-                    
-                    
                 }
-                
-                
-                
             }
-           
-            
         }
-      
-        
     }
     
-    func openFistBumpList() {
-
-        
-        
-    }
-    
+    /// Opens a view controller (`SelectedParentVC`) to display a specific post.
+    /// - Parameter post: The `PostModel` representing the post to be displayed.
     func openPost(post: PostModel) {
-        
-        if let SPVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "SelectedParentVC") as? SelectedParentVC {
+        // Attempt to instantiate 'SelectedParentVC' from the 'Dashboard' storyboard
+        if let selectedParentVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "SelectedParentVC") as? SelectedParentVC {
             
-            if let vc = UIViewController.currentViewController() {
+            // Find the currently active view controller
+            if let currentViewController = UIViewController.currentViewController() {
+                // Initialize a new UINavigationController with 'SelectedParentVC' as its root
+                let navigationController = UINavigationController(rootViewController: selectedParentVC)
                 
-                let nav = UINavigationController(rootViewController: SPVC)
-                
-                // Set the user ID, nickname, and onPresent properties of UPVC
-                SPVC.onPresent = true
-                SPVC.posts = [post]
-                SPVC.startIndex = 0
-                
-              
-                nav.modalPresentationStyle = .fullScreen
-                vc.present(nav, animated: true, completion: nil)
-                
+                // Set the properties of 'SelectedParentVC'
+                selectedParentVC.onPresent = true // Indicates that the view controller is being presented
+                selectedParentVC.posts = [post]    // Setting the post to be displayed
+                selectedParentVC.startIndex = 0    // Starting index, assuming it's used to determine which post to show first
+
+                // Set the modal presentation style and present the view controller
+                navigationController.modalPresentationStyle = .fullScreen
+                currentViewController.present(navigationController, animated: true, completion: nil)
             }
-            
-            
         }
-        
-        
     }
+
     
+    /// Opens a view controller (`CommentNotificationVC`) to display a specific comment.
+    /// - Parameters:
+    ///   - commentId: The unique identifier of the comment.
+    ///   - rootComment: The identifier of the root comment in the thread.
+    ///   - replyToComment: The identifier of the comment to which this comment is a reply.
+    ///   - type: The type of the comment or the context in which it is used.
+    ///   - post: The post model associated with the comment.
     func openComment(commentId: String, rootComment: String, replyToComment: String, type: String, post: PostModel) {
-        
-        if let vc = UIViewController.currentViewController() {
+        // Find the currently active view controller
+        if let currentViewController = UIViewController.currentViewController() {
+            // Initialize CommentNotificationVC
+            let commentNotificationVC = CommentNotificationVC()
             
-            let slideVC = CommentNotificationVC()
+            // Set properties for the comment view controller
+            commentNotificationVC.commentId = commentId
+            commentNotificationVC.reply_to_cid = replyToComment
+            commentNotificationVC.root_id = rootComment
+            commentNotificationVC.type = type
+            commentNotificationVC.post = post
             
-            slideVC.commentId = commentId
-            slideVC.reply_to_cid = replyToComment
-            slideVC.root_id = rootComment
-            slideVC.type = type
-            slideVC.post = post
+            // Global settings for presentation
+            global_presetingRate = Double(0.75) // Presumably a global variable affecting presentation rate
+            global_cornerRadius = 35 // Presumably a global variable affecting corner radius
+
+            // Customize the modal presentation style
+            commentNotificationVC.modalPresentationStyle = .custom
+            commentNotificationVC.transitioningDelegate = currentViewController.self
             
-            global_presetingRate = Double(0.75)
-            global_cornerRadius = 35
-            
-            slideVC.modalPresentationStyle = .custom
-            slideVC.transitioningDelegate = vc.self
-            
-            vc.present(slideVC, animated: true, completion: nil)
-            
-            
+            // Present the view controller
+            currentViewController.present(commentNotificationVC, animated: true, completion: nil)
         }
-        
-        
     }
+
     
+    /// Opens the user profile view controller (`UserProfileVC`) for a specific user.
+    /// - Parameters:
+    ///   - userId: The unique identifier of the user.
+    ///   - username: The username of the user.
     func openUser(userId: String, username: String) {
-        
-        
-        if let UPVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "UserProfileVC") as? UserProfileVC {
+        // Attempt to instantiate 'UserProfileVC' from the 'Dashboard' storyboard
+        if let userProfileVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "UserProfileVC") as? UserProfileVC {
             
-            if let vc = UIViewController.currentViewController() {
+            // Find the currently active view controller
+            if let currentViewController = UIViewController.currentViewController() {
+                // Initialize a new UINavigationController with 'UserProfileVC' as its root
+                let navigationController = UINavigationController(rootViewController: userProfileVC)
                 
-                let nav = UINavigationController(rootViewController: UPVC)
+                // Set the necessary properties of 'UserProfileVC'
+                userProfileVC.onPresent = true  // Indicates that the view controller is being presented
+                userProfileVC.userId = userId   // Sets the user ID
+                userProfileVC.nickname = username // Sets the username
+
+                // Customize the appearance of the navigation bar
+                navigationController.navigationBar.barTintColor = .background // Setting the background color
+                navigationController.navigationBar.tintColor = .white // Setting the tint color for navigation items
+                navigationController.navigationBar.titleTextAttributes = [.foregroundColor: UIColor.white] // Setting the title text color
                 
-                // Set the user ID, nickname, and onPresent properties of UPVC
-                UPVC.onPresent = true
-                UPVC.userId = userId
-                UPVC.nickname = username
-                
-                
-                // Customize the navigation bar appearance
-                nav.navigationBar.barTintColor = .background
-                nav.navigationBar.tintColor = .white
-                nav.navigationBar.titleTextAttributes = [.foregroundColor: UIColor.white]
-                
-                nav.modalPresentationStyle = .fullScreen
-                vc.present(nav, animated: true, completion: nil)
-                
-                
+                // Set the modal presentation style and present the view controller
+                navigationController.modalPresentationStyle = .fullScreen
+                currentViewController.present(navigationController, animated: true, completion: nil)
             }
-            
-            
         }
-        
     }
+
     
+    /// Opens the `MainFollowVC` view controller.
     func openFollow() {
-        
-        if let MFVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "MainFollowVC") as? MainFollowVC {
+        // Attempt to instantiate 'MainFollowVC' from the 'Dashboard' storyboard
+        if let mainFollowVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "MainFollowVC") as? MainFollowVC {
             
-            
-            if let vc = UIViewController.currentViewController() {
+            // Find the currently active view controller
+            if let currentViewController = UIViewController.currentViewController() {
+                // Initialize a new UINavigationController with 'MainFollowVC' as its root
+                let navigationController = UINavigationController(rootViewController: mainFollowVC)
                 
-                let nav = UINavigationController(rootViewController: MFVC)
+                // Configure 'MainFollowVC' properties
+                mainFollowVC.onPresent = true
+                mainFollowVC.showFollowerFirst = true
+                mainFollowVC.userId = _AppCoreData.userDataSource.value?.userID ?? ""
+                mainFollowVC.followerCount = 0
+                mainFollowVC.followingCount = 0
                 
-                // Set the user ID, nickname, and onPresent properties of UPVC
-                MFVC.onPresent = true
-                MFVC.showFollowerFirst = true
-                MFVC.userId = _AppCoreData.userDataSource.value?.userID ?? ""
-                MFVC.followerCount = 0
-                MFVC.followingCount = 0
+                // Customize the appearance of the navigation bar
+                navigationController.navigationBar.barTintColor = .background
+                navigationController.navigationBar.tintColor = .white
+                navigationController.navigationBar.titleTextAttributes = [.foregroundColor: UIColor.white]
                 
-                
-                // Customize the navigation bar appearance
-                nav.navigationBar.barTintColor = .background
-                nav.navigationBar.tintColor = .white
-                nav.navigationBar.titleTextAttributes = [.foregroundColor: UIColor.white]
-                
-                nav.modalPresentationStyle = .fullScreen
-                vc.present(nav, animated: true, completion: nil)
-                
-                
+                // Present the view controller with a full-screen modal presentation style
+                navigationController.modalPresentationStyle = .fullScreen
+                currentViewController.present(navigationController, animated: true, completion: nil)
             }
-            
         }
-        
-        
     }
+
     
-    func applicationDidBecomeActive(_ application: UIApplication) {
-        UIApplication.shared.applicationIconBadgeNumber = 0
-        requestAppleReview()
-        
+    func cleanTemporaryDirectory() {
+        let maxSizeInBytes: UInt64 = UInt64(0.5 * 1024 * 1024 * 1024)  // 0.5 GB
         do {
-            let maxSizeInBytes: UInt64 = UInt64(0.5 * 1024 * 1024 * 1024)  // 1GB
-            try maintainTmpDirectory(maxSizeInBytes: maxSizeInBytes)
+            try FileManager.default.maintainTmpDirectory(maxSizeInBytes: maxSizeInBytes)
         } catch {
             print("Failed to maintain tmp directory with error: \(error)")
-        }
-
-    }
-    
-    func maintainTmpDirectory(maxSizeInBytes: UInt64) throws {
-        let tmpURL = URL(fileURLWithPath: NSTemporaryDirectory())
-        let fileManager = FileManager.default
-        
-        do {
-            let tmpFiles = try fileManager.contentsOfDirectory(at: tmpURL, includingPropertiesForKeys: nil, options: [])
-            
-            var totalSize: UInt64 = 0
-            var fileAttributesMap: [URL: (UInt64, Date)] = [:]
-            
-            for fileURL in tmpFiles {
-                let attributes = try fileManager.attributesOfItem(atPath: fileURL.path)
-                if let fileSize = attributes[.size] as? UInt64,
-                   let modificationDate = attributes[.modificationDate] as? Date {
-                    totalSize += fileSize
-                    fileAttributesMap[fileURL] = (fileSize, modificationDate)
-                }
-            }
-            
-            if totalSize > maxSizeInBytes {
-                let sortedFiles = fileAttributesMap.sorted { $0.1.1 < $1.1.1 }
-                
-                var bytesToDelete = totalSize - maxSizeInBytes
-                for (fileURL, (fileSize, _)) in sortedFiles {
-                    try fileManager.removeItem(at: fileURL)
-                    
-                    if fileSize >= bytesToDelete {
-                        break
-                    }
-                    
-                    bytesToDelete -= fileSize
-                }
-            }
-            
-            print("Successfully maintained tmp directory.")
-        } catch {
-            print("Error maintaining tmp directory: \(error)")
-            throw error
         }
     }
 

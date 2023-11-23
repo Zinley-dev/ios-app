@@ -1129,6 +1129,20 @@ extension VideoNode {
         headerView.isUserInteractionEnabled = false
         headerView.settingBtn.isHidden = true
     }
+    
+    /// Hide Footer and buttons on showing playlist
+    func hideView() {
+        // Hide buttons and labels in footer and header views
+        footerView.isHidden = true
+        buttonView.isHidden = true
+    }
+    
+    /// Show Footer and buttons on showing playlist
+    func showView() {
+        // Show buttons and labels in footer and header views
+        footerView.isHidden = false
+        buttonView.isHidden = false
+    }
 
     // MARK: - User Profile Handling
 

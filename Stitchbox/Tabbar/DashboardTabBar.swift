@@ -19,7 +19,7 @@ import Alamofire
 
 @IBDesignable class DashboardTabBarController: UITabBarController, UITabBarControllerDelegate {
     
-    private var actionButton: UIButton = UIButton() // Renamed for clarity
+    var actionButton: UIButton = UIButton() // mid button action
     private var cachedResizedImage: UIImage? // Caching resized image for performance
 
     // Enum to define tab bar types with associated colors
