@@ -466,7 +466,6 @@ extension FeedViewController {
                     }
                     // Play the new video.
                     currentIndex = newPlayingIndex
-                    print(currentIndex)
                     playVideo(index: currentIndex!)
                     isVideoPlaying = true
                 
@@ -534,20 +533,30 @@ extension FeedViewController: ASCollectionDataSource {
         let post = self.posts[indexPath.row]
 
         // Returns a block that creates and configures a cell node.
-        return {
-            // Create an instance of the custom ASCellNode (RootNode) with the post data.
-            let node = RootNode(with: post, firstItem: self.isFirstLoad)
-            node.neverShowPlaceholders = true
-            node.debugName = "Node \(indexPath.row)"
-            node.automaticallyManagesSubnodes = true
+        return { [weak self] in
+            guard let self = self else { return ASCellNode() }
+
+            let isFirstItem = self.isFirstLoad && indexPath.row == 0
+            let node = RootNode(with: post, firstItem: isFirstItem)
+            self.configureNode(node, at: indexPath)
 
             // Update the flag after the first load.
             if self.isFirstLoad {
                 self.isFirstLoad = false
             }
-            
+
             return node
         }
+    }
+
+    /// Configures properties of a cell node.
+    /// - Parameters:
+    ///   - node: The `ASCellNode` to configure.
+    ///   - indexPath: The index path of the node.
+    private func configureNode(_ node: RootNode, at indexPath: IndexPath) {
+        node.neverShowPlaceholders = true
+        node.debugName = "Node \(indexPath.row)"
+        node.automaticallyManagesSubnodes = true
     }
 
 
@@ -1235,7 +1244,10 @@ extension FeedViewController {
         postNavVC.modalPresentationStyle = .fullScreen
         configurePostVC(for: postNavVC)
 
-        present(postNavVC, animated: true)
+        delay(0.1) { [weak self] in
+            self?.present(postNavVC, animated: true)
+        }
+    
     }
 
     /// Configures the `PostVC` within the navigation controller.

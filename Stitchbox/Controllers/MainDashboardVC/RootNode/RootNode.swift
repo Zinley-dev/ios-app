@@ -82,6 +82,24 @@ class RootNode: ASCellNode, UICollectionViewDelegateFlowLayout, UIAdaptivePresen
         self.mainCollectionNode.dataSource = self
     }
     
+    /// Called when the view controller’s view is no longer visible.
+    override func didExitVisibleState() {
+        super.didExitVisibleState() // Always call the super implementation of lifecycle methods
+        
+        // Pausing the video playback when the view is not visible.
+        pauseVideoOnScrolling(index: currentIndex!)
+
+        // Removing any observers that were added to avoid memory leaks or unintended behavior.
+        removeObservers()
+    }
+
+    /// Called when the view controller’s view becomes visible.
+    override func didEnterVisibleState() {
+        super.didEnterVisibleState() // Always call the super implementation of lifecycle methods
+
+        
+    }
+    
 }
 
 // MARK: - Lifecycle and Layout
@@ -198,13 +216,16 @@ extension RootNode: ASCollectionDelegate, ASCollectionDataSource {
             // Handling main collection node.
             return { [weak self] in
                 guard let strongSelf = self else { return ASCellNode() }
-                let node = VideoNode(with: post, isPreview: false, firstItem: strongSelf.firstItem)
+                
+                let isFirstItem = strongSelf.firstItem && indexPath.row == 0
+                let node = VideoNode(with: post, isPreview: false, firstItem: isFirstItem)
                 strongSelf.configureNode(node, at: indexPath)
 
-                if strongSelf.firstItem {
+                // Update the flag after the first load.
+                if isFirstItem {
                     strongSelf.firstItem = false
                 }
-
+                
                 return node
             }
         }
@@ -219,6 +240,7 @@ extension RootNode: ASCollectionDelegate, ASCollectionDataSource {
         node.debugName = "Node \(indexPath.row)"
         node.automaticallyManagesSubnodes = true
     }
+
 
 }
 
@@ -455,5 +477,12 @@ extension RootNode {
         mainCollectionNode.reloadData()
     }
     
+    /// Removes all observers from the video node.
+    func removeObservers() {
+        if let cell = self.mainCollectionNode.nodeForItem(at: IndexPath(row: currentIndex!, section: 0)) as? VideoNode {
+            cell.statusObservation?.invalidate()
+            cell.statusObservation = nil
+        }
+    }
     
 }

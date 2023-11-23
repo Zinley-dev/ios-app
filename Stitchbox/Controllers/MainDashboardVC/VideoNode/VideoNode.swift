@@ -50,7 +50,6 @@ class VideoNode: ASCellNode, ASVideoNodeDelegate {
     var firstSetup = false
     var spinnerRemoved = true
     var assetReset = false
-    var isFirstItem = false
     var selectedStitch = false
     var isSave = false
     var isFollowingUser = false
@@ -664,10 +663,6 @@ extension VideoNode {
         // Load the video asset asynchronously.
         loadVideoAssetAsync(with: post)
         
-        // Play video if first item on list.
-        if firstItem {
-            playVideo()
-        }
     }
     
     /// Sets up the appearance of cellVideoNode.
@@ -704,8 +699,9 @@ extension VideoNode {
         DispatchQueue.main.async() { [weak self] in
             guard let self = self else { return }
             self.cellVideoNode.asset = AVAsset(url: self.getVideoURL(post: post)!)
-            if self.isFirstItem {
-                self.playVideo()
+            // Play video if first item on list.
+            if firstItem {
+                playVideo()
             }
         }
     }
