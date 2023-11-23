@@ -462,6 +462,7 @@ extension FeedViewController {
             
                     // Pause the current video, if any.
                     if let currentIndex = currentIndex {
+                        hideStitchedView(index: currentIndex)
                         pauseVideoOnScrolling(index: currentIndex)
                     }
                     // Play the new video.
@@ -754,6 +755,13 @@ extension FeedViewController {
 // This extension provides methods to control video playback within the FeedViewController, including pausing and playing videos.
 
 extension FeedViewController {
+    
+    // Pauses the video at a specific index and optionally seeks to the start.
+    func hideStitchedView(index: Int) {
+        if let cell = self.collectionNode.nodeForItem(at: IndexPath(row: index, section: 0)) as? RootNode {
+            cell.hideStitchedView()
+        }
+    }
     
     // Pauses the video at a specific index and optionally seeks to the start.
     func pauseVideoOnScrolling(index: Int) {

@@ -15,6 +15,10 @@ class PostInteractionButtons: UIView {
     
     // MARK: - Outlets
     @IBOutlet weak var stackView: UIStackView!
+    @IBOutlet weak var likeStackView: UIStackView!
+    @IBOutlet weak var playListStackView: UIStackView!
+    @IBOutlet weak var commentStackView: UIStackView!
+    @IBOutlet weak var saveStackView: UIStackView!
     @IBOutlet weak var contentView: UIView!
     @IBOutlet weak var playListBtn: UIButton!
     @IBOutlet weak var commentBtn: UIButton!

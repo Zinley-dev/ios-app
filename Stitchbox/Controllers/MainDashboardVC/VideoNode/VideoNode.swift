@@ -67,6 +67,9 @@ class VideoNode: ASCellNode, ASVideoNodeDelegate {
     // Observer for video playback status.
     var statusObservation: NSKeyValueObservation?
 
+    // Action
+    var viewStitchBtn : ((ASCellNode) -> Void)?
+    
     // MARK: - Initializer
     
     /// Initializes the cell with the provided post model and preview flag.
@@ -916,13 +919,9 @@ extension VideoNode {
         self.headerView.postDate.isUserInteractionEnabled = true
 
         // Like Button Tap Gesture
-        let likeTap = createTapGestureRecognizer(target: self, action: #selector(VideoNode.likeTapped))
-        self.buttonView.likeBtn.addGestureRecognizer(likeTap)
-        
-        // Like Button Tap Gesture
         let likeTap1 = createTapGestureRecognizer(target: self, action: #selector(VideoNode.likeTapped))
-        self.buttonView.likeCountLbl.addGestureRecognizer(likeTap1)
-        self.buttonView.likeCountLbl.isUserInteractionEnabled = true
+        self.buttonView.likeStackView.addGestureRecognizer(likeTap1)
+        self.buttonView.likeStackView.isUserInteractionEnabled = true
 
         // Stitch Button Tap Gesture (Footer View)
         let stitchTap = createTapGestureRecognizer(target: self, action: #selector(VideoNode.stitchTapped))
@@ -930,21 +929,18 @@ extension VideoNode {
 
         // Save Button Tap Gesture
         let saveTap = createTapGestureRecognizer(target: self, action: #selector(VideoNode.onClickSave))
-        self.buttonView.saveBtn.addGestureRecognizer(saveTap)
+        self.buttonView.saveStackView.addGestureRecognizer(saveTap)
+        self.buttonView.saveStackView.isUserInteractionEnabled = true
         
-        // Save Button Tap Gesture
-        let saveTap1 = createTapGestureRecognizer(target: self, action: #selector(VideoNode.onClickSave))
-        self.buttonView.saveCountLbl.addGestureRecognizer(saveTap1)
-        self.buttonView.saveCountLbl.isUserInteractionEnabled = true
-
         // Comment Button Tap Gesture
         let commentTap = createTapGestureRecognizer(target: self, action: #selector(VideoNode.commentTapped))
-        self.buttonView.commentBtn.addGestureRecognizer(commentTap)
+        self.buttonView.commentStackView.addGestureRecognizer(commentTap)
+        self.buttonView.commentStackView.isUserInteractionEnabled = true
         
         // Comment Button Tap Gesture
-        let commentTap1 = createTapGestureRecognizer(target: self, action: #selector(VideoNode.commentTapped))
-        self.buttonView.commentCountLbl.addGestureRecognizer(commentTap1)
-        self.buttonView.commentCountLbl.isUserInteractionEnabled = true
+        let playListTap = createTapGestureRecognizer(target: self, action: #selector(VideoNode.playListTapped))
+        self.buttonView.playListStackView.addGestureRecognizer(playListTap)
+        self.buttonView.playListStackView.isUserInteractionEnabled = true
 
         // Double Tap Gesture (Like Handler)
         let doubleTap = createTapGestureRecognizer(target: self, action: #selector(VideoNode.likeHandle), taps: 2)
@@ -1269,6 +1265,13 @@ extension VideoNode {
         if let currentVC = UIViewController.currentViewController() {
             currentVC.present(activityController, animated: true)
         }
+    }
+    
+    // MARK: - playList Handling
+
+    /// Handles the comment action.
+    @objc func playListTapped() {
+        viewStitchBtn?(self)
     }
 
     // MARK: - Comment Handling

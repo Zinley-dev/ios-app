@@ -26,6 +26,7 @@ class RootNode: ASCellNode, UICollectionViewDelegateFlowLayout, UIAdaptivePresen
     var posts = [PostModel]() // Array to hold related posts.
     var page = 1 // Current page index for pagination or similar use.
     
+    
     // UI elements
     var galleryCollectionNode: ASCollectionNode! // Collection node for displaying a gallery of items.
     var mainCollectionNode: ASCollectionNode! // Main collection node for primary content display.
@@ -42,6 +43,7 @@ class RootNode: ASCellNode, UICollectionViewDelegateFlowLayout, UIAdaptivePresen
     var isDraggingEnded: Bool = false
     var isfirstLoad = true
     var firstItem = false
+    var isFirstGallerySelected = false
     
     // MARK: - Initializer
 
@@ -159,7 +161,7 @@ extension RootNode {
         self.selectPostCollectionView = SelectPostCollectionView()
         self.selectPostCollectionView.translatesAutoresizingMaskIntoConstraints = false
         self.view.addSubview(self.selectPostCollectionView)
-        self.selectPostCollectionView.isHidden = false
+        self.selectPostCollectionView.isHidden = true
 
         // Calculate the height for the collection view
         let height = UIScreen.main.bounds.height * 1 / 4
@@ -209,6 +211,7 @@ extension RootNode {
 
             if selectPostCollectionView.isHidden == false {
                 cell.showView()
+                selectPostCollectionView.isHidden = true
             }
         }
     }
@@ -279,7 +282,6 @@ extension RootNode: ASCollectionDelegate, ASCollectionDataSource {
     // MARK: - ASCollectionDataSource
 
     /// Provides a node block for each item in the collection node.
-    /// Decides which type of node (e.g., VideoNode, StitchGalleryNode) to use based on the collection node.
     /// - Parameters:
     ///   - collectionNode: The collection node requesting the node.
     ///   - indexPath: The index path of the item.
@@ -309,10 +311,17 @@ extension RootNode: ASCollectionDelegate, ASCollectionDataSource {
                     strongSelf.firstItem = false
                 }
                 
+                // Assigning a closure to the viewStitchBtn property of the VideoNode.
+                node.viewStitchBtn = { [weak self] node in
+                    guard let videoNode = node as? VideoNode else { return }
+                    self?.viewStitchedPost(node: videoNode)
+                }
+                
                 return node
             }
         }
     }
+
 
     /// Configures properties of a cell node.
     /// - Parameters:
@@ -324,6 +333,37 @@ extension RootNode: ASCollectionDelegate, ASCollectionDataSource {
         node.automaticallyManagesSubnodes = true
     }
 
+    
+    func collectionNode(_ collectionNode: ASCollectionNode, didSelectItemAt indexPath: IndexPath) {
+        
+        if collectionNode == galleryCollectionNode {
+            
+            if let currentIndex = currentIndex, abs(currentIndex - indexPath.row) > 1 {
+                var prev = IndexPath(item: currentIndex, section: 0)
+                
+                // If the user is moving forward
+                if indexPath.row > currentIndex {
+                    prev = IndexPath(item: indexPath.row - 1, section: 0)
+                }
+                
+                // If the user is moving backward
+                if indexPath.row < currentIndex {
+                    prev = IndexPath(item: indexPath.row + 1, section: 0)
+                }
+                
+                self.mainCollectionNode.scrollToItem(at: prev, at: .centeredVertically, animated: false)
+                self.mainCollectionNode.scrollToItem(at: indexPath, at: .centeredVertically, animated: true)
+                print("scroll: scroll1")
+            } else {
+                self.mainCollectionNode.scrollToItem(at: indexPath, at: .centeredVertically, animated: true)
+                print("scroll: scroll2")
+            }
+            
+            
+        }
+        
+        
+    }
 
 }
 
@@ -459,6 +499,8 @@ extension RootNode {
         // Retrieve the cell at the given index from the main collection node.
         if let cell = self.mainCollectionNode.nodeForItem(at: IndexPath(row: index, section: 0)) as? VideoNode {
             
+            print("currentIndex: \(index)")
+            
             // Cell selection/deselection logic for the gallery collection node.
             let indexPath = IndexPath(row: index, section: 0)
             if let imgCell = galleryCollectionNode.nodeForItem(at: indexPath) as? StitchGalleryNode {
@@ -466,6 +508,7 @@ extension RootNode {
                 updateCellAppearance(imgCell, isSelected: true)
                 galleryCollectionNode.selectItem(at: indexPath, animated: false, scrollPosition: [])
                 galleryCollectionNode.scrollToItem(at: indexPath, at: .centeredHorizontally, animated: true)
+                
 
                 // Deselect all other cells in the gallery collection node.
                 for i in 0..<galleryCollectionNode.numberOfItems(inSection: 0) {
@@ -495,6 +538,11 @@ extension RootNode {
     ///   - cell: The StitchGalleryNode whose appearance is to be updated.
     ///   - isSelected: A Boolean indicating whether the cell is selected.
     func updateCellAppearance(_ cell: StitchGalleryNode, isSelected: Bool) {
+        
+        if !isFirstGallerySelected {
+            isFirstGallerySelected = true
+        }
+        
         // Set the corner radius for the cell.
         cell.layer.cornerRadius = 10
 
@@ -611,5 +659,71 @@ extension RootNode {
             cell.statusObservation = nil
         }
     }
+    
+    /// Toggles the visibility of the stitched post view based on its current state.
+    /// - Parameter node: The `VideoNode` that is being interacted with.
+    func hideStitchedView() {
+        // Check if the selectPostCollectionView is currently visible
+        if self.selectPostCollectionView.isHidden == false {
+            // If visible, hide the stitched view
+            if let cell = self.mainCollectionNode.nodeForItem(at: IndexPath(row: currentIndex!, section: 0)) as? VideoNode {
+                hideStitchView(node: cell)
+            }
+        }
+    }
+    
+    /// Toggles the visibility of the stitched post view based on its current state.
+    /// - Parameter node: The `VideoNode` that is being interacted with.
+    func viewStitchedPost(node: VideoNode) {
+        // Check if the selectPostCollectionView is currently visible
+        if self.selectPostCollectionView.isHidden == false {
+            // If visible, hide the stitched view
+            hideStitchView(node: node)
+        } else {
+            // If not visible, show the stitched view
+            showStitchView(node: node)
+        }
+    }
+
+    
+    /// Shows the stitched view for a given node and updates the gallery collection node.
+    /// - Parameter node: The `VideoNode` to be displayed.
+    func showStitchView(node: VideoNode) {
+        // Ensure the stitched view is made visible only once when first selected.
+        if !isFirstGallerySelected {
+            isFirstGallerySelected = true
+
+            // Ensure there is a current index to work with.
+            guard let currentIndex = currentIndex else {
+                print("Current index is not set.")
+                return
+            }
+
+            // Cell selection/deselection logic for the gallery collection node.
+            let indexPath = IndexPath(row: currentIndex, section: 0)
+            if let imgCell = galleryCollectionNode.nodeForItem(at: indexPath) as? StitchGalleryNode {
+                // Update the appearance of the selected cell.
+                updateCellAppearance(imgCell, isSelected: true)
+                galleryCollectionNode.selectItem(at: indexPath, animated: false, scrollPosition: [])
+                galleryCollectionNode.scrollToItem(at: indexPath, at: .centeredHorizontally, animated: false)
+
+            }
+        }
+        
+        // Hide the view of the node and make the selectPostCollectionView visible.
+        node.hideView()
+        self.selectPostCollectionView.isHidden = false
+    }
+
+
+    
+    /// Hides the stitched view for a given node.
+    /// - Parameter node: The `VideoNode` whose view is to be hidden.
+    func hideStitchView(node: VideoNode) {
+        // Hide the stitched view
+        node.showView()
+        self.selectPostCollectionView.isHidden = true
+    }
+
     
 }
