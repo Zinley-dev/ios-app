@@ -498,9 +498,7 @@ extension RootNode {
     func playVideo(index: Int) {
         // Retrieve the cell at the given index from the main collection node.
         if let cell = self.mainCollectionNode.nodeForItem(at: IndexPath(row: index, section: 0)) as? VideoNode {
-            
-            print("currentIndex: \(index)")
-            
+        
             // Cell selection/deselection logic for the gallery collection node.
             let indexPath = IndexPath(row: index, section: 0)
             if let imgCell = galleryCollectionNode.nodeForItem(at: indexPath) as? StitchGalleryNode {
@@ -538,24 +536,26 @@ extension RootNode {
     ///   - cell: The StitchGalleryNode whose appearance is to be updated.
     ///   - isSelected: A Boolean indicating whether the cell is selected.
     func updateCellAppearance(_ cell: StitchGalleryNode, isSelected: Bool) {
-        
+        // Ensuring the gallery selection flag is set on the first selection
         if !isFirstGallerySelected {
             isFirstGallerySelected = true
         }
         
-        // Set the corner radius for the cell.
+        // Set the corner radius for the cell to create rounded corners.
         cell.layer.cornerRadius = 10
 
-        // Update the border width based on the selection state.
+        // Change the border width depending on whether the cell is selected.
+        // If selected, set a border width of 2; otherwise, no border.
         cell.layer.borderWidth = isSelected ? 2 : 0
 
-        // Update the border color based on the selection state.
-        // Uses a secondary color when selected, clear (no color) when not.
+        // Change the border color depending on the selection state.
+        // Use a secondary color when selected and clear (transparent) when not selected.
         cell.layer.borderColor = isSelected ? UIColor.secondary.cgColor : UIColor.clear.cgColor
 
-        // Set the cell's selected state.
+        // Update the cell's internal selected state.
         cell.isSelected = isSelected
     }
+
 
 
 }
@@ -650,6 +650,7 @@ extension RootNode {
         posts.removeAll()
         // Reload the collection node within the cell to reflect the changes.
         mainCollectionNode.reloadData()
+        galleryCollectionNode.reloadData()
     }
     
     /// Removes all observers from the video node.
