@@ -895,8 +895,14 @@ extension APIManager {
     }
   }
 
-  func listStitch(pid: String, completion: @escaping APICompletion) {
-    postStitchManager.request(.listStitch(pid: pid)) { result in
+  func listStitch(pid: String, page: Int = 1, completion: @escaping APICompletion) {
+    postStitchManager.request(.listStitch(pid: pid, page: page)) { result in
+      completion(result)
+    }
+  }
+  
+  func listStitchNext(pid: String, page: Int = 1, completion: @escaping APICompletion) {
+    postStitchManager.request(.listStitchNext(pid: pid, page: page)) { result in
       completion(result)
     }
   }
