@@ -168,7 +168,7 @@ class VideoNode: ASCellNode, ASVideoNodeDelegate {
     override func layoutSpecThatFits(_ constrainedSize: ASSizeRange) -> ASLayoutSpec {
         
         // Define common padding values for the video or image node within the cell.
-        let videoPadding = UIEdgeInsets(top: 2, left: 8, bottom: 37, right: 8)
+        let videoPadding = UIEdgeInsets(top: 50, left: 8, bottom: 37, right: 8)
 
         // Determine the child node based on the presence of a muxPlaybackId.
         // Using ternary operator for concise conditional assignment.
@@ -180,7 +180,7 @@ class VideoNode: ASCellNode, ASVideoNodeDelegate {
         
         // Set the main view inset, keeping the original bottom inset.
         // Using UIEdgeInsets for consistency and clarity.
-        let mainViewInset = UIEdgeInsets(top: 0, left: 0, bottom: 8, right: 0)
+        let mainViewInset = UIEdgeInsets(top: 48, left: 0, bottom: 8, right: 0)
 
         // Create an inset layout spec for the main view.
         // This approach provides a clear structure for the layout, making it easy to adjust in the future.
@@ -811,7 +811,7 @@ extension VideoNode {
     private func addHeaderConstraints(to childView: UIView, within parentView: UIView, constant: CGFloat = 0) {
         childView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            childView.topAnchor.constraint(equalTo: parentView.topAnchor, constant: constant),
+            childView.topAnchor.constraint(equalTo: parentView.topAnchor, constant: 94),
             childView.leadingAnchor.constraint(equalTo: parentView.leadingAnchor, constant: constant),
             childView.trailingAnchor.constraint(equalTo: parentView.trailingAnchor, constant: constant),
             childView.heightAnchor.constraint(equalToConstant: 80) // Height of the header view.

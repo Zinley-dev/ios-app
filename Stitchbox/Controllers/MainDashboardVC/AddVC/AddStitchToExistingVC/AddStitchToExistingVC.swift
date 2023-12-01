@@ -569,14 +569,14 @@ extension AddStitchToExistingVC {
 
     /// Adds a 'Decline' button to the alert.
     private func addDeclineButton(to alert: SCLAlertView) {
-        _ = alert.addButton("Decline", backgroundColor: .normalButtonBackground, textColor: .black) {
+        alert.addButton("Decline", backgroundColor: .normalButtonBackground, textColor: .black) {
             self.showNoteAndDismiss(text: "Thank you and feel free to enjoy other videos at Stitchbox!")
         }
     }
 
     /// Adds an 'Agree' button to the alert.
     private func addAgreeButton(to alert: SCLAlertView) {
-        _ = alert.addButton("Agree", backgroundColor: UIColor.secondary, textColor: .white) {
+        alert.addButton("Agree", backgroundColor: UIColor.secondary, textColor: .white) {
             self.updateUserDefaultAndShowNote()
         }
     }
@@ -592,20 +592,18 @@ extension AddStitchToExistingVC {
     /// Shows a note and dismisses the view controller.
     private func showNoteAndDismiss(text: String) {
         showNote(text: text)
-        if let navigationController = self.navigationController {
-            navigationController.popViewController(animated: true)
+        if self.navigationController != nil {
+            self.navigationController?.popViewController(animated: true)
         } else {
             self.dismiss(animated: true)
         }
     }
 
+
     /// Returns the terms string.
     private func getTermsString() -> String {
-        return """
-               Ensure your content maintains relevance to the original topic.
-               Exhibit respect towards the original author in your content.
-               Abide by our terms of use and guidelines in the creation of your content.
-               """
+        return "Ensure your content maintains relevance to the original topic. Exhibit respect towards the original author in your content. Abide by our terms of use and guidelines in the creation of your content."
     }
+
 
 }
