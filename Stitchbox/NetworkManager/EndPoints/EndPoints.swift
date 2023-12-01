@@ -1893,6 +1893,8 @@ public enum PostStitchApi {
   case getMyWaitlist(page: Int)
   case getMyPostsHasStitched(page: Int)
   case getStitchTo(pid: String)
+  case listStitch(pid: String, page: Int)
+  case listStitchNext(pid: String, page: Int)
   case getStitchInsight(uid: String)
 }
 extension PostStitchApi: EndPointType {
@@ -1936,6 +1938,10 @@ extension PostStitchApi: EndPointType {
         return "/stitch-to/\(pid)"
       case .getStitchInsight(let uid):
         return "/\(uid)/insight"
+      case .listStitch(let pid, let page):
+        return "/list-stitch/\(pid)/prev?page=\(page)"
+      case .listStitchNext(let pid, let page):
+        return "/list-stitch/\(pid)/next?page=\(page)"
     }
   }
   
@@ -1979,6 +1985,10 @@ extension PostStitchApi: EndPointType {
         return .get
       case .getStitchTo:
         return .get
+      case .listStitch:
+        return .get
+      case .listStitchNext:
+        return .get
       case .countStitchBy:
         return .get
       case .getStitchInsight:
@@ -2021,6 +2031,10 @@ extension PostStitchApi: EndPointType {
       case .getMyPostInWaitlist:
         return .request
       case .getStitchTo:
+        return .request
+      case .listStitch:
+        return .request
+      case .listStitchNext:
         return .request
       case .countStitchBy:
         return .request
