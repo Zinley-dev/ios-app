@@ -13,6 +13,7 @@ import SendBirdSDK
 import AVFoundation
 import AVKit
 import AnimatedCollectionViewLayout
+import MarqueeLabel
 
 fileprivate let FontSize: CGFloat = 13
 fileprivate let OrganizerImageSize: CGFloat = 30
@@ -30,7 +31,8 @@ class RootNode: ASCellNode, UICollectionViewDelegateFlowLayout, UIAdaptivePresen
     // UI elements
     var galleryCollectionNode: ASCollectionNode! // Collection node for displaying a gallery of items.
     var mainCollectionNode: ASCollectionNode! // Main collection node for primary content display.
-    var selectPostCollectionView: SelectPostCollectionView!
+    var selectPostCollectionView: SelectPostCollectionView! // View to hold Main collection node.
+    var animatedLabel: MarqueeLabel! // Animated label for heading next item.
 
     // Size properties
     var saveMin = CGSize(width: 0, height: 0) // Minimum size for some UI or layout purpose (context not clear from snippet).
@@ -124,6 +126,8 @@ class RootNode: ASCellNode, UICollectionViewDelegateFlowLayout, UIAdaptivePresen
         
     }
     
+    
+    
 }
 
 // MARK: - Lifecycle and Layout
@@ -138,6 +142,7 @@ extension RootNode {
         // Applying styling configurations to the node.
         // This includes setting up visual aspects and layout behaviors.
         self.applyStyle()
+        self.setupAnimatedLabel()
     }
 
     /// Defines the layout specification for the node.
@@ -301,7 +306,7 @@ extension RootNode: ASCollectionDelegate, ASCollectionDataSource {
             // Handling main collection node.
             return { [weak self] in
                 guard let strongSelf = self else { return ASCellNode() }
-                
+                print("rootNode test2: \(strongSelf.firstItem), \(indexPath.row)")
                 let isFirstItem = strongSelf.firstItem && indexPath.row == 0
                 let node = VideoNode(with: post, isPreview: false, firstItem: isFirstItem)
                 strongSelf.configureNode(node, at: indexPath)
@@ -309,6 +314,9 @@ extension RootNode: ASCollectionDelegate, ASCollectionDataSource {
                 // Update the flag after the first load.
                 if isFirstItem {
                     strongSelf.firstItem = false
+                    delay(1) {
+                        strongSelf.handleAnimationTextAndImage(post: post)
+                    }
                 }
                 
                 // Assigning a closure to the viewStitchBtn property of the VideoNode.
@@ -519,6 +527,8 @@ extension RootNode {
             }
             
             // Play the video in the selected cell.
+            
+            handleAnimationTextAndImage(post: cell.post)
             cell.playVideo()
         }
     }
@@ -723,3 +733,236 @@ extension RootNode {
 
     
 }
+
+
+extension RootNode {
+    
+    // MARK: - Label Setup
+
+    /// Sets up an animated label with specific properties and constraints.
+    func setupAnimatedLabel() {
+        // Initialize and configure the animated label
+        animatedLabel = MarqueeLabel(frame: CGRect.zero, rate: 30.0, fadeLength: 10.0)
+        animatedLabel.translatesAutoresizingMaskIntoConstraints = false
+        configureAnimatedLabelProperties()
+        
+        // Create a container for the label and add constraints
+        let container = UIView()
+        container.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(container)
+        container.addSubview(animatedLabel)
+        setupContainerConstraints(container)
+        
+        // Add tap gesture recognizer to the container
+        makeLabelTappable(with: container)
+    }
+
+    // MARK: - Private Methods
+
+    /// Configures properties of the animated label.
+    private func configureAnimatedLabelProperties() {
+        animatedLabel.backgroundColor = .clear
+        animatedLabel.type = .continuous
+        animatedLabel.leadingBuffer = 15.0
+        animatedLabel.trailingBuffer = 10.0
+        animatedLabel.animationDelay = 0.0
+        animatedLabel.textAlignment = .center
+        animatedLabel.font = FontManager.shared.roboto(.Bold, size: 15)
+        animatedLabel.textColor = .white
+    }
+
+    /// Sets up constraints for the container of the animated label.
+    private func setupContainerConstraints(_ container: UIView) {
+        
+        let button = UIButton()
+        button.translatesAutoresizingMaskIntoConstraints = false // Important for Auto Layout
+        button.backgroundColor = .clear
+        button.setTitle("", for: .normal)
+        button.addTarget(self, action: #selector(labelTapped), for: .touchUpInside)
+        button.isUserInteractionEnabled = true // Ensure user interaction is enabled
+        
+        container.addSubview(button)
+        container.backgroundColor = .clear
+        
+        NSLayoutConstraint.activate([
+            container.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 65),
+            container.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -78),
+            container.topAnchor.constraint(equalTo: view.topAnchor, constant: 50),
+            container.heightAnchor.constraint(equalToConstant: 50), // Fixed height of 50
+            animatedLabel.leadingAnchor.constraint(equalTo: container.leadingAnchor, constant: 10),
+            animatedLabel.trailingAnchor.constraint(equalTo: container.trailingAnchor, constant: -10),
+            animatedLabel.topAnchor.constraint(equalTo: container.topAnchor, constant: 10),
+            animatedLabel.bottomAnchor.constraint(equalTo: container.bottomAnchor, constant: -10),
+            
+            
+            button.leadingAnchor.constraint(equalTo: container.leadingAnchor, constant: 0),
+            button.trailingAnchor.constraint(equalTo: container.trailingAnchor, constant: 0),
+            button.topAnchor.constraint(equalTo: container.topAnchor, constant: 0),
+            button.bottomAnchor.constraint(equalTo: container.bottomAnchor, constant: 0)
+        ])
+    }
+    
+    /// Makes the label tappable and adds a tap gesture recognizer to the container.
+    private func makeLabelTappable(with container: UIView) {
+        container.isUserInteractionEnabled = true
+        let tap = UITapGestureRecognizer(target: self, action: #selector(labelTapped))
+        tap.numberOfTapsRequired = 1
+        container.addGestureRecognizer(tap)
+    }
+
+    // MARK: - Animation Text Methods
+
+    /// Applies the given text to the animated label.
+    /// - Parameter text: The text to be displayed in the animated label.
+    func applyAnimationText(text: String) {
+        if !text.isEmpty {
+            // Add extra spaces to ensure the animation effect is visible
+            animatedLabel.text = text + "                                  "
+            // Uncomment the line below to restart the label animation with the new text
+            // animatedLabel.restartLabel()
+        } else {
+            // Uncomment the line below to pause the label animation when there's no text
+            // animatedLabel.pauseLabel()
+            animatedLabel.text = text
+        }
+    }
+    
+    /// Handles the animation text and image based on the given post.
+    /// - Parameter post: The post model containing data to display.
+    func handleAnimationTextAndImage(post: PostModel) {
+        guard let currentIndex = currentIndex else { return }
+        let nextIndex = currentIndex + 1
+        let postCount = self.posts.count
+
+        if postCount == 1 {
+            // Only one post in the chain - encourage to add more stitches
+            applyAnimationText(text: "Start stitching to this post!            ")
+        } else if nextIndex < postCount {
+            // Handle next post in a chain with multiple posts
+            updateAnimationTextForPost(at: nextIndex, prefixText: "Up next: ")
+        } else if currentIndex == postCount - 1 {
+            // The last post in a longer chain - encourage to continue stitching
+            applyAnimationText(text: "Keep the chain going! Stitch to this post!            ")
+        }
+    }
+
+    // MARK: - Private Methods
+
+    /// Updates the animation text for a specific post.
+    /// - Parameters:
+    ///   - index: Index of the post in the posts array.
+    ///   - prefixText: The prefix text to display (e.g., "Up next: ").
+    private func updateAnimationTextForPost(at index: Int, prefixText: String) {
+        let item = self.posts[index]
+        if let username = item.owner?.username {
+            self.applyAnimationText(text: "\(prefixText)@\(username)            ")
+        }
+    }
+    
+    // MARK: - Label Interaction
+
+    /// Action for tap gesture on label's container.
+    @objc func labelTapped() {
+        guard let currentIndex = currentIndex, let labelText = animatedLabel.text else { return }
+
+        if labelText.contains("Keep the chain going! Stitch to this post!") || labelText.contains("Start stitching to this post!") {
+            // Present the stitch setting view controller
+            stitchTapped()
+        } else if labelText.contains("Up next") {
+            // Scroll to the next item if available
+            scrollToNextItem(currentIndex: currentIndex)
+        }
+    }
+
+    // MARK: - Navigation and Presentation
+
+    /// Scrolls to the next item in the collection view.
+    /// - Parameter currentIndex: The current index in the posts array.
+    private func scrollToNextItem(currentIndex: Int) {
+        guard currentIndex + 1 < posts.count else { return }
+
+        let indexPath = IndexPath(item: currentIndex + 1, section: 0)
+        // Assuming mainCollectionNode is a collection view in the class
+        mainCollectionNode.scrollToItem(at: indexPath, at: .centeredVertically, animated: true)
+    }
+    
+    // MARK: - Stitch Handling
+
+    /// Handles the stitch action.
+    @objc func stitchTapped() {
+        guard let viewController = UIViewController.currentViewController() else {
+            showStitchError()
+            return
+        }
+        
+        presentStitchSettingViewController(from: viewController)
+    }
+
+    /// Presents the stitch setting view controller.
+    private func presentStitchSettingViewController(from viewController: UIViewController) {
+        let stitchSettingVC = StitchSettingVC()
+        configureStitchSettingVC(stitchSettingVC, presentingFrom: viewController)
+        
+        viewController.present(stitchSettingVC, animated: true)
+    }
+
+    /// Configures the StitchSettingVC with appropriate data.
+    private func configureStitchSettingVC(_ stitchSettingVC: StitchSettingVC, presentingFrom viewController: UIViewController) {
+        stitchSettingVC.modalPresentationStyle = .custom
+        stitchSettingVC.transitioningDelegate = viewController
+        global_presetingRate = 0.25
+        global_cornerRadius = 35
+        
+        // Configure view controller based on its type
+        if let feedVC = viewController as? FeedViewController {
+            updateFeedViewController(feedVC, with: stitchSettingVC)
+        } else if let selectedParentVC = viewController as? SelectedParentVC {
+            updateSelectedViewController(selectedParentVC, with: stitchSettingVC)
+        }
+    }
+
+    // Helper methods to update the view controller
+    private func updateFeedViewController(_ viewController: FeedViewController, with stitchSettingVC: StitchSettingVC) {
+        stitchSettingVC.isSelected = false
+        viewController.editeddPost = posts[currentIndex!]
+    }
+    
+    private func updateSelectedViewController(_ viewController: SelectedParentVC, with stitchSettingVC: StitchSettingVC) {
+        stitchSettingVC.isSelected = true
+        if viewController.isRoot {
+            viewController.selectedRootPostVC.editeddPost = posts[currentIndex!]
+        } else {
+            viewController.stitchViewController.editeddPost = posts[currentIndex!]
+        }
+    }
+    
+    /// Displays an error related to stitching functionality.
+    private func showStitchError() {
+        // Ensure a view controller is available.
+        guard let vc = UIViewController.currentViewController() else {
+            return
+        }
+        
+        let post = posts[currentIndex!]
+
+        // Check if the post's owner's username is available.
+        if let stitchUsername = post.owner?.username {
+            // Fetch the current user's username.
+            let myUsername = _AppCoreData.userDataSource.value?.userName
+            // Determine the title based on the availability of myUsername.
+            let title = myUsername != nil ? "Hi \(myUsername!)," : "Oops!"
+            // Construct the error message.
+            let message = "@\(stitchUsername) has to follow you to enable stitch or a technical issue has occurred"
+            
+            // Show error in the viewController, if applicable.
+            if let update1 = vc as? FeedViewController {
+                update1.showErrorAlert(title, msg: message)
+            } else if let update1 = vc as? SelectedRootPostVC {
+                update1.showErrorAlert(title, msg: message)
+            }
+        }
+    }
+    
+}
+
+

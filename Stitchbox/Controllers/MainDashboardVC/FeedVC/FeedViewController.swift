@@ -107,6 +107,8 @@ class FeedViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
                 object: nil
             )
         }
+        
+        self.navigationController?.navigationBar.isUserInteractionEnabled = false
     }
 
     /// Called when the view is about to be removed from the view hierarchy.
@@ -536,13 +538,12 @@ extension FeedViewController: ASCollectionDataSource {
         // Returns a block that creates and configures a cell node.
         return { [weak self] in
             guard let self = self else { return ASCellNode() }
-
             let isFirstItem = self.isFirstLoad && indexPath.row == 0
             let node = RootNode(with: post, firstItem: isFirstItem)
             self.configureNode(node, at: indexPath)
 
             // Update the flag after the first load.
-            if self.isFirstLoad {
+            if isFirstItem {
                 self.isFirstLoad = false
             }
 
@@ -781,6 +782,9 @@ extension FeedViewController {
     func playVideo(index: Int) {
         if let cell = self.collectionNode.nodeForItem(at: IndexPath(row: index, section: 0)) as? RootNode {
             cell.playVideo(index: cell.currentIndex!)
+            if cell.animatedLabel.text != "" {
+                cell.animatedLabel.restartLabel()
+            }
         }
     }
     
