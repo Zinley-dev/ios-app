@@ -767,25 +767,16 @@ extension RootNode {
         animatedLabel.trailingBuffer = 10.0
         animatedLabel.animationDelay = 0.0
         animatedLabel.textAlignment = .center
-        animatedLabel.font = FontManager.shared.roboto(.Bold, size: 15)
+        animatedLabel.font = FontManager.shared.roboto(.Bold, size: 13)
         animatedLabel.textColor = .white
     }
 
     /// Sets up constraints for the container of the animated label.
     private func setupContainerConstraints(_ container: UIView) {
-        
-        let button = UIButton()
-        button.translatesAutoresizingMaskIntoConstraints = false // Important for Auto Layout
-        button.backgroundColor = .clear
-        button.setTitle("", for: .normal)
-        button.addTarget(self, action: #selector(labelTapped), for: .touchUpInside)
-        button.isUserInteractionEnabled = true // Ensure user interaction is enabled
-        
-        container.addSubview(button)
         container.backgroundColor = .clear
         
         NSLayoutConstraint.activate([
-            container.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 65),
+            container.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 55),
             container.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -78),
             container.topAnchor.constraint(equalTo: view.topAnchor, constant: 50),
             container.heightAnchor.constraint(equalToConstant: 50), // Fixed height of 50
@@ -793,12 +784,6 @@ extension RootNode {
             animatedLabel.trailingAnchor.constraint(equalTo: container.trailingAnchor, constant: -10),
             animatedLabel.topAnchor.constraint(equalTo: container.topAnchor, constant: 10),
             animatedLabel.bottomAnchor.constraint(equalTo: container.bottomAnchor, constant: -10),
-            
-            
-            button.leadingAnchor.constraint(equalTo: container.leadingAnchor, constant: 0),
-            button.trailingAnchor.constraint(equalTo: container.trailingAnchor, constant: 0),
-            button.topAnchor.constraint(equalTo: container.topAnchor, constant: 0),
-            button.bottomAnchor.constraint(equalTo: container.bottomAnchor, constant: 0)
         ])
     }
     
@@ -839,7 +824,7 @@ extension RootNode {
             applyAnimationText(text: "Start stitching to this post!            ")
         } else if nextIndex < postCount {
             // Handle next post in a chain with multiple posts
-            updateAnimationTextForPost(at: nextIndex, prefixText: "Up next: ")
+            updateAnimationTextForPost(at: nextIndex, prefixText: "--> ")
         } else if currentIndex == postCount - 1 {
             // The last post in a longer chain - encourage to continue stitching
             applyAnimationText(text: "Keep the chain going! Stitch to this post!            ")
@@ -854,10 +839,25 @@ extension RootNode {
     ///   - prefixText: The prefix text to display (e.g., "Up next: ").
     private func updateAnimationTextForPost(at index: Int, prefixText: String) {
         let item = self.posts[index]
-        if let username = item.owner?.username {
-            self.applyAnimationText(text: "\(prefixText)@\(username)            ")
+
+        // Safely handle the optional username
+        let usernameText = item.owner?.username ?? "Unknown User"
+
+        // Trim the content to 30 characters for a quick preview
+        let previewContent = String(item.content.prefix(30))
+
+        // Construct the animated text
+        let animatedText: String
+        if !previewContent.isEmpty {
+            animatedText = "\(prefixText)@\(usernameText) - \(previewContent) ...      "
+        } else {
+            animatedText = "\(prefixText)@\(usernameText)      "
         }
+
+        // Apply the animation text
+        self.applyAnimationText(text: animatedText)
     }
+
     
     // MARK: - Label Interaction
 

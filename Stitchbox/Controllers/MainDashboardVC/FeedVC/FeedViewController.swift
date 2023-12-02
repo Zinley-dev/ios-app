@@ -90,6 +90,7 @@ class FeedViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
         setupNavBar()          // Ensures navigation bar is set up correctly
         checkNotification()    // Checks for new notifications
         showMiddleBtn(vc: self) // Shows a middle button, if applicable
+        
 
         // Load the feed if the initial loading has been done
         if firstLoadDone {
@@ -108,7 +109,6 @@ class FeedViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
             )
         }
         
-        self.navigationController?.navigationBar.isUserInteractionEnabled = false
     }
 
     /// Called when the view is about to be removed from the view hierarchy.
@@ -199,8 +199,10 @@ extension FeedViewController {
         // Ensuring the navigation bar is visible
         navigationController?.setNavigationBarHidden(false, animated: true)
     }
-    
-    // Add any additional methods related to UI setup below
+
+
+
+
 }
 
 // MARK: - Navigation Controller and Button Setup Extension
