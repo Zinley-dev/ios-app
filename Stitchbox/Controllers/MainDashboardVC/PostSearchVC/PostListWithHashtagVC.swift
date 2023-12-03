@@ -324,7 +324,7 @@ extension PostListWithHashtagVC {
     }
     
     func collectionNode(_ collectionNode: ASCollectionNode, didSelectItemAt indexPath: IndexPath) {
-        if let selectedPostVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "SelectedParentVC") as? SelectedParentVC {
+        if let selectedPostVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "SelectedRootPostVC") as? SelectedRootPostVC {
             
             
             if let hashtag = searchHashtag, hashtag != "" {
@@ -356,10 +356,6 @@ extension PostListWithHashtagVC {
             
         }
     }
-
-
-
-
     
 }
 
@@ -428,8 +424,22 @@ extension PostListWithHashtagVC {
         }
     }
 
-    private func clearExistingPosts() {
+    /// Clears existing posts from the collection node.
+    func clearExistingPosts() {
+        // Calculate the total number of posts before removal.
+        let total = posts.count
+
+        // Iterate through each index and clear posts in each cell.
+        for index in 0..<total {
+            if let cell = collectionNode.nodeForItem(at: IndexPath(row: index, section: 0)) as? RootNode {
+                // Clear the posts array for each cell.
+                cell.clearExistingPosts()
+            }
+        }
+
+        // Clear the main posts array.
         posts.removeAll()
+        // Reload the main collection node to reflect the changes.
         collectionNode.reloadData()
     }
 

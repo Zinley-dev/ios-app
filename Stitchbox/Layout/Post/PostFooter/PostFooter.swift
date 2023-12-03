@@ -133,7 +133,7 @@ class PostFooter: UIView {
         label.attributedText = attributedString
 
         // Set the description label text
-        descriptionLbl.text = description
+        descriptionLbl.text = ""
     }
 
 

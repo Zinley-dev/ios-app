@@ -30,6 +30,7 @@ class VideoNode: ASCellNode, ASVideoNodeDelegate {
     var isViewed = false
     var shouldCountView = true
     var time = 0
+    var isActive = false
     
     // UI components and layout related properties.
     private var cellVideoNode: ASVideoNode
@@ -133,6 +134,7 @@ class VideoNode: ASCellNode, ASVideoNodeDelegate {
             // Logging if the setup was already completed earlier.
             print("Setup already completed for - \(post.id)")
         }
+        
     }
 
     /// `deinit` is called when the object is about to be deallocated.
@@ -314,12 +316,16 @@ extension VideoNode {
         if cellVideoNode.isPlaying() {
             return
         }
+        
 
         // Set mute status based on conditions
         cellVideoNode.muted = shouldMute ?? !globalIsSound
         
         // Remove any existing observers to avoid duplication
         removeObservers()
+        
+        // set isActive
+        isActive = true
 
         // Add observers if the current item is available, otherwise wait and try again
         if cellVideoNode.currentItem != nil {
@@ -419,16 +425,19 @@ extension VideoNode {
 
     /// Starts the video playback.
     func startPlayback() {
+        
         // Removing the spinner before starting playback
         removeSpinner()
 
         // Starting playback if not already playing
-        if !cellVideoNode.isPlaying() {
+        if !cellVideoNode.isPlaying(), isActive {
             // Adjusting bit rate based on network connection
             adjustBitRateBasedOnNetwork()
 
             // Starting the video playback
             cellVideoNode.play()
+        } else {
+            print("Can't play because of \(isActive) or \(cellVideoNode.isPlaying())")
         }
     }
 
@@ -465,10 +474,17 @@ extension VideoNode {
         shouldMute = false
     }
     
+    /// Unmutes the video.
+    func muteVideo() {
+        cellVideoNode.muted = true
+        shouldMute = true
+    }
+    
     /// Removes all observers from the video node.
     func removeObservers() {
         statusObservation?.invalidate()
         statusObservation = nil
+        isActive = false
     }
     
     /// Seek to zero time
@@ -1324,8 +1340,8 @@ extension VideoNode {
         // Configure view controller based on its type
         if let feedVC = viewController as? FeedViewController {
             updateFeedViewController(feedVC, with: stitchSettingVC)
-        } else if let selectedParentVC = viewController as? SelectedParentVC {
-            updateSelectedViewController(selectedParentVC, with: stitchSettingVC)
+        } else if let selectedVC = viewController as? SelectedRootPostVC {
+            updateSelectedViewController(selectedVC, with: stitchSettingVC)
         }
     }
 
@@ -1335,15 +1351,10 @@ extension VideoNode {
         viewController.editeddPost = post
     }
 
-    private func updateSelectedViewController(_ viewController: SelectedParentVC, with stitchSettingVC: StitchSettingVC) {
+    private func updateSelectedViewController(_ viewController: SelectedRootPostVC, with stitchSettingVC: StitchSettingVC) {
         stitchSettingVC.isSelected = true
-        if viewController.isRoot {
-            viewController.selectedRootPostVC.editeddPost = post
-        } else {
-            viewController.stitchViewController.editeddPost = post
-        }
+        viewController.editeddPost = post
     }
-
 
     /// Displays an error related to stitching functionality.
     private func showStitchError() {

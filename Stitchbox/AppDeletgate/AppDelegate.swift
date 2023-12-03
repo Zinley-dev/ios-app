@@ -584,7 +584,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
             if let currentViewController = UIViewController.currentViewController() {
                 
                 // Check if the current view controller is one of the specified types
-                if currentViewController is ParentViewController || currentViewController is TrendingVC || currentViewController is MainMessageVC || currentViewController is ProfileViewController {
+                if currentViewController is FeedViewController || currentViewController is TrendingVC || currentViewController is MainMessageVC || currentViewController is ProfileViewController {
                     
                     // Get the navigation controller of the current view controller, if any
                     if let navigationController = currentViewController.navigationController {
@@ -611,7 +611,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
     /// - Parameter post: The `PostModel` representing the post to be displayed.
     func openPost(post: PostModel) {
         // Attempt to instantiate 'SelectedParentVC' from the 'Dashboard' storyboard
-        if let selectedParentVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "SelectedParentVC") as? SelectedParentVC {
+        if let selectedParentVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "SelectedRootPostVC") as? SelectedRootPostVC {
             
             // Find the currently active view controller
             if let currentViewController = UIViewController.currentViewController() {

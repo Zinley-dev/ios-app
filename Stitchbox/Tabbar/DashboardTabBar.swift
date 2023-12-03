@@ -51,7 +51,7 @@ import Alamofire
     /// Configures the appearance of the action button based on tab bar type.
     private func configureButtonAppearance(for tabBarType: TabBarType) {
         actionButton.setImage(nil, for: .normal) // Clear any previous image
-        actionButton.backgroundColor = tabBarType.color
+        actionButton.backgroundColor = .clear
         
         if tabBarType == .white, cachedResizedImage == nil {
             cachedResizedImage = UIImage(named: "Add 2")?.resize(targetSize: CGSize(width: 26, height: 26))
@@ -320,7 +320,7 @@ import Alamofire
     /// Sets the badge value for unread messages count on the tab bar item.
     /// - Parameter totalCount: The total count of unread messages.
     func setUnreadMessagesCount(_ totalCount: UInt) {
-        var badgeValue: String? = totalCount == 0 ? nil : (totalCount > 99 ? "99+" : "\(totalCount)")
+        let badgeValue: String? = totalCount == 0 ? nil : (totalCount > 99 ? "99+" : "\(totalCount)")
 
         if let tabItem = self.tabBar.items?[3] {
             // Update badge and its attributes for the fourth tab item.
@@ -349,6 +349,11 @@ import Alamofire
         }
 
         tabBarIndex == 0 ? setupBlackTabBar() : setupWhiteTabBar()
+        
+        // Post notification to scroll to top if the first tab is selected.
+        if tabBarIndex == 0 {
+            NotificationCenter.default.post(name: NSNotification.Name(rawValue: "scrollToTop"), object: nil)
+        }
 
         // Clear badge value for the selected tab.
         clearBadgeForSelectedTab(in: tabBarController)

@@ -422,7 +422,7 @@ class PendingNode: ASCellNode, ASVideoNodeDelegate {
     }
 
     func presentSelectedPostVC(with posts: [PostModel]) {
-        guard let RVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "SelectedPostVC") as? SelectedParentVC,
+        guard let RVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "SelectedRootPostVC") as? SelectedRootPostVC,
               let vc = UIViewController.currentViewController() else { return }
 
         if general_vc != nil {

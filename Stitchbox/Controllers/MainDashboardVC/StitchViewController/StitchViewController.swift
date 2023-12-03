@@ -678,44 +678,7 @@ extension StitchViewController {
     }
     
     @objc func labelTapped() {
-        if currentIndex != nil, currentIndex! + 1 < posts.count {
-                
-            let indexPath = IndexPath(item: currentIndex! + 1, section: 0)
-            collectionNode.scrollToItem(at: indexPath, at: .centeredVertically, animated: true)
-                
-        } else if currentIndex! + 1 == posts.count {
-            
-            if let vc = UIViewController.currentViewController() {
-                if vc is ParentViewController {
-                    if let update1 = vc as? ParentViewController {
-                        if !update1.isFeed {
-                            // Calculate the next page index
-                           
-                            let offset = CGFloat(0) * update1.scrollView.bounds.width
-                            
-                            // Scroll to the next page
-                            update1.scrollView.setContentOffset(CGPoint(x: offset, y: 0), animated: true)
-                            update1.currentPageIndex = 0
-                            update1.showFeed()
-                          
-                        }
-                    } else if let update1 = vc as? SelectedParentVC {
-                        if !update1.isRoot {
-                            // Calculate the next page index
-                           
-                            let offset = CGFloat(0) * update1.scrollView.bounds.width
-                            
-                            // Scroll to the next page
-                            update1.scrollView.setContentOffset(CGPoint(x: offset, y: 0), animated: true)
-                            update1.currentPageIndex = 0
-                            update1.showRoot()
-                          
-                        }
-                    }
-                }
-            }
-            
-        }
+        
     }
     
 }

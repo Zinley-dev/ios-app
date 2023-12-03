@@ -43,7 +43,7 @@ extension AddVC {
         print("switch request")
         self.tabBarController?.selectedViewController = self.tabBarController?.viewControllers![0]
         
-        if let vc = UIViewController.currentViewController() as? ParentViewController {
+        if let vc = UIViewController.currentViewController() as? FeedViewController {
             
             vc.setupTabBar()
             

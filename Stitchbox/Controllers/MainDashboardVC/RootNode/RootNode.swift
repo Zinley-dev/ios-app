@@ -123,7 +123,19 @@ class RootNode: ASCellNode, UICollectionViewDelegateFlowLayout, UIAdaptivePresen
     override func didEnterVisibleState() {
         super.didEnterVisibleState() // Always call the super implementation of lifecycle methods
 
-        
+        activateVideoNodeIfNeeded()
+    }
+
+    // MARK: - Private Helpers
+
+    /// Activates the video node if applicable.
+    private func activateVideoNodeIfNeeded() {
+        guard let index = currentIndex else { return }
+
+        let indexPath = IndexPath(row: index, section: 0)
+        if let cell = mainCollectionNode.nodeForItem(at: indexPath) as? VideoNode {
+            cell.isActive = true
+        }
     }
     
     
@@ -131,7 +143,6 @@ class RootNode: ASCellNode, UICollectionViewDelegateFlowLayout, UIAdaptivePresen
 }
 
 // MARK: - Lifecycle and Layout
-
 extension RootNode {
 
     /// Called when the node has finished loading.
@@ -222,7 +233,6 @@ extension RootNode {
     }
 }
 
-
 // MARK: - Styling
 
 extension RootNode {
@@ -232,7 +242,7 @@ extension RootNode {
     func applyStyle() {
         // Setting the background color for the main collection node.
         // Both the node and its underlying view are given the same background color for consistency.
-        self.mainCollectionNode.backgroundColor = .black
+        self.mainCollectionNode.backgroundColor = .yellow
         self.mainCollectionNode.view.backgroundColor = .black
 
         // Controlling layout changes and preloading behavior.
@@ -261,8 +271,6 @@ extension RootNode {
 
     }
 }
-
-
 
 // MARK: - ASCollectionDelegate & ASCollectionDataSource
 
@@ -314,7 +322,7 @@ extension RootNode: ASCollectionDelegate, ASCollectionDataSource {
                 // Update the flag after the first load.
                 if isFirstItem {
                     strongSelf.firstItem = false
-                    delay(1) {
+                    delay(1.25) {
                         strongSelf.handleAnimationTextAndImage(post: post)
                     }
                 }
@@ -459,23 +467,22 @@ extension RootNode {
 // MARK: - ASCollectionNode Delegate Methods
 
 extension RootNode {
-
     /// Handles batch fetching for the collection node.
     /// This method is triggered when the collection node is ready to fetch more data.
     /// - Parameters:
     ///   - collectionNode: The collection node requiring more data.
     ///   - context: The batch fetching context.
     func collectionNode(_ collectionNode: ASCollectionNode, willBeginBatchFetchWith context: ASBatchContext) {
-        retrieveNextPageWithCompletion { [weak self] (newPosts) in
+        guard let currentViewController = UIViewController.currentViewController(),
+              currentViewController is FeedViewController || currentViewController is SelectedRootPostVC else {
+            context.completeBatchFetching(true)
+            return
+        }
+
+        retrieveNextPageWithCompletion { [weak self] newPosts in
             guard let self = self else { return }
-            
-            // Updating collection nodes only if the current view controller is of a specific type.
-            if let vc = UIViewController.currentViewController(), vc is FeedViewController {
-                self.insertNewRowsInCollectionNode(newPosts: newPosts)
-                context.completeBatchFetching(true)
-            } else {
-                context.completeBatchFetching(true)
-            }
+            self.insertNewRowsInCollectionNode(newPosts: newPosts)
+            context.completeBatchFetching(true)
         }
     }
 }
@@ -663,8 +670,9 @@ extension RootNode {
     /// Removes all observers from the video node.
     func removeObservers() {
         if let cell = self.mainCollectionNode.nodeForItem(at: IndexPath(row: currentIndex!, section: 0)) as? VideoNode {
-            cell.statusObservation?.invalidate()
-            cell.statusObservation = nil
+            cell.pauseVideo(shouldSeekToStart: false)
+            cell.removeSpinner()
+            cell.removeObservers()
         }
     }
     
@@ -916,8 +924,8 @@ extension RootNode {
         // Configure view controller based on its type
         if let feedVC = viewController as? FeedViewController {
             updateFeedViewController(feedVC, with: stitchSettingVC)
-        } else if let selectedParentVC = viewController as? SelectedParentVC {
-            updateSelectedViewController(selectedParentVC, with: stitchSettingVC)
+        } else if let SelectedRootPostVC = viewController as? SelectedRootPostVC {
+            updateSelectedViewController(SelectedRootPostVC, with: stitchSettingVC)
         }
     }
 
@@ -927,13 +935,9 @@ extension RootNode {
         viewController.editeddPost = posts[currentIndex!]
     }
     
-    private func updateSelectedViewController(_ viewController: SelectedParentVC, with stitchSettingVC: StitchSettingVC) {
+    private func updateSelectedViewController(_ viewController: SelectedRootPostVC, with stitchSettingVC: StitchSettingVC) {
         stitchSettingVC.isSelected = true
-        if viewController.isRoot {
-            viewController.selectedRootPostVC.editeddPost = posts[currentIndex!]
-        } else {
-            viewController.stitchViewController.editeddPost = posts[currentIndex!]
-        }
+        viewController.editeddPost = posts[currentIndex!]
     }
     
     /// Displays an error related to stitching functionality.
@@ -960,6 +964,18 @@ extension RootNode {
             } else if let update1 = vc as? SelectedRootPostVC {
                 update1.showErrorAlert(title, msg: message)
             }
+        }
+    }
+    
+    func muteVideo() {
+        if let cell = self.mainCollectionNode.nodeForItem(at: IndexPath(row: currentIndex!, section: 0)) as? VideoNode {
+            cell.muteVideo()
+        }
+    }
+    
+    func unmuteVideo() {
+        if let cell = self.mainCollectionNode.nodeForItem(at: IndexPath(row: currentIndex!, section: 0)) as? VideoNode {
+            cell.unmuteVideo()
         }
     }
     

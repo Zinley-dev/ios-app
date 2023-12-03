@@ -601,8 +601,9 @@ extension PostVC {
     }
 
     /// Sets up the default view for the view controller.
+    /// Sets up the default view by adjusting the setting view height based on the presence of a stitch post.
     func setupDefaultView() {
-        settingViewHeight.constant = 225 - 50
+        settingViewHeight.constant = stitchPost == nil ? 175 : 225
     }
 }
 

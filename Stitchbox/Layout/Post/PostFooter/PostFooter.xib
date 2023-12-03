@@ -50,11 +50,11 @@
                     <nil key="highlightedColor"/>
                 </label>
                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="wUq-iG-3yI">
-                    <rect key="frame" x="442" y="53" width="35" height="35"/>
+                    <rect key="frame" x="439.5" y="50.5" width="37.5" height="37.5"/>
                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                     <constraints>
-                        <constraint firstAttribute="height" constant="35" id="2Bg-X0-5RF"/>
-                        <constraint firstAttribute="width" constant="35" id="oM9-sx-fLJ"/>
+                        <constraint firstAttribute="height" constant="37.5" id="2Bg-X0-5RF"/>
+                        <constraint firstAttribute="width" constant="37.5" id="oM9-sx-fLJ"/>
                     </constraints>
                     <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
                     <state key="normal" image="stitchblackback">

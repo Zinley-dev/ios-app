@@ -2,76 +2,61 @@
 //  UIViewController+Utils.swift
 //  SendBird-iOS
 //
-//  Created by Jed Gyeong on 10/12/18.
-//  Copyright © 2018 SendBird. All rights reserved.
+//  Created by khoi Nguyen on 10/12/18.
 //
 
 import UIKit
 
+extension DispatchQueue {
+    /// Executes a block safely on the main thread, avoiding deadlocks if already on the main thread.
+    static func syncSafe(execute block: () -> Void) {
+        if Thread.isMainThread {
+            block()
+        } else {
+            DispatchQueue.main.sync {
+                block()
+            }
+        }
+    }
+
+    /// Executes a block that returns a value safely on the main thread, avoiding deadlocks if already on the main thread.
+    static func syncSafe<T>(execute work: () -> T) -> T {
+        if Thread.isMainThread {
+            return work()
+        } else {
+            return DispatchQueue.main.sync {
+                work()
+            }
+        }
+    }
+}
+
 extension UIViewController {
+
     public static func findBestViewController(_ vc: UIViewController) -> UIViewController {
-        if let presentedViewController = vc.presentedViewController {
-            // Return presented view controller
-            return UIViewController.findBestViewController(presentedViewController)
-        }
-        else if let svc = vc as? UISplitViewController {
-            // Return right hand side
-            if svc.viewControllers.count > 0 {
-                if svc.viewControllers.last != nil {
-                    return UIViewController.findBestViewController(svc.viewControllers.last!)
-                } else {
-                    return vc
-                }
-               
-            }
-            else {
+        return DispatchQueue.syncSafe(execute: {
+            if let presentedViewController = vc.presentedViewController {
+                return findBestViewController(presentedViewController)
+            } else if let svc = vc as? UISplitViewController, let lastVC = svc.viewControllers.last {
+                return findBestViewController(lastVC)
+            } else if let svc = vc as? UINavigationController, let topVC = svc.topViewController {
+                return findBestViewController(topVC)
+            } else if let svc = vc as? UITabBarController, let selectedVC = svc.selectedViewController {
+                return findBestViewController(selectedVC)
+            } else {
                 return vc
             }
-        }
-        else if let svc = vc as? UINavigationController {
-            // Return top view
-            // TODO: Need to compare with ObjC ver.
-            if let topViewController = svc.topViewController {
-                return UIViewController.findBestViewController(topViewController)
-            }
-            else {
-                return vc
-            }
-        }
-        else if let svc = vc as? UITabBarController {
-            // Return visible view
-            if (svc.viewControllers?.count ?? 0) > 0 {
-                if svc.selectedViewController != nil {
-                    return UIViewController.findBestViewController(svc.selectedViewController!)
-                } else {
-                    return vc
-                }
-                
-            }
-            else {
-                return vc
-            }
-        }
-        else {
-            // Unknown view controller type, return last child view controller
-            return vc
-        }
+        })
     }
     
     public static func currentViewController() -> UIViewController? {
-        
-        if let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
-           let window = windowScene.windows.first {
-            if let viewController = window.rootViewController {
-                return UIViewController.findBestViewController(viewController)
-            } else {
+        return DispatchQueue.syncSafe(execute: {
+            guard let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
+                  let window = windowScene.windows.first,
+                  let rootViewController = window.rootViewController else {
                 return nil
             }
-           
-        } else{
-            return nil
-        }
-        
+            return findBestViewController(rootViewController)
+        })
     }
-
 }

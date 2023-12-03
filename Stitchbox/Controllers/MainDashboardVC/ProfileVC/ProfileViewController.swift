@@ -639,7 +639,7 @@ extension ProfileViewController: UICollectionViewDelegate {
                     return nil
                 }
 
-            if let SPVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "SelectedParentVC") as? SelectedParentVC {
+            if let SPVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "SelectedRootPostVC") as? SelectedRootPostVC {
                 // Find the index of the selected post
                 let currentIndex = indexPath.row
 

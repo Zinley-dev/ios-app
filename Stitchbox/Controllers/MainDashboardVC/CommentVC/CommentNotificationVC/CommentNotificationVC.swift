@@ -323,14 +323,14 @@ class CommentNotificationVC: UIViewController, UITextViewDelegate, UIGestureReco
             
             if let vc = UIViewController.currentViewController() {
                 
-                if let update1 = vc as? ParentViewController {
+                if let update1 = vc as? FeedViewController {
                     
                     if !update1.hasViewAppeared {
                         update1.viewWillAppear(true)
                     }
                     
                     
-                } else if let update1 = vc as? SelectedParentVC {
+                } else if let update1 = vc as? SelectedRootPostVC {
                     
                     if !update1.hasViewAppeared {
                         update1.viewWillAppear(true)
@@ -977,7 +977,7 @@ class CommentNotificationVC: UIViewController, UITextViewDelegate, UIGestureReco
         
         if let viewPost = self.post {
             
-            if let RVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "SelectedParentVC") as? SelectedParentVC {
+            if let RVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "SelectedRootPostVC") as? SelectedRootPostVC {
                 
                 let nav = UINavigationController(rootViewController: RVC)
                 

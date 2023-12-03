@@ -269,14 +269,14 @@ class CommentVC: UIViewController, UITextViewDelegate, UIGestureRecognizerDelega
             
             if let vc = UIViewController.currentViewController() {
                 
-                if let update1 = vc as? ParentViewController {
+                if let update1 = vc as? FeedViewController {
                     
                     if !update1.hasViewAppeared {
                         update1.viewWillAppear(true)
                     }
                     
                     
-                } else if let update1 = vc as? SelectedParentVC {
+                } else if let update1 = vc as? SelectedRootPostVC {
                     
                     if !update1.hasViewAppeared {
                         update1.viewWillAppear(true)

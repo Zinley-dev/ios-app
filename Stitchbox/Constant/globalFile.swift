@@ -505,71 +505,37 @@ func unmuteVideoIfNeed() {
     
     if let vc = UIViewController.currentViewController() {
          
-        if vc is ParentViewController {
+        if vc is FeedViewController {
             
-            if let update1 = vc as? ParentViewController {
+            if let update1 = vc as? FeedViewController {
                 
                 
-                if update1.isFeed {
+                if update1.currentIndex == nil {
+                    update1.currentIndex = 0
+                }
+                
+                if let cell2 = update1.collectionNode.nodeForItem(at: IndexPath(row: update1.currentIndex!, section: 0)) as? RootNode {
                     
-                    if update1.feedViewController.currentIndex == nil {
-                        update1.feedViewController.currentIndex = 0
-                    }
-                    
-                    if let cell2 = update1.feedViewController.collectionNode.nodeForItem(at: IndexPath(row: update1.feedViewController.currentIndex!, section: 0)) as? VideoNode {
-                        
-                        cell2.unmuteVideo()
-                        shouldMute = false
-                        
-                    }
-                    
-                } else {
-                    
-                    if update1.stitchViewController.currentIndex == nil {
-                        update1.stitchViewController.currentIndex = 0
-                    }
-                    
-                    if let cell2 = update1.stitchViewController.collectionNode.nodeForItem(at: IndexPath(row: update1.stitchViewController.currentIndex!, section: 0)) as? VideoNode {
-                        
-                        cell2.unmuteVideo()
-                        shouldMute = false
-                        
-                    }
+                    cell2.unmuteVideo()
+                    shouldMute = false
                     
                 }
                  
             }
             
-        } else if vc is SelectedParentVC {
+        } else if vc is SelectedRootPostVC {
             
-            if let update1 = vc as? SelectedParentVC {
+            if let update1 = vc as? SelectedRootPostVC {
                 
                 
-                if update1.isRoot {
+                if update1.currentIndex == nil {
+                    update1.currentIndex = 0
+                }
+                
+                if let cell2 = update1.collectionNode.nodeForItem(at: IndexPath(row: update1.currentIndex!, section: 0)) as? RootNode {
                     
-                    if update1.selectedRootPostVC.currentIndex == nil {
-                        update1.selectedRootPostVC.currentIndex = 0
-                    }
-                    
-                    if let cell2 = update1.selectedRootPostVC.collectionNode.nodeForItem(at: IndexPath(row: update1.selectedRootPostVC.currentIndex!, section: 0)) as? VideoNode {
-                        
-                        cell2.unmuteVideo()
-                        shouldMute = false
-                        
-                    }
-                    
-                } else {
-                    
-                    if update1.stitchViewController.currentIndex == nil {
-                        update1.stitchViewController.currentIndex = 0
-                    }
-                    
-                    if let cell2 = update1.stitchViewController.collectionNode.nodeForItem(at: IndexPath(row: update1.stitchViewController.currentIndex!, section: 0)) as? VideoNode {
-                        
-                        cell2.unmuteVideo()
-                        shouldMute = false
-                        
-                    }
+                    cell2.unmuteVideo()
+                    shouldMute = false
                     
                 }
                 

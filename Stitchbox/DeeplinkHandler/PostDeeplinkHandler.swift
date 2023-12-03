@@ -62,7 +62,7 @@ final class PostDeeplinkHandler: DeeplinkHandlerProtocol {
     private func processPostData(_ data: [String: Any]?) {
         guard let data = data, !data.isEmpty,
               let post = PostModel(JSON: data),
-              let RVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "SelectedParentVC") as? SelectedParentVC,
+              let RVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "SelectedRootPostVC") as? SelectedRootPostVC,
               let vc = UIViewController.currentViewController() else {
             Dispatch.main.async {
                 SwiftLoader.hide()

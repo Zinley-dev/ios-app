@@ -147,7 +147,6 @@
 		6A4031162A86C9040038B655 /* ShowCleanModeVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A4031152A86C9040038B655 /* ShowCleanModeVC.swift */; };
 		6A4031192A872B770038B655 /* SupportVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A4031182A872B770038B655 /* SupportVC.swift */; };
 		6A40311C2A872D600038B655 /* ResolutionVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A40311B2A872D600038B655 /* ResolutionVC.swift */; };
-		6A40311F2A8739AD0038B655 /* SelectedParentVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A40311E2A8739AD0038B655 /* SelectedParentVC.swift */; };
 		6A4031222A89B5A70038B655 /* VideoIssueNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A4031212A89B5A70038B655 /* VideoIssueNode.swift */; };
 		6A4031252A89B6390038B655 /* VideoIssueModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A4031242A89B6390038B655 /* VideoIssueModel.swift */; };
 		6A467E5729AD8D0700214108 /* PostListWithHashtagVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A467E5629AD8D0700214108 /* PostListWithHashtagVC.swift */; };
@@ -278,7 +277,6 @@
 		6A9E4C862977B8F000B59176 /* BlockNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A9E4C852977B8F000B59176 /* BlockNode.swift */; };
 		6A9E4C8B2977C4FC00B59176 /* ContactUsImageCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A9E4C8A2977C4FC00B59176 /* ContactUsImageCell.swift */; };
 		6AA276E52A832E4B0001D69A /* PresentationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AA276E42A832E4B0001D69A /* PresentationController.swift */; };
-		6AA276E82A83703C0001D69A /* ParentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AA276E72A83703C0001D69A /* ParentViewController.swift */; };
 		6AA276EB2A83705C0001D69A /* StitchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AA276EA2A83705C0001D69A /* StitchViewController.swift */; };
 		6AAD79FF294C4C68003E3AB6 /* NavigationVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AAD79FE294C4C68003E3AB6 /* NavigationVC.swift */; };
 		6AAD7A02294C4D1C003E3AB6 /* MainMessageVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AAD7A01294C4D1C003E3AB6 /* MainMessageVC.swift */; };
@@ -635,7 +633,6 @@
 		6A4031152A86C9040038B655 /* ShowCleanModeVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShowCleanModeVC.swift; sourceTree = "<group>"; };
 		6A4031182A872B770038B655 /* SupportVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SupportVC.swift; sourceTree = "<group>"; };
 		6A40311B2A872D600038B655 /* ResolutionVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResolutionVC.swift; sourceTree = "<group>"; };
-		6A40311E2A8739AD0038B655 /* SelectedParentVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectedParentVC.swift; sourceTree = "<group>"; };
 		6A4031212A89B5A70038B655 /* VideoIssueNode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoIssueNode.swift; sourceTree = "<group>"; };
 		6A4031242A89B6390038B655 /* VideoIssueModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoIssueModel.swift; sourceTree = "<group>"; };
 		6A467E5629AD8D0700214108 /* PostListWithHashtagVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostListWithHashtagVC.swift; sourceTree = "<group>"; };
@@ -774,7 +771,6 @@
 		6A9E4C852977B8F000B59176 /* BlockNode.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BlockNode.swift; sourceTree = "<group>"; };
 		6A9E4C8A2977C4FC00B59176 /* ContactUsImageCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ContactUsImageCell.swift; sourceTree = "<group>"; };
 		6AA276E42A832E4B0001D69A /* PresentationController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PresentationController.swift; sourceTree = "<group>"; };
-		6AA276E72A83703C0001D69A /* ParentViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParentViewController.swift; sourceTree = "<group>"; };
 		6AA276EA2A83705C0001D69A /* StitchViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StitchViewController.swift; sourceTree = "<group>"; };
 		6AAD79FE294C4C68003E3AB6 /* NavigationVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NavigationVC.swift; sourceTree = "<group>"; };
 		6AAD7A01294C4D1C003E3AB6 /* MainMessageVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainMessageVC.swift; sourceTree = "<group>"; };
@@ -1988,14 +1984,6 @@
 			path = ResolutionVC;
 			sourceTree = "<group>";
 		};
-		6A40311D2A8739920038B655 /* SelectedParentVC */ = {
-			isa = PBXGroup;
-			children = (
-				6A40311E2A8739AD0038B655 /* SelectedParentVC.swift */,
-			);
-			path = SelectedParentVC;
-			sourceTree = "<group>";
-		};
 		6A4031202A89B5950038B655 /* VideoIssueNode */ = {
 			isa = PBXGroup;
 			children = (
@@ -2652,11 +2640,9 @@
 				6A57643F2A999E6800BB726E /* CategoryVC */,
 				6A0BC81D2A8DE10200F9A2EA /* ViewStitchStatsVC */,
 				6A2A16022A8C545B00E607EA /* AppMetrics */,
-				6A40311D2A8739920038B655 /* SelectedParentVC */,
 				6A40311A2A872D4E0038B655 /* ResolutionVC */,
 				6A4031142A86C8DF0038B655 /* ShowCleanModeVC */,
 				6AA276E92A83704A0001D69A /* StitchViewController */,
-				6AA276E62A83702A0001D69A /* ParentViewController */,
 				6A9A26912A801EA600F4D45A /* VideoNode */,
 				6AE3BEEE2A6C721900AAA5DD /* StitchDashboard */,
 				6AE3BEDC2A68830E00AAA5DD /* SuggestFollowVC */,
@@ -2761,14 +2747,6 @@
 				6A9E4C8A2977C4FC00B59176 /* ContactUsImageCell.swift */,
 			);
 			path = ContactUsImageCell;
-			sourceTree = "<group>";
-		};
-		6AA276E62A83702A0001D69A /* ParentViewController */ = {
-			isa = PBXGroup;
-			children = (
-				6AA276E72A83703C0001D69A /* ParentViewController.swift */,
-			);
-			path = ParentViewController;
 			sourceTree = "<group>";
 		};
 		6AA276E92A83704A0001D69A /* StitchViewController */ = {
@@ -4053,7 +4031,6 @@
 				6A9E4C862977B8F000B59176 /* BlockNode.swift in Sources */,
 				6AF973382978F99E00C76814 /* EditGeneralInformationVC.swift in Sources */,
 				6AEA33E2298A2E33005A4C5D /* Timer.swift in Sources */,
-				6A40311F2A8739AD0038B655 /* SelectedParentVC.swift in Sources */,
 				6AE1CE67294D590D00B1C435 /* SendBirdGlobalAuthen.swift in Sources */,
 				6A80F1A129B6921D0047595A /* UserSearchNode.swift in Sources */,
 				A59CB3EF294ADB1E00D84D9A /* AppNavigationController.swift in Sources */,
@@ -4137,7 +4114,6 @@
 				6AEA33EF298CE4A6005A4C5D /* PostHeader.swift in Sources */,
 				A59CB3F5294ADCA200D84D9A /* UserDataSource.swift in Sources */,
 				6ABA61232977D938003BFB5B /* LoginActivityVC.swift in Sources */,
-				6AA276E82A83703C0001D69A /* ParentViewController.swift in Sources */,
 				6AAD7A08294C5DBB003E3AB6 /* RequestVC.swift in Sources */,
 				A5746D0329BB350000EA143E /* UABuilder.swift in Sources */,
 				6A47AA902A1867C900E3E1FF /* ClassicSparkTrajectoryFactory.swift in Sources */,
