@@ -444,7 +444,7 @@ extension RootNode {
     /// The completion block returns an array of dictionaries representing new data.
     /// - Parameter block: A completion block that is executed when the data retrieval is complete.
     func retrieveNextPageWithCompletion(block: @escaping ([[String: Any]]) -> Void) {
-        APIManager.shared.getSuggestStitch(rootId: rootPost.id, page: page) { [weak self] result in
+        APIManager.shared.listStitchNext(pid: rootPost.id, page: page) { [weak self] result in
             guard let _ = self else { return } // Ensuring the instance is still around when the API call completes.
 
             switch result {
