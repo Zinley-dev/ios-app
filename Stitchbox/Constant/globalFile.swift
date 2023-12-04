@@ -449,174 +449,167 @@ extension Collection {
 
 
 
+/// Reloads global user information by fetching it from the API.
 func reloadGlobalUserInformation() {
-
     APIManager.shared.getme { result in
-        switch result {
-        case .success(let response):
-            
-            if let data = response.body {
-                
-                if !data.isEmpty {
-
-                    if let newUserData = Mapper<UserDataSource>().map(JSON: data) {
-                        _AppCoreData.reset()
-                        _AppCoreData.userDataSource.accept(newUserData)
-                        syncSendbirdAccount()
-                    } 
-                  
-                }
-                
-            }
-            
-            
-        case .failure(let error):
-            print("Error loading profile: ", error)
-          
-        }
+        handleUserInformationResult(result)
     }
-    
+}
+
+/// Handles the result of the user information API call.
+/// - Parameter result: The result of the API call, containing either the response or an error.
+private func handleUserInformationResult(_ result: Result) {
+    switch result {
+    case .success(let response):
+        updateUserInformation(with: response)
+    case .failure(let error):
+        print("Error loading profile: \(error)")
+    }
+}
+
+/// Updates user information using the API response.
+/// - Parameter response: The response from the user information API call.
+private func updateUserInformation(with response: APIResponse) {
+    guard let data = response.body, !data.isEmpty else {
+        print("No data available or data is empty in API response")
+        return
+    }
+
+    if let newUserData = Mapper<UserDataSource>().map(JSON: data) {
+        updateAppCoreData(with: newUserData)
+    } else {
+        print("Failed to map API response to UserDataSource")
+    }
+}
+
+/// Updates the app's core data with the new user data.
+/// - Parameter userData: The new user data to update.
+private func updateAppCoreData(with userData: UserDataSource) {
+    _AppCoreData.reset()
+    _AppCoreData.userDataSource.accept(userData)
+    syncSendbirdAccount()
 }
 
 
+
+/// Reloads global settings by fetching them from the API.
 func reloadGlobalSettings() {
-    
     APIManager.shared.getSettings { result in
-        switch result {
-        case .success(let apiResponse):
-            
-            guard let data = apiResponse.body else {
-                    return
-            }
-
-            globalSetting =  Mapper<SettingModel>().map(JSONObject: data)
-      
-        case .failure(let error):
-        
-            print(error)
-           
-        }
+        handleSettingsResult(result)
     }
-    
 }
+
+/// Handles the result of the settings API call.
+/// - Parameter result: The result of the API call, containing either the API response or an error.
+private func handleSettingsResult(_ result: Result) {
+    switch result {
+    case .success(let apiResponse):
+        updateGlobalSettings(from: apiResponse)
+    case .failure(let error):
+        handleSettingsError(error)
+    }
+}
+
+/// Updates global settings using the API response.
+/// - Parameter apiResponse: The response from the settings API call.
+private func updateGlobalSettings(from apiResponse: APIResponse) {
+    guard let data = apiResponse.body else {
+        print("No data available in API response")
+        return
+    }
+
+    if let settings = Mapper<SettingModel>().map(JSONObject: data) {
+        globalSetting = settings
+    } else {
+        print("Failed to map API response to SettingModel")
+    }
+}
+
+/// Handles errors that occur during the settings API call.
+/// - Parameter error: The error returned by the API call.
+private func handleSettingsError(_ error: Error) {
+    print("Error fetching settings: \(error)")
+}
+
 
 func unmuteVideoIfNeed() {
-  
-    
-    if let vc = UIViewController.currentViewController() {
-         
-        if vc is FeedViewController {
-            
-            if let update1 = vc as? FeedViewController {
-                
-                
-                if update1.currentIndex == nil {
-                    update1.currentIndex = 0
-                }
-                
-                if let cell2 = update1.collectionNode.nodeForItem(at: IndexPath(row: update1.currentIndex!, section: 0)) as? RootNode {
-                    
-                    cell2.unmuteVideo()
-                    shouldMute = false
-                    
-                }
-                 
-            }
-            
-        } else if vc is SelectedRootPostVC {
-            
-            if let update1 = vc as? SelectedRootPostVC {
-                
-                
-                if update1.currentIndex == nil {
-                    update1.currentIndex = 0
-                }
-                
-                if let cell2 = update1.collectionNode.nodeForItem(at: IndexPath(row: update1.currentIndex!, section: 0)) as? RootNode {
-                    
-                    cell2.unmuteVideo()
-                    shouldMute = false
-                    
-                }
-                
-            }
-            
-        } else if vc is PreviewVC {
-            
-            if let update1 = vc as? PreviewVC {
-                
-                if update1.currentIndex != nil {
-                    
-                    if let cell2 = update1.collectionNode.nodeForItem(at: IndexPath(row: update1.currentIndex!, section: 0)) as? VideoNode {
-                        
-                        cell2.unmuteVideo()
-                        shouldMute = false
-                        
-                    }
-                    
-                }
-                
-            }
-            
-        } else if vc is StitchDashboardVC {
-            
-            if let update1 = vc as? StitchDashboardVC {
-                
-                
-                if update1.PendingVC.view.isHidden == false {
-                    
-                    
-                    if update1.PendingVC.currentIndex != nil {
-                        
-                        if let cell = update1.PendingVC.waitCollectionNode.nodeForItem(at: IndexPath(row: update1.PendingVC.currentIndex!, section: 0)) as? PendingNode {
-                            
-                            cell.unmuteVideo()
-                            shouldMute = false
-                            
-                        }
-                        
-                    }
-                    
-                } else if update1.StitchToVC.view.isHidden == false {
-                    
-                    if update1.StitchToVC.currentIndex != nil {
-                        
-                        if let cell = update1.StitchToVC.waitCollectionNode.nodeForItem(at: IndexPath(row: update1.StitchToVC.currentIndex!, section: 0)) as? StitchControlForRemoveNode {
-                            
-                            cell.unmuteVideo()
-                            shouldMute = false
-                            
-                        }
-                        
-                    }
-                    
-                } else if update1.ApprovedStitchVC.view.isHidden == false {
-                    
-                    
-                    if update1.ApprovedStitchVC.currentIndex != nil {
-                        
-                        if let cell = update1.ApprovedStitchVC.waitCollectionNode.nodeForItem(at: IndexPath(row: update1.ApprovedStitchVC.currentIndex!, section: 0)) as? StitchControlForRemoveNode {
-                            
-                            cell.unmuteVideo()
-                            shouldMute = false
-                            
-                        }
-                        
-                    }
-                    
-                }
-                
-            }
-            
-        }
-             
-        
+    guard let vc = UIViewController.currentViewController() else { return }
+
+    switch vc {
+    case let feedVC as FeedViewController:
+        unmuteVideoForFeedViewController(feedVC)
+    case let selectedRootVC as SelectedRootPostVC:
+        unmuteVideoForSelectedRootPostVC(selectedRootVC)
+    case let previewVC as PreviewVC:
+        unmuteVideoForPreviewVC(previewVC)
+    case let stitchDashboardVC as StitchDashboardVC:
+        unmuteVideoForStitchDashboardVC(stitchDashboardVC)
+    default:
+        break
     }
-    
+}
+
+private func unmuteVideoForFeedViewController(_ vc: FeedViewController) {
+    guard let currentIndex = vc.currentIndex,
+          let cell = vc.collectionNode.nodeForItem(at: IndexPath(row: currentIndex, section: 0)) as? RootNode else { return }
+
+    cell.unmuteVideo()
+    shouldMute = false
+}
+
+private func unmuteVideoForSelectedRootPostVC(_ vc: SelectedRootPostVC) {
+    guard let currentIndex = vc.currentIndex,
+          let cell = vc.collectionNode.nodeForItem(at: IndexPath(row: currentIndex, section: 0)) as? RootNode else { return }
+
+    cell.unmuteVideo()
+    shouldMute = false
+}
+
+private func unmuteVideoForPreviewVC(_ vc: PreviewVC) {
+    guard let currentIndex = vc.currentIndex,
+          let cell = vc.collectionNode.nodeForItem(at: IndexPath(row: currentIndex, section: 0)) as? VideoNode else { return }
+
+    cell.unmuteVideo()
+    shouldMute = false
+}
+
+private func unmuteVideoForStitchDashboardVC(_ vc: StitchDashboardVC) {
+    if !vc.PendingVC.view.isHidden {
+        unmuteVideoForPendingVC(vc.PendingVC)
+    } else if !vc.StitchToVC.view.isHidden {
+        unmuteVideoForStitchToVC(vc.StitchToVC)
+    } else if !vc.ApprovedStitchVC.view.isHidden {
+        unmuteVideoForApprovedStitchVC(vc.ApprovedStitchVC)
+    }
+}
+
+private func unmuteVideoForPendingVC(_ vc: PendingVC) {
+    guard let currentIndex = vc.currentIndex,
+          let cell = vc.waitCollectionNode.nodeForItem(at: IndexPath(row: currentIndex, section: 0)) as? PendingNode else { return }
+
+    cell.unmuteVideo()
+    shouldMute = false
+}
+
+private func unmuteVideoForStitchToVC(_ vc: StitchToVC) {
+    guard let currentIndex = vc.currentIndex,
+          let cell = vc.waitCollectionNode.nodeForItem(at: IndexPath(row: currentIndex, section: 0)) as? StitchControlForRemoveNode else { return }
+
+    cell.unmuteVideo()
+    shouldMute = false
+}
+
+private func unmuteVideoForApprovedStitchVC(_ vc: ApprovedStitchVC) {
+    guard let currentIndex = vc.currentIndex,
+          let cell = vc.waitCollectionNode.nodeForItem(at: IndexPath(row: currentIndex, section: 0)) as? StitchControlForRemoveNode else { return }
+
+    cell.unmuteVideo()
+    shouldMute = false
 }
 
 
-func resetView(cell: VideoNode) {
+
+func resetViewForVideo(cell: VideoNode) {
     
     if cell.isViewed == true {
         
@@ -767,48 +760,68 @@ extension UIView {
 
 
 
+/// A UIView subclass with a shadow effect.
 class ShadowedView: UIView {
     
+    /// Overrides the layoutSubviews method to apply shadow properties.
     override func layoutSubviews() {
         super.layoutSubviews()
+        configureShadow()
+    }
+
+    /// Configures the shadow properties for the view.
+    private func configureShadow() {
         layer.shadowColor = UIColor.black.cgColor
         layer.shadowOpacity = 0.5
         layer.shadowOffset = CGSize(width: 0, height: 2)
         layer.shadowRadius = 5
         layer.masksToBounds = false
     }
-
 }
 
 extension UITabBarController {
     
-    func changeTabBar(hidden: Bool, animated: Bool) {
-        let tabBar = self.tabBar
+    /// Changes the visibility of the tab bar.
+    /// - Parameters:
+    ///   - hidden: A Boolean indicating whether the tab bar should be hidden.
+    ///   - animated: A Boolean indicating whether this change should be animated.
+    func changeTabBarVisibility(hidden: Bool, animated: Bool) {
+        guard tabBar.isHidden != hidden else { return }
 
-        if tabBar.isHidden == hidden {
-            return
-        }
+        let duration: TimeInterval = animated ? 0.25 : 0.0
+        adjustTabBarVisibility(hidden, withDuration: duration)
+    }
 
-        let duration: TimeInterval = (animated ? 0.25 : 0.0)
-
+    /// Adjusts the visibility of the tab bar with animation.
+    /// - Parameters:
+    ///   - hidden: A Boolean indicating the target visibility state.
+    ///   - duration: The duration of the animation.
+    private func adjustTabBarVisibility(_ hidden: Bool, withDuration duration: TimeInterval) {
         if hidden {
-            UIView.animate(withDuration: duration, animations: {
-                tabBar.alpha = 0
-            }, completion: { _ in
-                tabBar.isHidden = true
-                tabBar.alpha = 1 // Reset the alpha back to 1
-            })
+            animateTabBar(toAlpha: 0, duration: duration) { [weak self] in
+                self?.tabBar.isHidden = true
+                self?.tabBar.alpha = 1 // Reset alpha for next unhide
+            }
         } else {
             tabBar.isHidden = false
             tabBar.alpha = 0
-
-            UIView.animate(withDuration: duration) {
-                tabBar.alpha = 1
-            }
+            animateTabBar(toAlpha: 1, duration: duration)
         }
     }
-}
 
+    /// Animates the tab bar's alpha transition.
+    /// - Parameters:
+    ///   - alpha: The target alpha value.
+    ///   - duration: The duration of the animation.
+    ///   - completion: An optional completion handler.
+    private func animateTabBar(toAlpha alpha: CGFloat, duration: TimeInterval, completion: (() -> Void)? = nil) {
+        UIView.animate(withDuration: duration, animations: {
+            self.tabBar.alpha = alpha
+        }, completion: { _ in
+            completion?()
+        })
+    }
+}
 
 protocol PostManaging {
     var editeddPost: PostModel? { get }
@@ -816,26 +829,27 @@ protocol PostManaging {
     var collectionNode: ASCollectionNode { get } // Replace with your collection node type
 }
 
-
+/// Requests user authorization for tracking and handles the response.
 func requestTrackingAuthorization() {
-    ATTrackingManager.requestTrackingAuthorization(completionHandler: { status in
-        switch status {
-        case .authorized:
-            // User has granted permission to track
-            // You can now access the IDFA
-            let idfa = ASIdentifierManager.shared().advertisingIdentifier.uuidString
-            print("IDFA: \(idfa)")
-        case .denied:
-            // User has denied permission to track
-            print("Tracking denied")
-        case .restricted:
-            // Tracking capability is restricted
-            print("Tracking restricted")
-        case .notDetermined:
-            // User has not been asked for tracking permission
-            print("Tracking not determined")
-        @unknown default:
-            print("Unknown tracking status")
-        }
-    })
+    ATTrackingManager.requestTrackingAuthorization { status in
+        handleTrackingAuthorization(status: status)
+    }
+}
+
+/// Handles the tracking authorization status.
+/// - Parameter status: The authorization status.
+private func handleTrackingAuthorization(status: ATTrackingManager.AuthorizationStatus) {
+    switch status {
+    case .authorized:
+        let idfa = ASIdentifierManager.shared().advertisingIdentifier.uuidString
+        print("IDFA: \(idfa)")
+    case .denied:
+        print("Tracking denied")
+    case .restricted:
+        print("Tracking restricted")
+    case .notDetermined:
+        print("Tracking not determined")
+    @unknown default:
+        print("Unknown tracking status")
+    }
 }

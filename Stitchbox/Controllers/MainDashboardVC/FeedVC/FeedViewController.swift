@@ -762,7 +762,7 @@ extension FeedViewController {
     // Pauses the video at a specific index and optionally seeks to the start.
     func hideStitchedView(index: Int) {
         if let cell = self.collectionNode.nodeForItem(at: IndexPath(row: index, section: 0)) as? RootNode {
-            cell.hideStitchedView()
+            cell.showAllViews()
         }
     }
     
@@ -803,7 +803,6 @@ extension FeedViewController {
 // This extension includes methods for displaying alert messages and configuring loaders.
 
 extension FeedViewController {
-    
     // Displays an error alert with a title and message.
     func showErrorAlert(_ title: String, msg: String) {
         let alert = UIAlertController(title: title, message: msg, preferredStyle: .alert)
@@ -829,7 +828,6 @@ extension FeedViewController {
 
 
 extension FeedViewController {
-    
     /// Sets up observation for various notification actions related to a feed.
     private func setupObservation() {
         // Consolidated method to add observer
@@ -919,7 +917,6 @@ extension FeedViewController {
         }
 
     }
-    
 
 }
 

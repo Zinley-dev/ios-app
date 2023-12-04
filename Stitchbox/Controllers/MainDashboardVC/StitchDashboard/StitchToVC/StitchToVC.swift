@@ -32,7 +32,6 @@ class StitchToVC: UIViewController, UINavigationBarDelegate, UINavigationControl
     var newPlayingIndex: Int?
     var firstWaitReload = true
     var rootPost: PostModel!
-    
     var refresh_request = false
     
     private var pullControl = UIRefreshControl()
@@ -41,739 +40,803 @@ class StitchToVC: UIViewController, UINavigationBarDelegate, UINavigationControl
         super.viewDidLoad()
 
         setupCollectionNode()
-        
+        setupPullControl()
+    }
+
+    @objc private func refreshListData(_ sender: Any) {
+        clearAllData()
+    }
+    
+    @objc private func clearAllData() {
+        guard rootPost != nil else {
+            endRefreshingIfNecessary()
+            return
+        }
+
+        prepareForDataRefresh()
+        updateData()
+    }
+
+    // MARK: - Private Helper Methods
+
+    /// Sets up the pull-to-refresh control.
+    private func setupPullControl() {
         if #available(iOS 10.0, *) {
             waitCollectionNode.view.refreshControl = pullControl
         } else {
             myCollectionNode.view.addSubview(pullControl)
-            
         }
-        
+
         pullControl.tintColor = .secondary
         pullControl.addTarget(self, action: #selector(refreshListData(_:)), for: .valueChanged)
-        
     }
-    
-    @objc private func refreshListData(_ sender: Any) {
-        // self.pullControl.endRefreshing() // You can stop after API Call
-        // Call API
-        
-        clearAllData()
-        
+
+    /// Prepares the view controller for data refresh.
+    private func prepareForDataRefresh() {
+        refresh_request = true
+        waitPage = 1
+        currentIndex = 0
     }
-    
-    
-    @objc func clearAllData() {
-        
-        if rootPost != nil {
-            
-            refresh_request = true
-            waitPage = 1
-            currentIndex = 0
-            updateData()
-            
-        } else {
-            
-            if self.pullControl.isRefreshing == true {
-                self.pullControl.endRefreshing()
-            }
-            
-        }
-        
-    
-    }
-    
-    
+
+}
+
+extension StitchToVC {
+
+    /// Updates the data by fetching the next page of posts and refreshing the collection node.
     func updateData() {
-        
-        
-        self.retrieveNextPageForStitchtWithCompletion { [weak self] (newPosts) in
+        retrieveNextPageForStitchtWithCompletion { [weak self] newPosts in
             guard let self = self else { return }
 
-            if newPosts.count > 0 {
-                
-                self.insertNewRowsInCollectionNodeForWaitList(newPosts: newPosts)
-                
-                
+            if newPosts.isEmpty {
+                self.handleEmptyNewPosts()
             } else {
-                
-                
-                self.refresh_request = false
-                self.waitPost.removeAll()
-                self.waitCollectionNode.reloadData()
-                
-                if self.waitPost.isEmpty == true {
-                    
-                    self.waitCollectionNode.view.setEmptyMessage("No stitch found", color: .black)
-                    
-                    
-                } else {
-                    
-                    self.waitCollectionNode.view.restore()
-                    
-                }
-                
+                self.insertNewRowsInCollectionNodeForWaitList(newPosts: newPosts)
             }
-            
-            if self.pullControl.isRefreshing == true {
-                self.pullControl.endRefreshing()
-            }
-            
-     
+
+            self.endRefreshingIfNecessary()
         }
-        
-        
     }
 
+    // MARK: - Private Helper Methods
+
+    /// Handles the scenario when the new posts array is empty.
+    private func handleEmptyNewPosts() {
+        refresh_request = false
+        waitPost.removeAll()
+        updateWaitCollectionNodeForEmptyPosts()
+    }
+
+    /// Updates the wait collection node based on whether there are posts available.
+    private func updateWaitCollectionNodeForEmptyPosts() {
+        if waitPost.isEmpty {
+            waitCollectionNode.view.setEmptyMessage("No stitch found", color: .black)
+        } else {
+            waitCollectionNode.view.restore()
+        }
+
+        waitCollectionNode.reloadData()
+    }
+
+    /// Ends the refreshing animation on the pull control, if applicable.
+    private func endRefreshingIfNecessary() {
+        if pullControl.isRefreshing {
+            pullControl.endRefreshing()
+        }
+    }
 }
 
 
 extension StitchToVC: ASCollectionDelegate {
-    
+
+    // MARK: - ASCollectionDelegate
+
     func collectionNode(_ collectionNode: ASCollectionNode, constrainedSizeForItemAt indexPath: IndexPath) -> ASSizeRange {
-        
-        if collectionNode == myCollectionNode {
-            let height = self.contentView.layer.frame.height
-            let width = height * 9 / 13.5
-            
-            let min = CGSize(width: width, height: height)
-            let max = CGSize(width: width, height: height)
-            
-            return ASSizeRangeMake(min, max)
-            
-        } else {
-            
-            let height = self.stitchToView.layer.frame.height
-            let width = self.stitchToView.layer.frame.width
-            
-            let min = CGSize(width: width, height: height)
-            let max = CGSize(width: width, height: height)
-            
-            return ASSizeRangeMake(min, max)
-            
-        }
-        
-        
+        return sizeRangeForItemInCollectionNode(collectionNode)
     }
     
     func shouldBatchFetch(for collectionNode: ASCollectionNode) -> Bool {
-        
+        return shouldPerformBatchFetch(in: collectionNode)
+    }
+
+    // MARK: - Private Helper Methods
+
+    /// Calculates the size range for an item in a given collection node.
+    /// - Parameter collectionNode: The collection node containing the item.
+    /// - Returns: The size range (minimum and maximum size) for the item.
+    private func sizeRangeForItemInCollectionNode(_ collectionNode: ASCollectionNode) -> ASSizeRange {
+        let (width, height) = dimensionsForCollectionNode(collectionNode)
+
+        let size = CGSize(width: width, height: height)
+        return ASSizeRangeMake(size, size)
+    }
+
+    /// Determines the dimensions for a collection node based on its type.
+    /// - Parameter collectionNode: The collection node to determine dimensions for.
+    /// - Returns: A tuple containing the width and height.
+    private func dimensionsForCollectionNode(_ collectionNode: ASCollectionNode) -> (CGFloat, CGFloat) {
+        if collectionNode == myCollectionNode {
+            let height = contentView.layer.frame.height
+            return (height * 9 / 13.5, height)
+        } else {
+            let view = stitchToView.layer.frame
+            return (view.width, view.height)
+        }
+    }
+
+    /// Determines whether batch fetching should be performed for a given collection node.
+    /// - Parameter collectionNode: The collection node in question.
+    /// - Returns: A Boolean value indicating whether batch fetching should be performed.
+    private func shouldPerformBatchFetch(in collectionNode: ASCollectionNode) -> Bool {
         if collectionNode == myCollectionNode {
             return true
         } else {
-            if allowLoadingWaitList {
-                return true
-            }
-            return false
+            return allowLoadingWaitList
         }
-        
     }
-    
 }
 
-
 extension StitchToVC: ASCollectionDataSource {
-    
+
+    // MARK: - ASCollectionDataSource
+
     func numberOfSections(in collectionNode: ASCollectionNode) -> Int {
-        
         return 1
-        
     }
     
     func collectionNode(_ collectionNode: ASCollectionNode, numberOfItemsInSection section: Int) -> Int {
-        
-        if collectionNode == myCollectionNode {
-            
-            if self.myPost.isEmpty {
-                myCollectionNode.view.setEmptyMessage("No post found", color: .black)
-            } else {
-                myCollectionNode.view.restore()
-            }
-            return self.myPost.count
-        } else {
-            if self.myPost.isEmpty {
-                waitCollectionNode.view.setEmptyMessage("No stitch found", color: .black)
-            } else {
-                waitCollectionNode.view.restore()
-            }
-            return self.waitPost.count
-        }
-    
+        return itemCountForCollectionNode(collectionNode)
     }
     
     func collectionNode(_ collectionNode: ASCollectionNode, nodeBlockForItemAt indexPath: IndexPath) -> ASCellNodeBlock {
-        
-        if collectionNode == myCollectionNode {
-            
-            let post = self.myPost[indexPath.row]
-            
-            return {
-                let node = StitchControlNode(with: post)
-                node.neverShowPlaceholders = true
-                node.debugName = "Node \(indexPath.row)"
-                
-                //
-                return node
-            }
-            
-        } else {
-            
-            let post = self.waitPost[indexPath.row]
-            
-            return { [weak self] in
-                let node = StitchControlForRemoveNode(with: post, stitchTo: true)
-                node.neverShowPlaceholders = true
-                node.debugName = "Node \(indexPath.row)"
-                
-                node.unstitchBtn = { [weak self] node in
-                    self?.unstitchPost(node: node as! StitchControlForRemoveNode, post: post)
-                }
-
-                //
-                return node
-            }
-            
-        }
-        
-        
-        
+        return cellNodeBlockForCollectionNode(collectionNode, atIndexPath: indexPath)
     }
     
     func collectionNode(_ collectionNode: ASCollectionNode, willBeginBatchFetchWith context: ASBatchContext) {
-        
-        
-        if collectionNode == myCollectionNode {
-            
-            retrieveNextPageForMyPostWithCompletion { [weak self] (newPosts) in
-                guard let self = self else { return }
-                self.insertNewRowsInCollectionNodeForMyPost(newPosts: newPosts)
-
-                context.completeBatchFetching(true)
-            }
-            
-        } else if collectionNode == waitCollectionNode {
-            
-            if refresh_request == false {
-                
-                retrieveNextPageForStitchtWithCompletion { [weak self] (newPosts) in
-                    guard let self = self else { return }
-                    self.insertNewRowsInCollectionNodeForWaitList(newPosts: newPosts)
-
-                    context.completeBatchFetching(true)
-                }
-                
-            } else {
-                context.completeBatchFetching(true)
-            }
-            
-            
-        } else {
-            
-            context.completeBatchFetching(true)
-            
-        }
-        
-        
-        
+        handleBatchFetchForCollectionNode(collectionNode, withContext: context)
     }
 
-    
+    // MARK: - Private Helper Methods
+
+    private func itemCountForCollectionNode(_ collectionNode: ASCollectionNode) -> Int {
+        if collectionNode == myCollectionNode {
+            updateEmptyMessageIfNeeded(for: myCollectionNode, isEmpty: myPost.isEmpty, message: "No post found")
+            return myPost.count
+        } else {
+            updateEmptyMessageIfNeeded(for: waitCollectionNode, isEmpty: waitPost.isEmpty, message: "No stitch found")
+            return waitPost.count
+        }
+    }
+
+    private func updateEmptyMessageIfNeeded(for collectionNode: ASCollectionNode, isEmpty: Bool, message: String) {
+        if isEmpty {
+            collectionNode.view.setEmptyMessage(message, color: .black)
+        } else {
+            collectionNode.view.restore()
+        }
+    }
+
+    private func cellNodeBlockForCollectionNode(_ collectionNode: ASCollectionNode, atIndexPath indexPath: IndexPath) -> ASCellNodeBlock {
+        let post = collectionNode == myCollectionNode ? myPost[indexPath.row] : waitPost[indexPath.row]
+
+        return { [weak self] in
+            let node = collectionNode == self?.myCollectionNode ? StitchControlNode(with: post) : StitchControlForRemoveNode(with: post, stitchTo: true)
+            node.neverShowPlaceholders = true
+            node.debugName = "Node \(indexPath.row)"
+
+            if collectionNode != self?.myCollectionNode {
+                (node as? StitchControlForRemoveNode)?.unstitchBtn = { [weak self] node in
+                    self?.unstitchPost(node: node as! StitchControlForRemoveNode, post: post)
+                }
+            }
+
+            return node
+        }
+    }
+
+}
+
+extension StitchToVC {
+
+    private func handleBatchFetchForCollectionNode(_ collectionNode: ASCollectionNode, withContext context: ASBatchContext) {
+        // Early exit if the collection node is not one of the expected nodes or if refresh is requested for waitCollectionNode.
+        guard collectionNode == myCollectionNode || (collectionNode == waitCollectionNode && !refresh_request) else {
+            context.completeBatchFetching(true)
+            return
+        }
+
+        if collectionNode == myCollectionNode {
+            retrieveAndInsertForMyCollectionNode(context)
+        } else if collectionNode == waitCollectionNode {
+            retrieveAndInsertForWaitCollectionNode(context)
+        }
+    }
+
+    // MARK: - Private Helper Methods
+
+    private func retrieveAndInsertForMyCollectionNode(_ context: ASBatchContext) {
+        retrieveNextPageForMyPostWithCompletion { [weak self] newPosts in
+            guard let self = self else { return }
+            self.insertNewRowsInCollectionNodeForMyPost(newPosts: newPosts)
+            context.completeBatchFetching(true)
+        }
+    }
+
+    private func retrieveAndInsertForWaitCollectionNode(_ context: ASBatchContext) {
+        retrieveNextPageForStitchtWithCompletion { [weak self] newPosts in
+            guard let self = self else { return }
+            self.insertNewRowsInCollectionNodeForWaitList(newPosts: newPosts)
+            context.completeBatchFetching(true)
+        }
+    }
 }
 
 
 
 extension StitchToVC {
-    
+
+    // MARK: - Setup Methods
+
+    /// Sets up collection nodes with their respective layouts and styles.
     func setupCollectionNode() {
+        setupMyCollectionNode()
+        setupWaitCollectionNode()
+    }
+
+    // MARK: - Private Helper Methods
+
+    /// Sets up 'myCollectionNode' with its layout and style.
+    private func setupMyCollectionNode() {
+        let flowLayout = createFlowLayout(horizontalSpacing: 10)
+        myCollectionNode = ASCollectionNode(collectionViewLayout: flowLayout)
+
+        configureCollectionNode(myCollectionNode, in: contentView)
+        applyStyle(to: myCollectionNode, isPagingEnabled: false)
+    }
+
+    /// Sets up 'waitCollectionNode' with its layout and style.
+    private func setupWaitCollectionNode() {
+        let flowLayout = createFlowLayout(horizontalSpacing: 0)
+        waitCollectionNode = ASCollectionNode(collectionViewLayout: flowLayout)
+
+        configureCollectionNode(waitCollectionNode, in: stitchToView)
+        applyStyle(to: waitCollectionNode, isPagingEnabled: true)
+    }
+
+    /// Creates a flow layout with specified horizontal spacing.
+    /// - Parameter horizontalSpacing: The spacing between items in the flow layout.
+    /// - Returns: A configured UICollectionViewFlowLayout instance.
+    private func createFlowLayout(horizontalSpacing: CGFloat) -> UICollectionViewFlowLayout {
         let flowLayout = UICollectionViewFlowLayout()
         flowLayout.scrollDirection = .horizontal
-        flowLayout.minimumLineSpacing = 0
-        flowLayout.minimumInteritemSpacing = 0
-        
-        
-        let flowLayout2 = UICollectionViewFlowLayout()
-        flowLayout2.scrollDirection = .horizontal
-        flowLayout2.minimumLineSpacing = 10
-        flowLayout2.minimumInteritemSpacing = 10
-        
-        
-        self.myCollectionNode = ASCollectionNode(collectionViewLayout: flowLayout2)
-        self.myCollectionNode.automaticallyRelayoutOnLayoutMarginsChanges = true
-        self.myCollectionNode.leadingScreensForBatching = 2.0
-        self.myCollectionNode.view.contentInsetAdjustmentBehavior = .never
-        // Set the data source and delegate
-        self.myCollectionNode.dataSource = self
-        self.myCollectionNode.delegate = self
-        
-        // Add the collection node's view as a subview and set constraints
-        self.contentView.addSubview(myCollectionNode.view)
-        self.myCollectionNode.view.translatesAutoresizingMaskIntoConstraints = false
-        self.myCollectionNode.view.topAnchor.constraint(equalTo: self.contentView.topAnchor, constant: 0).isActive = true
-        self.myCollectionNode.view.leadingAnchor.constraint(equalTo: self.contentView.leadingAnchor, constant: 0).isActive = true
-        self.myCollectionNode.view.trailingAnchor.constraint(equalTo: self.contentView.trailingAnchor, constant: 0).isActive = true
-        self.myCollectionNode.view.bottomAnchor.constraint(equalTo: self.contentView.bottomAnchor, constant: 0).isActive = true
-        
-        
-        self.waitCollectionNode = ASCollectionNode(collectionViewLayout: flowLayout)
-        self.waitCollectionNode.automaticallyRelayoutOnLayoutMarginsChanges = true
-        self.waitCollectionNode.leadingScreensForBatching = 2.0
-        self.waitCollectionNode.view.contentInsetAdjustmentBehavior = .never
-        // Set the data source and delegate
-        self.waitCollectionNode.dataSource = self
-        self.waitCollectionNode.delegate = self
-        
-        // Add the collection node's view as a subview and set constraints
-        self.stitchToView.addSubview(waitCollectionNode.view)
-        self.waitCollectionNode.view.translatesAutoresizingMaskIntoConstraints = false
-        self.waitCollectionNode.view.topAnchor.constraint(equalTo: self.stitchToView.topAnchor, constant: 0).isActive = true
-        self.waitCollectionNode.view.leadingAnchor.constraint(equalTo: self.stitchToView.leadingAnchor, constant: 0).isActive = true
-        self.waitCollectionNode.view.trailingAnchor.constraint(equalTo: self.stitchToView.trailingAnchor, constant: 0).isActive = true
-        self.waitCollectionNode.view.bottomAnchor.constraint(equalTo: self.stitchToView.bottomAnchor, constant: 0).isActive = true
-        
-        self.applyStyle()
-        
-        // Reload the data on the collection node
-        self.myCollectionNode.reloadData()
-    }
-    
-    
-    
-    func applyStyle() {
-        
-        
-        self.myCollectionNode.view.isPagingEnabled = false
-        self.myCollectionNode.view.backgroundColor = UIColor.clear
-        self.myCollectionNode.view.showsVerticalScrollIndicator = false
-        self.myCollectionNode.view.allowsSelection = true
-        self.myCollectionNode.view.contentInsetAdjustmentBehavior = .never
-      
-        
-        
-        self.waitCollectionNode.view.isPagingEnabled = true
-        self.waitCollectionNode.view.backgroundColor = UIColor.clear
-        self.waitCollectionNode.view.showsVerticalScrollIndicator = false
-        self.waitCollectionNode.view.allowsSelection = true
-        self.waitCollectionNode.view.contentInsetAdjustmentBehavior = .never
-       
-        
+        flowLayout.minimumLineSpacing = horizontalSpacing
+        flowLayout.minimumInteritemSpacing = horizontalSpacing
+        return flowLayout
     }
 
-    
+    /// Configures a collection node and adds it to the specified view.
+    /// - Parameters:
+    ///   - node: The collection node to configure.
+    ///   - view: The view to add the collection node's view.
+    private func configureCollectionNode(_ node: ASCollectionNode, in view: UIView) {
+        node.automaticallyRelayoutOnLayoutMarginsChanges = true
+        node.leadingScreensForBatching = 2.0
+        node.view.contentInsetAdjustmentBehavior = .never
+        node.dataSource = self
+        node.delegate = self
+
+        addCollectionNodeView(node.view, to: view)
+    }
+
+    /// Adds a collection node's view as a subview to the specified view and sets constraints.
+    /// - Parameters:
+    ///   - view: The collection node's view to add.
+    ///   - parentView: The parent view to add the collection node's view.
+    private func addCollectionNodeView(_ view: UIView, to parentView: UIView) {
+        parentView.addSubview(view)
+        view.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            view.topAnchor.constraint(equalTo: parentView.topAnchor),
+            view.leadingAnchor.constraint(equalTo: parentView.leadingAnchor),
+            view.trailingAnchor.constraint(equalTo: parentView.trailingAnchor),
+            view.bottomAnchor.constraint(equalTo: parentView.bottomAnchor)
+        ])
+    }
+
+    /// Applies style settings to a collection node.
+    /// - Parameters:
+    ///   - node: The collection node to style.
+    ///   - isPagingEnabled: A boolean value indicating whether paging is enabled.
+    private func applyStyle(to node: ASCollectionNode, isPagingEnabled: Bool) {
+        node.view.isPagingEnabled = isPagingEnabled
+        node.view.backgroundColor = .clear
+        node.view.showsVerticalScrollIndicator = false
+        node.view.allowsSelection = true
+        node.view.contentInsetAdjustmentBehavior = .never
+    }
+}
+
+
+extension StitchToVC {
+
+    // MARK: - ASCollectionNodeDelegate
+
+    /// Handles the selection event of an item in the collection node.
+    /// - Parameters:
+    ///   - collectionNode: The collection node containing the item.
+    ///   - indexPath: The index path of the selected item.
     func collectionNode(_ collectionNode: ASCollectionNode, didSelectItemAt indexPath: IndexPath) {
-        
-        if collectionNode == myCollectionNode {
-            
-            rootPost = myPost[indexPath.row]
-            
-            if prevIndexPath == nil || prevIndexPath != indexPath {
-                prevIndexPath = indexPath
-                allowLoadingWaitList = true
-                
-                myCollectionNode.scrollToItem(at: indexPath, at: .centeredVertically, animated: false)
-                
-                
-                if let cell = myCollectionNode.nodeForItem(at: indexPath) as? StitchControlNode {
-                    cell.layer.cornerRadius = 10
-                    cell.layer.borderWidth = 2
-                    cell.layer.borderColor = UIColor.secondary.cgColor
-                }
-                
-                if !waitPost.isEmpty {
-                    waitPost.removeAll()
-                    waitPage = 1
-                    firstWaitReload = true
-                    waitCollectionNode.performBatchUpdates({
-                        waitCollectionNode.reloadData()
-                    }, completion: nil)
-                } else {
-                    waitCollectionNode.reloadData()
-                }
-                
-            }
-            
-            
+        guard collectionNode == myCollectionNode else { return }
+
+        rootPost = myPost[indexPath.row]
+        processSelectionChangeForItem(at: indexPath)
+    }
+
+    /// Handles the deselection event of an item in the collection node.
+    /// - Parameters:
+    ///   - collectionNode: The collection node containing the item.
+    ///   - indexPath: The index path of the deselected item.
+    func collectionNode(_ collectionNode: ASCollectionNode, didDeselectItemAt indexPath: IndexPath) {
+        guard collectionNode == myCollectionNode else { return }
+
+        updateCellAppearanceAfterDeselection(at: indexPath)
+    }
+
+    // MARK: - Private Helper Methods
+
+    /// Processes changes when a new item is selected in the collection node.
+    /// - Parameter indexPath: The index path of the selected item.
+    private func processSelectionChangeForItem(at indexPath: IndexPath) {
+        guard prevIndexPath == nil || prevIndexPath != indexPath else { return }
+
+        prevIndexPath = indexPath
+        allowLoadingWaitList = true
+        scrollToItemAndHighlight(at: indexPath)
+
+        resetWaitPostsIfNeeded()
+    }
+
+    /// Scrolls to the specified item and updates its appearance to highlight it.
+    /// - Parameter indexPath: The index path of the item to scroll to and highlight.
+    private func scrollToItemAndHighlight(at indexPath: IndexPath) {
+        myCollectionNode.scrollToItem(at: indexPath, at: .centeredVertically, animated: false)
+
+        if let cell = myCollectionNode.nodeForItem(at: indexPath) as? StitchControlNode {
+            styleSelectedCell(cell)
         }
-        
+    }
+
+
+    /// Resets the wait posts if needed.
+    private func resetWaitPostsIfNeeded() {
+        guard !waitPost.isEmpty else {
+            waitCollectionNode.reloadData()
+            return
+        }
+
+        waitPost.removeAll()
+        waitPage = 1
+        firstWaitReload = true
+        waitCollectionNode.performBatchUpdates({
+            waitCollectionNode.reloadData()
+        }, completion: nil)
+    }
+
+    /// Updates the appearance of the cell after it is deselected.
+    /// - Parameter indexPath: The index path of the deselected item.
+    private func updateCellAppearanceAfterDeselection(at indexPath: IndexPath) {
+        if let cell = myCollectionNode.nodeForItem(at: indexPath) as? StitchControlNode {
+            cell.layer.borderColor = UIColor.clear.cgColor
+        }
+    }
+}
+
+extension StitchToVC {
+
+    func retrieveNextPageForMyPostWithCompletion(block: @escaping ([[String: Any]]) -> Void) {
+        APIManager.shared.getMyStitch(page: myPage) { [weak self] result in
+            guard let self = self else { return }
+            self.handleApiResponse(result, updatePage: &self.myPage, completion: block)
+        }
     }
     
-    func collectionNode(_ collectionNode: ASCollectionNode, didDeselectItemAt indexPath: IndexPath) {
-        if collectionNode == myCollectionNode {
-            
-            if let cell = myCollectionNode.nodeForItem(at: indexPath) as? StitchControlNode {
-                cell.layer.borderColor = UIColor.clear.cgColor
+    func retrieveNextPageForStitchtWithCompletion(block: @escaping ([[String: Any]]) -> Void) {
+        APIManager.shared.getStitchTo(pid: rootPost.id) { result in
+            switch result {
+            case .success(let apiResponse):
+                self.handleStitchApiResponse(apiResponse, completion: block)
+            case .failure(let error):
+                print(error)
+                DispatchQueue.main.async {
+                    block([])
+                }
             }
-            
-            
+        }
+    }
+
+    // MARK: - Private Helper Methods
+
+    private func handleApiResponse(_ result: Result, updatePage page: inout Int, completion: @escaping ([[String: Any]]) -> Void) {
+        switch result {
+        case .success(let apiResponse):
+            guard let data = apiResponse.body?["data"] as? [[String: Any]], !data.isEmpty else {
+                DispatchQueue.main.async {
+                    completion([])
+                }
+                return
+            }
+            print("Successfully retrieved \(data.count) posts.")
+            page += 1
+            DispatchQueue.main.async {
+                completion(data)
+            }
+        case .failure(let error):
+            print(error)
+            DispatchQueue.main.async {
+                completion([])
+            }
+        }
+    }
+
+    private func handleStitchApiResponse(_ apiResponse: APIResponse, completion: @escaping ([[String: Any]]) -> Void) {
+        guard let data = apiResponse.body?["data"] as? [[String: Any]], !data.isEmpty else {
+            DispatchQueue.main.async {
+                completion([])
+            }
+            return
+        }
+        DispatchQueue.main.async {
+            completion(data)
         }
     }
 }
 
 
 extension StitchToVC {
-    
-    
-    func retrieveNextPageForMyPostWithCompletion(block: @escaping ([[String: Any]]) -> Void) {
 
-        APIManager.shared.getMyStitch(page: myPage) { [weak self] result in
+    // MARK: - Private Helper Methods
+
+    /// Handles the successful response from the API.
+    /// - Parameters:
+    ///   - apiResponse: The successful API response.
+    ///   - completion: The completion block to be executed.
+    private func handleSuccess(apiResponse: APIResponse, completion: @escaping ([[String: Any]]) -> Void) {
+        guard let data = apiResponse.body?["data"] as? [String: Any], !data.isEmpty else {
+            completionOnMainThread(with: [], completion: completion)
+            return
+        }
+
+        completionOnMainThread(with: [data], completion: completion)
+    }
+
+    /// Handles the failure case from the API.
+    /// - Parameter completion: The completion block to be executed.
+    private func handleFailure(completion: @escaping ([[String: Any]]) -> Void) {
+        completionOnMainThread(with: [], completion: completion)
+    }
+
+    /// Executes the completion block on the main thread with the given items.
+    /// - Parameters:
+    ///   - items: The items to pass to the completion block.
+    ///   - completion: The completion block to be executed.
+    private func completionOnMainThread(with items: [[String: Any]], completion: @escaping ([[String: Any]]) -> Void) {
+        DispatchQueue.main.async {
+            completion(items)
+        }
+    }
+    
+
+    // MARK: - Private Helper Methods
+
+    /// Handles a refresh request if needed.
+    private func handleRefreshRequestIfNeeded() {
+        guard refresh_request else { return }
+
+        refresh_request = false
+        waitPost.removeAll()
+        waitCollectionNode.reloadData()
+    }
+
+    /// Appends new PostModel objects from a given array of dictionaries.
+    /// - Parameter newPosts: The array of dictionaries to convert.
+    /// - Returns: An array of new PostModel objects.
+    private func appendNewPostModels(from newPosts: [[String: Any]]) -> [PostModel] {
+        var newItems = [PostModel]()
+
+        newPosts.forEach { postDict in
+            if let item = PostModel(JSON: postDict), !waitPost.contains(item) {
+                waitPost.append(item)
+                newItems.append(item)
+            }
+        }
+
+        return newItems
+    }
+
+    /// Inserts new items into the collection node.
+    /// - Parameter newItems: The new items to be inserted.
+    private func insertNewItemsInCollectionNode(_ newItems: [PostModel]) {
+        guard !newItems.isEmpty else { return }
+
+        let startIndex = waitPost.count - newItems.count
+        let endIndex = startIndex + newItems.count - 1
+        let indexPaths = (startIndex...endIndex).map { IndexPath(row: $0, section: 0) }
+
+        waitCollectionNode.insertItems(at: indexPaths)
+    }
+
+    /// Handles the first reload of the wait posts if needed.
+    private func handleFirstWaitReloadIfNeeded() {
+        guard firstWaitReload, !waitPost.isEmpty else { return }
+
+        firstWaitReload = false
+        currentIndex = 0
+    }
+    
+}
+
+extension StitchToVC {
+
+    // MARK: - UIScrollViewDelegate
+
+    /// Handles the scroll view's scrolling event.
+    /// - Parameter scrollView: The UIScrollView that has scrolled.
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        guard !waitPost.isEmpty, scrollView == waitCollectionNode.view else { return }
+
+        // Process only horizontal scroll events.
+        guard lastContentOffset != scrollView.contentOffset.x else { return }
+        lastContentOffset = scrollView.contentOffset.x
+
+        let visibleRect = CGRect(origin: scrollView.contentOffset, size: scrollView.bounds.size)
+        let visibleCells = waitCollectionNode.visibleNodes.compactMap { $0 as? StitchControlForRemoveNode }
+        var minDistanceFromCenter = CGFloat.infinity
+        var foundVisibleVideo = false
+
+        // Determine the closest video to the center.
+        for cell in visibleCells {
+            let cellRect = cell.view.convert(cell.bounds, to: waitCollectionNode.view)
+            let cellCenter = CGPoint(x: cellRect.midX, y: cellRect.midY)
+            let distanceFromCenter = abs(cellCenter.x - visibleRect.midX)
+
+            if distanceFromCenter < minDistanceFromCenter {
+                newPlayingIndex = cell.indexPath!.row
+                minDistanceFromCenter = distanceFromCenter
+            }
+        }
+
+        // Handle video play and pause based on visibility and scroll position.
+        handleVideoPlaybackChange(foundVisibleVideo: &foundVisibleVideo)
+    }
+
+    // MARK: - Video Control Methods
+
+    /// Pauses the video at the given index.
+    /// - Parameter index: The index of the video to pause.
+    func pauseVideo(atIndex: Int) {
+        if let cell = waitCollectionNode.nodeForItem(at: IndexPath(row: atIndex, section: 0)) as? StitchControlForRemoveNode {
+            cell.pauseVideo()
+        }
+    }
+
+    /// Plays the video at the given index.
+    /// - Parameter index: The index of the video to play.
+    func playVideo(atIndex: Int) {
+        if let cell = waitCollectionNode.nodeForItem(at: IndexPath(row: atIndex, section: 0)) as? StitchControlForRemoveNode {
+            cell.playVideo()
+        }
+    }
+
+    // MARK: - Private Helper Methods
+
+    /// Handles changes in video playback based on the scrolling of the collection view.
+    /// - Parameter foundVisibleVideo: A reference to the boolean indicating whether a visible video was found.
+    private func handleVideoPlaybackChange(foundVisibleVideo: inout Bool) {
+        if let newPlayingIndex = newPlayingIndex, newPlayingIndex < waitPost.count {
+            if !waitPost[newPlayingIndex].muxPlaybackId.isEmpty {
+                foundVisibleVideo = true
+                imageIndex = nil
+            } else {
+                imageIndex = newPlayingIndex
+            }
+        }
+
+        if foundVisibleVideo {
+            updateCurrentPlayingVideo()
+        } else if !isVideoPlaying && currentIndex != nil {
+            pauseVideo(atIndex: currentIndex!)
+            currentIndex = nil
+        }
+    }
+
+    /// Updates the currently playing video based on the new index.
+    private func updateCurrentPlayingVideo() {
+        guard let newPlayingIndex = newPlayingIndex, currentIndex != newPlayingIndex else { return }
+        if let currentIndex = currentIndex {
+            pauseVideo(atIndex: currentIndex)
+        }
+        currentIndex = newPlayingIndex
+        playVideo(atIndex: newPlayingIndex)
+        isVideoPlaying = true
+    }
+}
+
+
+extension StitchToVC {
+    
+    /// Attempts to unstitch a post and updates the UI accordingly.
+    /// - Parameters:
+    ///   - node: The StitchControlForRemoveNode to be unstitched.
+    ///   - post: The PostModel associated with the node.
+    func unstitchPost(node: StitchControlForRemoveNode, post: PostModel) {
+        guard rootPost != nil else {
+            showErrorAlert("Oops!", msg: "Couldn't remove stitch at this time, please try again")
+            return
+        }
+
+        presentSwiftLoader()
+        performUnstitchRequest(rootId: post.id, memberId: rootPost.id)
+    }
+
+    /// Performs the unstitch API request.
+    /// - Parameters:
+    ///   - rootId: The ID of the root post.
+    ///   - memberId: The ID of the member post.
+    private func performUnstitchRequest(rootId: String, memberId: String) {
+        APIManager.shared.unstitch(rootId: rootId, memberId: memberId) { [weak self] result in
             guard let self = self else { return }
             
             switch result {
-            case .success(let apiResponse):
-                
-                guard let data = apiResponse.body?["data"] as? [[String: Any]] else {
-                    let item = [[String: Any]]()
-                    DispatchQueue.main.async {
-                        block(item)
-                    }
-                    return
-                }
-                if !data.isEmpty {
-                    print("Successfully retrieved \(data.count) posts.")
-                    self.myPage += 1
-                    let items = data
-                    DispatchQueue.main.async {
-                        block(items)
-                    }
-                } else {
-                    
-                    let item = [[String: Any]]()
-                    DispatchQueue.main.async {
-                        block(item)
-                    }
-                }
+            case .success(_):
+                self.handleSuccessfulUnstitch(postId: rootId)
             case .failure(let error):
-                print(error)
-                let item = [[String: Any]]()
-                DispatchQueue.main.async {
-                    block(item)
-                }
+                self.handleUnstitchFailure(error: error)
             }
         }
-        
-        
     }
-    
-    
-    
-    
-    func retrieveNextPageForStitchtWithCompletion(block: @escaping ([[String: Any]]) -> Void) {
-        
-        APIManager.shared.getStitchTo(pid: rootPost.id) { result in
+
+    /// Handles the successful unstitch operation.
+    /// - Parameter postId: The ID of the post that was unstitched.
+    private func handleSuccessfulUnstitch(postId: String) {
+        DispatchQueue.main.async { [weak self] in
+            guard let self = self else { return }
+            SwiftLoader.hide()
+
+            self.updatePostsAndCollection(postId: postId)
+        }
+    }
+
+    /// Updates the posts and collection view after a successful unstitch.
+    /// - Parameter postId: The ID of the post that was unstitched.
+    private func updatePostsAndCollection(postId: String) {
+        if let indexPath = waitPost.firstIndex(where: { $0.id == postId }) {
+            waitPost.remove(at: indexPath)
+            waitCollectionNode.deleteItems(at: [IndexPath(item: indexPath, section: 0)])
+            playVideoIfNeededAfterUnstitch(at: indexPath)
+        }
+    }
+
+    /// Plays the video at a given index if conditions are met after unstitching.
+    /// - Parameter index: The index at which to play the video.
+    private func playVideoIfNeededAfterUnstitch(at index: Int) {
+        if index < waitPost.count {
+            playVideo(atIndex: index)
+        } else if waitPost.isEmpty {
+            playVideo(atIndex: 0)
+        }
+    }
+
+    /// Handles failure during the unstitch operation.
+    /// - Parameter error: The error encountered during unstitching.
+    private func handleUnstitchFailure(error: Error) {
+        DispatchQueue.main.async { [weak self] in
+            guard let self = self else { return }
             
-            switch result {
-            case .success(let apiResponse):
-              
-                guard let data = apiResponse.body?["data"] as? [String: Any] else {
-                    let item = [[String: Any]]()
-                    DispatchQueue.main.async {
-                        block(item)
-                    }
-                    return
-                }
-                
-                if !data.isEmpty {
-                   
-                    DispatchQueue.main.async {
-                        block([data])
-                    }
-                    
-                }  else {
-                    
-                    let item = [[String: Any]]()
-                    DispatchQueue.main.async {
-                        block(item)
-                    }
-                }
-                
-            case .failure(let error):
-                print(error)
-                let item = [[String: Any]]()
-                DispatchQueue.main.async {
-                    block(item)
-                }
-
-            }
+            SwiftLoader.hide()
+            self.showErrorAlert("Oops!", msg: "Couldn't remove stitch at this time, please try again. \(error.localizedDescription)")
         }
-        
-      
-    }
-    
-    
-    func insertNewRowsInCollectionNodeForMyPost(newPosts: [[String: Any]]) {
-
-        // checking empty
-        guard newPosts.count > 0 else {
-            return
-        }
-
-        // Create new PostModel objects and append them to the current posts
-        var items = [PostModel]()
-        for i in newPosts {
-            if let item = PostModel(JSON: i) {
-                if !self.myPost.contains(item) {
-                    self.myPost.append(item)
-                    items.append(item)
-                }
-            }
-        }
-
-        // Construct index paths for the new rows
-        if items.count > 0 {
-            let startIndex = self.myPost.count - items.count
-            let endIndex = startIndex + items.count - 1
-            print(startIndex, endIndex)
-            let indexPaths = (startIndex...endIndex).map { IndexPath(row: $0, section: 0) }
-
-            // Insert new items at index paths
-            self.myCollectionNode.insertItems(at: indexPaths)
-        }
-        
-        if firstLoad {
-            firstLoad = false
-
-            if  !myPost.isEmpty {
-                
-                if let cell = myCollectionNode.nodeForItem(at: IndexPath(item: 0, section: 0)) as? StitchControlNode {
-                    
-                    cell.layer.cornerRadius = 10
-                    cell.layer.borderWidth = 2
-                    cell.layer.borderColor = UIColor.secondary.cgColor
-                    cell.isSelected = true
-                    
-                    
-                    myCollectionNode.selectItem(at: IndexPath(item: 0, section: 0), animated: false, scrollPosition: [])
-                    self.myCollectionNode.scrollToItem(at: IndexPath(item: 0, section: 0), at: .centeredHorizontally, animated: true)
-
-                } else {
-                    print("Couldn't cast ?")
-                }
-                
-                rootPost = myPost[0]
-                
-                allowLoadingWaitList = true
-                waitCollectionNode.reloadData()
-            }
-        }
-    }
-
-    
-    func insertNewRowsInCollectionNodeForWaitList(newPosts: [[String: Any]]) {
-
-        // checking empty
-        guard newPosts.count > 0 else {
-            return
-        }
-
-        if refresh_request {
-
-            refresh_request = false
-            self.waitPost.removeAll()
-            self.waitCollectionNode.reloadData()
-            
-        }
-        
-        
-        // Create new PostModel objects and append them to the current posts
-        var items = [PostModel]()
-        for i in newPosts {
-            if let item = PostModel(JSON: i) {
-                if !self.waitPost.contains(item) {
-                    self.waitPost.append(item)
-                    items.append(item)
-                }
-            }
-        }
-
-        // Construct index paths for the new rows
-        if items.count > 0 {
-            let startIndex = self.waitPost.count - items.count
-            let endIndex = startIndex + items.count - 1
-            print(startIndex, endIndex)
-            let indexPaths = (startIndex...endIndex).map { IndexPath(row: $0, section: 0) }
-
-            // Insert new items at index paths
-            self.waitCollectionNode.insertItems(at: indexPaths)
-        }
-        
-        
-        if firstWaitReload {
-            firstWaitReload = false
-            if !waitPost.isEmpty {
-                currentIndex = 0
-            }
-        }
-        
-        
     }
     
 }
 
 extension StitchToVC {
-    
-    
-    func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        if !waitPost.isEmpty, scrollView == waitCollectionNode.view {
-            // Check if it's a horizontal scroll
-            if lastContentOffset != scrollView.contentOffset.x {
-                lastContentOffset = scrollView.contentOffset.x
-            } else {
-                return
-            }
-            
-            // Get the visible rect of the collection view.
-            let visibleRect = CGRect(origin: scrollView.contentOffset, size: scrollView.bounds.size)
-            
-            // Calculate the visible cells.
-            let visibleCells = waitCollectionNode.visibleNodes.compactMap { $0 as? StitchControlForRemoveNode }
-            
-            // Find the index of the visible video that is closest to the center of the screen.
-            var minDistanceFromCenter = CGFloat.infinity
-            
-            var foundVisibleVideo = false
-            
-            for cell in visibleCells {
-                    let cellRect = cell.view.convert(cell.bounds, to: waitCollectionNode.view)
-                    let cellCenter = CGPoint(x: cellRect.midX, y: cellRect.midY)
-                    let distanceFromCenter = abs(cellCenter.x - visibleRect.midX) // Use the x-coordinate for horizontal scroll
-                    
-                    // Only switch video if the distance from center is less than the min distance
-                    // and also less than the threshold.
-                    if distanceFromCenter < minDistanceFromCenter {
-                        newPlayingIndex = cell.indexPath!.row
-                        minDistanceFromCenter = distanceFromCenter
-                    }
-                }
-            
-            if newPlayingIndex! < waitPost.count {
-                
-                if !waitPost[newPlayingIndex!].muxPlaybackId.isEmpty {
-                    foundVisibleVideo = true
-                    //playTimeBar.isHidden = false
-                    imageIndex = nil
-                } else {
-                    //playTimeBar.isHidden = true
-                    imageIndex = newPlayingIndex
-                }
-                
-            }
-            
-            
-            
-            if foundVisibleVideo {
-                // Start playing the new video if it's different from the current playing video.
-                if let newPlayingIndex = newPlayingIndex, currentIndex != newPlayingIndex {
-                    // Pause the current video, if any.
-                    if let currentIndex = currentIndex {
-                        pauseVideo(index: currentIndex)
-                    }
-                    // Play the new video.
-                    currentIndex = newPlayingIndex
-                    playVideo(index: currentIndex!)
-                    isVideoPlaying = true
-                    
-                    
-                } else {
-                    // Do nothing if the current index is the same as newPlayingIndex
-                }
-            }
-            
 
-            // If there's no current playing video and no visible video, pause the last playing video, if any.
-            if !isVideoPlaying && currentIndex != nil {
-                pauseVideo(index: currentIndex!)
-                currentIndex = nil
-            }
-        }
-    }
-    
-    func pauseVideo(index: Int) {
-        
-        if let cell = self.waitCollectionNode.nodeForItem(at: IndexPath(row: index, section: 0)) as? StitchControlForRemoveNode {
-            
-            // Seek to the beginning of the video
-            cell.pauseVideo()
-            
-        }
-        
-    }
-
-    
-    func playVideo(index: Int) {
-        
-        if let cell = self.waitCollectionNode.nodeForItem(at: IndexPath(row: index, section: 0)) as? StitchControlForRemoveNode {
-            
-            cell.playVideo()
-            
-        }
-        
-    
-    }
-    
-    
-    func unstitchPost(node: StitchControlForRemoveNode, post: PostModel) {
-        
-        if rootPost != nil {
-            
-            presentSwiftLoader()
-            
-            APIManager.shared.unstitch(rootId: post.id, memberId: rootPost.id) { [weak self] result in
-                guard let self = self else { return }
-                
-                switch result {
-                    
-                case .success(_):
-                    
-                    Dispatch.main.async { [weak self]  in
-                        guard let self = self else { return }
-                        SwiftLoader.hide()
-                        if let indexPath = waitPost.firstIndex(of: post) {
-                            
-                            waitPost.removeObject(post)
-                            
-                            waitCollectionNode.deleteItems(at: [IndexPath(item: indexPath, section: 0)])
-                            
-                            // return the next index if it exists
-                            if indexPath < waitPost.count {
-                                playVideo(index: indexPath)
-                            } else if waitPost.count == 1 {
-                                playVideo(index: 0)
-                            }
-                            
-                        }
-                    }
-                   
-                case .failure(let error):
-                    Dispatch.main.async { [weak self]  in
-                        guard let self = self else { return }
-                        
-                        SwiftLoader.hide()
-                        self.showErrorAlert("Oops!", msg: "Couldn't remove stitch at this time, please try again. \(error.localizedDescription)")
-                        
-                    }
-                    
-                }
-            }
-            
-        } else {
-            
-            showErrorAlert("Oops!", msg: "Couldn't remove stitch at this time, please try again")
-            
-        }
-
-
-    }
-    
-    
- 
-    
+    /// Displays an error alert with a given title and message.
+    /// - Parameters:
+    ///   - title: The title of the alert.
+    ///   - msg: The message of the alert.
     func showErrorAlert(_ title: String, msg: String) {
-        
-        let alert = UIAlertController(title: title, message: msg, preferredStyle: .alert)
-        let action = UIAlertAction(title: "OK", style: .default)
-        
-        alert.addAction(action)
-        present(alert, animated: true, completion: nil)
-        
+        let alert = createAlertController(withTitle: title, message: msg)
+        present(alert, animated: true)
     }
-    
+
+    // MARK: - Private Helper Methods
+
+    /// Creates and returns a UIAlertController with specified title and message.
+    /// - Parameters:
+    ///   - title: The title for the alert.
+    ///   - message: The message for the alert.
+    /// - Returns: A configured UIAlertController instance.
+    private func createAlertController(withTitle title: String, message: String) -> UIAlertController {
+        let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
+        let okAction = UIAlertAction(title: "OK", style: .default)
+        alert.addAction(okAction)
+        return alert
+    }
+}
+
+extension StitchToVC {
+
+    func insertNewRowsInCollectionNodeForMyPost(newPosts: [[String: Any]]) {
+        let newItems = processNewPosts(newPosts, for: &myPost)
+        insertItems(newItems, into: myCollectionNode)
+        handleFirstLoadForMyPost()
+    }
+
+    func insertNewRowsInCollectionNodeForWaitList(newPosts: [[String: Any]]) {
+        if refresh_request {
+            refresh_request = false
+            waitPost.removeAll()
+            waitCollectionNode.reloadData()
+        }
+
+        let newItems = processNewPosts(newPosts, for: &waitPost)
+        insertItems(newItems, into: waitCollectionNode)
+        handleFirstWaitReload()
+    }
+
+    // MARK: - Private Helper Methods
+
+    private func processNewPosts(_ newPosts: [[String: Any]], for currentPosts: inout [PostModel]) -> [PostModel] {
+        var newItems = [PostModel]()
+        for postData in newPosts {
+            if let item = PostModel(JSON: postData), !currentPosts.contains(item) {
+                currentPosts.append(item)
+                newItems.append(item)
+            }
+        }
+        return newItems
+    }
+
+    private func insertItems(_ items: [PostModel], into collectionNode: ASCollectionNode) {
+        guard !items.isEmpty else { return }
+
+        let startIndex = collectionNode.numberOfItems(inSection: 0)
+        let indexPaths = (startIndex..<(startIndex + items.count)).map { IndexPath(row: $0, section: 0) }
+        collectionNode.insertItems(at: indexPaths)
+    }
+
+    private func handleFirstLoadForMyPost() {
+        if firstLoad, !myPost.isEmpty {
+            firstLoad = false
+            selectFirstItemInCollectionNode(myCollectionNode)
+            rootPost = myPost[0]
+            allowLoadingWaitList = true
+            waitCollectionNode.reloadData()
+        }
+    }
+
+    private func handleFirstWaitReload() {
+        if firstWaitReload, !waitPost.isEmpty {
+            firstWaitReload = false
+            currentIndex = 0
+        }
+    }
+
+    private func selectFirstItemInCollectionNode(_ collectionNode: ASCollectionNode) {
+        let firstIndexPath = IndexPath(item: 0, section: 0)
+        if let cell = collectionNode.nodeForItem(at: firstIndexPath) as? StitchControlNode {
+            styleSelectedCell(cell)
+            collectionNode.selectItem(at: firstIndexPath, animated: false, scrollPosition: [])
+            collectionNode.scrollToItem(at: firstIndexPath, at: .centeredHorizontally, animated: true)
+        } else {
+            print("Couldn't cast cell")
+        }
+    }
+
+    private func styleSelectedCell(_ cell: StitchControlNode) {
+        cell.layer.cornerRadius = 10
+        cell.layer.borderWidth = 2
+        cell.layer.borderColor = UIColor.secondary.cgColor
+        cell.isSelected = true
+    }
 }

@@ -226,7 +226,7 @@ extension RootNode {
         if let cell = self.mainCollectionNode.nodeForItem(at: IndexPath(row: currentIndex!, section: 0)) as? VideoNode {
 
             if selectPostCollectionView.isHidden == false {
-                cell.showView()
+                showAllViews()
                 selectPostCollectionView.isHidden = true
             }
         }
@@ -539,10 +539,6 @@ extension RootNode {
         updateGallerySelection(at: index)
         handleAnimationTextAndImage(post: videoNode.post)
 
-        if !selectPostCollectionView.isHidden {
-            videoNode.hideView()
-        }
-
         videoNode.playVideo()
     }
 
@@ -684,7 +680,7 @@ extension RootNode {
                     isVideoPlaying = true
                     
                     if let node = mainCollectionNode.nodeForItem(at: IndexPath(item: currentIndex!, section: 0)) as? VideoNode {
-                        resetView(cell: node)
+                        resetViewForVideo(cell: node)
                     }
                 }
             }
@@ -761,7 +757,7 @@ extension RootNode {
         }
         
         // Hide the view of the node and make the selectPostCollectionView visible.
-        node.hideView()
+        hideAllViews()
         self.selectPostCollectionView.isHidden = false
     }
     
@@ -769,13 +765,38 @@ extension RootNode {
     /// - Parameter node: The `VideoNode` whose view is to be hidden.
     func hideStitchView(node: VideoNode) {
         // Hide the stitched view
-        node.showView()
+        showAllViews()
         self.selectPostCollectionView.isHidden = true
     }
-
     
-}
+    /// Hides all views in the main collection node.
+    func hideAllViews() {
+        iterateThroughCollectionNodes { node in
+            node.hideView()
+        }
+    }
 
+    /// Shows all views in the main collection node.
+    func showAllViews() {
+        iterateThroughCollectionNodes { node in
+            node.showView()
+        }
+    }
+
+    /// Iterates through all nodes in the main collection node and performs an action on each VideoNode.
+    /// - Parameter action: The action to perform on each VideoNode.
+    private func iterateThroughCollectionNodes(action: (VideoNode) -> Void) {
+        let numberOfItems = mainCollectionNode.numberOfItems(inSection: 0)
+
+        for index in 0..<numberOfItems {
+            let indexPath = IndexPath(row: index, section: 0)
+            if let node = mainCollectionNode.nodeForItem(at: indexPath) as? VideoNode {
+                action(node)
+            }
+        }
+    }
+
+}
 
 extension RootNode {
     
