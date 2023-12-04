@@ -24,6 +24,9 @@ class SelectedRootPostVC: UIViewController, UICollectionViewDelegateFlowLayout, 
     @IBOutlet weak var topConstraint: NSLayoutConstraint!
     @IBOutlet weak var contentView: UIView!
     
+    @IBOutlet weak var loadingImage: FLAnimatedImageView!
+    @IBOutlet weak var loadingView: UIView!
+    
     var isFirstLoad = true
     var onPresent = false
     var posts = [PostModel]()
@@ -56,6 +59,7 @@ class SelectedRootPostVC: UIViewController, UICollectionViewDelegateFlowLayout, 
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        showLoading()
         prepareForAppearance()
     }
 
@@ -1086,3 +1090,82 @@ extension SelectedRootPostVC {
 
 
 }
+
+extension SelectedRootPostVC {
+
+    // MARK: - Loading Animation Handling
+
+    /// Shows a loading animation.
+    func showLoading() {
+        if firstAnimated {
+            setupLoadingView()
+            loadAndSetLoadingAnimation()
+            firstAnimated = false
+            
+            hideLoading()
+        }
+    }
+
+    /// Hides the loading animation.
+    func hideLoading() {
+        performLoadingAnimationFadeOut()
+    }
+
+    // MARK: - Private Helper Methods
+
+    /// Sets up the initial state of the loading view.
+    private func setupLoadingView() {
+        loadingView.backgroundColor = .white
+    }
+
+    /// Loads and sets the loading animation.
+    private func loadAndSetLoadingAnimation() {
+        DispatchQueue.global(qos: .background).async {
+            do {
+                let gifData = try self.loadGifData(resourceName: "fox2", type: "gif")
+                DispatchQueue.main.async { [weak self] in
+                    self?.setLoadingImage(with: gifData)
+                }
+            } catch {
+                print(error.localizedDescription)
+            }
+        }
+    }
+
+    /// Loads GIF data from the specified resource.
+    private func loadGifData(resourceName: String, type: String) throws -> Data? {
+        guard let path = Bundle.main.path(forResource: resourceName, ofType: type) else { return nil }
+        return try Data(contentsOf: URL(fileURLWithPath: path))
+    }
+
+    /// Sets the loading image with the provided GIF data.
+    private func setLoadingImage(with gifData: Data?) {
+        guard let gifData = gifData else { return }
+        let image = FLAnimatedImage(animatedGIFData: gifData)
+        loadingImage.animatedImage = image
+    }
+
+    /// Performs the fade-out animation for the loading view and then hides it.
+    private func performLoadingAnimationFadeOut() {
+        delay(1) { [weak self] in
+            UIView.animate(withDuration: 0.5, animations: {
+                self?.loadingView.alpha = 0
+            }, completion: { _ in
+                self?.finalizeLoadingViewHide()
+            })
+        }
+    }
+
+    /// Finalizes the hiding of the loading view.
+    private func finalizeLoadingViewHide() {
+        guard loadingView.alpha == 0 else { return }
+        
+        loadingView.isHidden = true
+        loadingImage.stopAnimating()
+        loadingImage.animatedImage = nil
+        loadingImage.image = nil
+        loadingImage.removeFromSuperview()
+    }
+
+}
+

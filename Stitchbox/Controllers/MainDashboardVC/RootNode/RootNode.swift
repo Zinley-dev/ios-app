@@ -302,39 +302,56 @@ extension RootNode: ASCollectionDelegate, ASCollectionDataSource {
     func collectionNode(_ collectionNode: ASCollectionNode, nodeBlockForItemAt indexPath: IndexPath) -> ASCellNodeBlock {
         let post = posts[indexPath.row]
 
-        // Determine the type of collection node to handle.
         if collectionNode == galleryCollectionNode {
-            // Handling gallery collection node.
-            return {
-                let node = StitchGalleryNode(with: post)
-                self.configureNode(node, at: indexPath)
-                return node
-            }
+            return createGalleryNodeBlock(for: post, at: indexPath)
         } else {
-            // Handling main collection node.
-            return { [weak self] in
-                guard let strongSelf = self else { return ASCellNode() }
-                print("rootNode test2: \(strongSelf.firstItem), \(indexPath.row)")
-                let isFirstItem = strongSelf.firstItem && indexPath.row == 0
-                let node = VideoNode(with: post, isPreview: false, firstItem: isFirstItem)
-                strongSelf.configureNode(node, at: indexPath)
+            return createMainNodeBlock(for: post, at: indexPath)
+        }
+    }
 
-                // Update the flag after the first load.
-                if isFirstItem {
-                    strongSelf.firstItem = false
-                    delay(1.25) {
-                        strongSelf.handleAnimationTextAndImage(post: post)
-                    }
-                }
-                
-                // Assigning a closure to the viewStitchBtn property of the VideoNode.
-                node.viewStitchBtn = { [weak self] node in
-                    guard let videoNode = node as? VideoNode else { return }
-                    self?.viewStitchedPost(node: videoNode)
-                }
-                
-                return node
+    // MARK: - Private Helper Methods
+
+    private func createGalleryNodeBlock(for post: PostModel, at indexPath: IndexPath) -> ASCellNodeBlock {
+        return {
+            let node = StitchGalleryNode(with: post)
+            self.configureNode(node, at: indexPath)
+            return node
+        }
+    }
+
+    private func createMainNodeBlock(for post: PostModel, at indexPath: IndexPath) -> ASCellNodeBlock {
+        return { [weak self] in
+            guard let strongSelf = self else { return ASCellNode() }
+            let isFirstItem = strongSelf.firstItem && indexPath.row == 0
+            let node = VideoNode(with: post, isPreview: false, firstItem: isFirstItem)
+            strongSelf.configureMainNode(node, for: post, at: indexPath, isFirstItem: isFirstItem)
+            return node
+        }
+    }
+
+    private func configureMainNode(_ node: VideoNode, for post: PostModel, at indexPath: IndexPath, isFirstItem: Bool) {
+        configureNode(node, at: indexPath)
+        handleFirstItemAnimationIfNeeded(node, for: post, at: indexPath, isFirstItem: isFirstItem)
+        setupNodeActions(node)
+    }
+
+    private func handleFirstItemAnimationIfNeeded(_ node: VideoNode, for post: PostModel, at indexPath: IndexPath, isFirstItem: Bool) {
+        if isFirstItem {
+            firstItem = false
+            delay(1.25) {
+                self.handleAnimationTextAndImage(post: post)
             }
+        } else if indexPath.row == 0, posts.count == 1 {
+            delay(1) {
+                self.handleAnimationTextAndImage(post: post)
+            }
+        }
+    }
+
+    private func setupNodeActions(_ node: VideoNode) {
+        node.viewStitchBtn = { [weak self] node in
+        guard let videoNode = node as? VideoNode else { return }
+        self?.viewStitchedPost(node: videoNode)
         }
     }
 
@@ -370,9 +387,12 @@ extension RootNode: ASCollectionDelegate, ASCollectionDataSource {
                 self.mainCollectionNode.scrollToItem(at: prev, at: .centeredVertically, animated: false)
                 self.mainCollectionNode.scrollToItem(at: indexPath, at: .centeredVertically, animated: true)
                 print("scroll: scroll1")
+                
+                
             } else {
                 self.mainCollectionNode.scrollToItem(at: indexPath, at: .centeredVertically, animated: true)
                 print("scroll: scroll2")
+                
             }
             
             
@@ -511,32 +531,46 @@ extension RootNode {
     /// Plays the video at a specified index and updates the appearance of the gallery collection node.
     /// - Parameter index: The index of the video to be played.
     func playVideo(index: Int) {
-        // Retrieve the cell at the given index from the main collection node.
-        if let cell = self.mainCollectionNode.nodeForItem(at: IndexPath(row: index, section: 0)) as? VideoNode {
-        
-            // Cell selection/deselection logic for the gallery collection node.
-            let indexPath = IndexPath(row: index, section: 0)
-            if let imgCell = galleryCollectionNode.nodeForItem(at: indexPath) as? StitchGalleryNode {
-                // Update the appearance of the selected cell.
-                updateCellAppearance(imgCell, isSelected: true)
-                galleryCollectionNode.selectItem(at: indexPath, animated: false, scrollPosition: [])
-                galleryCollectionNode.scrollToItem(at: indexPath, at: .centeredHorizontally, animated: true)
-                
+        guard let videoNode = mainCollectionNode.nodeForItem(at: IndexPath(row: index, section: 0)) as? VideoNode else {
+            print("Couldn't cast to expected cell type.")
+            return
+        }
 
-                // Deselect all other cells in the gallery collection node.
-                for i in 0..<galleryCollectionNode.numberOfItems(inSection: 0) {
-                    if i != index, let otherCell = galleryCollectionNode.nodeForItem(at: IndexPath(row: i, section: 0)) as? StitchGalleryNode {
-                        updateCellAppearance(otherCell, isSelected: false)
-                    }
-                }
-            } else {
-                print("Couldn't cast to expected cell type.")
+        updateGallerySelection(at: index)
+        handleAnimationTextAndImage(post: videoNode.post)
+
+        if !selectPostCollectionView.isHidden {
+            videoNode.hideView()
+        }
+
+        videoNode.playVideo()
+    }
+
+    // MARK: - Private Helper Methods
+
+    /// Updates the selection and appearance of cells in the gallery collection node.
+    private func updateGallerySelection(at selectedIndex: Int) {
+        let indexPath = IndexPath(row: selectedIndex, section: 0)
+        updateCellAppearance(at: indexPath, isSelected: true)
+        galleryCollectionNode.selectItem(at: indexPath, animated: false, scrollPosition: [])
+        galleryCollectionNode.scrollToItem(at: indexPath, at: .centeredHorizontally, animated: true)
+
+        deselectOtherCells(exceptAt: selectedIndex)
+    }
+
+    /// Updates the appearance of a cell in the gallery collection node.
+    private func updateCellAppearance(at indexPath: IndexPath, isSelected: Bool) {
+        if let imgCell = galleryCollectionNode.nodeForItem(at: indexPath) as? StitchGalleryNode {
+            updateCellAppearance(imgCell, isSelected: isSelected)
+        }
+    }
+
+    /// Deselects all cells in the gallery collection node except the one at the specified index.
+    private func deselectOtherCells(exceptAt selectedIndex: Int) {
+        for i in 0..<galleryCollectionNode.numberOfItems(inSection: 0) {
+            if i != selectedIndex {
+                updateCellAppearance(at: IndexPath(row: i, section: 0), isSelected: false)
             }
-            
-            // Play the video in the selected cell.
-            
-            handleAnimationTextAndImage(post: cell.post)
-            cell.playVideo()
         }
     }
 

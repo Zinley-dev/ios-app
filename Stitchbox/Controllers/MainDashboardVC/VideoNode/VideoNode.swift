@@ -778,6 +778,10 @@ extension VideoNode {
             setupTimeView()
             setupFunction()
         }
+        
+        if isPreview {
+            footerView.stitchBtn.isHidden = true
+        }
     }
 
     
@@ -920,19 +924,21 @@ extension VideoNode {
         self.headerView.avatarImg.isUserInteractionEnabled = true
         self.headerView.avatarImg.addGestureRecognizer(usernameTap2)
         
-        // Settings Button1 Tap Gesture
-        let settingTap = createTapGestureRecognizer(target: self, action: #selector(VideoNode.settingTapped))
-        self.headerView.settingBtn.addGestureRecognizer(settingTap)
-        
-        // Settings Button2 Tap Gesture
-        let settingTap2 = createTapGestureRecognizer(target: self, action: #selector(VideoNode.settingTapped))
-        self.headerView.postTime.addGestureRecognizer(settingTap2)
-        self.headerView.postTime.isUserInteractionEnabled = true
-        
-        // Settings Button3 Tap Gesture
-        let settingTap3 = createTapGestureRecognizer(target: self, action: #selector(VideoNode.settingTapped))
-        self.headerView.postDate.addGestureRecognizer(settingTap3)
-        self.headerView.postDate.isUserInteractionEnabled = true
+        if !isPreview  {
+            // Settings Button1 Tap Gesture
+            let settingTap = createTapGestureRecognizer(target: self, action: #selector(VideoNode.settingTapped))
+            self.headerView.settingBtn.addGestureRecognizer(settingTap)
+            
+            // Settings Button2 Tap Gesture
+            let settingTap2 = createTapGestureRecognizer(target: self, action: #selector(VideoNode.settingTapped))
+            self.headerView.postTime.addGestureRecognizer(settingTap2)
+            self.headerView.postTime.isUserInteractionEnabled = true
+            
+            // Settings Button3 Tap Gesture
+            let settingTap3 = createTapGestureRecognizer(target: self, action: #selector(VideoNode.settingTapped))
+            self.headerView.postDate.addGestureRecognizer(settingTap3)
+            self.headerView.postDate.isUserInteractionEnabled = true
+        }
 
         // Like Button Tap Gesture
         let likeTap1 = createTapGestureRecognizer(target: self, action: #selector(VideoNode.likeTapped))
