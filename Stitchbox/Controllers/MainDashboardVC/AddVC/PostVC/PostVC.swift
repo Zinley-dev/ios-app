@@ -815,14 +815,10 @@ extension PostVC {
             }
             
             // Terms to be displayed in the alert
-            let terms = """
-                        Ensure your content maintains relevance to the original topic.
-                        Exhibit respect towards the original author in your content.
-                        Abide by our terms of use and guidelines in the creation of your content.
-                        """
+            let terms = "Ensure your content maintains relevance to the original topic. Exhibit respect towards the original author in your content. Abide by our terms of use and guidelines in the creation of your content."
             
             // Adding an icon to the alert
-            let icon = UIImage(named:"Logo")
+            let icon = UIImage(named:"fistBumpedStats")
             
             // Displaying the alert
             _ = alert.showCustom("Hi \(username),", subTitle: terms, color: UIColor.white, icon: icon!)
@@ -842,5 +838,4 @@ extension PostVC {
         userDefaults.synchronize() // Forcing the app to update UserDefaults
     }
 
-    
 }

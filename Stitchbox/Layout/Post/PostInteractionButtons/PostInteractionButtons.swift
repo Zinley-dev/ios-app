@@ -80,13 +80,13 @@ extension PostInteractionButtons {
     ///   - cmtCount: Number of comments.
     ///   - saveCount: Number of saves.
     ///   - playlistCount: Number of playlist additions.
-    func fillInformation(likeCount: Int, cmtCount: Int, saveCount: Int, playlistCount: Int) {
+    func fillInformation(likeCount: Int, cmtCount: Int, saveCount: Int, totalOnChain: Int, positionOnChain: Int) {
         DispatchQueue.main.async { [weak self] in
             guard let strongSelf = self else { return }
             strongSelf.likeCountLbl.text = "\(formatPoints(num: Double(likeCount)))"
             strongSelf.saveCountLbl.text = "\(formatPoints(num: Double(saveCount)))"
             strongSelf.commentCountLbl.text = "\(formatPoints(num: Double(cmtCount)))"
-            strongSelf.playListCountLbl.text = "\(formatPoints(num: Double(playlistCount)))"
+            strongSelf.playListCountLbl.text = "\(formatPoints(num: Double(positionOnChain)))/\(formatPoints(num: Double(totalOnChain)))"
         }
     }
     

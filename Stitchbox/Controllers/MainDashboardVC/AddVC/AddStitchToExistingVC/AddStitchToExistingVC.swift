@@ -549,7 +549,7 @@ extension AddStitchToExistingVC {
         addAgreeButton(to: alert)
 
         let terms = getTermsString()
-        let icon = UIImage(named: "stitchboxlogonew")
+        let icon = UIImage(named: "fistBumpedStats")
         alert.showCustom("Hi \(username),", subTitle: terms, color: UIColor.white, icon: icon!)
     }
 

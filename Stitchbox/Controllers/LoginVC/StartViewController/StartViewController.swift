@@ -164,7 +164,7 @@ class StartViewController: UIViewController, ControllerType, ZSWTappableLabelTap
                 let settings = Mapper<SettingModel>().map(JSONObject: data)
                 globalSetting = settings
                 globalIsSound = settings?.AutoPlaySound ?? false
-                globalClear = settings?.ClearMode ?? false
+                globalRegulate = settings?.RegulateMode ?? false
 
                 completed()
 

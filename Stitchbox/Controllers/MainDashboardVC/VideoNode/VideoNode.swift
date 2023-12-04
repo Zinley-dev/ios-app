@@ -464,7 +464,9 @@ extension VideoNode {
         if shouldSeekToStart {
             let startTime = CMTime(seconds: 0, preferredTimescale: 1)
             cellVideoNode.player?.seek(to: startTime)
-            playTimeBar.setValue(Float(0), animated: true)
+            if playTimeBar != nil {
+                playTimeBar.setValue(Float(0), animated: true)
+            }
         }
     }
 
@@ -595,8 +597,11 @@ extension VideoNode {
     /// Removes the spinner from the view.
     func removeSpinner() {
         spinnerRemoved = true
-        spinner.stopAnimating()
-        spinner.removeFromSuperview()
+        if spinner != nil {
+            spinner.stopAnimating()
+            spinner.removeFromSuperview()
+        }
+        
     }
     
 }
@@ -879,7 +884,8 @@ extension VideoNode {
             likeCount: post.totalLikes,
             cmtCount: post.totalComments,
             saveCount: post.totalSave,
-            playlistCount: post.totalStitchTo + post.totalMemberStitch
+            totalOnChain: post.totalOnChain,
+            positionOnChain: post.positionOnChain
         )
     }
 

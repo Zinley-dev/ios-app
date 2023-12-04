@@ -54,7 +54,7 @@ var newSlogan = ""
 var didChanged = false
 var reloadAddedGame = false
 var globalIsSound = false
-var globalClear = false
+var globalRegulate = false
 var shouldMute: Bool?
 var globalSetting: SettingModel!
 var navigationControllerHeight: CGFloat = 0.0
@@ -517,7 +517,7 @@ private func updateGlobalSettings(from apiResponse: APIResponse) {
         print("No data available in API response")
         return
     }
-
+    
     if let settings = Mapper<SettingModel>().map(JSONObject: data) {
         globalSetting = settings
     } else {

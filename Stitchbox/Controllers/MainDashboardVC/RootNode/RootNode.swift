@@ -26,7 +26,11 @@ class RootNode: ASCellNode, UICollectionViewDelegateFlowLayout, UIAdaptivePresen
     var rootPost: PostModel! // The main post object for the view controller.
     var posts = [PostModel]() // Array to hold related posts.
     var page = 1 // Current page index for pagination or similar use.
+    var prevPage = 1 // Current page index for pagination or similar use.
     
+    var lastContentOffset: CGPoint = .zero
+    var isLoadingPreviousPosts = false
+    var lastLoadTriggerOffset: CGFloat = 0
     
     // UI elements
     var galleryCollectionNode: ASCollectionNode! // Collection node for displaying a gallery of items.
@@ -91,6 +95,7 @@ class RootNode: ASCellNode, UICollectionViewDelegateFlowLayout, UIAdaptivePresen
         // Set up the gallery collection node's delegate and data source
         galleryCollectionNode.delegate = self
         galleryCollectionNode.dataSource = self
+        
     }
 
     
@@ -138,8 +143,6 @@ class RootNode: ASCellNode, UICollectionViewDelegateFlowLayout, UIAdaptivePresen
         }
     }
     
-    
-    
 }
 
 // MARK: - Lifecycle and Layout
@@ -154,6 +157,7 @@ extension RootNode {
         // This includes setting up visual aspects and layout behaviors.
         self.applyStyle()
         self.setupAnimatedLabel()
+        //self.handleRightScrollForLoading(scrollView: mainCollectionNode.view, bypassCheck: true)
     }
 
     /// Defines the layout specification for the node.
@@ -223,12 +227,9 @@ extension RootNode {
     }
     
     func hideBtnPressed() {
-        if let cell = self.mainCollectionNode.nodeForItem(at: IndexPath(row: currentIndex!, section: 0)) as? VideoNode {
-
-            if selectPostCollectionView.isHidden == false {
-                showAllViews()
-                selectPostCollectionView.isHidden = true
-            }
+        if selectPostCollectionView.isHidden == false {
+            showAllViews()
+            selectPostCollectionView.isHidden = true
         }
     }
 }
@@ -445,7 +446,7 @@ extension RootNode {
     /// - Parameter block: A completion block that is executed when the data retrieval is complete.
     func retrieveNextPageWithCompletion(block: @escaping ([[String: Any]]) -> Void) {
         APIManager.shared.listStitchNext(pid: rootPost.id, page: page) { [weak self] result in
-            guard let _ = self else { return } // Ensuring the instance is still around when the API call completes.
+            guard let self = self else { return } // Ensuring the instance is still around when the API call completes.
 
             switch result {
             case .success(let apiResponse):
@@ -454,12 +455,13 @@ extension RootNode {
                     DispatchQueue.main.async { block([]) }
                     return
                 }
+                self.page += 1
                 print("Successfully retrieved \(data.count) posts.")
                 DispatchQueue.main.async { block(data) }
 
             case .failure(let error):
                 // Handling failure in API response.
-                print(error)
+                print("listStitchNext: \(error)")
                 DispatchQueue.main.async { block([]) }
             }
         }
@@ -684,9 +686,120 @@ extension RootNode {
                     }
                 }
             }
+            
+            // Check for right swipe and proximity to the top.
+            handleRightScrollForLoading(scrollView: scrollView, bypassCheck: false)
 
         }
     }
+    
+    /// Handles right scroll for loading previous posts.
+    /// - Parameters:
+    ///   - scrollView: The scrollView being scrolled.
+    ///   - bypassCheck: A flag to determine if the usual check should be bypassed.
+    func handleRightScrollForLoading(scrollView: UIScrollView, bypassCheck: Bool) {
+        let currentOffsetX = scrollView.contentOffset.x
+
+        if shouldLoadPreviousPosts(currentOffset: currentOffsetX, bypassCheck: bypassCheck) {
+            isLoadingPreviousPosts = true
+            loadPreviousPosts()
+        }
+
+        // Update the last content offset
+        lastContentOffset = scrollView.contentOffset
+    }
+
+    // MARK: - Private Helper Methods
+
+    /// Determines if previous posts should be loaded based on the current scroll position and conditions.
+    /// - Parameters:
+    ///   - currentOffset: The current horizontal offset of the scrollView.
+    ///   - bypassCheck: A flag to determine if the usual check should be bypassed.
+    /// - Returns: A Boolean indicating whether previous posts should be loaded.
+    private func shouldLoadPreviousPosts(currentOffset: CGFloat, bypassCheck: Bool) -> Bool {
+        if bypassCheck {
+            return true
+        } else {
+            // Check if scrolling right and not already loading previous posts
+            let isScrollingRight = currentOffset < lastContentOffset.x
+            let distanceFromStart = currentOffset
+            let isCloseToStart = distanceFromStart <= view.frame.width * 2
+
+            return isScrollingRight && !isLoadingPreviousPosts && isCloseToStart
+        }
+    }
+    
+    
+    func loadPreviousPosts() {
+        // Implement your logic to load previous posts here
+        // After loading, remember to set 'isLoadingPreviousPosts' to false
+        print("loadPreviousPosts")
+        
+        guard let currentViewController = UIViewController.currentViewController(),
+              currentViewController is FeedViewController || currentViewController is SelectedRootPostVC else {
+            isLoadingPreviousPosts = false
+            return
+        }
+
+        retrieveNextPageWithCompletionForPreviousPost { [weak self] newPosts in
+            guard let self = self else { return }
+            self.insertNewRowsInCollectionNodeforPreviousPost(newPosts: newPosts)
+            isLoadingPreviousPosts = false
+        }
+    }
+    
+    
+    /// Retrieves the next page of data from the API.
+    /// The completion block returns an array of dictionaries representing new data.
+    /// - Parameter block: A completion block that is executed when the data retrieval is complete.
+    func retrieveNextPageWithCompletionForPreviousPost(block: @escaping ([[String: Any]]) -> Void) {
+        APIManager.shared.listStitch(pid: rootPost.id, page: prevPage) { [weak self] result in
+            guard let self = self else { return } // Ensuring the instance is still around when the API call completes.
+
+            switch result {
+            case .success(let apiResponse):
+                // Handling successful API response.
+                guard let data = apiResponse.body?["data"] as? [[String: Any]] else {
+                    DispatchQueue.main.async { block([]) }
+                    return
+                }
+                self.prevPage += 1
+                print("Successfully retrieved \(data.count) posts.")
+                DispatchQueue.main.async { block(data) }
+
+            case .failure(let error):
+                // Handling failure in API response.
+                print("listStitchNext: \(error)")
+                DispatchQueue.main.async { block([]) }
+            }
+        }
+    }
+
+    
+    /// Inserts new rows into the collection node at the beginning and maintains the current scroll position.
+    /// - Parameter newPosts: An array of dictionaries representing the new posts to be added.
+    func insertNewRowsInCollectionNodeforPreviousPost(newPosts: [[String: Any]]) {
+        guard !newPosts.isEmpty else { return }
+        
+        // Convert raw data to PostModel objects.
+        let newItems = newPosts.compactMap { PostModel(JSON: $0) }.filter { !posts.contains($0) }
+        
+        let currentWidth = CGFloat(posts.count) * view.frame.width
+
+        // Insert new items at the beginning of the posts array.
+        posts.insert(contentsOf: newItems, at: 0)
+
+        if !newItems.isEmpty {
+            // Update the currentIndex to reflect the new position of the previously focused item.
+            currentIndex = (currentIndex ?? 0) + newItems.count
+
+            // Store the current content size and content offset.
+            let indexPaths = (0..<newItems.count).map { IndexPath(row: $0, section: 0) }
+            mainCollectionNode.insertItems(at: indexPaths)
+            galleryCollectionNode.insertItems(at: indexPaths)
+        }
+    }
+
 
     /// Clears existing posts from the collection node.
     func clearExistingPosts() {

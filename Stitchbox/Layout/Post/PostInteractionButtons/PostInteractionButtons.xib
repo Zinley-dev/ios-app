@@ -37,7 +37,7 @@
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
                 <stackView opaque="NO" contentMode="scaleToFill" spacing="30" translatesAutoresizingMaskIntoConstraints="NO" id="B1q-ab-Jis">
-                    <rect key="frame" x="43.5" y="25" width="290" height="50"/>
+                    <rect key="frame" x="49" y="25" width="279.5" height="50"/>
                     <subviews>
                         <stackView opaque="NO" contentMode="scaleToFill" alignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="b4R-yR-gjg">
                             <rect key="frame" x="0.0" y="0.0" width="50" height="50"/>
@@ -113,8 +113,8 @@
                             </subviews>
                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         </stackView>
-                        <stackView opaque="NO" contentMode="scaleToFill" alignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="GjM-LT-SuH">
-                            <rect key="frame" x="240" y="0.0" width="50" height="50"/>
+                        <stackView opaque="NO" contentMode="scaleToFill" alignment="center" spacing="7" translatesAutoresizingMaskIntoConstraints="NO" id="GjM-LT-SuH">
+                            <rect key="frame" x="240" y="0.0" width="39.5" height="50"/>
                             <subviews>
                                 <button opaque="NO" userInteractionEnabled="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="bb4-OW-rNV">
                                     <rect key="frame" x="0.0" y="0.0" width="25" height="50"/>
@@ -126,10 +126,7 @@
                                     <buttonConfiguration key="configuration" style="plain" image="save"/>
                                 </button>
                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="0" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="3JX-G8-Iy9">
-                                    <rect key="frame" x="25" y="17.5" width="25" height="15.5"/>
-                                    <constraints>
-                                        <constraint firstAttribute="width" constant="25" id="joa-xg-0sW"/>
-                                    </constraints>
+                                    <rect key="frame" x="32" y="17.5" width="7.5" height="15.5"/>
                                     <fontDescription key="fontDescription" name="Roboto-Regular" family="Roboto" pointSize="13"/>
                                     <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                     <nil key="highlightedColor"/>

@@ -144,7 +144,6 @@
 		6A3F0A8C2982331F00366665 /* UserProfileVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A3F0A8B2982331F00366665 /* UserProfileVC.swift */; };
 		6A3F0A8F2982454400366665 /* UserProfileHeaderCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A3F0A8E2982454400366665 /* UserProfileHeaderCell.swift */; };
 		6A3F0A912982458700366665 /* UserChallengerCardProfileHeaderCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A3F0A902982458700366665 /* UserChallengerCardProfileHeaderCell.swift */; };
-		6A4031162A86C9040038B655 /* ShowCleanModeVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A4031152A86C9040038B655 /* ShowCleanModeVC.swift */; };
 		6A4031192A872B770038B655 /* SupportVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A4031182A872B770038B655 /* SupportVC.swift */; };
 		6A40311C2A872D600038B655 /* ResolutionVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A40311B2A872D600038B655 /* ResolutionVC.swift */; };
 		6A4031222A89B5A70038B655 /* VideoIssueNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A4031212A89B5A70038B655 /* VideoIssueNode.swift */; };
@@ -629,7 +628,6 @@
 		6A3F0A8B2982331F00366665 /* UserProfileVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserProfileVC.swift; sourceTree = "<group>"; };
 		6A3F0A8E2982454400366665 /* UserProfileHeaderCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserProfileHeaderCell.swift; sourceTree = "<group>"; };
 		6A3F0A902982458700366665 /* UserChallengerCardProfileHeaderCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserChallengerCardProfileHeaderCell.swift; sourceTree = "<group>"; };
-		6A4031152A86C9040038B655 /* ShowCleanModeVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShowCleanModeVC.swift; sourceTree = "<group>"; };
 		6A4031182A872B770038B655 /* SupportVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SupportVC.swift; sourceTree = "<group>"; };
 		6A40311B2A872D600038B655 /* ResolutionVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResolutionVC.swift; sourceTree = "<group>"; };
 		6A4031212A89B5A70038B655 /* VideoIssueNode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoIssueNode.swift; sourceTree = "<group>"; };
@@ -1956,14 +1954,6 @@
 			path = UserProfileCell;
 			sourceTree = "<group>";
 		};
-		6A4031142A86C8DF0038B655 /* ShowCleanModeVC */ = {
-			isa = PBXGroup;
-			children = (
-				6A4031152A86C9040038B655 /* ShowCleanModeVC.swift */,
-			);
-			path = ShowCleanModeVC;
-			sourceTree = "<group>";
-		};
 		6A4031172A872B5D0038B655 /* SupportVC */ = {
 			isa = PBXGroup;
 			children = (
@@ -2639,7 +2629,6 @@
 				6A0BC81D2A8DE10200F9A2EA /* ViewStitchStatsVC */,
 				6A2A16022A8C545B00E607EA /* AppMetrics */,
 				6A40311A2A872D4E0038B655 /* ResolutionVC */,
-				6A4031142A86C8DF0038B655 /* ShowCleanModeVC */,
 				6A9A26912A801EA600F4D45A /* VideoNode */,
 				6AE3BEEE2A6C721900AAA5DD /* StitchDashboard */,
 				6AE3BEDC2A68830E00AAA5DD /* SuggestFollowVC */,
@@ -4052,7 +4041,6 @@
 				6A47AAA52A1867DC00E3E1FF /* SparkViewFactory.swift in Sources */,
 				395477BF294D714F008EED97 /* CreateAccountViewModel.swift in Sources */,
 				6A9E4C7A2977AF5400B59176 /* SecurityVC.swift in Sources */,
-				6A4031162A86C9040038B655 /* ShowCleanModeVC.swift in Sources */,
 				6A0BC81F2A8DE17900F9A2EA /* ViewStitchStatsVC.swift in Sources */,
 				6AAD7A4A294C664D003E3AB6 /* StartCallConvertible.swift in Sources */,
 				6ABA611E2977CB29003BFB5B /* PhotoVC.swift in Sources */,

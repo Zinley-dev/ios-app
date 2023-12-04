@@ -33,7 +33,7 @@ class SettingVC: UIViewController {
     @IBOutlet weak var SoundSwitch: UISwitch!
     @IBOutlet weak var StitchSwitch: UISwitch!
     @IBOutlet weak var PublicStitchSwitch: UISwitch!
-    @IBOutlet weak var ClearSwitch: UISwitch!
+    @IBOutlet weak var RegulateSwitch: UISwitch!
     @IBOutlet weak var proView: UIView!
     
     
@@ -44,7 +44,7 @@ class SettingVC: UIViewController {
     var isPublicStitch = false
     var isSound = false
     var isPrivate = false
-    var isClearMode = false
+    var isRegulateMode = false
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -243,21 +243,21 @@ class SettingVC: UIViewController {
     }
     
     
-    @IBAction func ClearSwitchPressed(_ sender: Any) {
+    @IBAction func RegulateSwitchPressed(_ sender: Any) {
         
-        var params = ["clearMode": false]
+        var params = ["isRegulation": false]
         
-        if isClearMode {
+        if isRegulateMode {
             
-            params = ["clearMode": false]
-            isClearMode = false
-            globalClear = false
+            params = ["isRegulation": false]
+            isRegulateMode = false
+            globalRegulate = false
             
         } else {
             
-            params = ["clearMode": true]
-            isClearMode = true
-            globalClear = true
+            params = ["isRegulation": true]
+            isRegulateMode = true
+            globalRegulate = true
         }
         
         APIManager.shared.updateSettings(params: params) { [weak self] result in
@@ -421,28 +421,12 @@ extension SettingVC {
                 isSound = false
             }
             
-            if globalSetting.AllowStitch == true {
-                self.StitchSwitch.setOn(true, animated: true)
-                isStitch = true
+            if globalSetting.RegulateMode == true {
+                self.RegulateSwitch.setOn(true, animated: true)
+                isRegulateMode = true
             } else {
-                self.StitchSwitch.setOn(false, animated: true)
-                isStitch = false
-            }
-            
-            if globalSetting.PublicStitch == true {
-                self.PublicStitchSwitch.setOn(true, animated: true)
-                isPublicStitch = true
-            } else {
-                self.PublicStitchSwitch.setOn(false, animated: true)
-                isPublicStitch = false
-            }
-            
-            if globalSetting.ClearMode == true {
-                self.ClearSwitch.setOn(true, animated: true)
-                isClearMode = true
-            } else {
-                self.ClearSwitch.setOn(false, animated: true)
-                isClearMode = false
+                self.RegulateSwitch.setOn(false, animated: true)
+                isRegulateMode = false
             }
             
         }
