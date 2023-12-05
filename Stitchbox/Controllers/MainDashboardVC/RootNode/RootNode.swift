@@ -356,11 +356,11 @@ extension RootNode: ASCollectionDelegate, ASCollectionDataSource {
     private func handleFirstItemAnimationIfNeeded(_ node: VideoNode, for post: PostModel, at indexPath: IndexPath, isFirstItem: Bool) {
         if isFirstItem {
             firstItem = false
-            delay(1.25) {
+            delay(1.7) {
                 self.handleAnimationTextAndImage(post: post)
             }
         } else if indexPath.row == 0, posts.count == 1 {
-            delay(1) {
+            delay(1.5) {
                 self.handleAnimationTextAndImage(post: post)
             }
         }
@@ -525,7 +525,7 @@ extension RootNode {
             return
         }
         
-        delayItem.perform(after: 0.75) { [weak self] in
+        delayItem.perform(after: 1.25) { [weak self] in
             self?.retrieveNextPageWithCompletion { [weak self] newPosts in
                 guard let self = self else { return }
                 self.insertNewRowsInCollectionNode(newPosts: newPosts)

@@ -41,9 +41,9 @@ class VideoNode: ASCellNode, ASVideoNodeDelegate {
     private lazy var headerView: PostHeader = PostHeader()
     private lazy var footerView: PostFooter = PostFooter()
     private lazy var buttonView: PostInteractionButtons = PostInteractionButtons()
-    private var playTimeBar: CustomSlider!
-    private let fireworkController = FountainFireworkController()
-    private let fireworkController2 = ClassicFireworkController()
+    private lazy var playTimeBar = CustomSlider()
+    private lazy var fireworkController = FountainFireworkController()
+    private lazy var fireworkController2 = ClassicFireworkController()
     
     // Flags and counters for various states.
     var didSlideEnd = true
@@ -1702,7 +1702,7 @@ extension VideoNode {
         blurView.translatesAutoresizingMaskIntoConstraints = false
 
         // Initialize the play time bar with updated constraints.
-        playTimeBar = CustomSlider()
+
         playTimeBar.translatesAutoresizingMaskIntoConstraints = false
 
         // Add subviews to the video node's view.
@@ -1792,7 +1792,6 @@ extension VideoNode {
     /// - Parameter currentTime: The current time of the video playback.
     func updateSlider(currentTime: TimeInterval) {
         // Ensure that playTimeBar is available.
-        guard let playTimeBar = playTimeBar else { return }
 
         // Set the maximum value of the slider if it hasn't been set yet.
         if !setupMaxVal, let max = cellVideoNode.currentItem?.duration {

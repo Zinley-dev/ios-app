@@ -23,7 +23,7 @@ class ToolbarActions: ObservableObject {
 // MARK: - ChatBotView Struct
 // Main view for the chatbot interface.
 struct ChatBotView: View {
-    @StateObject var vm = ViewModel(api: ChatGPTAPI(apiKey: "Your-API-Key"))
+    @StateObject var vm = ViewModel(api: ChatGPTAPI(apiKey: "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"))
     @ObservedObject var toolbarActions: ToolbarActions
     @State private var scrollToLastMessage: Bool = false
     @State private var didLoadHistory: Bool = false
