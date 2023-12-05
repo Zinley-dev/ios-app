@@ -70,6 +70,7 @@ class VideoNode: ASCellNode, ASVideoNodeDelegate {
 
     // Action
     var viewStitchBtn : ((ASCellNode) -> Void)?
+    var indexPathSetup: Int?
     
     // MARK: - Initializer
     
@@ -77,11 +78,15 @@ class VideoNode: ASCellNode, ASVideoNodeDelegate {
     /// - Parameters:
     ///   - post: The `PostModel` instance containing the data for the cell.
     ///   - isPreview: A Boolean flag indicating if this is a preview.
-    init(with post: PostModel, isPreview: Bool, firstItem: Bool) {
+    init(with post: PostModel, isPreview: Bool, firstItem: Bool, level: Int, indexPath: Int) {
+        
+        print("Preparing post for VideoNode: \(level)")
+        
         // Assign the provided post and preview flag.
         self.post = post
         self.isPreview = isPreview
         self.firstItem = firstItem
+        self.indexPathSetup = indexPath
 
         // Initialize the image and video nodes.
         self.cellImageNode = ASNetworkImageNode()
@@ -90,16 +95,8 @@ class VideoNode: ASCellNode, ASVideoNodeDelegate {
         // Call the superclass initializer.
         super.init()
 
-        // Configure the node based on the presence of a muxPlaybackId.
-        // This approach avoids duplicate checks and makes the decision point clear.
-        if !post.muxPlaybackId.isEmpty {
-            configureVideoNode(with: post)
-        } else {
-            configureImageNode(with: post)
-        }
     }
-
-
+    
     // MARK: - Node Lifecycle
 
     override func didLoad() {
@@ -108,6 +105,29 @@ class VideoNode: ASCellNode, ASVideoNodeDelegate {
         setupSpinner()
         setupChildView()
     }
+
+    
+    func presetup() {
+        // Configure the node based on the presence of a muxPlaybackId.
+        // This approach avoids duplicate checks and makes the decision point clear.
+        if !post.muxPlaybackId.isEmpty {
+            configureVideoNode(with: post)
+        } else {
+            configureImageNode(with: post)
+        }
+    }
+    
+    override func willEnterHierarchy() {
+        presetup()
+    }
+    
+    override func didExitHierarchy() {
+        cellVideoNode.asset = nil
+        cellImageNode.url = nil
+        // Removing any observers that were added to avoid memory leaks or unintended behavior.
+        removeObservers()
+    }
+
 
     /// Called when the view controller’s view is no longer visible.
     override func didExitVisibleState() {
@@ -885,7 +905,8 @@ extension VideoNode {
             cmtCount: post.totalComments,
             saveCount: post.totalSave,
             totalOnChain: post.totalOnChain,
-            positionOnChain: post.positionOnChain
+            positionOnChain: post.positionOnChain, 
+            postID: post.id
         )
     }
 

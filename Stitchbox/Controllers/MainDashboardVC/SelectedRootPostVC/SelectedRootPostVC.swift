@@ -493,7 +493,7 @@ extension SelectedRootPostVC: ASCollectionDataSource {
         return { [weak self] in
             guard let self = self else { return ASCellNode() }
             let isFirstItem = self.isFirstLoad && indexPath.row == 0
-            let node = RootNode(with: post, firstItem: isFirstItem)
+            let node = RootNode(with: post, firstItem: isFirstItem, level: indexPath.row)
             self.configureNode(node, at: indexPath)
 
             // Update the flag after the first load.

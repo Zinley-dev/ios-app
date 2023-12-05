@@ -436,7 +436,7 @@ extension UserProfileVC {
         userSettingVC.modalPresentationStyle = .custom
         userSettingVC.transitioningDelegate = self
         
-        global_presetingRate = Double(0.30)
+        global_presetingRate = Double(0.25)
         global_cornerRadius = 45
         
         self.present(userSettingVC, animated: true, completion: nil)

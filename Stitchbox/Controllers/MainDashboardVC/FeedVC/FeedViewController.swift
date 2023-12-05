@@ -54,7 +54,6 @@ class FeedViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
     lazy var delayItem = workItem()
     lazy var delayItem3 = workItem()
     
-
     // MARK: - View Lifecycle
 
     /// Called after the controller's view is loaded into memory.
@@ -79,8 +78,27 @@ class FeedViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
             name: NSNotification.Name(rawValue: "updateProgressBar2"),
             object: nil
         )
+        
     }
 
+    override func didReceiveMemoryWarning() {
+        print("didReceiveMemoryWarning for feedvc")
+        // Remove expired objects from cache
+        CacheManager.shared.asyncRemoveExpiredObjects()
+        
+        // Maintain the temporary directory size
+        cleanTemporaryDirectory()
+    }
+    
+    func cleanTemporaryDirectory() {
+        let maxSizeInBytes: UInt64 = UInt64(0.1 * 1024 * 1024 * 1024)  // 0.1 GB
+        do {
+            try FileManager.default.maintainTmpDirectory(maxSizeInBytes: maxSizeInBytes)
+        } catch {
+            print("Failed to maintain tmp directory with error: \(error)")
+        }
+    }
+    
     /// Called before the view is added to the view hierarchy.
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
@@ -541,7 +559,7 @@ extension FeedViewController: ASCollectionDataSource {
         return { [weak self] in
             guard let self = self else { return ASCellNode() }
             let isFirstItem = self.isFirstLoad && indexPath.row == 0
-            let node = RootNode(with: post, firstItem: isFirstItem)
+            let node = RootNode(with: post, firstItem: isFirstItem, level: indexPath.row)
             self.configureNode(node, at: indexPath)
 
             // Update the flag after the first load.

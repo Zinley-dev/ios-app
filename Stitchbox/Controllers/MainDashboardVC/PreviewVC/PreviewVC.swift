@@ -381,7 +381,7 @@ extension PreviewVC: ASCollectionDataSource, ASCollectionDelegate {
     ///   - indexPath: The index path of the cell node in the collection.
     /// - Returns: A configured `ASCellNode`.
     private func createCellNode(for post: PostModel, at indexPath: IndexPath) -> ASCellNode {
-        let node = VideoNode(with: post, isPreview: true, firstItem: false)
+        let node = VideoNode(with: post, isPreview: true, firstItem: false, level: 0, indexPath: 0)
         node.neverShowPlaceholders = true
         node.debugName = "Node \(indexPath.row)"
         node.automaticallyManagesSubnodes = true

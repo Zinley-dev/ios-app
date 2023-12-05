@@ -50,6 +50,9 @@ class RootNode: ASCellNode, UICollectionViewDelegateFlowLayout, UIAdaptivePresen
     var isfirstLoad = true
     var firstItem = false
     var isFirstGallerySelected = false
+    var firstPre = false
+    var level = 0
+    lazy var delayItem = workItem()
     
     // MARK: - Initializer
 
@@ -57,10 +60,17 @@ class RootNode: ASCellNode, UICollectionViewDelegateFlowLayout, UIAdaptivePresen
     /// - Parameters:
     ///   - post: The main post model around which this view controller is based.
     ///   - firstItem: A Boolean value indicating if this is the first item in the collection.
-    init(with post: PostModel, firstItem: Bool) {
+    init(with post: PostModel, firstItem: Bool, level: Int) {
+        print("Preparing post for RootNode: \(level)")
         self.firstItem = firstItem
         self.rootPost = post // Storing the provided post model
-
+        self.level = level
+        
+        // Add the root post to the posts array if it's not already present
+        if !posts.contains(post) {
+            posts.append(post)
+        }
+                
         // Setting up the main collection node with a custom layout for page-like navigation
         let layout = AnimatedCollectionViewLayout()
         layout.animator = PageAttributesAnimator() // Custom animator for page transitions
@@ -78,16 +88,6 @@ class RootNode: ASCellNode, UICollectionViewDelegateFlowLayout, UIAdaptivePresen
 
         super.init() // Calling the superclass initializer
 
-        // Add the root post to the posts array if it's not already present
-        if !posts.contains(post) {
-            posts.append(post)
-        }
-
-        // Ensure UI updates are on the main thread
-        DispatchQueue.main.async { [weak self] in
-            self?.addSubCollection()
-        }
-
         // Set up the main collection node's delegate and data source
         mainCollectionNode.delegate = self
         mainCollectionNode.dataSource = self
@@ -97,7 +97,24 @@ class RootNode: ASCellNode, UICollectionViewDelegateFlowLayout, UIAdaptivePresen
         galleryCollectionNode.dataSource = self
         
     }
+    
+    /// Called when the node has finished loading.
+    /// This method is a good place to perform any additional setup that requires the node to be fully loaded.
+    override func didLoad() {
+        super.didLoad() // Always call the super implementation in lifecycle methods.
 
+        // Applying styling configurations to the node.
+        // This includes setting up visual aspects and layout behaviors.
+        self.applyStyle()
+        self.setupAnimatedLabel()
+        
+        // Ensure UI updates are on the main thread
+        DispatchQueue.main.async { [weak self] in
+            self?.addSubCollection()
+        }
+        //self.handleRightScrollForLoading(scrollView: mainCollectionNode.view, bypassCheck: true)
+    }
+    
     
     /// Called just before the object is deallocated.
     deinit {
@@ -130,6 +147,22 @@ class RootNode: ASCellNode, UICollectionViewDelegateFlowLayout, UIAdaptivePresen
 
         activateVideoNodeIfNeeded()
     }
+    
+    
+    override func willEnterHierarchy() {
+        if !firstPre {
+            preSetup()
+            firstPre = true
+        }
+    }
+    
+    override func didExitHierarchy() {
+        // Pausing the video playback when the view is not visible.
+        pauseVideoOnScrolling(index: currentIndex!)
+
+        // Removing any observers that were added to avoid memory leaks or unintended behavior.
+        removeObservers()
+    }
 
     // MARK: - Private Helpers
 
@@ -147,18 +180,6 @@ class RootNode: ASCellNode, UICollectionViewDelegateFlowLayout, UIAdaptivePresen
 
 // MARK: - Lifecycle and Layout
 extension RootNode {
-
-    /// Called when the node has finished loading.
-    /// This method is a good place to perform any additional setup that requires the node to be fully loaded.
-    override func didLoad() {
-        super.didLoad() // Always call the super implementation in lifecycle methods.
-
-        // Applying styling configurations to the node.
-        // This includes setting up visual aspects and layout behaviors.
-        self.applyStyle()
-        self.setupAnimatedLabel()
-        //self.handleRightScrollForLoading(scrollView: mainCollectionNode.view, bypassCheck: true)
-    }
 
     /// Defines the layout specification for the node.
     /// This method calculates and provides a layout spec that ASCollectionNode will use.
@@ -324,9 +345,16 @@ extension RootNode: ASCollectionDelegate, ASCollectionDataSource {
         return { [weak self] in
             guard let strongSelf = self else { return ASCellNode() }
             let isFirstItem = strongSelf.firstItem && indexPath.row == 0
-            let node = VideoNode(with: post, isPreview: false, firstItem: isFirstItem)
-            strongSelf.configureMainNode(node, for: post, at: indexPath, isFirstItem: isFirstItem)
-            return node
+            if indexPath.row == 0 {
+                let node = VideoNode(with: post, isPreview: false, firstItem: isFirstItem, level: strongSelf.level, indexPath: -1)
+                strongSelf.configureMainNode(node, for: post, at: indexPath, isFirstItem: isFirstItem)
+                return node
+            } else {
+                let node = VideoNode(with: post, isPreview: false, firstItem: isFirstItem, level: strongSelf.level, indexPath: indexPath.row)
+                strongSelf.configureMainNode(node, for: post, at: indexPath, isFirstItem: isFirstItem)
+                return node
+            }
+            
         }
     }
 
@@ -432,6 +460,7 @@ extension RootNode {
     /// - Parameter collectionNode: The collection node in question.
     /// - Returns: Boolean indicating whether batch fetching should be performed.
     func shouldBatchFetch(for collectionNode: ASCollectionNode) -> Bool {
+        //return false
         return collectionNode != galleryCollectionNode // Enabling batch fetching only for the main collection node.
     }
 }
@@ -500,12 +529,16 @@ extension RootNode {
             context.completeBatchFetching(true)
             return
         }
-
-        retrieveNextPageWithCompletion { [weak self] newPosts in
-            guard let self = self else { return }
-            self.insertNewRowsInCollectionNode(newPosts: newPosts)
-            context.completeBatchFetching(true)
+        
+        delayItem.perform(after: 0.75) { [weak self] in
+            self?.retrieveNextPageWithCompletion { [weak self] newPosts in
+                guard let self = self else { return }
+                self.insertNewRowsInCollectionNode(newPosts: newPosts)
+                context.completeBatchFetching(true)
+            }
         }
+
+        
     }
 }
 
@@ -723,7 +756,7 @@ extension RootNode {
             // Check if scrolling right and not already loading previous posts
             let isScrollingRight = currentOffset < lastContentOffset.x
             let distanceFromStart = currentOffset
-            let isCloseToStart = distanceFromStart <= view.frame.width * 2
+            let isCloseToStart = distanceFromStart <= view.frame.width
 
             return isScrollingRight && !isLoadingPreviousPosts && isCloseToStart
         }
@@ -808,6 +841,16 @@ extension RootNode {
         // Reload the collection node within the cell to reflect the changes.
         mainCollectionNode.reloadData()
         galleryCollectionNode.reloadData()
+    }
+    
+    
+    /// Removes all observers from the video node.
+    func preSetup() {
+        if let cell = self.mainCollectionNode.nodeForItem(at: IndexPath(row: currentIndex!, section: 0)) as? VideoNode {
+            // Configure the node based on the presence of a muxPlaybackId.
+            // This approach avoids duplicate checks and makes the decision point clear.
+            cell.presetup()
+        }
     }
     
     /// Removes all observers from the video node.
