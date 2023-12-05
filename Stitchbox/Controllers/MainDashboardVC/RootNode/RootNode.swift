@@ -51,6 +51,7 @@ class RootNode: ASCellNode, UICollectionViewDelegateFlowLayout, UIAdaptivePresen
     var firstItem = false
     var isFirstGallerySelected = false
     var firstPre = false
+    var loadChainAllow = false
     var level = 0
     lazy var delayItem = workItem()
     
@@ -87,14 +88,7 @@ class RootNode: ASCellNode, UICollectionViewDelegateFlowLayout, UIAdaptivePresen
         galleryCollectionNode = ASCollectionNode(collectionViewLayout: galleryFlowLayout)
 
         super.init() // Calling the superclass initializer
-
-        // Set up the main collection node's delegate and data source
-        mainCollectionNode.delegate = self
-        mainCollectionNode.dataSource = self
         
-        // Set up the gallery collection node's delegate and data source
-        galleryCollectionNode.delegate = self
-        galleryCollectionNode.dataSource = self
         
     }
     
@@ -112,7 +106,15 @@ class RootNode: ASCellNode, UICollectionViewDelegateFlowLayout, UIAdaptivePresen
         DispatchQueue.main.async { [weak self] in
             self?.addSubCollection()
         }
-        //self.handleRightScrollForLoading(scrollView: mainCollectionNode.view, bypassCheck: true)
+        
+        // Set up the main collection node's delegate and data source
+        mainCollectionNode.delegate = self
+        mainCollectionNode.dataSource = self
+        
+        // Set up the gallery collection node's delegate and data source
+        galleryCollectionNode.delegate = self
+        galleryCollectionNode.dataSource = self
+        
     }
     
     
@@ -134,34 +136,21 @@ class RootNode: ASCellNode, UICollectionViewDelegateFlowLayout, UIAdaptivePresen
     override func didExitVisibleState() {
         super.didExitVisibleState() // Always call the super implementation of lifecycle methods
         
+        loadChainAllow = false
+        
         // Pausing the video playback when the view is not visible.
         pauseVideoOnScrolling(index: currentIndex!)
 
         // Removing any observers that were added to avoid memory leaks or unintended behavior.
         removeObservers()
+
     }
 
     /// Called when the view controller’s view becomes visible.
     override func didEnterVisibleState() {
         super.didEnterVisibleState() // Always call the super implementation of lifecycle methods
-
+        loadChainAllow = true
         activateVideoNodeIfNeeded()
-    }
-    
-    
-    override func willEnterHierarchy() {
-        if !firstPre {
-            preSetup()
-            firstPre = true
-        }
-    }
-    
-    override func didExitHierarchy() {
-        // Pausing the video playback when the view is not visible.
-        pauseVideoOnScrolling(index: currentIndex!)
-
-        // Removing any observers that were added to avoid memory leaks or unintended behavior.
-        removeObservers()
     }
 
     // MARK: - Private Helpers
@@ -449,20 +438,26 @@ extension RootNode {
             return ASSizeRangeMake(size, size)
         } else {
             // Size calculation for mainCollectionNode items.
-            let min = CGSize(width: mainCollectionNode.layer.frame.width, height: 50)
-            let max = CGSize(width: mainCollectionNode.layer.frame.width, height: mainCollectionNode.frame.height)
-            return collectionNode.frame.width != 0.0 && collectionNode.frame.height != 0.0 ? ASSizeRangeMake(min, max) : ASSizeRangeMake(saveMin, saveMax)
+            let min = CGSize(width: view.layer.frame.width, height: 50)
+            let max = CGSize(width: view.layer.frame.width, height: view.frame.height)
+            return view.frame.width != 0.0 && view.frame.height != 0.0 ? ASSizeRangeMake(min, max) : ASSizeRangeMake(saveMin, saveMax)
         }
     }
 
-    /// Determines if batch fetching should be performed for the collection node.
-    /// This method restricts batch fetching to certain collection nodes.
-    /// - Parameter collectionNode: The collection node in question.
-    /// - Returns: Boolean indicating whether batch fetching should be performed.
+    /// Determines whether batch fetching should be enabled for a given collection node.
+    /// - Parameter collectionNode: The collection node to evaluate for batch fetching.
+    /// - Returns: A Boolean indicating if batch fetching should be enabled.
     func shouldBatchFetch(for collectionNode: ASCollectionNode) -> Bool {
-        //return false
-        return collectionNode != galleryCollectionNode // Enabling batch fetching only for the main collection node.
+        // Checking if loading is allowed; if not, batch fetching is disabled
+        guard loadChainAllow else {
+            return false
+        }
+
+        // Enabling batch fetching only for the main collection node and not for the gallery collection node
+        return collectionNode != galleryCollectionNode
     }
+
+
 }
 
 
@@ -726,21 +721,29 @@ extension RootNode {
         }
     }
     
-    /// Handles right scroll for loading previous posts.
+    /// Handles the right scroll event for loading previous posts in a scroll view.
     /// - Parameters:
-    ///   - scrollView: The scrollView being scrolled.
-    ///   - bypassCheck: A flag to determine if the usual check should be bypassed.
+    ///   - scrollView: The scroll view where the scrolling event is detected.
+    ///   - bypassCheck: A flag to determine whether to bypass the usual checks for loading.
     func handleRightScrollForLoading(scrollView: UIScrollView, bypassCheck: Bool) {
+        // Checking if loading is allowed; if not, return immediately
+        guard loadChainAllow else {
+            return
+        }
+        
+        // Getting the current horizontal scroll offset
         let currentOffsetX = scrollView.contentOffset.x
 
+        // Checking if conditions are met to load previous posts
         if shouldLoadPreviousPosts(currentOffset: currentOffsetX, bypassCheck: bypassCheck) {
             isLoadingPreviousPosts = true
             loadPreviousPosts()
         }
 
-        // Update the last content offset
+        // Updating the last content offset to keep track of scroll position
         lastContentOffset = scrollView.contentOffset
     }
+
 
     // MARK: - Private Helper Methods
 
@@ -850,6 +853,13 @@ extension RootNode {
             // Configure the node based on the presence of a muxPlaybackId.
             // This approach avoids duplicate checks and makes the decision point clear.
             cell.presetup()
+        }
+    }
+    
+    /// Removes all observers from the video node.
+    func removeAllAssets() {
+        iterateThroughCollectionNodes { node in
+            node.removeAllAssets()
         }
     }
     

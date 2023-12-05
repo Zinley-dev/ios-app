@@ -31,7 +31,7 @@ class VideoNode: ASCellNode, ASVideoNodeDelegate {
     var shouldCountView = true
     var time = 0
     var isActive = false
-    
+    var level = 0
     // UI components and layout related properties.
     private var cellVideoNode: ASVideoNode
     private var cellImageNode: ASNetworkImageNode
@@ -80,21 +80,19 @@ class VideoNode: ASCellNode, ASVideoNodeDelegate {
     ///   - isPreview: A Boolean flag indicating if this is a preview.
     init(with post: PostModel, isPreview: Bool, firstItem: Bool, level: Int, indexPath: Int) {
         
-        print("Preparing post for VideoNode: \(level)")
-        
         // Assign the provided post and preview flag.
         self.post = post
         self.isPreview = isPreview
         self.firstItem = firstItem
         self.indexPathSetup = indexPath
-
+        self.level = level
         // Initialize the image and video nodes.
         self.cellImageNode = ASNetworkImageNode()
         self.cellVideoNode = ASVideoNode()
     
         // Call the superclass initializer.
         super.init()
-
+        presetup()
     }
     
     // MARK: - Node Lifecycle
@@ -112,22 +110,9 @@ class VideoNode: ASCellNode, ASVideoNodeDelegate {
         // This approach avoids duplicate checks and makes the decision point clear.
         if !post.muxPlaybackId.isEmpty {
             configureVideoNode(with: post)
-        } else {
-            configureImageNode(with: post)
         }
     }
     
-    override func willEnterHierarchy() {
-        presetup()
-    }
-    
-    override func didExitHierarchy() {
-        cellVideoNode.asset = nil
-        cellImageNode.url = nil
-        // Removing any observers that were added to avoid memory leaks or unintended behavior.
-        removeObservers()
-    }
-
 
     /// Called when the view controller’s view is no longer visible.
     override func didExitVisibleState() {
@@ -742,6 +727,7 @@ extension VideoNode {
     private func loadVideoAssetAsync(with post: PostModel) {
         DispatchQueue.main.async() { [weak self] in
             guard let self = self else { return }
+            print("Preparing post for VideoNode: \(level)")
             self.cellVideoNode.asset = AVAsset(url: self.getVideoURL(post: post)!)
             // Play video if first item on list.
             if firstItem {
@@ -1843,5 +1829,8 @@ extension VideoNode {
         }
     }
 
+    func removeAllAssets() {
+        cellVideoNode.asset = nil
+    }
 }
 

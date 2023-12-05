@@ -728,6 +728,7 @@ extension SelectedRootPostVC {
         case .success:
             removePostFromList()
         case .failure(let error):
+            print(error)
             showErrorAfterDelay(message: "Unable to delete this post. \(error.localizedDescription), please try again.")
         }
     }

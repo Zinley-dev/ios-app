@@ -153,7 +153,7 @@ class ImageViewCell: UICollectionViewCell {
             stackView.isHidden = false
             stitchStackView.isHidden = false
             
-            stitchCountLabel.text =  "\(formatPoints(num: Double(data.totalStitchTo + data.totalMemberStitch)))"
+            stitchCountLabel.text =  "\(formatPoints(num: Double(data.totalOnChain)))"
             countLabel.text = "\(formatPoints(num: Double(data.estimatedCount?.sizeViews ?? 0)))"
         
         } else {

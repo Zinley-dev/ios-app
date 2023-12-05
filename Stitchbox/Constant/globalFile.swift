@@ -517,7 +517,7 @@ private func updateGlobalSettings(from apiResponse: APIResponse) {
         print("No data available in API response")
         return
     }
-    
+
     if let settings = Mapper<SettingModel>().map(JSONObject: data) {
         globalSetting = settings
     } else {

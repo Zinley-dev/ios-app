@@ -163,8 +163,6 @@ class PostModel: Mappable {
     private(set) var image: [String] = [""]
     private(set) var hashtags: [String]?
     private(set) var isApproved: Bool = false
-    private(set) var totalMemberStitch: Int = 0
-    private(set) var totalStitchTo: Int = 0
     private(set) var totalOnChain: Int = 0
     private(set) var positionOnChain: Int = 0
     private(set) var userSettings: UserSettings?
@@ -196,8 +194,6 @@ class PostModel: Mappable {
         image <- map["images"]
         hashtags <- map["hashtags"]
         isApproved <- map["isApproved"]
-        totalMemberStitch <- map["totalMemberStitch"]
-        totalStitchTo <- map["totalStitchTo"]
         totalOnChain <- map["total"]
         positionOnChain <- map["position"]
         userSettings <- map["userSettings"]

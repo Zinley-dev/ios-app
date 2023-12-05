@@ -141,7 +141,7 @@ class TrendingPostNode: ASCellNode {
         )
         
         self.stitchCountNode.attributedText = NSAttributedString(
-            string: "\(formatPoints(num: Double(post.totalStitchTo + post.totalMemberStitch)))",
+            string: "\(formatPoints(num: Double(post.totalOnChain)))",
             attributes: [
                     NSAttributedString.Key.font: FontManager.shared.roboto(.Regular, size: FontSize - 3), // Using the Roboto Regular style
                     NSAttributedString.Key.foregroundColor: UIColor.white,

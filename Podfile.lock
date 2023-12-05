@@ -19,7 +19,10 @@ PODS:
   - GTMAppAuth (2.0.0):
     - AppAuth/Core (~> 1.6)
     - GTMSessionFetcher/Core (< 4.0, >= 1.5)
-  - GTMSessionFetcher/Core (3.1.1)
+  - GTMSessionFetcher/Core (3.2.0)
+  - IGListDiffKit (4.0.0)
+  - IGListKit (4.0.0):
+    - IGListDiffKit (= 4.0.0)
   - MarqueeLabel (4.4.0)
   - NVActivityIndicatorView (5.1.1):
     - NVActivityIndicatorView/Base (= 5.1.1)
@@ -72,16 +75,16 @@ PODS:
   - SCLAlertView (0.8)
   - SendBirdCalls (1.9.7):
     - SendBirdWebRTC (~> 1.6.0)
-  - SendBirdSDK (3.1.53)
+  - SendBirdSDK (3.1.54)
   - SendBirdUIKit (2.2.14):
     - SendBirdSDK (>= 3.1.39)
   - SendBirdWebRTC (1.6.1)
-  - Sentry (8.14.2):
-    - Sentry/Core (= 8.14.2)
-    - SentryPrivate (= 8.14.2)
-  - Sentry/Core (8.14.2):
-    - SentryPrivate (= 8.14.2)
-  - SentryPrivate (8.14.2)
+  - Sentry (8.17.1):
+    - Sentry/Core (= 8.17.1)
+    - SentryPrivate (= 8.17.1)
+  - Sentry/Core (8.17.1):
+    - SentryPrivate (= 8.17.1)
+  - SentryPrivate (8.17.1)
   - SwiftEntryKit (1.2.6):
     - QuickLayout (= 3.0.0)
   - SwiftLint (0.50.3)
@@ -123,6 +126,7 @@ DEPENDENCIES:
   - Cache (~> 5.3.0)
   - FLAnimatedImage (~> 1.0)
   - GoogleSignIn (~> 7.0.0)
+  - IGListKit (~> 4.0.0)
   - MarqueeLabel
   - NVActivityIndicatorView
   - NYTPhotoViewer (~> 1.1.0)
@@ -159,6 +163,8 @@ SPEC REPOS:
     - GoogleSignIn
     - GTMAppAuth
     - GTMSessionFetcher
+    - IGListDiffKit
+    - IGListKit
     - MarqueeLabel
     - NVActivityIndicatorView
     - NYTPhotoViewer
@@ -201,7 +207,9 @@ SPEC CHECKSUMS:
   FLAnimatedImage: bbf914596368867157cc71b38a8ec834b3eeb32b
   GoogleSignIn: b232380cf495a429b8095d3178a8d5855b42e842
   GTMAppAuth: 99fb010047ba3973b7026e45393f51f27ab965ae
-  GTMSessionFetcher: e8647203b65cee28c5f73d0f473d096653945e72
+  GTMSessionFetcher: 41b9ef0b4c08a6db4b7eb51a21ae5183ec99a2c8
+  IGListDiffKit: 665d6cf43ce726e676013db9c7d6c4294259b6b2
+  IGListKit: fd5a5d21935298f5849fa49d426843cff97b77c7
   MarqueeLabel: d2388949ac58d587303178d56a792ba8a001b037
   NVActivityIndicatorView: 1f6c5687f1171810aa27a3296814dc2d7dec3667
   NYTPhotoViewer: e80e8767f3780d2df37c6f72cbab15d6c7232911
@@ -220,11 +228,11 @@ SPEC CHECKSUMS:
   RxSwift: 5710a9e6b17f3c3d6e40d6e559b9fa1e813b2ef8
   SCLAlertView: 6a77bb2edfc65e04dbe57725546cb4107a506b85
   SendBirdCalls: 738efdd2a21e3ff0cf058477f1c612d59cd73510
-  SendBirdSDK: b247b5b0b8546170dc20dfb1985ae0309fab34bd
+  SendBirdSDK: d69196f62f314f1f1ae38d6f82f5e4ec93f379fc
   SendBirdUIKit: 0f3d085f0aa42fc1be87140eb33d0d6d5dd844ee
   SendBirdWebRTC: d848df17569ecb607d0c5503b726bae3ce3dcf68
-  Sentry: e0ea366f95ebb68f26d6030d8c22d6b2e6d23dd0
-  SentryPrivate: 949a21fa59872427edc73b524c3ec8456761d97f
+  Sentry: d9f99f9cc13777c5d938650c1e1c85047bb4f0d1
+  SentryPrivate: 839b1e58addf58624087a80b2628e543193fa8ef
   SwiftEntryKit: 96a2fa90b2631bbbfac50d18449e9ca3d0635f13
   SwiftLint: 77f7cb2b9bb81ab4a12fcc86448ba3f11afa50c6
   SwipeTransition: 2d35c95dcb4c47a6a1cc530235a3cbf7114b5670
@@ -234,6 +242,6 @@ SPEC CHECKSUMS:
   ZSWTaggedString: 1a6aab3143188634c1e5dfe9383ce754c1fb5fe2
   ZSWTappableLabel: cff84c0a55e30f2141f7dac24e5903302a7e35ec
 
-PODFILE CHECKSUM: 4a8ab35efc05b4ca10ed4fbfeed4f426bc4fc5d6
+PODFILE CHECKSUM: e1b7111f07e0842a5655d3e66752445a49adbf9e
 
 COCOAPODS: 1.14.2

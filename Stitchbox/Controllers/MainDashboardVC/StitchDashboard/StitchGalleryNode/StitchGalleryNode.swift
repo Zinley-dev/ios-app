@@ -151,7 +151,7 @@ class StitchGalleryNode: ASCellNode {
 
         // Create an attributed string for the stitch count.
         stitchCountNode.attributedText = NSAttributedString(
-            string: "\(formatPoints(num: Double(post.totalStitchTo + post.totalMemberStitch)))",
+            string: "\(formatPoints(num: Double(post.totalOnChain)))",
             attributes: [
                 .font: FontManager.shared.roboto(.Regular, size: FontSize - 3),
                 .foregroundColor: UIColor.white,
