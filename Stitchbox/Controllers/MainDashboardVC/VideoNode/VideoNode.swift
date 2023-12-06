@@ -1705,6 +1705,10 @@ extension VideoNode {
         blurView.backgroundColor = .black
         blurView.alpha = 0.6
         blurView.translatesAutoresizingMaskIntoConstraints = false
+        
+        // Determining the left and right padding values based on the presence of a notch
+        let sideLeftPadding = globalHasNotch ? 8 : 16
+        let sideRightPadding = globalHasNotch ? -8 : -16
 
         // Initialize the play time bar with updated constraints.
 
@@ -1727,9 +1731,9 @@ extension VideoNode {
 
             // Updated constraints for the play time bar.
             playTimeBar.bottomAnchor.constraint(equalTo: self.view.bottomAnchor, constant: -37),
-            playTimeBar.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: 8),
-            playTimeBar.trailingAnchor.constraint(equalTo: self.view.trailingAnchor, constant: -8),
-            playTimeBar.heightAnchor.constraint(equalToConstant: 1)
+            playTimeBar.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: CGFloat(sideLeftPadding)),
+            playTimeBar.trailingAnchor.constraint(equalTo: self.view.trailingAnchor, constant: CGFloat(sideRightPadding)),
+            playTimeBar.heightAnchor.constraint(equalToConstant: 1) // Fixed height of 1
         ])
     }
 
