@@ -24,7 +24,7 @@
                 <subviews>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="igY-R3-fO7">
                         <rect key="frame" x="16" y="36.5" width="255" height="25"/>
-                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
                             <constraint firstAttribute="height" constant="25" id="Eld-lL-M6Q"/>
                         </constraints>
@@ -51,7 +51,7 @@
             </tableViewCellContentView>
             <viewLayoutGuide key="safeArea" id="njF-e1-oar"/>
             <connections>
-                <outlet property="reportLbl" destination="igY-R3-fO7" id="pTv-kY-qiO"/>
+                <outlet property="reportLbl" destination="igY-R3-fO7" id="hTx-5j-H0j"/>
             </connections>
             <point key="canvasLocation" x="-34.057971014492757" y="101.78571428571428"/>
         </tableViewCell>

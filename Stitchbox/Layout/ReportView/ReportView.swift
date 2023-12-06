@@ -39,7 +39,7 @@ class ReportView: UIViewController, UITableViewDelegate, UITableViewDataSource, 
         super.viewDidLoad()
         tableView.delegate = self
         tableView.dataSource = self
-        tableView.register(UINib(nibName: "reportCell", bundle: nil), forCellReuseIdentifier: "reportCell")
+        tableView.register(UINib(nibName: "ReportCell", bundle: nil), forCellReuseIdentifier: "ReportCell")
         descriptionTxtView.delegate = self
         updateReportTitle()
     }
