@@ -976,9 +976,12 @@ extension FeedViewController {
     /// Handles the result of the delete post request.
     /// - Parameter result: The result of the deletion request.
     private func handleDeletePostResult(_ result: Result) {
+        SwiftLoader.hide()
         switch result {
         case .success:
-            removePostFromList()
+            DispatchQueue.main.async { [weak self] in
+                self?.removePostFromList()
+            }
         case .failure(let error):
             showErrorAfterDelay(message: "Unable to delete this post. \(error.localizedDescription), please try again.")
         }
