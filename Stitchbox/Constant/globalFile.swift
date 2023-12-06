@@ -31,6 +31,7 @@ let emptySB = "https://stitchbox-app-images.s3.us-east-1.amazonaws.com/adf94fba-
 
 // MARK: - Global Variables
 
+var globalHasNotch = true
 var mainRootId = ""
 var mainSeletedId = ""
 var chatbot_id = "64397f3ceff4334484bf537b"
@@ -853,3 +854,21 @@ private func handleTrackingAuthorization(status: ATTrackingManager.Authorization
         print("Unknown tracking status")
     }
 }
+
+extension UIDevice {
+    /// Returns `true` if the device has a notch
+    var ifHasNotch: Bool {
+        guard #available(iOS 13.0, *),
+              let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
+              let window = windowScene.windows.first(where: { $0.isKeyWindow }) else {
+                  return false
+              }
+        
+        if UIDevice.current.orientation.isPortrait {
+            return window.safeAreaInsets.top >= 44
+        } else {
+            return window.safeAreaInsets.left > 0 || window.safeAreaInsets.right > 0
+        }
+    }
+}
+

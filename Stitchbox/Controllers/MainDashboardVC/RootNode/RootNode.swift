@@ -1010,19 +1010,35 @@ extension RootNode {
     }
 
     /// Sets up constraints for the container of the animated label.
+    /// - Parameter container: The container view to which constraints are to be applied.
     private func setupContainerConstraints(_ container: UIView) {
+        // Setting the background color of the container to clear
         container.backgroundColor = .clear
-        
-        NSLayoutConstraint.activate([
+
+        // Common constraints for the container, regardless of the notch
+        var containerConstraints = [
             container.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 55),
             container.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -78),
-            container.topAnchor.constraint(equalTo: view.topAnchor, constant: 50),
-            container.heightAnchor.constraint(equalToConstant: 50), // Fixed height of 50
+            container.heightAnchor.constraint(equalToConstant: 50) // Fixed height of 50
+        ]
+        
+        // Constraints specific to whether the device has a notch or not
+        let topConstraint = globalHasNotch
+            ? container.topAnchor.constraint(equalTo: view.topAnchor, constant: 50)
+            : container.topAnchor.constraint(equalTo: view.topAnchor, constant: 20)
+        
+        containerConstraints.append(topConstraint)
+
+        // Constraints for the animated label within the container
+        let animatedLabelConstraints = [
             animatedLabel.leadingAnchor.constraint(equalTo: container.leadingAnchor, constant: 10),
             animatedLabel.trailingAnchor.constraint(equalTo: container.trailingAnchor, constant: -10),
             animatedLabel.topAnchor.constraint(equalTo: container.topAnchor, constant: 10),
-            animatedLabel.bottomAnchor.constraint(equalTo: container.bottomAnchor, constant: -10),
-        ])
+            animatedLabel.bottomAnchor.constraint(equalTo: container.bottomAnchor, constant: -10)
+        ]
+        
+        // Activating all constraints
+        NSLayoutConstraint.activate(containerConstraints + animatedLabelConstraints)
     }
     
     /// Makes the label tappable and adds a tap gesture recognizer to the container.

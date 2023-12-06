@@ -48,6 +48,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         sentrySetup() // Setup for Sentry
         CacheManager.shared.asyncRemoveExpiredObjects() // Clear expired objects from cache
         metricsManager = AppMetrics() // Initialize the metrics manager
+        globalHasNotch = UIDevice.current.ifHasNotch
 
         return true // Indicate successful launch
     }

@@ -169,33 +169,32 @@ class VideoNode: ASCellNode, ASVideoNodeDelegate {
         )
         // Additional configuration, if needed, can be added here.
     }
-
+    
     // MARK: - Layout
 
     override func layoutSpecThatFits(_ constrainedSize: ASSizeRange) -> ASLayoutSpec {
-        
-        // Define common padding values for the video or image node within the cell.
-        let videoPadding = UIEdgeInsets(top: 50, left: 8, bottom: 37, right: 8)
+        // Define common padding values for both conditions
+        let topPadding = globalHasNotch ? 50 : 34
+        let mainViewTopInset = globalHasNotch ? 48 : 32
+        let mainViewSideInset = globalHasNotch ? 8 : 16
 
-        // Determine the child node based on the presence of a muxPlaybackId.
-        // Using ternary operator for concise conditional assignment.
+        // Common padding values for the video or image node within the cell
+        let videoPadding = UIEdgeInsets(top: CGFloat(topPadding), left: CGFloat(mainViewSideInset), bottom: 37, right: CGFloat(mainViewSideInset))
+
+        // Determine the child node based on the presence of a muxPlaybackId
         let childNode = post.muxPlaybackId.isEmpty ? cellImageNode : cellVideoNode
 
-        // Apply padding to the chosen child node using ASInsetLayoutSpec.
-        // This approach avoids redundant code and enhances readability.
+        // Apply padding to the chosen child node using ASInsetLayoutSpec
         let paddedVideoSpec = ASInsetLayoutSpec(insets: videoPadding, child: childNode)
         
-        // Set the main view inset, keeping the original bottom inset.
-        // Using UIEdgeInsets for consistency and clarity.
-        let mainViewInset = UIEdgeInsets(top: 48, left: 0, bottom: 8, right: 0)
+        // Set the main view inset, keeping the bottom inset consistent
+        let mainViewInset = UIEdgeInsets(top: CGFloat(mainViewTopInset), left: 0, bottom: 8, right: 0)
 
-        // Create an inset layout spec for the main view.
-        // This approach provides a clear structure for the layout, making it easy to adjust in the future.
+        // Create an inset layout spec for the main view
         let insetSpec = ASInsetLayoutSpec(insets: mainViewInset, child: paddedVideoSpec)
 
-        // Return the final layout spec.
+        // Return the final layout spec
         return insetSpec
-        
     }
 
 
@@ -838,16 +837,22 @@ extension VideoNode {
     /// - Parameters:
     ///   - childView: The child view to which constraints are applied.
     ///   - parentView: The parent view in which the child view resides.
-    ///   - constant: An optional constant value for leading, trailing, and top constraints.
+    ///   - constant: An optional constant value for leading and trailing constraints.
     private func addHeaderConstraints(to childView: UIView, within parentView: UIView, constant: CGFloat = 0) {
         childView.translatesAutoresizingMaskIntoConstraints = false
+
+        // Determining the top constraint based on the presence of a notch
+        let topConstraintConstant = globalHasNotch ? 94 : 60
+
+        // Activating constraints
         NSLayoutConstraint.activate([
-            childView.topAnchor.constraint(equalTo: parentView.topAnchor, constant: 94),
+            childView.topAnchor.constraint(equalTo: parentView.topAnchor, constant: CGFloat(topConstraintConstant)),
             childView.leadingAnchor.constraint(equalTo: parentView.leadingAnchor, constant: constant),
-            childView.trailingAnchor.constraint(equalTo: parentView.trailingAnchor, constant: constant),
-            childView.heightAnchor.constraint(equalToConstant: 80) // Height of the header view.
+            childView.trailingAnchor.constraint(equalTo: parentView.trailingAnchor, constant: -constant), // Negative for trailing
+            childView.heightAnchor.constraint(equalToConstant: 80) // Fixed height of the header view.
         ])
     }
+
 
     /// Adds constraints to the footer view.
     /// - Parameters:
