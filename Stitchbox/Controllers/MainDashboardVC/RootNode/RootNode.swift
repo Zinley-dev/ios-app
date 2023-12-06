@@ -143,6 +143,8 @@ class RootNode: ASCellNode, UICollectionViewDelegateFlowLayout, UIAdaptivePresen
 
         // Removing any observers that were added to avoid memory leaks or unintended behavior.
         removeObservers()
+        
+        print("Tracking root: \(level) didExitVisibleState")
 
     }
 
@@ -151,16 +153,25 @@ class RootNode: ASCellNode, UICollectionViewDelegateFlowLayout, UIAdaptivePresen
         super.didEnterVisibleState() // Always call the super implementation of lifecycle methods
         loadChainAllow = true
         activateVideoNodeIfNeeded()
+        
+        print("Tracking root: \(level) didEnterVisibleState")
     }
     
     
     override func didEnterDisplayState() {
         loadChainAllow = true
+        
+        print("Tracking root: \(level) didEnterDisplay")
+        
     }
     
     override func didExitDisplayState() {
         loadChainAllow = false
+        
+        print("Tracking root: \(level) didExitDisplay")
     }
+    
+
     
     // MARK: - Private Helpers
 
@@ -343,16 +354,9 @@ extension RootNode: ASCollectionDelegate, ASCollectionDataSource {
         return { [weak self] in
             guard let strongSelf = self else { return ASCellNode() }
             let isFirstItem = strongSelf.firstItem && indexPath.row == 0
-            if indexPath.row == 0 {
-                let node = VideoNode(with: post, isPreview: false, firstItem: isFirstItem, level: strongSelf.level, indexPath: -1)
-                strongSelf.configureMainNode(node, for: post, at: indexPath, isFirstItem: isFirstItem)
-                return node
-            } else {
-                let node = VideoNode(with: post, isPreview: false, firstItem: isFirstItem, level: strongSelf.level, indexPath: indexPath.row)
-                strongSelf.configureMainNode(node, for: post, at: indexPath, isFirstItem: isFirstItem)
-                return node
-            }
-            
+            let node = VideoNode(with: post, isPreview: false, firstItem: isFirstItem, level: strongSelf.level, indexPath: indexPath.row)
+            strongSelf.configureMainNode(node, for: post, at: indexPath, isFirstItem: isFirstItem)
+            return node
         }
     }
 

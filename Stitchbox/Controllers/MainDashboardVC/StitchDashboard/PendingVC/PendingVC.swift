@@ -209,6 +209,13 @@ extension PendingVC: ASCollectionDataSource {
                 // Node setup for PendingNode, if needed.
                 node.neverShowPlaceholders = true // Example of setup
                 // Add more setup code here if required.
+                node.approveBtn = { [weak self] node in
+                    self?.approvePost(node: node as! PendingNode, post: post)
+                }
+
+                node.declineBtn = { [weak self] node in
+                    self?.declinePost(node: node as! PendingNode, post: post)
+                }
                 return node
             }
         }

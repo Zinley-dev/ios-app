@@ -244,7 +244,7 @@ extension EditPostVC {
 
     /// Sets the default description in the text view from the selected post.
     func setDefaultDesc() {
-        descTxtView.text = selectedPost.content.isEmpty ? "Hi, let's share something fun!" : selectedPost.content
+        descTxtView.text = selectedPost.content.isEmpty ? "Got something fun to share? Keep it snappy – max 100 characters! 😊" : selectedPost.content
     }
 
     /// Sets the default media display for the selected post.
@@ -382,7 +382,7 @@ extension EditPostVC {
         let updateText = getPostDescription()
         let updateHashtagList = getHashtags(using: userDataSource.userName)
         
-        var contentPost: [String: Any] = [
+        let contentPost: [String: Any] = [
             "id": selectedPost.id,
             "content": updateText,
             "hashtags": updateHashtagList, // This should be [String]
@@ -393,6 +393,7 @@ extension EditPostVC {
             ] // This is [String: Any]
         ]
 
+        print("contentPost: \(contentPost)")
         return contentPost
     }
 
@@ -400,7 +401,7 @@ extension EditPostVC {
     /// Gets post description, excluding placeholder text.
     /// - Returns: The post description.
     private func getPostDescription() -> String {
-        guard let text = descTxtView.text, text != "Hi, let's share something fun!" else {
+        guard let text = descTxtView.text, text != "Got something fun to share? Keep it snappy – max 100 characters! 😊" else {
             return ""
         }
         return text

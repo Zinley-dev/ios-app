@@ -32,6 +32,7 @@ class VideoNode: ASCellNode, ASVideoNodeDelegate {
     var time = 0
     var isActive = false
     var level = 0
+    var childSetup = false
     // UI components and layout related properties.
     private var cellVideoNode: ASVideoNode
     private var cellImageNode: ASNetworkImageNode
@@ -102,6 +103,7 @@ class VideoNode: ASCellNode, ASVideoNodeDelegate {
         backgroundColor = .black
         setupSpinner()
         setupChildView()
+        
     }
 
     
@@ -123,6 +125,8 @@ class VideoNode: ASCellNode, ASVideoNodeDelegate {
 
         // Removing any observers that were added to avoid memory leaks or unintended behavior.
         removeObservers()
+        
+        print("Tracking video: \(level) didExitVisibleState")
     }
 
     /// Called when the view controller’s view becomes visible.
@@ -140,7 +144,35 @@ class VideoNode: ASCellNode, ASVideoNodeDelegate {
             print("Setup already completed for - \(post.id)")
         }
         
+        print("Tracking video: \(level) didEnterVisibleState")
+        
     }
+    
+    override func didExitDisplayState() {
+        super.didExitDisplayState()
+        // Release the PostHeader view and its resources
+        
+        
+        print("Tracking video: \(level) didExitDisplayState")
+    }
+    
+    
+    override func didEnterDisplayState() {
+        super.didEnterDisplayState()
+        // Recreate and configure the PostHeader view
+       
+        print("Tracking video: \(level) didEnterDisplayState")
+    }
+    
+    
+    func cleanChildView() {
+        childSetup = false
+        headerView.removeFromSuperview()
+        footerView.removeFromSuperview()
+        buttonView.removeFromSuperview()
+    }
+
+
 
     /// `deinit` is called when the object is about to be deallocated.
     /// This is a crucial place to remove any observers or perform any clean-up to prevent memory leaks.
@@ -411,16 +443,16 @@ extension VideoNode {
         assetReset = true
 
         // Fading out the video node before resetting
-        UIView.animate(withDuration: 0.2) {
-            self.cellVideoNode.alpha = 0.0
+        UIView.animate(withDuration: 0.2) { [weak self] in
+            self?.cellVideoNode.alpha = 0.0
         } completion: { _ in
             // Replacing the video asset
             self.cellVideoNode.asset = nil
             self.cellVideoNode.asset = AVAsset(url: self.getVideoURL(post: self.post)!)
 
             // Fading the video node back in and starting playback
-            UIView.animate(withDuration: 0.2) {
-                self.cellVideoNode.alpha = 1.0
+            UIView.animate(withDuration: 0.2) { [weak self] in
+                self?.cellVideoNode.alpha = 1.0
             } completion: { _ in
                 self.playVideo()
             }
@@ -765,6 +797,7 @@ extension VideoNode {
     /// Sets up child views of the VideoNode.
     /// This function orchestrates the setup of various subviews including header, footer, and interaction buttons.
     func setupChildView() {
+        childSetup = true
         // Setup different view components of the VideoNode.
         setupHeaderViews()
         setupFooterViews()

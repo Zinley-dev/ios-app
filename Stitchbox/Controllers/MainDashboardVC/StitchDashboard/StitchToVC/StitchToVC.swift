@@ -440,6 +440,7 @@ extension StitchToVC {
     }
     
     func retrieveNextPageForStitchtWithCompletion(block: @escaping ([[String: Any]]) -> Void) {
+        print("rootPost.id: \(rootPost.id)")
         APIManager.shared.getStitchTo(pid: rootPost.id) { result in
             switch result {
             case .success(let apiResponse):

@@ -42,6 +42,7 @@ class AddStitchToExistingVC: UIViewController, UICollectionViewDelegateFlowLayou
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        print("stitchedPost.id: \(stitchedPost.id)")
         configureView()
         checkForUserAlertSettings()
     }
