@@ -63,6 +63,7 @@ class FeedViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
         // UI setup
         setupNavBar()         // Configures the navigation bar
         setupButtons()        // Sets up buttons in the view
+        globalHasNotch = UIDevice.current.ifHasNotch
         setupCollectionNode() // Initializes the collection node
 
         // Configuring pull-to-refresh for the collection node

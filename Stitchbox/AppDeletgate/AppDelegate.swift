@@ -16,9 +16,6 @@ import PixelSDK
 import UserNotifications
 import OneSignal
 import Sentry
-import SwipeTransition
-import SwipeTransitionAutoSwipeBack
-import SwipeTransitionAutoSwipeToDismiss
 
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterDelegate, SBDChannelDelegate {
@@ -48,7 +45,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         sentrySetup() // Setup for Sentry
         CacheManager.shared.asyncRemoveExpiredObjects() // Clear expired objects from cache
         metricsManager = AppMetrics() // Initialize the metrics manager
-        globalHasNotch = UIDevice.current.ifHasNotch
 
         return true // Indicate successful launch
     }

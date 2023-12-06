@@ -539,6 +539,10 @@ extension RootNode {
                 guard let self = self else { return }
                 self.insertNewRowsInCollectionNode(newPosts: newPosts)
                 context.completeBatchFetching(true)
+                
+                if newPosts.count == 0, posts.count == 1 {
+                    loadPreviousPosts()
+                }
             }
         }
 
