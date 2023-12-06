@@ -701,7 +701,8 @@ extension SelectedRootPostVC {
 
         // Reload the collection node if no more posts are available, otherwise delete the specific item.
         if posts.isEmpty {
-            collectionNode.reloadData()
+            collectionNode.deleteItems(at: [IndexPath(item: indexPath, section: 0)])
+            navigationController?.popViewController(animated: true)
         } else {
             collectionNode.deleteItems(at: [IndexPath(item: indexPath, section: 0)])
         }
@@ -724,9 +725,14 @@ extension SelectedRootPostVC {
     /// Handles the result of the delete post request.
     /// - Parameter result: The result of the deletion request.
     private func handleDeletePostResult(_ result: Result) {
+        
+        SwiftLoader.hide()
+        
         switch result {
         case .success:
-            removePostFromList()
+            DispatchQueue.main.async { [weak self] in
+                self?.removePostFromList()
+            }
         case .failure(let error):
             print(error)
             showErrorAfterDelay(message: "Unable to delete this post. \(error.localizedDescription), please try again.")
@@ -746,7 +752,8 @@ extension SelectedRootPostVC {
     /// - Parameter indexPath: The index of the deleted post.
     private func manageCollectionView(for indexPath: Int) {
         if posts.isEmpty {
-            collectionNode.reloadData()
+            collectionNode.deleteItems(at: [IndexPath(item: indexPath, section: 0)])
+            navigationController?.popViewController(animated: true)
         } else {
             collectionNode.deleteItems(at: [IndexPath(item: indexPath, section: 0)])
         }
