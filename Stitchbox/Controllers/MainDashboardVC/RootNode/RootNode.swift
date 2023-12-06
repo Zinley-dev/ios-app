@@ -480,7 +480,7 @@ extension RootNode {
                     return
                 }
                 self.page += 1
-                print("Successfully retrieved \(data.count) posts.")
+                print("Successfully retrieved \(data.count) posts. \(data)")
                 DispatchQueue.main.async { block(data) }
 
             case .failure(let error):
@@ -525,7 +525,7 @@ extension RootNode {
             return
         }
         
-        delayItem.perform(after: 1.25) { [weak self] in
+        delayItem.perform(after: 0.25) { [weak self] in
             self?.retrieveNextPageWithCompletion { [weak self] newPosts in
                 guard let self = self else { return }
                 self.insertNewRowsInCollectionNode(newPosts: newPosts)
