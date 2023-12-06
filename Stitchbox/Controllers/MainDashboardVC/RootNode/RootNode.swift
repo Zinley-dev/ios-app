@@ -152,7 +152,16 @@ class RootNode: ASCellNode, UICollectionViewDelegateFlowLayout, UIAdaptivePresen
         loadChainAllow = true
         activateVideoNodeIfNeeded()
     }
-
+    
+    
+    override func didEnterDisplayState() {
+        loadChainAllow = true
+    }
+    
+    override func didExitDisplayState() {
+        loadChainAllow = false
+    }
+    
     // MARK: - Private Helpers
 
     /// Activates the video node if applicable.
