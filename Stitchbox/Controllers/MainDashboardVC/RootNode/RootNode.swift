@@ -149,8 +149,7 @@ class RootNode: ASCellNode, UICollectionViewDelegateFlowLayout, UIAdaptivePresen
         // Removing any observers that were added to avoid memory leaks or unintended behavior.
         removeObservers()
         delayItem.cancel()
-        
-        print("Tracking root: \(level) didExitVisibleState")
+    
 
     }
 
@@ -159,15 +158,13 @@ class RootNode: ASCellNode, UICollectionViewDelegateFlowLayout, UIAdaptivePresen
         super.didEnterVisibleState() // Always call the super implementation of lifecycle methods
         loadChainAllow = true
         activateVideoNodeIfNeeded()
-        
-        print("Tracking root: \(level) didEnterVisibleState")
+      
     }
     
     
     override func didEnterDisplayState() {
         loadChainAllow = true
         
-        print("Tracking root: \(level) didEnterDisplay")
         self.setupAnimatedLabel()
         
         iterateThroughCollectionNodes { node in
@@ -180,8 +177,6 @@ class RootNode: ASCellNode, UICollectionViewDelegateFlowLayout, UIAdaptivePresen
     
     override func didExitDisplayState() {
         loadChainAllow = false
-        
-        print("Tracking root: \(level) didExitDisplay")
         self.animatedLabel.removeFromSuperview()
         
         iterateThroughCollectionNodes { node in

@@ -45,7 +45,6 @@ target 'Stitchbox' do
   pod 'SCLAlertView'
   pod 'NVActivityIndicatorView'
   pod 'AnimatedCollectionViewLayout'
-  pod 'IGListKit', '~> 4.0.0'
   
   target 'StitchboxTests' do
     inherit! :search_paths

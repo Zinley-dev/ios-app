@@ -20,9 +20,6 @@ PODS:
     - AppAuth/Core (~> 1.6)
     - GTMSessionFetcher/Core (< 4.0, >= 1.5)
   - GTMSessionFetcher/Core (3.2.0)
-  - IGListDiffKit (4.0.0)
-  - IGListKit (4.0.0):
-    - IGListDiffKit (= 4.0.0)
   - MarqueeLabel (4.4.0)
   - NVActivityIndicatorView (5.1.1):
     - NVActivityIndicatorView/Base (= 5.1.1)
@@ -126,7 +123,6 @@ DEPENDENCIES:
   - Cache (~> 5.3.0)
   - FLAnimatedImage (~> 1.0)
   - GoogleSignIn (~> 7.0.0)
-  - IGListKit (~> 4.0.0)
   - MarqueeLabel
   - NVActivityIndicatorView
   - NYTPhotoViewer (~> 1.1.0)
@@ -163,8 +159,6 @@ SPEC REPOS:
     - GoogleSignIn
     - GTMAppAuth
     - GTMSessionFetcher
-    - IGListDiffKit
-    - IGListKit
     - MarqueeLabel
     - NVActivityIndicatorView
     - NYTPhotoViewer
@@ -208,8 +202,6 @@ SPEC CHECKSUMS:
   GoogleSignIn: b232380cf495a429b8095d3178a8d5855b42e842
   GTMAppAuth: 99fb010047ba3973b7026e45393f51f27ab965ae
   GTMSessionFetcher: 41b9ef0b4c08a6db4b7eb51a21ae5183ec99a2c8
-  IGListDiffKit: 665d6cf43ce726e676013db9c7d6c4294259b6b2
-  IGListKit: fd5a5d21935298f5849fa49d426843cff97b77c7
   MarqueeLabel: d2388949ac58d587303178d56a792ba8a001b037
   NVActivityIndicatorView: 1f6c5687f1171810aa27a3296814dc2d7dec3667
   NYTPhotoViewer: e80e8767f3780d2df37c6f72cbab15d6c7232911
@@ -242,6 +234,6 @@ SPEC CHECKSUMS:
   ZSWTaggedString: 1a6aab3143188634c1e5dfe9383ce754c1fb5fe2
   ZSWTappableLabel: cff84c0a55e30f2141f7dac24e5903302a7e35ec
 
-PODFILE CHECKSUM: e1b7111f07e0842a5655d3e66752445a49adbf9e
+PODFILE CHECKSUM: 4a8ab35efc05b4ca10ed4fbfeed4f426bc4fc5d6
 
 COCOAPODS: 1.14.2

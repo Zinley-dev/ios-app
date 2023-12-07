@@ -35,7 +35,6 @@ class VideoNode: ASCellNode, ASVideoNodeDelegate {
     var childSetup = false
     // UI components and layout related properties.
     private var cellVideoNode: ASVideoNode
-    private var cellImageNode: ASNetworkImageNode
     private var timeLbl: UILabel!
     private var blurView: UIView!
     private var spinner: NVActivityIndicatorView!
@@ -60,6 +59,8 @@ class VideoNode: ASCellNode, ASVideoNodeDelegate {
     var isLike = false
     var allowProcess = true
     var firstItem = false
+
+    
     private var isPreview: Bool!
     
     // Constants
@@ -89,7 +90,6 @@ class VideoNode: ASCellNode, ASVideoNodeDelegate {
         self.indexPathSetup = indexPath
         self.level = level
         // Initialize the image and video nodes.
-        self.cellImageNode = ASNetworkImageNode()
         self.cellVideoNode = ASVideoNode()
     
         // Call the superclass initializer.
@@ -105,7 +105,7 @@ class VideoNode: ASCellNode, ASVideoNodeDelegate {
         print("Tracking root2: \(level) -\(indexPathSetup) didLoad")
         backgroundColor = .black
         setupSpinner()
-        //setupChildView()
+        setupChildView()
         
     }
 
@@ -114,7 +114,6 @@ class VideoNode: ASCellNode, ASVideoNodeDelegate {
         // Configure the node based on the presence of a muxPlaybackId.
         // This approach avoids duplicate checks and makes the decision point clear.
         if !post.muxPlaybackId.isEmpty {
-            print("Tracking root2: \(level) -\(indexPathSetup) presetup")
             configureVideoNode(with: post)
         }
     }
@@ -129,13 +128,14 @@ class VideoNode: ASCellNode, ASVideoNodeDelegate {
 
         // Removing any observers that were added to avoid memory leaks or unintended behavior.
         removeObservers()
-        
+        cleanGesture()
       
     }
 
     /// Called when the view controller’s view becomes visible.
     override func didEnterVisibleState() {
         super.didEnterVisibleState() // Always call the super implementation of lifecycle methods
+        setupGesture()
   
     }
     /// Checks if the node needs to be set up again.
@@ -155,17 +155,17 @@ class VideoNode: ASCellNode, ASVideoNodeDelegate {
     /// Called when the node enters the preload state.
     /// This method handles the initial setup of the cellVideoNode if it's not already set.
     override func didEnterPreloadState() {
+        fillInfo()
     }
 
     /// Called when the node exits the preload state.
     /// This method cleans up the cellVideoNode's asset if it's not nil.
     override func didExitPreloadState() {
-
+        cleanInfo()
     }
     
     override func didEnterDisplayState() {
         super.didEnterPreloadState()
-        
         if checkIfNeedToSetupAgain()  {
             presetup()
         }
@@ -174,6 +174,7 @@ class VideoNode: ASCellNode, ASVideoNodeDelegate {
     
     override func didExitDisplayState() {
         super.didExitDisplayState()
+        print("Tracking root2: \(level) -\(indexPathSetup) didExitDisplayState")
         if checkIfShouldClean() {
             cleanVideoNode()
         }
@@ -225,11 +226,8 @@ class VideoNode: ASCellNode, ASVideoNodeDelegate {
         // Common padding values for the video or image node within the cell
         let videoPadding = UIEdgeInsets(top: CGFloat(topPadding), left: CGFloat(mainViewSideInset), bottom: 37, right: CGFloat(mainViewSideInset))
 
-        // Determine the child node based on the presence of a muxPlaybackId
-        let childNode = post.muxPlaybackId.isEmpty ? cellImageNode : cellVideoNode
-
         // Apply padding to the chosen child node using ASInsetLayoutSpec
-        let paddedVideoSpec = ASInsetLayoutSpec(insets: videoPadding, child: childNode)
+        let paddedVideoSpec = ASInsetLayoutSpec(insets: videoPadding, child: cellVideoNode)
         
         // Set the main view inset, keeping the bottom inset consistent
         let mainViewInset = UIEdgeInsets(top: CGFloat(mainViewTopInset), left: 0, bottom: 8, right: 0)
@@ -512,9 +510,7 @@ extension VideoNode {
         if shouldSeekToStart {
             let startTime = CMTime(seconds: 0, preferredTimescale: 1)
             cellVideoNode.player?.seek(to: startTime)
-            if playTimeBar != nil {
-                playTimeBar.setValue(Float(0), animated: true)
-            }
+            playTimeBar.setValue(Float(0), animated: true)
         }
     }
 
@@ -657,70 +653,6 @@ extension VideoNode {
 
 extension VideoNode {
     
-    /// Configures the image node with a given post model.
-    /// - Parameter post: The post model used to configure the image node.
-    private func configureImageNode(with post: PostModel) {
-        
-        // Set up the cell image node's appearance and behavior.
-        setupImageNodeAppearance()
-        
-        // Determine and set the image content mode based on post's metadata.
-        determineAndSetImageContentMode(with: post)
-        
-        // Load the image asset asynchronously.
-        loadImageAssetAsync(with: post)
-    }
-    
-    /// Sets up the appearance of cellImageNode.
-    private func setupImageNodeAppearance() {
-        cellImageNode.cornerRadius = 12
-        cellImageNode.clipsToBounds = true
-        cellImageNode.backgroundColor = .black
-    }
-    
-    /// Determines and sets the image content mode based on post's metadata.
-    /// - Parameter post: The post model with metadata to determine content mode.
-    private func determineAndSetImageContentMode(with post: PostModel) {
-        if let width = post.metadata?.width, let height = post.metadata?.height, width != 0, height != 0 {
-            setImageContentModeFor(width: width, height: height)
-        } else {
-            setDefaultImageContentMode()
-        }
-    }
-    
-    /// Asynchronously loads the image asset for the cellImageNode.
-    /// - Parameter post: The post model containing the image URL.
-    private func loadImageAssetAsync(with post: PostModel) {
-        DispatchQueue.main.async() { [weak self] in
-            guard let self = self else { return }
-            self.cellImageNode.url = URL(string: post.imageUrl.absoluteString)
-        }
-    }
-    
-    /// Sets the image content mode based on the given dimensions.
-    /// - Parameters:
-    ///   - width: The width of the image.
-    ///   - height: The height of the image.
-    func setImageContentModeFor(width: CGFloat, height: CGFloat) {
-        let aspectRatio = width / height
-        // Check for a 9:16 aspect ratio with a margin for error.
-        if abs(aspectRatio - (9.0/16.0)) < 0.01 {
-            cellImageNode.contentMode = .scaleAspectFill
-        } else {
-            setDefaultImageContentMode()
-        }
-    }
-
-    /// Sets the default image content mode for the cellImageNode.
-    func setDefaultImageContentMode() {
-        cellImageNode.contentMode = .scaleAspectFit
-    }
-    
-}
-
-
-extension VideoNode {
-    
     /// Configures the video node with a given post model.
     /// - Parameter post: The post model used to configure the video node.
     private func configureVideoNode(with post: PostModel) {
@@ -821,7 +753,16 @@ extension VideoNode {
 
         // Adjust space based on the width of the view.
         setupSpace(width: self.view.frame.width)
-
+        
+        if isPreview {
+            footerView.stitchBtn.isHidden = true
+        }
+        
+        likeCount = post.totalLikes
+        saveCount = post.totalSave
+    }
+    
+    func fillInfo() {
         // Populate the VideoNode with relevant post information.
         fillPostStats()
         fillPostHeaderInfo()
@@ -829,20 +770,31 @@ extension VideoNode {
 
         // Load and setup reactions and gesture recognizers.
         loadReaction()
-        setupGestureRecognizers()
-        setupCustomTap()
         
+        /*
         // Setup the time view if the post contains a muxPlaybackId.
         if !post.muxPlaybackId.isEmpty {
             setupTimeView()
             setupFunction()
-        }
+        } */
+    }
+    
+    func cleanInfo() {
+        headerView.cleanup()
+        buttonView.cleanup()
+        footerView.cleanup()
         
-        if isPreview {
-            footerView.stitchBtn.isHidden = true
-        }
     }
 
+    func cleanGesture() {
+        cleanupCustomTap()
+        removeGestureRecognizers()
+    }
+    
+    func setupGesture() {
+        setupGestureRecognizers()
+        setupCustomTap()
+    }
     
     /// Sets up the header views.
     /// This method adds the header view to the node and applies necessary constraints.
@@ -934,9 +886,6 @@ extension VideoNode {
 
     /// Fills the post statistics like likes, comments, saves, and stitch counts
     func fillPostStats() {
-        // Updating local properties with post statistics
-        likeCount = post.totalLikes
-        saveCount = post.totalSave
 
         // Filling the button view with post information
         // This includes like count, comment count, save count, and total stitch count
@@ -1042,6 +991,28 @@ extension VideoNode {
         longPress.delaysTouchesBegan = true
         self.view.addGestureRecognizer(longPress)
     }
+    
+    
+    func removeGestureRecognizers() {
+        // Remove gesture recognizers from header view elements
+        self.headerView.username.gestureRecognizers?.forEach(self.headerView.username.removeGestureRecognizer)
+        self.headerView.avatarImg.gestureRecognizers?.forEach(self.headerView.avatarImg.removeGestureRecognizer)
+        self.headerView.settingBtn.gestureRecognizers?.forEach(self.headerView.settingBtn.removeGestureRecognizer)
+        self.headerView.postTime.gestureRecognizers?.forEach(self.headerView.postTime.removeGestureRecognizer)
+        self.headerView.postDate.gestureRecognizers?.forEach(self.headerView.postDate.removeGestureRecognizer)
+
+        // Remove gesture recognizers from button view elements
+        self.buttonView.likeStackView.gestureRecognizers?.forEach(self.buttonView.likeStackView.removeGestureRecognizer)
+        self.buttonView.saveStackView.gestureRecognizers?.forEach(self.buttonView.saveStackView.removeGestureRecognizer)
+        self.buttonView.commentStackView.gestureRecognizers?.forEach(self.buttonView.commentStackView.removeGestureRecognizer)
+        self.buttonView.playListStackView.gestureRecognizers?.forEach(self.buttonView.playListStackView.removeGestureRecognizer)
+
+        // Remove gesture recognizers from footer view elements
+        self.footerView.stitchBtn.gestureRecognizers?.forEach(self.footerView.stitchBtn.removeGestureRecognizer)
+
+        // Remove gesture recognizers from the view
+        self.view.gestureRecognizers?.forEach(self.view.removeGestureRecognizer)
+    }
 
     /// Creates and returns a UITapGestureRecognizer with specified target, action, and number of taps
     /// - Parameters:
@@ -1068,6 +1039,11 @@ extension VideoNode {
         }
     }
 
+    func cleanupCustomTap() {
+        footerView.label.handleCustomTap(for: footerView.customType) { _ in }
+    }
+
+    
     /// Presents the `PostListWithHashtagVC` for the given hashtag.
     /// - Parameter selectedHashtag: The hashtag selected by the user.
     func presentPostListWithHashtagVC(for selectedHashtag: String) {
