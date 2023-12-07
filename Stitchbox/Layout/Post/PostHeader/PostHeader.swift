@@ -97,7 +97,7 @@ class PostHeader: UIView {
     // MARK: - Cleanup Function
     func cleanup() {
         // Resetting the image in avatarNode to release memory.
-        avatarNode.image = nil
+        avatarNode.url = nil
 
         // Cancel any ongoing network requests for avatarNode.
         // If you're using a network image node with a networking library
@@ -110,8 +110,8 @@ class PostHeader: UIView {
         postTime.text = nil
 
         // Reset the states of buttons if they are dynamically set.
-        settingBtn.setTitle(nil, for: .normal)
-        followBtn.setTitle(nil, for: .normal)
+        //settingBtn.setTitle(nil, for: .normal)
+        //followBtn.setTitle(nil, for: .normal)
 
         // If there are any custom views or layers added dynamically to contentView,
         // consider removing them or resetting their state.

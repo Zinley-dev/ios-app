@@ -39,7 +39,6 @@ class SelectedRootPostVC: UIViewController, UICollectionViewDelegateFlowLayout, 
     var keyword = ""
     var userId = ""
     var hashtag = ""
-    var keepLoading = false
     var firstAnimated = true
     var isVideoPlaying = false
     var newPlayingIndex: Int?
@@ -381,7 +380,7 @@ extension SelectedRootPostVC {
 
     /// Determines whether the collection node should fetch the next batch of data.
     func shouldBatchFetch(for collectionNode: ASCollectionNode) -> Bool {
-        return keepLoading
+        return true
     }
 
     /// Handles the beginning of a batch fetch in the collection node.

@@ -35,8 +35,8 @@ class VideoNode: ASCellNode, ASVideoNodeDelegate {
     var childSetup = false
     // UI components and layout related properties.
     private var cellVideoNode: ASVideoNode
-    private var timeLbl: UILabel!
-    private var blurView: UIView!
+    private lazy var timeLbl = UILabel()
+    private lazy var blurView = UIView()
     private var spinner: NVActivityIndicatorView!
     private lazy var headerView: PostHeader = PostHeader()
     private lazy var footerView: PostFooter = PostFooter()
@@ -92,9 +92,7 @@ class VideoNode: ASCellNode, ASVideoNodeDelegate {
         // Initialize the image and video nodes.
         self.cellVideoNode = ASVideoNode()
     
-        // Call the superclass initializer.
         super.init()
-        print("Tracking root2: \(level) -\(indexPathSetup) init")
         presetup()
     }
     
@@ -102,7 +100,6 @@ class VideoNode: ASCellNode, ASVideoNodeDelegate {
 
     override func didLoad() {
         super.didLoad()
-        print("Tracking root2: \(level) -\(indexPathSetup) didLoad")
         backgroundColor = .black
         setupSpinner()
         setupChildView()
@@ -129,14 +126,16 @@ class VideoNode: ASCellNode, ASVideoNodeDelegate {
         // Removing any observers that were added to avoid memory leaks or unintended behavior.
         removeObservers()
         cleanGesture()
-      
+        emptyDelegate()
     }
 
     /// Called when the view controller’s view becomes visible.
     override func didEnterVisibleState() {
         super.didEnterVisibleState() // Always call the super implementation of lifecycle methods
         setupGesture()
-  
+        if !isPreview {
+            setDelegate()
+        }
     }
     /// Checks if the node needs to be set up again.
     /// This method determines if initialization is required and if the cellVideoNode's asset is nil.
@@ -155,13 +154,15 @@ class VideoNode: ASCellNode, ASVideoNodeDelegate {
     /// Called when the node enters the preload state.
     /// This method handles the initial setup of the cellVideoNode if it's not already set.
     override func didEnterPreloadState() {
-        fillInfo()
+        super.didEnterPreloadState()
+        //fillInfo()
     }
 
     /// Called when the node exits the preload state.
     /// This method cleans up the cellVideoNode's asset if it's not nil.
     override func didExitPreloadState() {
-        cleanInfo()
+        super.didExitPreloadState()
+        //cleanInfo()
     }
     
     override func didEnterDisplayState() {
@@ -169,23 +170,33 @@ class VideoNode: ASCellNode, ASVideoNodeDelegate {
         if checkIfNeedToSetupAgain()  {
             presetup()
         }
+        fillInfo()
     }
     
     
     override func didExitDisplayState() {
         super.didExitDisplayState()
-        print("Tracking root2: \(level) -\(indexPathSetup) didExitDisplayState")
         if checkIfShouldClean() {
             cleanVideoNode()
         }
+        cleanInfo()
     }
 
     /// Cleans the video node by resetting its asset.
     /// This method sets the asset of cellVideoNode to nil, effectively cleaning up resources.
     func cleanVideoNode() {
+        cellVideoNode.asset?.cancelLoading()
         cellVideoNode.asset = nil
     }
 
+    
+    func emptyDelegate() {
+        cellVideoNode.delegate = nil
+    }
+    
+    func setDelegate() {
+        cellVideoNode.delegate = self
+    }
 
     /// `deinit` is called when the object is about to be deallocated.
     /// This is a crucial place to remove any observers or perform any clean-up to prevent memory leaks.
@@ -193,10 +204,6 @@ class VideoNode: ASCellNode, ASVideoNodeDelegate {
         // Removing the object as an observer from NotificationCenter.
         // It's important to remove the observer to avoid any retain cycles or crashes due to observers being called after the object is deallocated.
         NotificationCenter.default.removeObserver(self)
-
-        // Logging the deallocation for debugging purposes.
-        // This can help identify memory leaks or ensure that objects are being deallocated as expected.
-        print("VideoNode is being deallocated.")
     }
 
     // MARK: - Configuration
@@ -286,6 +293,16 @@ class VideoNode: ASCellNode, ASVideoNodeDelegate {
 
 // MARK: - VideoNode Extension
 extension VideoNode {
+    
+    func cleanupPlayTimeBarActions() {
+        // Remove target-actions for the playTimeBar
+        playTimeBar.removeTarget(self, action: #selector(VideoNode.sliderDidStartSliding), for: .touchDown)
+        playTimeBar.removeTarget(self, action: #selector(VideoNode.sliderDidEndSliding), for: [.touchUpInside, .touchUpOutside])
+        playTimeBar.removeTarget(self, action: #selector(VideoNode.sliderValueDidChange), for: .valueChanged)
+
+        // Additional cleanup actions for playTimeBar (if necessary)
+    }
+
     
     // MARK: - Setup
     /// Sets up the play time slider with target-action patterns for different events.
@@ -430,14 +447,11 @@ extension VideoNode {
             let likelyToKeepUp = cellVideoNode.currentItem?.isPlaybackLikelyToKeepUp ?? false
             let errorDescription = cellVideoNode.currentItem?.error?.localizedDescription ?? "Unknown error"
             
-            // Logging the status and details
-            print("\(prefix): Buffer Full: \(bufferFull), Buffer Empty: \(bufferEmpty), Likely to Keep Up: \(likelyToKeepUp), Error: \(errorDescription)")
             
             // Setting buffer duration preference and rechecking status
             cellVideoNode.currentItem?.preferredForwardBufferDuration = 5
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.85) { [weak self] in
                 guard let self = self, let status = self.cellVideoNode.currentItem?.status else {
-                    print("Playback status check failed - status unavailable")
                     self?.resetAssets()
                     return
                 }
@@ -483,7 +497,7 @@ extension VideoNode {
             // Starting the video playback
             cellVideoNode.play()
         } else {
-            print("Can't play because of \(isActive) or \(cellVideoNode.isPlaying())")
+           // print("Can't play because of \(isActive) or \(cellVideoNode.isPlaying())")
         }
     }
 
@@ -548,23 +562,23 @@ extension VideoNode {
         switch status {
         case .readyToPlay:
             startPlayback()
-            print("\(prefix) - Ready to play")
+            //print("\(prefix) - Ready to play")
         case .failed:
             addSpinner()
-            print("\(prefix) - Playback failed")
+            //print("\(prefix) - Playback failed")
         case .unknown:
             addSpinner()
-            print("\(prefix) - Playback status unknown")
+            //print("\(prefix) - Playback status unknown")
         @unknown default:
             addSpinner()
-            print("\(prefix) - Unexpected playback status")
+            //print("\(prefix) - Unexpected playback status")
         }
     }
 
     /// Retries or resets playback based on the current status of the video node.
     private func retryOrResetPlaybackBasedOnCurrentStatus() {
         guard let status = cellVideoNode.currentItem?.status else {
-            print("Playback status check failed - status unavailable")
+            //print("Playback status check failed - status unavailable")
             resetAssets()
             return
         }
@@ -682,9 +696,6 @@ extension VideoNode {
         cellVideoNode.url = getThumbnailURL(post: post)
         cellVideoNode.shouldAutoplay = false
         cellVideoNode.shouldAutorepeat = true
-        if !isPreview {
-            cellVideoNode.delegate = self
-        }
     }
     
     /// Determines and sets the video content mode based on post's metadata.
@@ -700,17 +711,36 @@ extension VideoNode {
     /// Asynchronously loads the video asset for the cellVideoNode.
     /// - Parameter post: The post model containing the video URL.
     private func loadVideoAssetAsync(with post: PostModel) {
-        DispatchQueue.main.async() { [weak self] in
+        DispatchQueue.main.async { [weak self] in
             guard let self = self else { return }
-            print("Preparing post for VideoNode: \(level)")
-            self.cellVideoNode.asset = AVAsset(url: self.getVideoURL(post: post)!)
-            // Play video if first item on list.
-            if firstItem {
-                playVideo()
+
+            // Ensure URL is valid
+            guard let videoURL = self.getVideoURL(post: post) else {
+                // Handle invalid URL case
+                return
             }
-            
-            if !isInit {
-                isInit = true
+
+            self.cellVideoNode.asset = AVAsset(url: videoURL)
+
+            self.cellVideoNode.asset?.loadValuesAsynchronously(forKeys: ["playable"]) {
+                DispatchQueue.main.async {
+                    // Check the status of the asset to see if it's playable
+                    var error: NSError? = nil
+                    let status = self.cellVideoNode.asset?.statusOfValue(forKey: "playable", error: &error)
+                    if status == .loaded {
+                        // The asset is playable, proceed with further actions
+                        if self.firstItem {
+                            self.playVideo()
+                        }
+
+                        if !self.isInit {
+                            self.isInit = true
+                        }
+                    } else {
+                        // Handle the error or the case where the asset is not playable
+                        // This might include logging the error or showing a user-facing message
+                    }
+                }
             }
         }
     }
@@ -771,18 +801,16 @@ extension VideoNode {
         // Load and setup reactions and gesture recognizers.
         loadReaction()
         
-        /*
+        
         // Setup the time view if the post contains a muxPlaybackId.
-        if !post.muxPlaybackId.isEmpty {
-            setupTimeView()
-            setupFunction()
-        } */
+        setupTotalTimer()
     }
     
     func cleanInfo() {
         headerView.cleanup()
         buttonView.cleanup()
         footerView.cleanup()
+        cleanTimer()
         
     }
 
@@ -1052,7 +1080,7 @@ extension VideoNode {
                 .instantiateViewController(withIdentifier: "PostListWithHashtagVC") as? PostListWithHashtagVC,
               let vc = UIViewController.currentViewController() else {
             // Error handling if the view controller could not be instantiated.
-            print("Error: Unable to instantiate PostListWithHashtagVC from storyboard.")
+            //print("Error: Unable to instantiate PostListWithHashtagVC from storyboard.")
             return
         }
         
@@ -1090,14 +1118,15 @@ extension VideoNode {
                       let isFollowing = data["isFollowing"] as? Bool,
                       let isLiked = data["isLike"] as? Bool,
                       let isSaved = data["isSaved"] as? Bool else {
-                    print("Error: Invalid or missing data in response")
+                    //print("Error: Invalid or missing data in response")
                     return
                 }
                 
                 // Handling the reaction data.
                 strongSelf.handleReaction(isFollower: isFollower, isFollowing: isFollowing, isLiked: isLiked, isSaved: isSaved)
-            case .failure(let error):
-                print("API Error: \(error)")
+            case .failure(_):
+                return
+                //print("API Error: \(error)")
             }
         }
     }
@@ -1134,7 +1163,6 @@ extension VideoNode {
     private func updateLikeButtonImage(isLiked: Bool) {
         let likeImageToUse = isLiked ? likeImage : emptyLikeImage
         guard let likeImage = likeImageToUse else {
-            print("Error: likeImage or emptyLikeImage is nil")
             return
         }
 
@@ -1155,7 +1183,8 @@ extension VideoNode {
     func hideFollowBtn() {
         DispatchQueue.main.async { [weak self] in
             guard let strongSelf = self else { return }
-            strongSelf.headerView.followBtn.isHidden = true
+            strongSelf.headerView.followBtn.isUserInteractionEnabled = false
+            strongSelf.headerView.followBtn.setTitle("", for: .normal)
             strongSelf.isFollowingUser = true
         }
     }
@@ -1281,7 +1310,6 @@ extension VideoNode {
     private func processSaveResult(_ result: Result, isSaving: Bool) {
         switch result {
         case .failure(let error):
-            print("Error in \(isSaving ? "saving" : "unsaving") post: \(error)")
             isSave = !isSaving
             isSaving ? unSaveAnimation() : saveAnimation()
         case .success(let apiResponse):
@@ -1296,7 +1324,6 @@ extension VideoNode {
     @objc func shareTapped() {
         guard let userDataSource = _AppCoreData.userDataSource.value,
               let userUID = userDataSource.userID, !userUID.isEmpty else {
-            print("Sendbird: Can't get userUID")
             return
         }
         
@@ -1311,10 +1338,10 @@ extension VideoNode {
     private func createShare(userUID: String) {
         APIManager.shared.createShare(postId: post.id, userId: userUID) { result in
             switch result {
-            case .success(let apiResponse):
-                print(apiResponse)
-            case .failure(let error):
-                print("Error creating share: \(error)")
+            case .success(_):
+                return
+            case .failure(_):
+                return
             }
         }
     }
@@ -1599,10 +1626,10 @@ extension VideoNode {
     /// Handles the API response for both liking and unliking a post.
     private func handleAPIResponse(_ result: Result) {
         switch result {
-        case .success(let apiResponse):
-            print(apiResponse)
-        case .failure(let error):
-            print(error)
+        case .success(_):
+            return
+        case .failure(_):
+            return
         }
     }
 
@@ -1715,17 +1742,37 @@ extension VideoNode {
 
 extension VideoNode {
     
+    func setupTotalTimer() {
+        setupTimeView()
+        setupFunction()
+    }
+    
+    func cleanTimer() {
+        cleanupTimeView()
+        cleanupPlayTimeBarActions()
+    }
+    
+    func cleanupTimeView() {
+
+        // Remove subviews from the video node's view
+        [blurView, timeLbl, playTimeBar].forEach { $0.removeFromSuperview() }
+
+        // Additional cleanup actions (if any)
+        // For example, you might want to reset properties or release resources
+        // associated with the time view components
+    }
+    
     /// Sets up the time view for the video node.
     func setupTimeView() {
         // Initialize and configure the time label.
-        timeLbl = UILabel()
+        
         timeLbl.isHidden = true
         timeLbl.textColor = .white
         timeLbl.font = FontManager.shared.roboto(.Bold, size: 17)
         timeLbl.translatesAutoresizingMaskIntoConstraints = false
 
         // Initialize and configure the blur view.
-        blurView = UIView()
+        
         blurView.isHidden = true
         blurView.backgroundColor = .black
         blurView.alpha = 0.6
@@ -1768,7 +1815,7 @@ extension VideoNode {
     ///   - timeInterval: The current playback time interval.
     func videoNode(_ videoNode: ASVideoNode, didPlayToTimeInterval timeInterval: TimeInterval) {
         // Perform certain actions only under specific conditions.
-        if didSlideEnd, !isPreview, let _ = blurView, let _ = videoNode.currentItem {
+        if didSlideEnd, !isPreview, let _ = videoNode.currentItem {
             // Initialize video duration if not already set.
             if videoDuration == 0 {
                 videoDuration = videoNode.currentItem?.duration.seconds ?? 0
@@ -1814,10 +1861,10 @@ extension VideoNode {
         // Call API to create a view record.
         APIManager.shared.createView(post: finalPost.id, watchTime: watchTime) { result in
             switch result {
-            case .success(let apiResponse):
-                print(apiResponse)
-            case .failure(let error):
-                print(error)
+            case .success(_):
+                return
+            case .failure(_):
+                return
             }
         }
     }

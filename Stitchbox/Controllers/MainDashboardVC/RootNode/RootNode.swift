@@ -37,6 +37,7 @@ class RootNode: ASCellNode, UICollectionViewDelegateFlowLayout, UIAdaptivePresen
     var mainCollectionNode: ASCollectionNode! // Main collection node for primary content display.
     var selectPostCollectionView: SelectPostCollectionView! // View to hold Main collection node.
     var animatedLabel: MarqueeLabel! // Animated label for heading next item.
+    lazy var container = UIView()
 
     // Size properties
     var saveMin = CGSize(width: 0, height: 0) // Minimum size for some UI or layout purpose (context not clear from snippet).
@@ -51,10 +52,13 @@ class RootNode: ASCellNode, UICollectionViewDelegateFlowLayout, UIAdaptivePresen
     var firstItem = false
     var isFirstGallerySelected = false
     var firstPre = false
-    var loadChainAllow = false
+    //var loadChainAllow = true
     var level = 0
     var isCollectionLoad = false
+    var hasEverFetch = false
     lazy var delayItem = workItem()
+    lazy var delayItem2 = workItem()
+    lazy var delayItem3 = workItem()
     
     // MARK: - Initializer
 
@@ -63,20 +67,15 @@ class RootNode: ASCellNode, UICollectionViewDelegateFlowLayout, UIAdaptivePresen
     ///   - post: The main post model around which this view controller is based.
     ///   - firstItem: A Boolean value indicating if this is the first item in the collection.
     init(with post: PostModel, firstItem: Bool, level: Int) {
-        print("Preparing post for RootNode: \(level)")
         self.firstItem = firstItem
         self.rootPost = post // Storing the provided post model
         self.level = level
-    
-
-        super.init() // Calling the superclass initializer
         
         // Add the root post to the posts array if it's not already present
         if !posts.contains(post) {
             posts.append(post)
         }
                 
-        
         // Setting up the main collection node with a custom layout for page-like navigation
         let layout = AnimatedCollectionViewLayout()
         layout.animator = PageAttributesAnimator() // Custom animator for page transitions
@@ -91,7 +90,19 @@ class RootNode: ASCellNode, UICollectionViewDelegateFlowLayout, UIAdaptivePresen
         galleryFlowLayout.minimumLineSpacing = 12 // Spacing between lines
         galleryFlowLayout.minimumInteritemSpacing = 12 // Spacing between items
         galleryCollectionNode = ASCollectionNode(collectionViewLayout: galleryFlowLayout)
-        
+
+        super.init() // Calling the superclass initializer after all properties are set up
+    }
+    
+    /// Called just before the object is deallocated.
+    deinit {
+        // Nil out the delegate and dataSource of mainCollectionNode to prevent retain cycles
+        mainCollectionNode.delegate = nil
+        mainCollectionNode.dataSource = nil
+
+        // Nil out the delegate and dataSource of galleryCollectionNode for the same reason
+        galleryCollectionNode.delegate = nil
+        galleryCollectionNode.dataSource = nil
     }
     
     /// Called when the node has finished loading.
@@ -101,10 +112,7 @@ class RootNode: ASCellNode, UICollectionViewDelegateFlowLayout, UIAdaptivePresen
 
         // Applying styling configurations to the node.
         // This includes setting up visual aspects and layout behaviors.
-        print("Tracking root: \(level) didLoad")
         self.applyStyle()
-        //self.setupAnimatedLabel()
-        
         
         // Ensure UI updates are on the main thread
         DispatchQueue.main.async { [weak self] in
@@ -119,29 +127,13 @@ class RootNode: ASCellNode, UICollectionViewDelegateFlowLayout, UIAdaptivePresen
         galleryCollectionNode.delegate = self
         galleryCollectionNode.dataSource = self
         
-        
     }
     
-    
-    /// Called just before the object is deallocated.
-    deinit {
-        // Nil out the delegate and dataSource of mainCollectionNode to prevent retain cycles
-        mainCollectionNode.delegate = nil
-        mainCollectionNode.dataSource = nil
-
-        // Nil out the delegate and dataSource of galleryCollectionNode for the same reason
-        galleryCollectionNode.delegate = nil
-        galleryCollectionNode.dataSource = nil
-
-        // Log a message to indicate that the object is being deallocated
-        print("RootNode is being deallocated.")
-    }
 
     /// Called when the view controller’s view is no longer visible.
     override func didExitVisibleState() {
         super.didExitVisibleState() // Always call the super implementation of lifecycle methods
         
-        loadChainAllow = false
         
         // Pausing the video playback when the view is not visible.
         pauseVideoOnScrolling(index: currentIndex!)
@@ -149,55 +141,41 @@ class RootNode: ASCellNode, UICollectionViewDelegateFlowLayout, UIAdaptivePresen
         // Removing any observers that were added to avoid memory leaks or unintended behavior.
         removeObservers()
         delayItem.cancel()
+        delayItem2.cancel()
+        delayItem2.cancel()
+        
+        iterateThroughCollectionNodes(action: { node in
+            node.removeObservers()
+            node.cleanGesture()
+            node.emptyDelegate()
+        }, ignoreIndex: true)
     
-
     }
 
     /// Called when the view controller’s view becomes visible.
     override func didEnterVisibleState() {
         super.didEnterVisibleState() // Always call the super implementation of lifecycle methods
-        loadChainAllow = true
+       
         activateVideoNodeIfNeeded()
-      
     }
     
     
     override func didEnterDisplayState() {
-        loadChainAllow = true
-        
+        //loadChainAllow = true
         self.setupAnimatedLabel()
-        
-        iterateThroughCollectionNodes { node in
-            if node.checkIfNeedToSetupAgain() {
-                node.presetup()
-            }
-        }
-        
     }
-    
+
     override func didExitDisplayState() {
-        loadChainAllow = false
+        //loadChainAllow = true
         self.animatedLabel.removeFromSuperview()
-        
-        iterateThroughCollectionNodes { node in
-            if node.checkIfShouldClean() {
-               node.cleanVideoNode()
-            }
-        }
+        self.container.removeFromSuperview()
+        self.animatedLabel = nil
+        iterateThroughCollectionNodes(action: { node in
+            node.cleanVideoNode()
+            node.cleanInfo()
+        }, ignoreIndex: true)
     }
-    
-    override func didEnterPreloadState() {
-        print("Tracking root: \(level) didEnterPreloadState")
-        
-        
-    }
-    
-    
-    override func didExitPreloadState() {
-        print("Tracking root: \(level) didExitPreloadState")
-        
-        
-    }
+
 
     
     // MARK: - Private Helpers
@@ -396,12 +374,8 @@ extension RootNode: ASCollectionDelegate, ASCollectionDataSource {
     private func handleFirstItemAnimationIfNeeded(_ node: VideoNode, for post: PostModel, at indexPath: IndexPath, isFirstItem: Bool) {
         if isFirstItem {
             firstItem = false
-            delay(1.7) {
-                self.handleAnimationTextAndImage(post: post)
-            }
-        } else if indexPath.row == 0, posts.count == 1 {
-            delay(1.5) {
-                self.handleAnimationTextAndImage(post: post)
+            delayItem2.perform(after: 2) { [weak self] in
+                self?.handleAnimationTextAndImage(post: post)
             }
         }
     }
@@ -444,12 +418,12 @@ extension RootNode: ASCollectionDelegate, ASCollectionDataSource {
                 
                 self.mainCollectionNode.scrollToItem(at: prev, at: .centeredVertically, animated: false)
                 self.mainCollectionNode.scrollToItem(at: indexPath, at: .centeredVertically, animated: true)
-                print("scroll: scroll1")
+             
                 
                 
             } else {
                 self.mainCollectionNode.scrollToItem(at: indexPath, at: .centeredVertically, animated: true)
-                print("scroll: scroll2")
+               
                 
             }
             
@@ -489,10 +463,6 @@ extension RootNode {
     /// - Returns: A Boolean indicating if batch fetching should be enabled.
     func shouldBatchFetch(for collectionNode: ASCollectionNode) -> Bool {
         // Checking if loading is allowed; if not, batch fetching is disabled
-        guard loadChainAllow else {
-            return false
-        }
-
         // Enabling batch fetching only for the main collection node and not for the gallery collection node
         return collectionNode != galleryCollectionNode
     }
@@ -520,12 +490,10 @@ extension RootNode {
                     return
                 }
                 self.page += 1
-                print("Successfully retrieved \(data.count) posts. \(data)")
                 DispatchQueue.main.async { block(data) }
 
             case .failure(let error):
                 // Handling failure in API response.
-                print("listStitchNext: \(error)")
                 DispatchQueue.main.async { block([]) }
             }
         }
@@ -565,19 +533,26 @@ extension RootNode {
             return
         }
         
-        delayItem.perform(after: 1.25) { [weak self] in
+        delayItem.perform(after: 1.05) { [weak self] in
             self?.retrieveNextPageWithCompletion { [weak self] newPosts in
                 guard let self = self else { return }
-                self.insertNewRowsInCollectionNode(newPosts: newPosts)
-                context.completeBatchFetching(true)
                 
-                if newPosts.count == 0, posts.count == 1 {
-                    //loadPreviousPosts()
+                // Update the flag to indicate that a fetch operation has occurred.
+                if !hasEverFetch {
+                    hasEverFetch = true
                 }
+                if newPosts.isEmpty {
+                    // If no new posts are fetched, load previous posts.
+                    self.loadPreviousPosts(addToFront: false)
+                } else {
+                    // Insert new rows in the collection node with the fetched posts.
+                    self.insertNewRowsInCollectionNode(newPosts: newPosts)
+                }
+                // Complete batch fetching and update the fetching status.
+                context.completeBatchFetching(true)
             }
         }
 
-        
     }
 }
 
@@ -606,12 +581,19 @@ extension RootNode {
     /// - Parameter index: The index of the video to be played.
     func playVideo(index: Int) {
         guard let videoNode = mainCollectionNode.nodeForItem(at: IndexPath(row: index, section: 0)) as? VideoNode else {
-            print("Couldn't cast to expected cell type.")
             return
         }
 
         updateGallerySelection(at: index)
-        handleAnimationTextAndImage(post: videoNode.post)
+        
+        if hasEverFetch {
+            handleAnimationTextAndImage(post: videoNode.post)
+        } else {
+            applyAnimationText(text: "Loading Stitch ......                 ")
+            delayItem3.perform(after: 1.5) { [weak self] in
+                self?.handleAnimationTextAndImage(post: videoNode.post)
+            }
+        }
 
         videoNode.playVideo()
     }
@@ -770,18 +752,13 @@ extension RootNode {
     ///   - scrollView: The scroll view where the scrolling event is detected.
     ///   - bypassCheck: A flag to determine whether to bypass the usual checks for loading.
     func handleRightScrollForLoading(scrollView: UIScrollView, bypassCheck: Bool) {
-        // Checking if loading is allowed; if not, return immediately
-        guard loadChainAllow else {
-            return
-        }
-        
         // Getting the current horizontal scroll offset
         let currentOffsetX = scrollView.contentOffset.x
 
         // Checking if conditions are met to load previous posts
         if shouldLoadPreviousPosts(currentOffset: currentOffsetX, bypassCheck: bypassCheck) {
             isLoadingPreviousPosts = true
-            loadPreviousPosts()
+            loadPreviousPosts(addToFront: true)
         }
 
         // Updating the last content offset to keep track of scroll position
@@ -810,23 +787,38 @@ extension RootNode {
     }
     
     
-    func loadPreviousPosts() {
-        // Implement your logic to load previous posts here
-        // After loading, remember to set 'isLoadingPreviousPosts' to false
-        print("loadPreviousPosts")
-        
-        guard let currentViewController = UIViewController.currentViewController(),
-              currentViewController is FeedViewController || currentViewController is SelectedRootPostVC else {
+    /// Loads previous posts and updates the collection node.
+    /// - Parameter addToFront: A flag indicating whether to add new posts to the front of the collection.
+    func loadPreviousPosts(addToFront: Bool) {
+        // Ensure the current view controller is either FeedViewController or SelectedRootPostVC
+        guard isCurrentViewControllerValid() else {
             isLoadingPreviousPosts = false
             return
         }
-
+        
+        // Retrieve next page of posts and handle them based on the addToFront flag
         retrieveNextPageWithCompletionForPreviousPost { [weak self] newPosts in
             guard let self = self else { return }
-            self.insertNewRowsInCollectionNodeforPreviousPost(newPosts: newPosts)
+            if addToFront {
+                self.insertNewRowsInCollectionNodeforPreviousPost(newPosts: newPosts)
+            } else {
+                self.insertNewRowsInCollectionNode(newPosts: newPosts)
+            }
+            
+            // Mark that the app is no longer loading previous posts
             isLoadingPreviousPosts = false
         }
     }
+
+    /// Checks if the current view controller is either FeedViewController or SelectedRootPostVC.
+    /// - Returns: A Boolean indicating whether the current view controller is valid for this operation.
+    private func isCurrentViewControllerValid() -> Bool {
+        if let currentViewController = UIViewController.currentViewController() {
+            return currentViewController is FeedViewController || currentViewController is SelectedRootPostVC
+        }
+        return false
+    }
+
     
     
     /// Retrieves the next page of data from the API.
@@ -844,12 +836,10 @@ extension RootNode {
                     return
                 }
                 self.prevPage += 1
-                print("Successfully retrieved \(data.count) posts.")
                 DispatchQueue.main.async { block(data) }
 
             case .failure(let error):
                 // Handling failure in API response.
-                print("listStitchNext: \(error)")
                 DispatchQueue.main.async { block([]) }
             }
         }
@@ -943,7 +933,6 @@ extension RootNode {
 
             // Ensure there is a current index to work with.
             guard let currentIndex = currentIndex else {
-                print("Current index is not set.")
                 return
             }
 
@@ -973,24 +962,32 @@ extension RootNode {
     
     /// Hides all views in the main collection node.
     func hideAllViews() {
-        iterateThroughCollectionNodes { node in
+        iterateThroughCollectionNodes(action: { node in
             node.hideView()
-        }
+        }, ignoreIndex: false) // Passing false to include all nodes
     }
 
     /// Shows all views in the main collection node.
     func showAllViews() {
-        iterateThroughCollectionNodes { node in
+        iterateThroughCollectionNodes(action: { node in
             node.showView()
-        }
+        }, ignoreIndex: false) // Passing false to include all nodes
     }
 
-    /// Iterates through all nodes in the main collection node and performs an action on each VideoNode.
-    /// - Parameter action: The action to perform on each VideoNode.
-    private func iterateThroughCollectionNodes(action: (VideoNode) -> Void) {
-        let numberOfItems = mainCollectionNode.numberOfItems(inSection: 0)
+
+    /// Iterates through collection nodes and performs an action on each VideoNode, with an option to ignore a specific index.
+    /// - Parameters:
+    ///   - action: A closure that defines the action to be performed on each VideoNode.
+    ///   - ignoreIndex: A flag indicating whether to ignore the node at the current index.
+    private func iterateThroughCollectionNodes(action: (VideoNode) -> Void, ignoreIndex: Bool) {
+        let numberOfItems = posts.count
 
         for index in 0..<numberOfItems {
+            // Skip the current index if ignoreIndex is true and index matches currentIndex
+            if ignoreIndex && index == currentIndex {
+                continue
+            }
+
             let indexPath = IndexPath(row: index, section: 0)
             if let node = mainCollectionNode.nodeForItem(at: indexPath) as? VideoNode {
                 action(node)
@@ -1012,14 +1009,11 @@ extension RootNode {
         configureAnimatedLabelProperties()
         
         // Create a container for the label and add constraints
-        let container = UIView()
         container.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(container)
         container.addSubview(animatedLabel)
         setupContainerConstraints(container)
         
-        // Add tap gesture recognizer to the container
-        makeLabelTappable(with: container)
     }
 
     // MARK: - Private Methods
@@ -1067,14 +1061,7 @@ extension RootNode {
         // Activating all constraints
         NSLayoutConstraint.activate(containerConstraints + animatedLabelConstraints)
     }
-    
-    /// Makes the label tappable and adds a tap gesture recognizer to the container.
-    private func makeLabelTappable(with container: UIView) {
-        container.isUserInteractionEnabled = true
-        let tap = UITapGestureRecognizer(target: self, action: #selector(labelTapped))
-        tap.numberOfTapsRequired = 1
-        container.addGestureRecognizer(tap)
-    }
+
 
     // MARK: - Animation Text Methods
 
@@ -1097,18 +1084,19 @@ extension RootNode {
     /// - Parameter post: The post model containing data to display.
     func handleAnimationTextAndImage(post: PostModel) {
         guard let currentIndex = currentIndex else { return }
+        guard let ownerUsername = post.owner?.username else { return }
         let nextIndex = currentIndex + 1
         let postCount = self.posts.count
 
         if postCount == 1 {
             // Only one post in the chain - encourage to add more stitches
-            applyAnimationText(text: "Start stitching to this post!            ")
+            applyAnimationText(text: "Start stitching to @\(ownerUsername)            ")
         } else if nextIndex < postCount {
             // Handle next post in a chain with multiple posts
             updateAnimationTextForPost(at: nextIndex, prefixText: "--> ")
         } else if currentIndex == postCount - 1 {
             // The last post in a longer chain - encourage to continue stitching
-            applyAnimationText(text: "Keep the chain going! Stitch to this post!            ")
+            applyAnimationText(text: "Stitch to @\(ownerUsername) to keep the chain going!            ")
         }
     }
 

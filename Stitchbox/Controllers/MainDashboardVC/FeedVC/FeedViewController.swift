@@ -39,7 +39,6 @@ class FeedViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
     var editeddPost: PostModel?
     var refresh_request = false
     var lastLoadTime: Date?
-    var readyToLoad = true
     var hasViewAppeared = false
     var firstLoadDone = false
     var isScrollingToTop = false
@@ -604,7 +603,7 @@ extension FeedViewController: ASCollectionDataSource {
     /// Determines whether the next page of content should be fetched.
     /// - Returns: Boolean indicating if the next page should be fetched.
     private func shouldFetchNextPage() -> Bool {
-        return !refresh_request && posts.count <= 200 && readyToLoad
+        return !refresh_request
     }
 
     /// Completes the batch fetching process and sets the initial load flag.
