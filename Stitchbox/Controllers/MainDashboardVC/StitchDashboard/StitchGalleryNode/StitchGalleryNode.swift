@@ -50,8 +50,6 @@ class StitchGalleryNode: ASCellNode {
         infoNode.isLayerBacked = true
         imageNode.isLayerBacked = true
 
-        // Setting the URL for the imageNode to load the image from the post's imageUrl.
-        imageNode.url = post.imageUrl
     }
     
     override func didEnterDisplayState() {
@@ -73,7 +71,7 @@ class StitchGalleryNode: ASCellNode {
         // Reset imageNode properties
         imageNode.contentMode = .scaleToFill // Or any default contentMode you prefer
         imageNode.cornerRadius = 0
-        imageNode.image = nil // Resetting the image if necessary
+        imageNode.url = nil // Resetting the image if necessary
 
         // Reset properties set in setupnode()
         cleanupnode()
@@ -91,7 +89,6 @@ class StitchGalleryNode: ASCellNode {
     func cleanupnode() {
         // Reset properties for stitchSignNode and videoSignNode
         [stitchSignNode, videoSignNode].forEach { node in
-            node.image = nil
             node.contentMode = .scaleToFill // Or any default contentMode you prefer
             node.style.preferredSize = CGSize.zero
             node.clipsToBounds = false
@@ -116,6 +113,10 @@ class StitchGalleryNode: ASCellNode {
     
     /// Configures the layout and appearance of the node.
     func setupLayout() {
+        
+        // Setting the URL for the imageNode to load the image from the post's imageUrl.
+        imageNode.url = post.imageUrl
+        
         // Set the background of the node to be clear
         self.backgroundColor = .clear
         // Also set the imageNode's background to clear

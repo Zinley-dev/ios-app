@@ -143,6 +143,7 @@ class CommentNode: ASCellNode {
         timeNode.attributedText = nil
         cmtNode.attributedText = nil
         label.attributedText = nil
+        avatarNode.url = nil
     }
 
 

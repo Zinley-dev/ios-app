@@ -127,7 +127,6 @@ class OwnerPostSearchNode: ASCellNode {
         nameNode.isLayerBacked = true
         imageNode.isLayerBacked = true
         imageNode.shouldRenderProgressImages = true
-        imageNode.url = post.imageUrl
      
         automaticallyManagesSubnodes = true
         
@@ -154,7 +153,7 @@ class OwnerPostSearchNode: ASCellNode {
         imageNode.backgroundColor = nil
         imageNode.contentMode = .scaleToFill // Or any default contentMode you prefer
         imageNode.cornerRadius = 0
-        imageNode.image = nil // Resetting the image
+        imageNode.url = nil // Resetting the image
 
         // Clear the attributed text in infoNode, nameNode, stitchCountNode, and countNode
         infoNode.attributedText = nil
@@ -169,7 +168,7 @@ class OwnerPostSearchNode: ASCellNode {
     
     func setupLayout() {
         self.backgroundColor = .clear // set background to clear
-
+        imageNode.url = post.imageUrl
       
         self.imageNode.backgroundColor = .clear
         imageNode.contentMode = .scaleAspectFill

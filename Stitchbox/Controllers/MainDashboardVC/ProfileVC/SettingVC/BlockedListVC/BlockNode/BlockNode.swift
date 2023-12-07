@@ -336,7 +336,6 @@ class BlockNode: ASCellNode {
         nameNode.attributedText = nil
 
         // Reset the avatarNode's image to a default image or nil.
-        avatarNode.image = nil // or UIImage(named: "defaultAvatar") if you have a default avatar image.
         avatarNode.url = nil
     }
 

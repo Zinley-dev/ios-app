@@ -73,7 +73,7 @@ class LoginActivityNode: ASCellNode {
 
         // Release the avatar image or URL to free memory
         AvatarNode.url = nil
-        AvatarNode.image = nil
+
 
         // Reset any other properties or references that need cleaning
         // ...
