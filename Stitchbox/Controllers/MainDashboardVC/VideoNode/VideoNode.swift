@@ -72,6 +72,7 @@ class VideoNode: ASCellNode, ASVideoNodeDelegate {
     // Action
     var viewStitchBtn : ((ASCellNode) -> Void)?
     var indexPathSetup: Int?
+    var isInit = false
     
     // MARK: - Initializer
     
@@ -93,6 +94,7 @@ class VideoNode: ASCellNode, ASVideoNodeDelegate {
     
         // Call the superclass initializer.
         super.init()
+        print("Tracking root2: \(level) -\(indexPathSetup) init")
         presetup()
     }
     
@@ -100,9 +102,10 @@ class VideoNode: ASCellNode, ASVideoNodeDelegate {
 
     override func didLoad() {
         super.didLoad()
+        print("Tracking root2: \(level) -\(indexPathSetup) didLoad")
         backgroundColor = .black
         setupSpinner()
-        setupChildView()
+        //setupChildView()
         
     }
 
@@ -111,6 +114,7 @@ class VideoNode: ASCellNode, ASVideoNodeDelegate {
         // Configure the node based on the presence of a muxPlaybackId.
         // This approach avoids duplicate checks and makes the decision point clear.
         if !post.muxPlaybackId.isEmpty {
+            print("Tracking root2: \(level) -\(indexPathSetup) presetup")
             configureVideoNode(with: post)
         }
     }
@@ -126,52 +130,60 @@ class VideoNode: ASCellNode, ASVideoNodeDelegate {
         // Removing any observers that were added to avoid memory leaks or unintended behavior.
         removeObservers()
         
-        print("Tracking video: \(level) didExitVisibleState")
+      
     }
 
     /// Called when the view controller’s view becomes visible.
     override func didEnterVisibleState() {
         super.didEnterVisibleState() // Always call the super implementation of lifecycle methods
-
-        // Check if the initial setup for the view controller is completed.
-        if !firstSetup {
-            firstSetup = true // Marking that the first setup is completed.
-
-            // Logging the completion of the setup. Useful for debugging.
-            print("Setup completed for - \(post.id)")
-        } else {
-            // Logging if the setup was already completed earlier.
-            print("Setup already completed for - \(post.id)")
-        }
-        
-        print("Tracking video: \(level) didEnterVisibleState")
-        
+  
     }
+    /// Checks if the node needs to be set up again.
+    /// This method determines if initialization is required and if the cellVideoNode's asset is nil.
+    /// - Returns: A Boolean indicating whether setup is needed.
+    func checkIfNeedToSetupAgain() -> Bool {
+        return isInit && cellVideoNode.asset == nil
+    }
+
+    /// Checks if the node's resources should be cleaned up.
+    /// This method determines if the cellVideoNode's asset is nil, indicating a need for cleanup.
+    /// - Returns: A Boolean indicating whether cleanup is needed.
+    func checkIfShouldClean() -> Bool {
+        return cellVideoNode.asset != nil
+    }
+
+    /// Called when the node enters the preload state.
+    /// This method handles the initial setup of the cellVideoNode if it's not already set.
+    override func didEnterPreloadState() {
+    }
+
+    /// Called when the node exits the preload state.
+    /// This method cleans up the cellVideoNode's asset if it's not nil.
+    override func didExitPreloadState() {
+
+    }
+    
+    override func didEnterDisplayState() {
+        super.didEnterPreloadState()
+        
+        if checkIfNeedToSetupAgain()  {
+            presetup()
+        }
+    }
+    
     
     override func didExitDisplayState() {
         super.didExitDisplayState()
-        // Release the PostHeader view and its resources
-        
-        
-        print("Tracking video: \(level) didExitDisplayState")
-    }
-    
-    
-    override func didEnterDisplayState() {
-        super.didEnterDisplayState()
-        // Recreate and configure the PostHeader view
-       
-        print("Tracking video: \(level) didEnterDisplayState")
-    }
-    
-    
-    func cleanChildView() {
-        childSetup = false
-        headerView.removeFromSuperview()
-        footerView.removeFromSuperview()
-        buttonView.removeFromSuperview()
+        if checkIfShouldClean() {
+            cleanVideoNode()
+        }
     }
 
+    /// Cleans the video node by resetting its asset.
+    /// This method sets the asset of cellVideoNode to nil, effectively cleaning up resources.
+    func cleanVideoNode() {
+        cellVideoNode.asset = nil
+    }
 
 
     /// `deinit` is called when the object is about to be deallocated.
@@ -763,6 +775,10 @@ extension VideoNode {
             // Play video if first item on list.
             if firstItem {
                 playVideo()
+            }
+            
+            if !isInit {
+                isInit = true
             }
         }
     }
@@ -1870,8 +1886,5 @@ extension VideoNode {
         }
     }
 
-    func removeAllAssets() {
-        cellVideoNode.asset = nil
-    }
 }
 

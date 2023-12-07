@@ -24,4 +24,9 @@ class workItem {
         DispatchQueue.main.asyncAfter(deadline: .now() + after, execute: requestWorkItem)
     }
     
+    func cancel() {
+        // Cancel the currently pending item
+        pendingRequestWorkItem?.cancel()
+    }
+    
 }

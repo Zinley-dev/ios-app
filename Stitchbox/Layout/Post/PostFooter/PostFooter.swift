@@ -135,6 +135,27 @@ class PostFooter: UIView {
         // Set the description label text
         descriptionLbl.text = ""
     }
+    
+    // MARK: - Cleanup Function
+    func cleanup() {
+        // Clear the text in labels to release any retained strings.
+        titleLbl.text = nil
+        descriptionLbl.text = nil
+
+        // Reset the state of buttons if they are dynamically set.
+        stitchBtn.setTitle(nil, for: .normal)
+
+        // Clear any attributed text or custom settings in the ActiveLabel.
+        label.text = nil
+        label.attributedText = nil
+
+        // Reset any custom properties or states you have set on the ActiveLabel.
+        // For example, if you're modifying the appearance or behavior based on the content.
+        
+        // Additional cleanup for other UI components or resources if necessary.
+        // This could include resetting layout constraints, stopping animations,
+        // or clearing any cached data that's specific to the content of this view.
+    }
 
 
 }

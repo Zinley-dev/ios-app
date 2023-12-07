@@ -512,6 +512,8 @@ extension AddStitchToExistingVC {
         if let stitchedPost = stitchedPost, let selectedPost = selectedPost {
             swiftLoader(progress: "Stitching...")
             
+            print("onClickStitch: \(stitchedPost.id) - \(selectedPost.id)")
+            
             APIManager.shared.stitch(rootId: stitchedPost.id, memberId: selectedPost.id) { [weak self] result in
                 guard let self = self else { return }
 

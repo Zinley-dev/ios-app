@@ -103,8 +103,13 @@ class EditPostVC: UIViewController {
     
     /// Toggles the state of the allow comment switch.
     @IBAction func allowCmtSwitchPressed(_ sender: Any) {
-        isAllowComment.toggle()
-        allowCmtSwitch.setOn(isAllowComment, animated: true)
+        if isAllowComment == true {
+            isAllowComment =  false
+            allowCmtSwitch.setOn(false, animated: true)
+        } else {
+            isAllowComment = true
+            allowCmtSwitch.setOn(true, animated: true)
+        }
     }
     
     

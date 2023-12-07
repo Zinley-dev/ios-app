@@ -53,6 +53,7 @@ class RootNode: ASCellNode, UICollectionViewDelegateFlowLayout, UIAdaptivePresen
     var firstPre = false
     var loadChainAllow = false
     var level = 0
+    var isCollectionLoad = false
     lazy var delayItem = workItem()
     
     // MARK: - Initializer
@@ -66,12 +67,16 @@ class RootNode: ASCellNode, UICollectionViewDelegateFlowLayout, UIAdaptivePresen
         self.firstItem = firstItem
         self.rootPost = post // Storing the provided post model
         self.level = level
+    
+
+        super.init() // Calling the superclass initializer
         
         // Add the root post to the posts array if it's not already present
         if !posts.contains(post) {
             posts.append(post)
         }
                 
+        
         // Setting up the main collection node with a custom layout for page-like navigation
         let layout = AnimatedCollectionViewLayout()
         layout.animator = PageAttributesAnimator() // Custom animator for page transitions
@@ -86,9 +91,6 @@ class RootNode: ASCellNode, UICollectionViewDelegateFlowLayout, UIAdaptivePresen
         galleryFlowLayout.minimumLineSpacing = 12 // Spacing between lines
         galleryFlowLayout.minimumInteritemSpacing = 12 // Spacing between items
         galleryCollectionNode = ASCollectionNode(collectionViewLayout: galleryFlowLayout)
-
-        super.init() // Calling the superclass initializer
-        
         
     }
     
@@ -99,8 +101,10 @@ class RootNode: ASCellNode, UICollectionViewDelegateFlowLayout, UIAdaptivePresen
 
         // Applying styling configurations to the node.
         // This includes setting up visual aspects and layout behaviors.
+        print("Tracking root: \(level) didLoad")
         self.applyStyle()
-        self.setupAnimatedLabel()
+        //self.setupAnimatedLabel()
+        
         
         // Ensure UI updates are on the main thread
         DispatchQueue.main.async { [weak self] in
@@ -114,6 +118,7 @@ class RootNode: ASCellNode, UICollectionViewDelegateFlowLayout, UIAdaptivePresen
         // Set up the gallery collection node's delegate and data source
         galleryCollectionNode.delegate = self
         galleryCollectionNode.dataSource = self
+        
         
     }
     
@@ -143,6 +148,7 @@ class RootNode: ASCellNode, UICollectionViewDelegateFlowLayout, UIAdaptivePresen
 
         // Removing any observers that were added to avoid memory leaks or unintended behavior.
         removeObservers()
+        delayItem.cancel()
         
         print("Tracking root: \(level) didExitVisibleState")
 
@@ -162,6 +168,13 @@ class RootNode: ASCellNode, UICollectionViewDelegateFlowLayout, UIAdaptivePresen
         loadChainAllow = true
         
         print("Tracking root: \(level) didEnterDisplay")
+        self.setupAnimatedLabel()
+        
+        iterateThroughCollectionNodes { node in
+            if node.checkIfNeedToSetupAgain() {
+                node.presetup()
+            }
+        }
         
     }
     
@@ -169,8 +182,27 @@ class RootNode: ASCellNode, UICollectionViewDelegateFlowLayout, UIAdaptivePresen
         loadChainAllow = false
         
         print("Tracking root: \(level) didExitDisplay")
+        self.animatedLabel.removeFromSuperview()
+        
+        iterateThroughCollectionNodes { node in
+            if node.checkIfShouldClean() {
+               node.cleanVideoNode()
+            }
+        }
     }
     
+    override func didEnterPreloadState() {
+        print("Tracking root: \(level) didEnterPreloadState")
+        
+        
+    }
+    
+    
+    override func didExitPreloadState() {
+        print("Tracking root: \(level) didExitPreloadState")
+        
+        
+    }
 
     
     // MARK: - Private Helpers
@@ -538,14 +570,14 @@ extension RootNode {
             return
         }
         
-        delayItem.perform(after: 0.25) { [weak self] in
+        delayItem.perform(after: 1.25) { [weak self] in
             self?.retrieveNextPageWithCompletion { [weak self] newPosts in
                 guard let self = self else { return }
                 self.insertNewRowsInCollectionNode(newPosts: newPosts)
                 context.completeBatchFetching(true)
                 
                 if newPosts.count == 0, posts.count == 1 {
-                    loadPreviousPosts()
+                    //loadPreviousPosts()
                 }
             }
         }
@@ -837,7 +869,6 @@ extension RootNode {
         // Convert raw data to PostModel objects.
         let newItems = newPosts.compactMap { PostModel(JSON: $0) }.filter { !posts.contains($0) }
         
-        let currentWidth = CGFloat(posts.count) * view.frame.width
 
         // Insert new items at the beginning of the posts array.
         posts.insert(contentsOf: newItems, at: 0)
@@ -870,13 +901,6 @@ extension RootNode {
             // Configure the node based on the presence of a muxPlaybackId.
             // This approach avoids duplicate checks and makes the decision point clear.
             cell.presetup()
-        }
-    }
-    
-    /// Removes all observers from the video node.
-    func removeAllAssets() {
-        iterateThroughCollectionNodes { node in
-            node.removeAllAssets()
         }
     }
     

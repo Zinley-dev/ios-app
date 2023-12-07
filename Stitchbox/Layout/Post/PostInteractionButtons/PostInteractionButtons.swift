@@ -56,8 +56,37 @@ class PostInteractionButtons: UIView {
         setupImage()
     }
     
-    
+    // MARK: - Cleanup Function
+    func cleanup() {
+        // Reset button images to nil or default images
+        playListBtn.setImage(nil, for: .normal)
+        commentBtn.setImage(nil, for: .normal)
+        likeBtn.setImage(nil, for: .normal)
+        saveBtn.setImage(nil, for: .normal)
+
+        // Clear the text in UILabels
+        likeCountLbl.text = nil
+        commentCountLbl.text = nil
+        playListCountLbl.text = nil
+        saveCountLbl.text = nil
+
+        // Reset any dynamic states or properties of the stack views if necessary
+        // For example, if you're dynamically adding or removing arranged subviews
+        // likeStackView.arrangedSubviews.forEach { $0.removeFromSuperview() }
+        // playListStackView.arrangedSubviews.forEach { $0.removeFromSuperview() }
+        // commentStackView.arrangedSubviews.forEach { $0.removeFromSuperview() }
+        // saveStackView.arrangedSubviews.forEach { $0.removeFromSuperview() }
+
+        // Additionally, if you have any ongoing asynchronous tasks related to this view,
+        // consider cancelling them to avoid unexpected behavior.
+        // Example: URLSession.shared.invalidateAndCancel() // If you're using URL sessions
+
+        // If using gesture recognizers or adding any event listeners to the buttons,
+        // consider removing them to prevent retain cycles.
+        // Example: likeBtn.gestureRecognizers?.forEach(likeBtn.removeGestureRecognizer)
+    }
 }
+    
 
 // MARK: - UI Updates
 
