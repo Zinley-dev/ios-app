@@ -26,7 +26,6 @@ class RecentNode: ASCellNode {
     var upperNameNode: ASTextNode!
     var belowNameNode: ASTextNode!
     var imageNode: ASNetworkImageNode!
-    private var didSetup = false
     
     init(with item: RecentModel) {
         
@@ -51,16 +50,17 @@ class RecentNode: ASCellNode {
     }
     
     
-    override func didEnterVisibleState() {
-            
-            if !didSetup {
-                setupLayout()
-            }
-            
-        }
+    override func didEnterDisplayState() {
+        super.didEnterDisplayState()
+        setupLayout()
+    }
+    
+    override func didExitDisplayState() {
+        super.didExitDisplayState()
+        cleanup()
+    }
     
     func setupLayout() {
-        didSetup = true
         if item.type == "user" {
             
             imageNode.cornerRadius = OrganizerImageSize/2
@@ -117,6 +117,21 @@ class RecentNode: ASCellNode {
         
         
     }
+    
+    func cleanup() {
+        // Reset imageNode
+        imageNode.url = nil
+        imageNode.image = nil
+        imageNode.cornerRadius = 0
+        imageNode.clipsToBounds = false
+        imageNode.shouldRenderProgressImages = false
+        imageNode.isLayerBacked = false
+
+        // Clear attributed texts
+        upperNameNode.attributedText = nil
+        belowNameNode.attributedText = nil
+    }
+
   
     override func layoutSpecThatFits(_ constrainedSize: ASSizeRange) -> ASLayoutSpec {
         

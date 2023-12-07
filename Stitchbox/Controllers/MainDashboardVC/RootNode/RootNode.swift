@@ -1068,6 +1068,9 @@ extension RootNode {
     /// Applies the given text to the animated label.
     /// - Parameter text: The text to be displayed in the animated label.
     func applyAnimationText(text: String) {
+        guard animatedLabel != nil else {
+            return
+        }
         if !text.isEmpty {
             // Add extra spaces to ensure the animation effect is visible
             animatedLabel.text = text + "                                  "

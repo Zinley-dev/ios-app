@@ -26,7 +26,6 @@ class HashTagSearchNode: ASCellNode {
     var hashtagTextNode: ASTextNode!
     var hashtagSymbolImg: ASTextNode!
     var countNode: ASTextNode!
-    private var didSetup = false
     
     init(with hashtag: HashtagsModel) {
         
@@ -52,16 +51,28 @@ class HashTagSearchNode: ASCellNode {
         
     }
     
-    override func didEnterVisibleState() {
-            
-            if !didSetup {
-                setupLayout()
-            }
-            
-        }
+    override func didEnterDisplayState() {
+        super.didEnterDisplayState()
+        setupLayout()
+    }
     
+    override func didExitDisplayState() {
+        super.didExitDisplayState()
+        cleanup()
+    }
+    
+    
+    func cleanup() {
+
+        // Clear attributed texts
+        hashtagTextNode.attributedText = nil
+        countNode.attributedText = nil
+        hashtagSymbolImg.attributedText = nil
+
+    }
+
     func setupLayout() {
-        didSetup = true
+        
         let paragraphStyles = NSMutableParagraphStyle()
         paragraphStyles.alignment = .right
         
@@ -95,10 +106,8 @@ class HashTagSearchNode: ASCellNode {
             )
         }
 
-        
         countNode.backgroundColor = UIColor.clear
-        
-        
+    
     }
     
     override func layoutSpecThatFits(_ constrainedSize: ASSizeRange) -> ASLayoutSpec {

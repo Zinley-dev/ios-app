@@ -25,7 +25,6 @@ class TrendingHashtagNode: ASCellNode {
     var rankNode: ASTextNode!
     var hashtagTextNode: ASTextNode!
     var viewsNode: ASTextNode!
-    private var didSetup = false
     
     init(with trendingHashtag: TrendingHashtag, rank: Int) {
         
@@ -50,16 +49,36 @@ class TrendingHashtagNode: ASCellNode {
 
     }
     
-    override func didEnterVisibleState() {
-            
-            if !didSetup {
-                setupLayout()
-            }
-            
-        }
+    override func didEnterDisplayState() {
+        super.didEnterDisplayState()
+        setupLayout()
+    }
+    
+    override func didExitDisplayState() {
+        super.didExitDisplayState()
+        cleanupLayout()
+    }
+    
+    
+    func cleanupLayout() {
+        // Reset rankNode properties
+        rankNode.attributedText = nil
+
+        // Reset hashtagTextNode properties
+        hashtagTextNode.attributedText = nil
+
+        // Reset viewsNode properties
+        viewsNode.attributedText = nil
+        viewsNode.backgroundColor = nil // Resetting the background color
+
+        // Any additional properties set in setupLayout() should also be reset here.
+        // For example, if you have set any specific layout constraints, colors, or other properties,
+        // they should be returned to their default state.
+    }
+
     
     func setupLayout() {
-        didSetup = true
+       
         let paragraphStyles = NSMutableParagraphStyle()
         paragraphStyles.alignment = .left
 

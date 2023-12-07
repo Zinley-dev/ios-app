@@ -28,7 +28,6 @@ class FindFriendsNode: ASCellNode {
     var followBtnNode: ASButtonNode!
    
     var desc = ""
-    private var didSetup = false
     
     init(with user: FindFriendsModel) {
         
@@ -70,16 +69,19 @@ class FindFriendsNode: ASCellNode {
         
     }
     
-    override func didEnterVisibleState() {
-            
-            if !didSetup {
-                setupLayout()
-            }
-            
-        }
+    override func didEnterDisplayState() {
+        super.didEnterDisplayState()
+        setupLayout()
+    }
+    
+    override func didExitDisplayState() {
+        super.didExitDisplayState()
+        
+    }
+    
     
     func setupLayout() {
-        didSetup = true
+       
         let paragraphStyles = NSMutableParagraphStyle()
         paragraphStyles.alignment = .left
         

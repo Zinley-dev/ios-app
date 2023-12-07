@@ -33,7 +33,6 @@ class TrendingPostNode: ASCellNode {
     var stitchSignNode: ASImageNode!
     var countNode: ASTextNode!
     var ranking = 0
-    private var didSetup = false
     
     init(with post: PostModel, ranking: Int) {
         self.ranking = ranking
@@ -66,16 +65,18 @@ class TrendingPostNode: ASCellNode {
         
     }
     
-    override func didEnterVisibleState() {
-        
-        if !didSetup {
-            setupLayout()
-        }
-        
+    override func didEnterDisplayState() {
+        super.didEnterDisplayState()
+        setupLayout()
     }
     
+    override func didExitDisplayState() {
+        super.didExitDisplayState()
+        cleanupnode()
+    }
+
+    
     func setupLayout() {
-        didSetup = true
         // Basic setup
         self.backgroundColor = .clear
         self.imageNode.backgroundColor = .clear
@@ -234,4 +235,55 @@ class TrendingPostNode: ASCellNode {
 
         
     }
+    
+    /// Resets the nodes to their default states after being set up by setupnode().
+    func cleanupnode() {
+        // Reset stitchSignNode properties
+        stitchSignNode.image = nil
+        stitchSignNode.contentMode = .scaleToFill // Or any default contentMode you prefer
+        stitchSignNode.style.preferredSize = CGSize.zero
+        stitchSignNode.clipsToBounds = false
+
+        // Reset stitchCountNode properties
+        stitchCountNode.attributedText = nil
+        stitchCountNode.maximumNumberOfLines = 0
+
+        // Reset videoSignNode properties
+        videoSignNode.image = nil
+        videoSignNode.contentMode = .scaleToFill // Or any default contentMode you prefer
+        videoSignNode.style.preferredSize = CGSize.zero
+        videoSignNode.clipsToBounds = false
+
+        // Reset countNode properties
+        countNode.attributedText = nil
+        countNode.maximumNumberOfLines = 0
+
+        // Reset infoNode properties
+        infoNode.backgroundColor = nil // Clear any specific background color
+        infoNode.attributedText = nil
+        infoNode.maximumNumberOfLines = 0
+
+        // Additional properties that were set in setupnode() should also be reset here.
+        // ...
+        
+        self.backgroundColor = nil
+        imageNode.backgroundColor = nil
+        rankingNode.backgroundColor = nil
+
+        // Reset imageNode properties
+        imageNode.cornerRadius = 0
+        imageNode.contentMode = .scaleToFill // Or any default contentMode you prefer
+        imageNode.image = nil // Resetting the image
+
+        // Clear attributed text in nodes
+        infoNode.attributedText = nil
+        nameNode.attributedText = nil
+        rankingNode.attributedText = nil
+        countNode.attributedText = nil
+        stitchCountNode.attributedText = nil
+
+        // Reset maximumNumberOfLines for rankingNode
+        rankingNode.maximumNumberOfLines = 0
+    }
+
 }

@@ -50,18 +50,18 @@ class UserSearchNode: ASCellNode {
         nameNode.backgroundColor = UIColor.clear
         
         automaticallyManagesSubnodes = true
-    
-
-        
+  
     }
     
-    override func didEnterVisibleState() {
-            
-            if !didSetup {
-                setupLayout()
-            }
-            
-        }
+    override func didExitDisplayState() {
+        super.didExitDisplayState()
+        cleanup()
+    }
+    
+    override func didEnterDisplayState() {
+        super.didEnterDisplayState()
+        setupLayout()
+    }
     
     func setupLayout() {
         didSetup = true
@@ -109,7 +109,21 @@ class UserSearchNode: ASCellNode {
         
         
     }
+    
+    func cleanup() {
+        // Reset imageNode
+        imageNode.url = nil
+        imageNode.image = nil
+        imageNode.cornerRadius = 0
+        imageNode.clipsToBounds = false
+        imageNode.shouldRenderProgressImages = false
+        imageNode.isLayerBacked = false
 
+        // Clear attributed texts
+        nameNode.attributedText = nil
+        userNameNode.attributedText = nil
+
+    }
 
     override func layoutSpecThatFits(_ constrainedSize: ASSizeRange) -> ASLayoutSpec {
         

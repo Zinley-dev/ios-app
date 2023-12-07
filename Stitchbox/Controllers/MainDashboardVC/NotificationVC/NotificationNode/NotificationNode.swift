@@ -49,6 +49,39 @@ class NotificationNode: ASCellNode {
         imageNode.isLayerBacked = true
         timeNode.isLayerBacked = true
         
+      
+        imageNode.cornerRadius = OrganizerImageSize/2
+        imageNode.clipsToBounds = true
+        
+        automaticallyManagesSubnodes = true
+        
+    }
+    
+    override func didEnterDisplayState() {
+        super.didEnterDisplayState()
+        setupLayout()
+    }
+    
+    override func didExitDisplayState() {
+        super.didExitDisplayState()
+        cleanupLayout()
+    }
+    
+    
+    /// Resets the layout elements to their default states.
+    func cleanupLayout() {
+        // Clear the text in upperTextNode and timeNode.
+        upperTextNode.attributedText = nil
+        timeNode.attributedText = nil
+
+        // Reset the imageNode's image and URL to default or nil.
+        imageNode.image = nil
+        imageNode.url = nil
+    }
+
+    
+    
+    func setupLayout() {
         let textAttributes: [NSAttributedString.Key: Any] = [
             NSAttributedString.Key.font: FontManager.shared.roboto(.Medium, size: FontSize), // Using the Roboto Medium style
             NSAttributedString.Key.foregroundColor: UIColor.black,
@@ -76,12 +109,6 @@ class NotificationNode: ASCellNode {
             imageNode.image = UIImage.init(named: "defaultuser")
             
         }
-      
-        imageNode.cornerRadius = OrganizerImageSize/2
-        imageNode.clipsToBounds = true
-        
-        automaticallyManagesSubnodes = true
-        
     }
     
     override func layoutSpecThatFits(_ constrainedSize: ASSizeRange) -> ASLayoutSpec {

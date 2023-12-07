@@ -34,7 +34,6 @@ class BlockNode: ASCellNode {
     
     var isBlock = true
     var isFollowingUser = false
-    private var didSetup = false
     
     init(with user: BlockUserModel) {
         
@@ -76,20 +75,25 @@ class BlockNode: ASCellNode {
         
         automaticallyManagesSubnodes = true
         
-        
-        
+
     }
     
-    override func didEnterVisibleState() {
-            
-            if !didSetup {
-                setupLayout()
-            }
-            
-        }
+    override func didLoad() {
+        super.didLoad()
+        setupLayout()
+    }
+    
+    override func didEnterDisplayState() {
+        super.didEnterDisplayState()
+        loadInfo(uid: user.blockId)
+    }
+    
+    override func didExitDisplayState() {
+        super.didExitDisplayState()
+        cleanupInfo()
+    }
     
     func setupLayout() {
-        didSetup = true
         if isBlock {
             
             DispatchQueue.main.async { [weak self] in
@@ -106,16 +110,9 @@ class BlockNode: ASCellNode {
         }
         
     }
-    
-    override func didLoad() {
-        super.didLoad()
-        
-        loadInfo(uid: user.blockId)
-    }
-    
+
     
     @objc func actionBtnPressed() {
-        
         
         if allowProcess {
             self.allowProcess = false
@@ -138,8 +135,6 @@ class BlockNode: ASCellNode {
             }
             
         }
-        
-        
         
     }
     
@@ -333,5 +328,17 @@ class BlockNode: ASCellNode {
         }
         
     }
+    
+    /// Cleans up the nodes by resetting their states to defaults.
+    func cleanupInfo() {
+        // Reset the text of userNameNode and nameNode to empty or default values.
+        userNameNode.attributedText = nil
+        nameNode.attributedText = nil
+
+        // Reset the avatarNode's image to a default image or nil.
+        avatarNode.image = nil // or UIImage(named: "defaultAvatar") if you have a default avatar image.
+        avatarNode.url = nil
+    }
+
     
 }

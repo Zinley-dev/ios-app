@@ -22,7 +22,6 @@ class LoginActivityNode: ASCellNode {
     var descriptionNode: ASTextNode!
     var timeNode: ASTextNode!
     var AvatarNode: ASNetworkImageNode!
-    private var didSetup = false
     
     let paragraphStyles = NSMutableParagraphStyle()
     
@@ -54,77 +53,81 @@ class LoginActivityNode: ASCellNode {
         
         automaticallyManagesSubnodes = true
         
-    
-        
     }
     
-    override func didEnterVisibleState() {
-            
-            if !didSetup {
-                setupLayout()
-            }
-            
-        }
+    override func didEnterDisplayState() {
+        super.didEnterDisplayState()
+        setupLayout()
+    }
     
+    override func didExitDisplayState() {
+        super.didExitDisplayState()
+        cleanup()
+    }
+    
+    /// Cleans up the node when it goes off-screen or is no longer needed.
+    func cleanup() {
+        // Reset attributed texts to nil to release any resources they might be holding
+        timeNode.attributedText = nil
+        descriptionNode.attributedText = nil
+
+        // Release the avatar image or URL to free memory
+        AvatarNode.url = nil
+        AvatarNode.image = nil
+
+        // Reset any other properties or references that need cleaning
+        // ...
+
+        // If there are any custom cleanup actions required for your specific case, add them here
+        // ...
+    }
+
+
+    /// Sets up the layout for the activity node.
     func setupLayout() {
-        didSetup = true
+
+        // Common attributes for description text
         let textAttributes: [NSAttributedString.Key: Any] = [
-            NSAttributedString.Key.font: FontManager.shared.roboto(.Medium, size: FontSize),
-            NSAttributedString.Key.foregroundColor: UIColor.black,
-            NSAttributedString.Key.paragraphStyle: paragraphStyles
-        ]
-        let timeAttributes: [NSAttributedString.Key: Any] = [
-            NSAttributedString.Key.font: FontManager.shared.roboto(.Medium, size: FontSize),
-            NSAttributedString.Key.foregroundColor: UIColor.darkGray,
-            NSAttributedString.Key.paragraphStyle: paragraphStyles
+            .font: FontManager.shared.roboto(.Medium, size: FontSize),
+            .foregroundColor: UIColor.black,
+            .paragraphStyle: paragraphStyles
         ]
 
-        
-        let time = NSAttributedString(string: "\(timeAgoSinceDate(activity.createdAt, numericDates: true))", attributes: timeAttributes)
-        
-        timeNode.attributedText = time
-        
-      
-        if activity.action == "Create" {
-            
+        // Attributes for time text
+        let timeAttributes: [NSAttributedString.Key: Any] = [
+            .font: FontManager.shared.roboto(.Medium, size: FontSize),
+            .foregroundColor: UIColor.darkGray,
+            .paragraphStyle: paragraphStyles
+        ]
+
+        // Set the time node text
+        let timeString = timeAgoSinceDate(activity.createdAt, numericDates: true)
+        timeNode.attributedText = NSAttributedString(string: timeString, attributes: timeAttributes)
+
+        // Set the description node text based on activity action
+        switch activity.action {
+        case "Create":
             descriptionNode.attributedText = NSAttributedString(string: "Your account is created", attributes: textAttributes)
-            
-        } else if activity.action == "Update" {
-            
+        case "Update":
             descriptionNode.attributedText = NSAttributedString(string: "Your account has been updated", attributes: textAttributes)
-                         
-        } else if activity.action == "Login" {
-            
+        case "Login":
             descriptionNode.attributedText = NSAttributedString(string: "Your account has been logged in", attributes: textAttributes)
-            
-        } else if activity.action == "Logout" {
-            
+        case "Logout":
             descriptionNode.attributedText = NSAttributedString(string: "Your account has been logged out", attributes: textAttributes)
-            
-            
-        } else if activity.action == "Change Password" {
-            
+        case "Change Password":
             descriptionNode.attributedText = NSAttributedString(string: "You have changed your password", attributes: textAttributes)
-            
-            
-        } else if activity.action == "Update my profile" {
-            
+        case "Update my profile":
             descriptionNode.attributedText = NSAttributedString(string: "You have updated your profile", attributes: textAttributes)
-            
-            
-        } else {
-            
+        default:
             print(activity.action, activity.content)
-            
         }
-        
-        
-        if let avatarUrl = _AppCoreData.userDataSource.value?.avatarURL, avatarUrl != "" {
-            let url = URL(string: avatarUrl)
-            AvatarNode.url = url
+
+        // Set the avatar node URL
+        if let avatarUrl = _AppCoreData.userDataSource.value?.avatarURL, !avatarUrl.isEmpty {
+            AvatarNode.url = URL(string: avatarUrl)
         }
-        
     }
+
     
     override func layoutSpecThatFits(_ constrainedSize: ASSizeRange) -> ASLayoutSpec {
         

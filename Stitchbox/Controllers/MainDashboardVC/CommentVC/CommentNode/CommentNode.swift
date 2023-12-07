@@ -45,7 +45,6 @@ class CommentNode: ASCellNode {
     var reply : ((ASCellNode) -> Void)?
     var isLiked = false
     var label: ActiveLabel!
-    private var didSetup = false
 
     init(with post: CommentModel) {
         
@@ -122,17 +121,33 @@ class CommentNode: ASCellNode {
           
     }
     
+    override func didEnterDisplayState() {
+        super.didEnterDisplayState()
+        setupLayout()
+    }
     
-    override func didEnterVisibleState() {
-            
-            if !didSetup {
-                setupLayout()
-            }
-            
-        }
+    override func didExitDisplayState() {
+        super.didExitDisplayState()
+        cleanupLayout()
+    }
+    
+    
+    /// Resets the layout and configurations to their default states.
+    func cleanupLayout() {
+        // Clear the label's text and remove any interaction handlers.
+        label.text = nil
+        
+        // Remove the label from its superview.
+        label.removeFromSuperview()
+
+        timeNode.attributedText = nil
+        cmtNode.attributedText = nil
+        label.attributedText = nil
+    }
+
+
     
     func setupLayout() {
-        didSetup = true
         label = ActiveLabel()
           
         cmtNode.view.addSubview(self.label)

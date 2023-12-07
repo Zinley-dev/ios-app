@@ -25,7 +25,6 @@ class AccountActivityNode: ASCellNode {
     var timeNode: ASTextNode!
     var AvatarNode: ASNetworkImageNode!
     let paragraphStyles = NSMutableParagraphStyle()
-    private var didSetup = false
     
     init(with activity: UserActivityModel) {
         
@@ -62,16 +61,18 @@ class AccountActivityNode: ASCellNode {
 
     }
     
-    override func didEnterVisibleState() {
-            
-            if !didSetup {
-                setupLayout()
-            }
-            
-        }
+    override func didEnterDisplayState() {
+        super.didEnterDisplayState()
+        setupLayout()
+    }
     
+    override func didExitDisplayState() {
+        super.didExitDisplayState()
+        cleanupLayout()
+    }
+    
+
     func setupLayout() {
-        didSetup = true
         
         let date = self.activity.createdAt
     
@@ -186,6 +187,18 @@ class AccountActivityNode: ASCellNode {
         }
         
     }
+    
+    /// Resets the nodes to their default states.
+    func cleanupLayout() {
+        // Clear the text from timeNode and descriptionNode.
+        timeNode.attributedText = nil
+        descriptionNode.attributedText = nil
+
+        // Reset the AvatarNode's image and URL to nil or default values.
+        AvatarNode.image = nil // You can also set this to a default image if you have one.
+        AvatarNode.url = nil
+    }
+
     
     override func layoutSpecThatFits(_ constrainedSize: ASSizeRange) -> ASLayoutSpec {
         

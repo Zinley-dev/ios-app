@@ -18,7 +18,6 @@ class OwnerPostSearchNode: ASCellNode {
     var imageNode: ASNetworkImageNode!
     var fontSize: CGFloat = 13
     let paragraphStyles = NSMutableParagraphStyle()
-    private var didSetup = false
     
     private lazy var stitchSignNode: ASImageNode = {
         let imageNode = ASImageNode()
@@ -134,17 +133,41 @@ class OwnerPostSearchNode: ASCellNode {
         
     }
     
-    override func didEnterVisibleState() {
-            
-            if !didSetup {
-                setupLayout()
-            }
-            
-        }
+    override func didEnterDisplayState() {
+        super.didEnterDisplayState()
+        setupLayout()
+        
+    }
     
+    override func didExitDisplayState() {
+        super.didExitDisplayState()
+        cleanupLayout()
+    }
+    
+    
+    /// Resets the layout elements to their default states.
+    func cleanupLayout() {
+        // Clear the background color
+        self.backgroundColor = nil
+
+        // Reset imageNode properties
+        imageNode.backgroundColor = nil
+        imageNode.contentMode = .scaleToFill // Or any default contentMode you prefer
+        imageNode.cornerRadius = 0
+        imageNode.image = nil // Resetting the image
+
+        // Clear the attributed text in infoNode, nameNode, stitchCountNode, and countNode
+        infoNode.attributedText = nil
+        nameNode.attributedText = nil
+        stitchCountNode.attributedText = nil
+        countNode.attributedText = nil
+
+       
+    }
+
+   
     
     func setupLayout() {
-        didSetup = true
         self.backgroundColor = .clear // set background to clear
 
       

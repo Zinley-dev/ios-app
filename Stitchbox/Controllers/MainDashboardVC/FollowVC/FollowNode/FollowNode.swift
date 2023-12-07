@@ -32,7 +32,6 @@ class FollowNode: ASCellNode {
     var isFollowingUser = false
     var denyBtn = false
     var allowProcess = true
-    private var didSetup = false
     
     init(with user: FollowModel) {
         self.user = user
@@ -68,16 +67,30 @@ class FollowNode: ASCellNode {
         
     }
     
-    override func didEnterVisibleState() {
-            
-            if !didSetup {
-                setupLayout()
-            }
-            
-        }
+    override func didEnterDisplayState() {
+        super.didEnterDisplayState()
+        setupLayout()
+    }
+    
+    override func didExitDisplayState() {
+        super.didExitDisplayState()
+        cleanupLayout()
+    }
+    
+    /// Resets the UI elements to their default states.
+    func cleanupLayout() {
+        // Reset text and attributed text of userNameNode and nameNode to empty or default values.
+        userNameNode.attributedText = nil
+        nameNode.attributedText = nil
+
+        // Reset the avatarNode's image and URL to default values or nil.
+        avatarNode.image = UIImage(named: "defaultuser")  // or set to nil if you don't have a default image.
+        avatarNode.url = nil
+
+    }
+
     
     func setupLayout() {
-        didSetup = true
         if let user = user.userId {
             if user == _AppCoreData.userDataSource.value?.userID {
                 denyBtn = true

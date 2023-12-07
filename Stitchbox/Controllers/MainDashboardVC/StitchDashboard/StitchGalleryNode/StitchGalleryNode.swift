@@ -25,7 +25,6 @@ class StitchGalleryNode: ASCellNode {
     private var stitchSignNode: ASImageNode!
     private var countNode: ASTextNode!
     private var stitchCountNode: ASTextNode!
-    private var didSetup = false
 
     /// Initializes a StitchGalleryNode with a given post.
     /// - Parameter post: The `PostModel` instance used to configure the node.
@@ -54,23 +53,69 @@ class StitchGalleryNode: ASCellNode {
         // Setting the URL for the imageNode to load the image from the post's imageUrl.
         imageNode.url = post.imageUrl
     }
-
     
-    /// Called when the node becomes visible on the screen.
-    override func didEnterVisibleState() {
-        // Check if the setup has already been completed
-        if !didSetup {
-            // If not, perform the setup
-            setupLayout()
+    override func didEnterDisplayState() {
+        super.didEnterDisplayState()
+        setupLayout()
+    }
+    
+    override func didExitDisplayState() {
+        super.didExitDisplayState()
+        cleanupLayout()
+    }
+
+    /// Resets the nodes to their default states after being set up by setupLayout().
+    func cleanupLayout() {
+        // Reset background colors
+        self.backgroundColor = nil
+        imageNode.backgroundColor = nil
+
+        // Reset imageNode properties
+        imageNode.contentMode = .scaleToFill // Or any default contentMode you prefer
+        imageNode.cornerRadius = 0
+        imageNode.image = nil // Resetting the image if necessary
+
+        // Reset properties set in setupnode()
+        cleanupnode()
+
+        // Clear attributed text in infoNode, stitchCountNode, and countNode
+        infoNode.attributedText = nil
+        stitchCountNode.attributedText = nil
+        countNode.attributedText = nil
+
+        // Additional cleanup for other properties or nodes that were set up or modified.
+        // ...
+    }
+
+    /// Resets the subnodes used in setupnode() to their default states.
+    func cleanupnode() {
+        // Reset properties for stitchSignNode and videoSignNode
+        [stitchSignNode, videoSignNode].forEach { node in
+            node.image = nil
+            node.contentMode = .scaleToFill // Or any default contentMode you prefer
+            node.style.preferredSize = CGSize.zero
+            node.clipsToBounds = false
+            node.shadowColor = nil
+            node.shadowOpacity = 0
+            node.shadowOffset = CGSize.zero
+            node.shadowRadius = 0
         }
+
+        // Reset stitchCountNode and countNode
+        [stitchCountNode, countNode].forEach { node in
+            node.maximumNumberOfLines = 0
+            node.attributedText = nil
+        }
+
+        // Reset infoNode properties
+        infoNode.backgroundColor = nil // Clear any specific background color
+        infoNode.attributedText = nil
+        infoNode.maximumNumberOfLines = 0
     }
 
     
     /// Configures the layout and appearance of the node.
     func setupLayout() {
-        // Marking that setup is complete to prevent redundant calls
-        didSetup = true
-
         // Set the background of the node to be clear
         self.backgroundColor = .clear
         // Also set the imageNode's background to clear

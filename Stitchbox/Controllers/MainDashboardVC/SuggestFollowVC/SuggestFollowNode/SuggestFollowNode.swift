@@ -38,7 +38,6 @@ class SuggestFollowNode: ASCellNode {
     
     let font = FontManager.shared.roboto(.Medium, size: FontSize + 1)
     let textColor = UIColor.black
-    private var didSetup = false
     
     init(with users: FriendSuggestionModel) {
         user = users
@@ -56,10 +55,53 @@ class SuggestFollowNode: ASCellNode {
         userNameNode.backgroundColor = UIColor.clear
         nameNode.backgroundColor = UIColor.clear
         followBtnNode.backgroundColor = .secondary
-       
-
         followBtnNode.addTarget(self, action: #selector(FollowNode.followBtnPressed), forControlEvents: .touchUpInside)
+        automaticallyManagesSubnodes = true
+
+    }
+    
+    
+    func textAttributes(withFont font: UIFont) -> [NSAttributedString.Key: Any] {
+        let paragraphStyles = NSMutableParagraphStyle()
+        paragraphStyles.alignment = .left
         
+        return [
+            NSAttributedString.Key.font: font,
+            NSAttributedString.Key.foregroundColor: textColor,
+            NSAttributedString.Key.paragraphStyle: paragraphStyles
+        ]
+    }
+    
+    override func didLoad() {
+        super.didLoad()
+        setupLayout()
+    }
+    
+    
+    override func didEnterDisplayState() {
+        super.didEnterDisplayState()
+        setupUserInfo()
+    }
+    
+    override func didExitDisplayState() {
+        super.didExitDisplayState()
+        cleanupUserLayout()
+    }
+    
+    func cleanupUserLayout() {
+        // Reset avatarNode properties
+        avatarNode.url = nil // Clear any URL set
+        avatarNode.image = nil // Reset to default image
+
+        // Reset userNameNode and nameNode text attributes
+        userNameNode.attributedText = nil
+        nameNode.attributedText = nil
+
+    }
+
+
+    
+    func setupUserInfo() {
         
         if user.avatar != "" {
             avatarNode.url = URL(string: user.avatar)
@@ -78,36 +120,9 @@ class SuggestFollowNode: ASCellNode {
         } else {
             nameNode.attributedText = NSAttributedString.init(attributedString: NSAttributedString(string: "None", attributes: commonAttributes))
         }
-        
-      
-        automaticallyManagesSubnodes = true
-
     }
-    
-    
-    func textAttributes(withFont font: UIFont) -> [NSAttributedString.Key: Any] {
-        let paragraphStyles = NSMutableParagraphStyle()
-        paragraphStyles.alignment = .left
-        
-        return [
-            NSAttributedString.Key.font: font,
-            NSAttributedString.Key.foregroundColor: textColor,
-            NSAttributedString.Key.paragraphStyle: paragraphStyles
-        ]
-    }
-    
-    
-    override func didEnterVisibleState() {
-            
-            if !didSetup {
-                setupLayout()
-            }
-            
-        }
-    
     
     func setupLayout() {
-        didSetup = true
         if user.userId == _AppCoreData.userDataSource.value?.userID {
             denyBtn = true
         }

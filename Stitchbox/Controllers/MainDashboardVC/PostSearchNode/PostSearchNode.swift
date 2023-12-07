@@ -25,7 +25,6 @@ class PostSearchNode: ASCellNode {
     private var videoSignNode: ASImageNode!
     private var stitchSignNode: ASImageNode!
     private var countNode: ASTextNode!
-    private var didSetup = false
     
     let paragraphStyles = NSMutableParagraphStyle()
     var keyword = ""
@@ -58,18 +57,37 @@ class PostSearchNode: ASCellNode {
         automaticallyManagesSubnodes = true
     }
     
+    override func didEnterDisplayState() {
+        super.didEnterDisplayState()
+        setupLayout()
+    }
     
-    override func didEnterVisibleState() {
-            
-            if !didSetup {
-                setupLayout()
-            }
-            
-        }
+    override func didExitDisplayState() {
+        super.didExitDisplayState()
+        cleanupLayout()
+    }
+    
+    /// Resets the layout elements to their default states.
+    func cleanupLayout() {
+        // Reset background color
+        self.backgroundColor = nil
+
+        // Reset imageNode properties
+        imageNode.backgroundColor = nil
+        imageNode.image = nil // Resetting the image
+
+        // Clear attributed text in nameNode, infoNode, stitchCountNode, and countNode
+        nameNode.attributedText = nil
+        infoNode.attributedText = nil
+        stitchCountNode.attributedText = nil
+        countNode.attributedText = nil
+
+    }
+
+    
     
     
     func setupLayout() {
-        didSetup = true
         self.backgroundColor = .clear // set background to clear
         paragraphStyles.alignment = .center
         
