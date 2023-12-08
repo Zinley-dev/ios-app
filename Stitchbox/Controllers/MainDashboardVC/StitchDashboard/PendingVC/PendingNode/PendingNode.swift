@@ -5,498 +5,209 @@
 //  Created by Khoi Nguyen on 7/16/23.
 //
 
+
 import Foundation
 import UIKit
 import AsyncDisplayKit
 import Alamofire
-import SendBirdSDK
 import AVFoundation
 import AVKit
-import ActiveLabel
 import NVActivityIndicatorView
-
 
 fileprivate let FontSize: CGFloat = 12
 fileprivate let OrganizerImageSize: CGFloat = 30
 fileprivate let HorizontalBuffer: CGFloat = 10
 
+// A node representing a video cell in a list or grid. It handles video playback, UI interactions, and layout.
 class PendingNode: ASCellNode, ASVideoNodeDelegate {
-    
-    deinit {
-        print("PendingNode is being deallocated.")
-    }
-    
-    var allowProcess = true
-    var isFollowingUser = false
-    var isSave = false
+
+    // MARK: - Properties
+
+    // The model representing the post associated with this video node.
+    weak var post: PostModel!
+
+    // Video properties and state management variables.
+    var videoDuration: Double = 0
+    var lastViewTimestamp: TimeInterval = NSDate().timeIntervalSince1970
+    var totalWatchedTime: TimeInterval = 0.0
+    var previousTimeStamp: TimeInterval = 0.0
     var isActive = false
-    var buttonNode: ASDisplayNode!
-    var post: PostModel!
+    var level = 0
+    // UI components and layout related properties.
     private var cellVideoNode: ASVideoNode
-    var statusObservation: NSKeyValueObservation?
-    var headerView: PostHeader!
-    var spinnerRemoved = true
-    var assetReset = false
-    var gradientNode: GradientView
-    var label: ActiveLabel!
-    var pendingView: HandlePendingView!
-    
-    let maximumShowing = 100
     private var spinner: NVActivityIndicatorView!
+    private lazy var headerView: PostHeader = PostHeader()
+    private lazy var footerView: PostFooter = PostFooter()
+    private lazy var pendingView: HandlePendingView = HandlePendingView()
+    
     var approveBtn : ((ASCellNode) -> Void)?
     var declineBtn : ((ASCellNode) -> Void)?
-    private var didSetup = false
+
+    // Flags and counters for various states.
+    var didSlideEnd = true
+    var setupMaxVal = false
+    var firstSetup = false
+    var spinnerRemoved = true
+    var assetReset = false
+    var selectedStitch = false
+    var isFollowingUser = false
+    var allowProcess = true
+    var firstItem = false
+
     
+    // Observer for video playback status.
+    var statusObservation: NSKeyValueObservation?
+    var buttonNode: ASDisplayNode!
+    // MARK: - Initializer
+    
+    /// Initializes the cell with the provided post model and preview flag.
+    /// - Parameters:
+    ///   - post: The `PostModel` instance containing the data for the cell.
+    ///   - isPreview: A Boolean flag indicating if this is a preview.
     init(with post: PostModel) {
+        
+        // Assign the provided post and preview flag.
         self.post = post
-      
+        // Initialize the image and video nodes.
         self.cellVideoNode = ASVideoNode()
-        self.gradientNode = GradientView()
         self.buttonNode = ASDisplayNode()
-        
+    
         super.init()
-        
-        configureGradientNode()
-        configureVideoNode(with: post)
-    
+        presetup()
         automaticallyManagesSubnodes = true
-    
     }
     
+    // MARK: - Node Lifecycle
+
     override func didLoad() {
-        spinner = NVActivityIndicatorView(frame:  CGRect(x: 0, y: 0, width: 55, height: 55), type: .circleStrokeSpin, color: .white, padding: 0)
+        super.didLoad()
+        backgroundColor = .white
+        setupSpinner()
+        setupChildView()
+    }
+
+    
+    func presetup() {
+        // Configure the node based on the presence of a muxPlaybackId.
+        // This approach avoids duplicate checks and makes the decision point clear.
+        if !post.muxPlaybackId.isEmpty {
+            configureVideoNode(with: post)
+        }
     }
     
+
+    /// Called when the view controller’s view is no longer visible.
+    override func didExitVisibleState() {
+        super.didExitVisibleState() // Always call the super implementation of lifecycle methods
+        
+        guard shouldAllowAfterInactive else {
+            return
+        }
+
+        // Pausing the video playback when the view is not visible.
+        pauseVideo(shouldSeekToStart: false)
+
+        // Removing any observers that were added to avoid memory leaks or unintended behavior.
+        removeObservers()
+        cleanGesture()
+        emptyDelegate()
+    }
+
+    /// Called when the view controller’s view becomes visible.
     override func didEnterVisibleState() {
-        isActive = true
-        if !didSetup {
-            setupLayout()
+        super.didEnterVisibleState() // Always call the super implementation of lifecycle methods
+
+        guard shouldAllowAfterInactive else {
+            return
         }
         
+        setupGesture()
+        setDelegate()
+    }
+    /// Checks if the node needs to be set up again.
+    /// This method determines if initialization is required and if the cellVideoNode's asset is nil.
+    /// - Returns: A Boolean indicating whether setup is needed.
+    func checkIfNeedToSetupAgain() -> Bool {
+        return cellVideoNode.asset == nil
+    }
+
+    /// Checks if the node's resources should be cleaned up.
+    /// This method determines if the cellVideoNode's asset is nil, indicating a need for cleanup.
+    /// - Returns: A Boolean indicating whether cleanup is needed.
+    func checkIfShouldClean() -> Bool {
+        return cellVideoNode.asset != nil
     }
     
-    func setupLayout() {
-        didSetup = true
-        setupViews()
-        setupLabel()
+    override func didEnterDisplayState() {
+        super.didEnterPreloadState()
         
-        self.cellVideoNode.view.layer.cornerRadius = 10
-        self.cellVideoNode.view.clipsToBounds = true
+        guard shouldAllowAfterInactive else {
+            return
+        }
         
-        self.gradientNode.cornerRadius = 10
-        self.gradientNode.clipsToBounds = true
-        spinner = NVActivityIndicatorView(frame:  CGRect(x: 0, y: 0, width: 75, height: 75), type: .ballScale, color: .secondary, padding: 0)
+        if checkIfNeedToSetupAgain()  {
+            presetup()
+        }
+        
+        fillInfo()
+    }
+    
+    override func didExitDisplayState() {
+        super.didExitDisplayState()
+        
+        guard shouldAllowAfterInactive else {
+            return
+        }
+        
+        if checkIfShouldClean() {
+            cleanVideoNode()
+        }
+        cleanInfo()
+        
+    }
+
+
+    /// Cleans the video node by resetting its asset.
+    /// This method sets the asset of cellVideoNode to nil, effectively cleaning up resources.
+    func cleanVideoNode() {
+        cellVideoNode.asset?.cancelLoading()
+        cellVideoNode.asset = nil
     }
 
     
-    
-    private func configureGradientNode() {
-        gradientNode.isLayerBacked = true
-        gradientNode.isOpaque = false
+    func emptyDelegate() {
+        cellVideoNode.delegate = nil
     }
-
-    private func configureVideoNode(with post: PostModel) {
-        
-        cellVideoNode.url = getThumbnailURL(post: post)
-        cellVideoNode.player?.automaticallyWaitsToMinimizeStalling = true
-        cellVideoNode.shouldAutoplay = false
-        cellVideoNode.shouldAutorepeat = true
+    
+    func setDelegate() {
         cellVideoNode.delegate = self
-        
-        if let width = post.metadata?.width, let height = post.metadata?.height, width != 0, height != 0 {
-            // Calculate aspect ratio
-            let aspectRatio = Float(width) / Float(height)
-            
-            if aspectRatio >= 0.5 && aspectRatio <= 0.7 { // Close to 9:16 aspect ratio (vertical)
-                cellVideoNode.contentMode = .scaleAspectFill
-                cellVideoNode.gravity = AVLayerVideoGravity.resizeAspectFill.rawValue
-            } else if aspectRatio >= 1.7 && aspectRatio <= 1.9 { // Close to 16:9 aspect ratio (landscape)
-                cellVideoNode.contentMode = .scaleAspectFit
-                cellVideoNode.gravity = AVLayerVideoGravity.resizeAspect.rawValue
-                
-            } else {
-                // Default contentMode, adjust as needed
-                cellVideoNode.contentMode = .scaleAspectFit
-                cellVideoNode.gravity = AVLayerVideoGravity.resizeAspectFill.rawValue
-                
-            }
-        } else {
-            // Default contentMode, adjust as needed
-            cellVideoNode.contentMode = .scaleAspectFill
-            cellVideoNode.gravity = AVLayerVideoGravity.resizeAspectFill.rawValue
-            
-        }
-        
-        DispatchQueue.main.async { [weak self] in
-            guard let self = self else { return }
-            self.cellVideoNode.asset = AVAsset(url: self.getVideoURL(post: post)!)
-        }
-        
     }
 
-    
-    func setupLabel() {
-        self.label = ActiveLabel()
-    
-        self.label.backgroundColor = .clear
-        
-      
-        let customType = ActiveType.custom(pattern: "\\*more\\b|\\*hide\\b")
-        self.label.customColor[customType] = .lightGray
-        self.label.enabledTypes = [.hashtag, .url, customType]
-       
-        self.label.hashtagColor = UIColor(red: 208/255, green: 223/255, blue: 252/255, alpha: 1)
+    /// `deinit` is called when the object is about to be deallocated.
+    /// This is a crucial place to remove any observers or perform any clean-up to prevent memory leaks.
+    deinit {
+        // Removing the object as an observer from NotificationCenter.
+        // It's important to remove the observer to avoid any retain cycles or crashes due to observers being called after the object is deallocated.
+        NotificationCenter.default.removeObserver(self)
+    }
 
-        self.label.URLColor = UIColor(red: 60/255, green: 115/255, blue: 180/255, alpha: 1)
-
-        
-        self.label.handleCustomTap(for: customType) { [weak self] element in
-            guard let self = self else { return }
-            element == "*more" ? self.seeMore() : self.hideContent()
-        }
-        
-        self.label.handleHashtagTap { [weak self] hashtag in
-            guard let self = self else { return }
-            self.presentPostListWithHashtagVC(for: "#" + hashtag)
-        }
-
-        self.label.handleURLTap { [weak self] string in
-            guard let self = self else { return }
-            self.handleURLTap(url: string.absoluteString)
-        }
+    // MARK: - Configuration
     
-        
-    
-        setupDefaultContent()
-        
+    /// Sets up the spinner used for indicating loading or processing states.
+    /// This method initializes the spinner with specific properties like frame, type, and color.
+    private func setupSpinner() {
+        // Creating an instance of NVActivityIndicatorView.
+        // NVActivityIndicatorView is a customizable activity indicator library.
+        spinner = NVActivityIndicatorView(
+            frame: CGRect(x: 0, y: 0, width: 55, height: 55), // Setting the frame of the spinner.
+            type: .circleStrokeSpin, // Choosing the style/type of the spinner.
+            color: .white,           // Setting the color of the spinner.
+            padding: 0               // Setting the padding around the spinner.
+        )
+        // Additional configuration, if needed, can be added here.
     }
     
-    func setupViews() {
-        // Header View Setup
-        
-        self.headerView = PostHeader()
-        self.view.addSubview(self.headerView)
-        
-        addConstraints(to: self.headerView, within: self.view)
-    
-     
-        
-        //
-        self.pendingView = HandlePendingView()
-        self.pendingView.backgroundColor = .clear
-        self.buttonNode.view.addSubview(self.pendingView)
-        self.pendingView.translatesAutoresizingMaskIntoConstraints = false
-        self.pendingView.topAnchor.constraint(equalTo: self.buttonNode.view.topAnchor, constant: 0).isActive = true
-        self.pendingView.bottomAnchor.constraint(equalTo: self.buttonNode.view.bottomAnchor, constant: 0).isActive = true
-        self.pendingView.leadingAnchor.constraint(equalTo: self.buttonNode.view.leadingAnchor, constant: 0).isActive = true
-        self.pendingView.trailingAnchor.constraint(equalTo: self.buttonNode.view.trailingAnchor, constant: 0).isActive = true
-        
-        let approveTap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(PendingNode.approveTapped))
-        approveTap.numberOfTapsRequired = 1
-        self.pendingView.approveBtn.addGestureRecognizer(approveTap)
-        
-        let declineTap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(PendingNode.declineTapped))
-        declineTap.numberOfTapsRequired = 1
-        self.pendingView.declineBtn.addGestureRecognizer(declineTap)
-        
-        
-        // Gesture Recognizers
-        setupGestureRecognizers()
-        
-    }
-
-    func addConstraints(to childView: UIView, within parentView: UIView, constant: CGFloat = 0) {
-        
-        let change = self.view.frame.width - ( self.view.frame.height * 9 / 16)
-        let padding = change / 2
-        
-        childView.translatesAutoresizingMaskIntoConstraints = false
-        childView.topAnchor.constraint(equalTo: parentView.topAnchor, constant: constant).isActive = true
-        childView.bottomAnchor.constraint(equalTo: parentView.bottomAnchor, constant: -60).isActive = true
-        childView.leadingAnchor.constraint(equalTo: parentView.leadingAnchor, constant: padding).isActive = true
-        childView.trailingAnchor.constraint(equalTo: parentView.trailingAnchor, constant: padding).isActive = true
-    }
-    
-    func setupGestureRecognizers() {
-        
-
-
-        
-    }
-    
-    func createTapGestureRecognizer(target: Any, action: Selector, taps: Int = 1) -> UITapGestureRecognizer {
-        let tap = UITapGestureRecognizer(target: target, action: action)
-        tap.numberOfTapsRequired = taps
-        return tap
-    }
-   
-
-    func handleURLTap(url: String) {
-        if url.contains("https://stitchbox.net/app/account/") || url.contains("https://stitchbox.net/app/post/") {
-            if let id = self.getUIDParameter(from: url) {
-                url.contains("account") ? self.moveToUserProfileVC(id: id) : self.openPost(id: id)
-            }
-        } else if let requestUrl = URL(string: url), UIApplication.shared.canOpenURL(requestUrl) {
-            UIApplication.shared.open(requestUrl, options: [:], completionHandler: nil)
-        }
-    }
-
-    func presentPostListWithHashtagVC(for selectedHashtag: String) {
-        guard let PLHVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "PostListWithHashtagVC") as? PostListWithHashtagVC,
-              let vc = UIViewController.currentViewController() else { return }
-        
-        let nav = UINavigationController(rootViewController: PLHVC)
-        PLHVC.searchHashtag = selectedHashtag
-        PLHVC.onPresent = true
-        nav.navigationBar.barTintColor = .background
-        nav.navigationBar.tintColor = .white
-        nav.navigationBar.titleTextAttributes = [.foregroundColor: UIColor.white]
-        nav.modalPresentationStyle = .fullScreen
-        vc.present(nav, animated: true, completion: nil)
-    }
-    
-    func seeMore() {
-        
-        setupHideContent()
-        setNeedsLayout()
-        
-    }
-    
-    func hideContent() {
-        
-        setupDefaultContent()
-        setNeedsLayout()
-    }
-
-    func setupDefaultContent() {
-
-        headerView.backgroundColor = UIColor.clear
-
-        let hashtagsText = post.hashtags?.joined(separator: " ")
-        let finalText = post.content + " " + (hashtagsText ?? "")
-        var truncatedText: String
-            
-        if post.content == "" {
-            truncatedText = truncateTextIfNeeded(hashtagsText ?? "")
-        } else {
-            truncatedText = truncateTextIfNeeded(finalText)
-        }
-            
-        let attr1 = NSAttributedString(string: truncatedText, attributes: [
-            NSAttributedString.Key.font: FontManager.shared.roboto(.Regular, size: FontSize), // Using the Roboto Regular style as an example
-            NSAttributedString.Key.foregroundColor: UIColor.clear
-        ])
-
-        let attr2 = NSAttributedString(string: truncatedText, attributes: [
-            NSAttributedString.Key.font: FontManager.shared.roboto(.Regular, size: FontSize), // Using the Roboto Regular style as an example
-            NSAttributedString.Key.foregroundColor: UIColor.white
-        ])
-            
-       
-        label.attributedText = attr2
-          
-        self.headerView.setNeedsLayout()
-        self.headerView.layoutIfNeeded()
-            
-            
-            
-        }
-        
-    func setupHideContent() {
-            
-        headerView.backgroundColor = UIColor.clear
-            
-        let hashtagsText = post.hashtags?.joined(separator: " ")
-        let finalText = post.content + " " + (hashtagsText ?? "")
-        var contentText: String
-
-        if post.content == "" {
-            contentText = processTextForHiding(hashtagsText ?? "")
-        } else {
-            contentText = processTextForHiding(finalText)
-        }
-            
-        let attr1 = NSAttributedString(string: contentText, attributes: [
-            NSAttributedString.Key.font: FontManager.shared.roboto(.Regular, size: FontSize), // Using the Roboto Regular style as an example
-            NSAttributedString.Key.foregroundColor: UIColor.clear
-        ])
-            
-        let attr2 = NSAttributedString(string: contentText, attributes: [
-            NSAttributedString.Key.font: FontManager.shared.roboto(.Regular, size: FontSize), // Using the Roboto Regular style as an example
-            NSAttributedString.Key.foregroundColor: UIColor.white
-        ])
-            
-            
-        
-        label.attributedText = attr2
-            
-        self.headerView.setNeedsLayout()
-        self.headerView.layoutIfNeeded()
-
-           
-    }
-        
-    private func processTextForHiding(_ text: String) -> String {
-        if text.count > maximumShowing {
-            return text + " *hide"
-        } else {
-            return text
-        }
-    }
-
-    private func truncateTextIfNeeded(_ text: String) -> String {
-        if text.count > maximumShowing, text.count - maximumShowing >= 20 {
-            return String(text.prefix(maximumShowing)) + " ..." + " *more"
-        } else {
-            return text
-        }
-    }
-
-
-    func getThumbnailURL(post: PostModel) -> URL? {
-        if post.muxPlaybackId != "" {
-                
-            let urlString = "https://image.mux.com/\(post.muxPlaybackId)/thumbnail.jpg?time=0"
-                
-            return URL(string: urlString)
-                
-        } else {
-            return nil
-        }
-    }
-        
-    func getVideoURL(post: PostModel) -> URL? {
-        if post.muxPlaybackId != "" {
-                
-            let urlString = "https://stream.mux.com/\(post.muxPlaybackId).m3u8?redundant_streams=true&max_resolution=720p"
-            return URL(string: urlString)
-                
-        } else {
-                
-            return nil
-        }
-    }
-    
-    func moveToUserProfileVC(id: String) {
-        guard let UPVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "UserProfileVC") as? UserProfileVC,
-              let vc = UIViewController.currentViewController() else { return }
-
-        if general_vc != nil {
-            general_vc.viewWillDisappear(true)
-            general_vc.viewDidDisappear(true)
-        }
-
-        let nav = UINavigationController(rootViewController: UPVC)
-        UPVC.userId = id
-        UPVC.onPresent = true
-        nav.navigationBar.barTintColor = .background
-        nav.navigationBar.tintColor = .white
-        nav.navigationBar.titleTextAttributes = [.foregroundColor: UIColor.white]
-        nav.modalPresentationStyle = .fullScreen
-        vc.present(nav, animated: true, completion: nil)
-    }
-
-    
-    func openPost(id: String) {
-        presentSwiftLoader()
-
-        APIManager.shared.getPostDetail(postId: id) { result in
-            DispatchQueue.main.async {
-                SwiftLoader.hide()
-            }
-
-            switch result {
-            case .success(let apiResponse):
-                guard let data = apiResponse.body, !data.isEmpty, let post = PostModel(JSON: data) else {
-                    return
-                }
-                
-                DispatchQueue.main.async { [weak self] in
-                    self?.presentSelectedPostVC(with: [post])
-                }
-                
-            case .failure(let error):
-                print(error)
-            }
-        }
-    }
-
-    func presentSelectedPostVC(with posts: [PostModel]) {
-        guard let RVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "SelectedRootPostVC") as? SelectedRootPostVC,
-              let vc = UIViewController.currentViewController() else { return }
-
-        if general_vc != nil {
-            general_vc.viewWillDisappear(true)
-            general_vc.viewDidDisappear(true)
-        }
-
-        RVC.onPresent = true
-        RVC.posts = posts
-        RVC.startIndex = 0
-        
-        let nav = UINavigationController(rootViewController: RVC)
-
-
-        vc.present(nav, animated: true, completion: nil)
-    }
-
-    func getUIDParameter(from urlString: String) -> String? {
-        if let url = URL(string: urlString) {
-            let components = URLComponents(url: url, resolvingAgainstBaseURL: false)
-            return components?.queryItems?.first(where: { $0.name == "uid" })?.value
-        } else {
-            return nil
-        }
-    }
-
-}
-
-
-extension PendingNode {
-    
-    @objc func userTapped() {
-        
-        if let userId = post.owner?.id, let username = post.owner?.username, userId != "", username != "" {
-            
-            if userId != _AppCoreData.userDataSource.value?.userID  {
-                
-                if let UPVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "UserProfileVC") as? UserProfileVC {
-                    
-                    if let vc = UIViewController.currentViewController() {
-                        
-                        let nav = UINavigationController(rootViewController: UPVC)
-
-                        // Set the user ID, nickname, and onPresent properties of UPVC
-                        UPVC.userId = userId
-                        UPVC.nickname = username
-                        UPVC.onPresent = true
-
-                        // Customize the navigation bar appearance
-                        nav.navigationBar.barTintColor = .background
-                        nav.navigationBar.tintColor = .white
-                        nav.navigationBar.titleTextAttributes = [.foregroundColor: UIColor.white]
-
-                        nav.modalPresentationStyle = .fullScreen
-                        vc.present(nav, animated: true, completion: nil)
-
-               
-                    }
-                }
-                
-            }
-            
-            
-        }
- 
-        
-    }
-
-    
-
-}
-
-
-extension PendingNode {
+    // MARK: - Layout
     
     private func createButtonsInsetSpec(constrainedSize: ASSizeRange) -> ASInsetLayoutSpec {
         
@@ -514,57 +225,874 @@ extension PendingNode {
         let padding = change / 2
         
         let inset = UIEdgeInsets(top: 0, left: padding, bottom: 0, right: padding)
-        let gradientInsetSpec = ASInsetLayoutSpec(insets: inset, child: gradientNode)
         let videoInsetSpec = ASInsetLayoutSpec(insets: inset, child: cellVideoNode)
-        let overlay = ASOverlayLayoutSpec(child: videoInsetSpec, overlay: gradientInsetSpec)
-        
         let buttonsInsetSpec = createButtonsInsetSpec(constrainedSize: constrainedSize)
         let verticalStackInset = UIEdgeInsets(top: .infinity, left: 0, bottom: 8, right: 0)
         let verticalStackInsetSpec = ASInsetLayoutSpec(insets: verticalStackInset, child: buttonsInsetSpec)
-        let finalOverlay = ASOverlayLayoutSpec(child: overlay, overlay: verticalStackInsetSpec)
+        let finalOverlay = ASOverlayLayoutSpec(child: videoInsetSpec, overlay: verticalStackInsetSpec)
         
         return finalOverlay
     }
+
+
+    // MARK: - User Interaction
+
+    /// Handles user interaction with the video node.
+    /// Toggles between playing and pausing the video based on its current state.
+    /// - Parameter videoNode: The video node that was tapped by the user.
+    func didTap(_ videoNode: ASVideoNode) {
+        if !videoNode.isPlaying() {
+            playVideo() // If the video is not playing, start playing.
+        } else {
+            pauseVideo(shouldSeekToStart: false) // If the video is playing, pause it without seeking to the start.
+        }
+    }
+
+    // MARK: - Helper Methods
+
+    /// Retrieves the thumbnail URL for a given post.
+    /// This method constructs and returns a URL pointing to the thumbnail image of the video.
+    /// - Parameter post: The post model containing the video information.
+    /// - Returns: A URL for the video's thumbnail, or nil if the post lacks a valid muxPlaybackId.
+    func getThumbnailURL(post: PostModel) -> URL? {
+        if post.muxPlaybackId != "" {
+            let urlString = "https://image.mux.com/\(post.muxPlaybackId)/thumbnail.jpg?time=0"
+            return URL(string: urlString) // Constructing and returning the URL for the thumbnail.
+        } else {
+            return nil // Returning nil if no valid muxPlaybackId is available.
+        }
+    }
+
+    /// Retrieves the video URL for a given post.
+    /// This method constructs and returns a URL for the video stream.
+    /// - Parameter post: The post model containing the video information.
+    /// - Returns: A URL for streaming the video, or nil if the post lacks a valid muxPlaybackId.
+    func getVideoURL(post: PostModel) -> URL? {
+        if post.muxPlaybackId != "" {
+            let urlString = "https://stream.mux.com/\(post.muxPlaybackId).m3u8?redundant_streams=true&max_resolution=1080p"
+            return URL(string: urlString) // Constructing and returning the URL for the video.
+        } else {
+            return nil // Returning nil if no valid muxPlaybackId is available.
+        }
+    }
     
-  
+}
+
+
+// MARK: - VideoNode Extension -  video playback
+extension PendingNode {
+
+    /// Plays the video in the video node.
+    func playVideo() {
+        // Avoid playing if already playing
+        if cellVideoNode.isPlaying() {
+            return
+        }
+        
+
+        // Set mute status based on conditions
+        cellVideoNode.muted = shouldMute ?? !globalIsSound
+        
+        // Remove any existing observers to avoid duplication
+        removeObservers()
+        
+        // set isActive
+        isActive = true
+
+        // Add observers if the current item is available, otherwise wait and try again
+        if cellVideoNode.currentItem != nil {
+            addObservers()
+        } else {
+            // Attempt to add observers after a delay
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) { [weak self] in
+                guard let self = self, self.cellVideoNode.currentItem != nil else {
+                    // Error handling if the video is still not ready
+                    return
+                }
+                self.addObservers()
+            }
+        }
+    }
+
+    /// Adds observers to the video node.
+    func addObservers() {
+        // Observing the status of the video playback
+        statusObservation = cellVideoNode.currentItem?.observe(\.status, options: [.new, .initial]) { [weak self] (playerItem, change) in
+            self?.handleStatusChange()
+        }
+    }
+    
+    /// Handles changes in the video node's status.
+    func handleStatusChange() {
+        // Safely unwrapping the status of the current item
+        guard let status = cellVideoNode.currentItem?.status else { return }
+
+        // Handling different states of video playback
+        switch status {
+        case .readyToPlay:
+            startPlayback()
+        case .failed:
+            printStatusDetails(withPrefix: "Playback failed")
+        case .unknown:
+            printStatusDetails(withPrefix: "Playback status unknown")
+        @unknown default:
+            printStatusDetails(withPrefix: "Unexpected playback status")
+        }
+    }
+
+    /// Prints status details along with buffer and error information.
+    /// - Parameter prefix: Prefix for the log message.
+    func printStatusDetails(withPrefix prefix: String) {
+        // Checking network connectivity
+        let connectionStatus = ReachabilityManager.shared.reachability.connection
+
+        if connectionStatus == .unavailable {
+            // Handling no internet connection
+            showNote(text: "No Internet Connection")
+        } else {
+
+            // Setting buffer duration preference and rechecking status
+            cellVideoNode.currentItem?.preferredForwardBufferDuration = 5
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.85) { [weak self] in
+                guard let self = self, let status = self.cellVideoNode.currentItem?.status else {
+                    self?.resetAssets()
+                    return
+                }
+                self.handlePlaybackBasedOn(status: status, withPrefix: prefix)
+            }
+        }
+    }
+    
+    /// Resets the video assets and attempts playback.
+    func resetAssets() {
+        // Pausing and resetting the video player
+        cellVideoNode.player?.pause()
+        assetReset = true
+
+        // Fading out the video node before resetting
+        UIView.animate(withDuration: 0.2) { [weak self] in
+            self?.cellVideoNode.alpha = 0.0
+        } completion: { _ in
+            // Replacing the video asset
+            self.cellVideoNode.asset = nil
+            self.cellVideoNode.asset = AVAsset(url: self.getVideoURL(post: self.post)!)
+
+            // Fading the video node back in and starting playback
+            UIView.animate(withDuration: 0.2) { [weak self] in
+                self?.cellVideoNode.alpha = 1.0
+            } completion: { _ in
+                self.playVideo()
+            }
+        }
+    }
+
+    /// Starts the video playback.
+    func startPlayback() {
+        
+        // Removing the spinner before starting playback
+        removeSpinner()
+
+        // Starting playback if not already playing
+        if !cellVideoNode.isPlaying(), isActive {
+            // Adjusting bit rate based on network connection
+            adjustBitRateBasedOnNetwork()
+
+            // Starting the video playback
+            cellVideoNode.play()
+        } else {
+           // print("Can't play because of \(isActive) or \(cellVideoNode.isPlaying())")
+        }
+    }
+
+    /// Adjusts the video bit rate based on the network connection.
+    private func adjustBitRateBasedOnNetwork() {
+        let connectionStatus = ReachabilityManager.shared.reachability.connection
+        switch connectionStatus {
+        case .wifi:
+            cellVideoNode.currentItem?.preferredPeakBitRate = 6000 * 1000 // 6.0 Mbps for Wi-Fi
+        case .cellular:
+            cellVideoNode.currentItem?.preferredPeakBitRate = 3000 * 1000 // 3.0 Mbps for Cellular
+        default:
+            cellVideoNode.currentItem?.preferredPeakBitRate = 2000 * 1000 // 2 Mbps for unknown network
+        }
+    }
+
+    /// Pauses the video playback and seeks to start if required.
+    /// - Parameter shouldSeekToStart: Indicates if the video should seek to the beginning.
+    func pauseVideo(shouldSeekToStart: Bool) {
+        cellVideoNode.pause()
+        removeObservers()
+
+        // Seeking to the start of the video if required
+        if shouldSeekToStart {
+            let startTime = CMTime(seconds: 0, preferredTimescale: 1)
+            cellVideoNode.player?.seek(to: startTime)
+        }
+    }
+
+    /// Unmutes the video.
+    func unmuteVideo() {
+        cellVideoNode.muted = false
+        shouldMute = false
+    }
+    
+    /// Unmutes the video.
+    func muteVideo() {
+        cellVideoNode.muted = true
+        shouldMute = true
+    }
+    
+    /// Removes all observers from the video node.
+    func removeObservers() {
+        statusObservation?.invalidate()
+        statusObservation = nil
+        isActive = false
+    }
+    
+    /// Seek to zero time
+    func seekToZero() {
+        let time = CMTime(seconds: 0, preferredTimescale: 1)
+        cellVideoNode.player?.seek(to: time)
+    }
+
+    /// Handles playback based on the current status of the video node.
+    /// - Parameters:
+    ///   - status: The current status of the video node's item.
+    ///   - prefix: Prefix for log messages.
+    private func handlePlaybackBasedOn(status: AVPlayerItem.Status, withPrefix prefix: String) {
+        switch status {
+        case .readyToPlay:
+            startPlayback()
+            //print("\(prefix) - Ready to play")
+        case .failed:
+            addSpinner()
+            //print("\(prefix) - Playback failed")
+        case .unknown:
+            addSpinner()
+            //print("\(prefix) - Playback status unknown")
+        @unknown default:
+            addSpinner()
+            //print("\(prefix) - Unexpected playback status")
+        }
+    }
+
+    /// Retries or resets playback based on the current status of the video node.
+    private func retryOrResetPlaybackBasedOnCurrentStatus() {
+        guard let status = cellVideoNode.currentItem?.status else {
+            //print("Playback status check failed - status unavailable")
+            resetAssets()
+            return
+        }
+        
+        switch status {
+        case .readyToPlay:
+            startPlayback()
+        case .failed, .unknown:
+            if shouldRetryPlayback() {
+                resetAssets()
+            } else {
+                handlePlaybackBasedOn(status: status, withPrefix: "Retry failed")
+            }
+        @unknown default:
+            handlePlaybackBasedOn(status: status, withPrefix: "Retry default")
+        }
+    }
+
+    /// Determines whether playback should be retried based on buffer state.
+    /// - Returns: Boolean indicating if playback should be retried.
+    private func shouldRetryPlayback() -> Bool {
+        guard let currentItem = cellVideoNode.currentItem else { return false }
+        let likelyToKeepUp = currentItem.isPlaybackLikelyToKeepUp
+        let loadedTimeRanges = currentItem.loadedTimeRanges
+
+        if !likelyToKeepUp && bufferIsEmpty(loadedTimeRanges: loadedTimeRanges) {
+            return assetReset == false
+        } else {
+            return false
+        }
+    }
 }
 
 extension PendingNode {
+    
+    /// Adds a spinner to indicate loading or buffering.
+    func addSpinner() {
+        // Ensuring spinner is only added once
+        if spinnerRemoved {
+            spinner.center = view.center
+            view.addSubview(spinner)
+            spinner.startAnimating()
+            spinnerRemoved = false
+        }
 
-    @objc func tapProcess() {
+        // Remove spinner or retry playback based on status after a delay
+        DispatchQueue.main.asyncAfter(deadline: .now() + 2) { [weak self] in
+            guard let self = self else { return }
+
+            // Continue playback if already playing
+            if self.cellVideoNode.isPlaying() {
+                self.removeSpinner()
+                return
+            }
+
+            // Retry or reset based on current item's status and buffer state
+            self.retryOrResetPlaybackBasedOnCurrentStatus()
+        }
+    }
+
+    /// Checks if the buffer is empty.
+    /// - Parameter loadedTimeRanges: Array of loaded time ranges.
+    /// - Returns: Boolean indicating if the buffer is empty.
+    func bufferIsEmpty(loadedTimeRanges: [NSValue]) -> Bool {
+        // Calculating buffer end time and comparing with current time
+        guard let lastTimeRange = loadedTimeRanges.last as? CMTimeRange else {
+            return true
+        }
+        let bufferEndTime = CMTimeAdd(lastTimeRange.start, lastTimeRange.duration)
+        let currentTime = cellVideoNode.player?.currentTime() ?? CMTime.zero
+        return bufferEndTime < currentTime
+    }
+
+    /// Removes the spinner from the view.
+    func removeSpinner() {
+        spinnerRemoved = true
+        if spinner != nil {
+            spinner.stopAnimating()
+            spinner.removeFromSuperview()
+        }
         
-        if let vc = UIViewController.currentViewController() {
-            switch vc {
-            case let dashboard as StitchDashboardVC:
-                
-                if dashboard.PendingVC.view.isHidden != true {
-                    playProcess()
+    }
+    
+}
+
+
+extension PendingNode {
+    
+    /// Configures the video node with a given post model.
+    /// - Parameter post: The post model used to configure the video node.
+    private func configureVideoNode(with post: PostModel) {
+        
+        // Set up the cell video node's appearance and behavior.
+        setupCellVideoNodeAppearance()
+        setupCellVideoNodeBehavior(with: post)
+        
+        // Determine and set the video content mode based on post's metadata.
+        determineAndSetVideoContentMode(with: post)
+        
+        // Load the video asset asynchronously.
+        loadVideoAssetAsync(with: post)
+        
+    }
+    
+    /// Sets up the appearance of cellVideoNode.
+    private func setupCellVideoNodeAppearance() {
+        cellVideoNode.cornerRadius = 12
+        cellVideoNode.clipsToBounds = true
+        cellVideoNode.backgroundColor = .blue
+    }
+    
+    /// Sets up the behavior of cellVideoNode based on the post model.
+    /// - Parameter post: The post model used for configuration.
+    private func setupCellVideoNodeBehavior(with post: PostModel) {
+        cellVideoNode.url = getThumbnailURL(post: post)
+        cellVideoNode.shouldAutoplay = false
+        cellVideoNode.shouldAutorepeat = true
+    }
+    
+    /// Determines and sets the video content mode based on post's metadata.
+    /// - Parameter post: The post model with metadata to determine content mode.
+    private func determineAndSetVideoContentMode(with post: PostModel) {
+        if let width = post.metadata?.width, let height = post.metadata?.height, width != 0, height != 0 {
+            setVideoContentModeFor(width: width, height: height)
+        } else {
+            setDefaultVideoContentMode()
+        }
+    }
+    
+    /// Asynchronously loads the video asset for the cellVideoNode.
+    /// - Parameter post: The post model containing the video URL.
+    private func loadVideoAssetAsync(with post: PostModel) {
+        DispatchQueue.main.async { [weak self] in
+            guard let self = self else { return }
+
+            // Ensure URL is valid
+            guard let videoURL = self.getVideoURL(post: post) else {
+                // Handle invalid URL case
+                return
+            }
+
+            self.cellVideoNode.asset = AVAsset(url: videoURL)
+        }
+    }
+    
+    /// Sets the video content mode based on the given dimensions.
+    /// - Parameters:
+    ///   - width: The width of the video.
+    ///   - height: The height of the video.
+    func setVideoContentModeFor(width: CGFloat, height: CGFloat) {
+        let aspectRatio = width / height
+        // Check for a 9:16 aspect ratio with a margin for error.
+        if abs(aspectRatio - (9.0/16.0)) < 0.01 {
+            cellVideoNode.contentMode = .scaleAspectFill
+            cellVideoNode.gravity = AVLayerVideoGravity.resizeAspectFill.rawValue
+        } else {
+            setDefaultVideoContentMode()
+        }
+    }
+
+    /// Sets the default video content mode for the cellVideoNode.
+    func setDefaultVideoContentMode() {
+        cellVideoNode.contentMode = .scaleAspectFit
+        cellVideoNode.gravity = AVLayerVideoGravity.resizeAspect.rawValue
+    }
+    
+}
+
+// MARK: - Subview Setup
+
+extension PendingNode {
+    
+    /// Sets up child views of the VideoNode.
+    /// This function orchestrates the setup of various subviews including header, footer, and interaction buttons.
+    func setupChildView() {
+        // Setup different view components of the VideoNode.
+        setupHeaderViews()
+        setupFooterViews()
+        setupPendingView()
+        headerView.setLayoutForDashboard()
+        footerView.stitchBtn.isHidden = true
+    }
+    
+    func fillInfo() {
+        // Populate the VideoNode with relevant post information.
+        fillPostHeaderInfo()
+        fillPostFooterInfo()
+
+        // Load and setup reactions and gesture recognizers.
+        loadReaction()
+        
+    }
+    
+    func cleanInfo() {
+        headerView.cleanup()
+        footerView.cleanup()
+        
+    }
+
+    func cleanGesture() {
+        cleanupCustomTap()
+        removeGestureRecognizers()
+    }
+    
+    func setupGesture() {
+        setupGestureRecognizers()
+        setupCustomTap()
+    }
+    
+    /// Sets up the header views.
+    /// This method adds the header view to the node and applies necessary constraints.
+    private func setupHeaderViews() {
+        self.view.addSubview(self.headerView)
+        addHeaderConstraints(to: self.headerView, within: self.view)
+    }
+    
+    /// Sets up the footer views.
+    /// This method adds the footer view to the node and applies necessary constraints.
+    private func setupFooterViews() {
+        self.view.addSubview(self.footerView)
+        addFooterConstraints(to: self.footerView, within: self.view)
+    }
+    
+
+    /// Adds constraints to the header view.
+    /// - Parameters:
+    ///   - childView: The child view to which constraints are applied.
+    ///   - parentView: The parent view in which the child view resides.
+    ///   - constant: An optional constant value for leading and trailing constraints.
+    private func addHeaderConstraints(to childView: UIView, within parentView: UIView, constant: CGFloat = 0) {
+        childView.translatesAutoresizingMaskIntoConstraints = false
+
+        // Determining the top constraint based on the presence of a notch
+        let topConstraintConstant = 2
+        
+        let change = view.frame.width - ( view.frame.height * 9 / 16)
+        let padding = change / 2
+
+        // Activating constraints
+        NSLayoutConstraint.activate([
+            childView.topAnchor.constraint(equalTo: parentView.topAnchor, constant: CGFloat(topConstraintConstant)),
+            childView.leadingAnchor.constraint(equalTo: parentView.leadingAnchor, constant: padding - 10),
+            childView.trailingAnchor.constraint(equalTo: parentView.trailingAnchor, constant: -padding + 10), // Negative for trailing
+            childView.heightAnchor.constraint(equalToConstant: 80) // Fixed height of the header view.
+        ])
+    }
+
+
+    /// Adds constraints to the footer view.
+    /// - Parameters:
+    ///   - childView: The child view to which constraints are applied.
+    ///   - parentView: The parent view in which the child view resides.
+    ///   - constant: An optional constant value for leading, trailing, and bottom constraints.
+    private func addFooterConstraints(to childView: UIView, within parentView: UIView, constant: CGFloat = 0) {
+        let change = view.frame.width - ( view.frame.height * 9 / 16)
+        let padding = change / 2
+        
+        childView.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            childView.bottomAnchor.constraint(equalTo: parentView.bottomAnchor, constant: -50), // Offset from the bottom.
+            childView.leadingAnchor.constraint(equalTo: parentView.leadingAnchor, constant: padding - 10),
+            childView.trailingAnchor.constraint(equalTo: parentView.trailingAnchor, constant: constant),
+            childView.heightAnchor.constraint(equalToConstant: 150) // Height of the footer view.
+        ])
+    }
+
+    /// Fills the header with information about the post's owner
+    func fillPostHeaderInfo() {
+        // Check if the post has an owner and fill the header view accordingly
+        if let owner = post.owner {
+            // Set header information including the username, post creation time, and avatar URL
+            headerView.setHeaderInfo(
+                username: owner.username,
+                postTime: post.createdAt!, // Force unwrapping is risky here, consider safe unwrapping
+                avatarURL: owner.avatar
+            )
+        }
+        // Consider adding an else block to handle the case where post.owner is nil
+    }
+
+    /// Fills the footer with information about the post
+    func fillPostFooterInfo() {
+        // Setting footer information with post content and additional description
+        // 'post.content' is used for the title, and a static extra description is added
+        footerView.setFooterInfoForDashboard(
+            title: post.content,
+            description: "extra description will go here! ^^"
+        )
+
+        // Note: Consider making the extra description dynamic or configurable
+        // if different posts require different footer descriptions.
+    }
+    
+    // MARK: - Gesture Recognizer Setup
+
+    /// Sets up gesture recognizers for various interactive elements in the view
+    func setupGestureRecognizers() {
+        // Username Tap Gesture (Header View)
+        let usernameTap1 = createTapGestureRecognizer(target: self, action: #selector(PendingNode.userTapped))
+        self.headerView.username.isUserInteractionEnabled = true
+        self.headerView.username.addGestureRecognizer(usernameTap1)
+        
+        // Avatar Image Tap Gesture (Header View)
+        let usernameTap2 = createTapGestureRecognizer(target: self, action: #selector(PendingNode.userTapped))
+        self.headerView.avatarImg.isUserInteractionEnabled = true
+        self.headerView.avatarImg.addGestureRecognizer(usernameTap2)
+        
+        let approveTap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(PendingNode.approveTapped))
+        approveTap.numberOfTapsRequired = 1
+        self.pendingView.approveBtn.addGestureRecognizer(approveTap)
+        
+        let declineTap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(PendingNode.declineTapped))
+        declineTap.numberOfTapsRequired = 1
+        self.pendingView.declineBtn.addGestureRecognizer(declineTap)
+    }
+    
+    func setupPendingView() {
+        self.pendingView.backgroundColor = .clear
+        self.buttonNode.view.addSubview(self.pendingView)
+        self.pendingView.translatesAutoresizingMaskIntoConstraints = false
+        self.pendingView.topAnchor.constraint(equalTo: self.buttonNode.view.topAnchor, constant: 0).isActive = true
+        self.pendingView.bottomAnchor.constraint(equalTo: self.buttonNode.view.bottomAnchor, constant: 0).isActive = true
+        self.pendingView.leadingAnchor.constraint(equalTo: self.buttonNode.view.leadingAnchor, constant: 0).isActive = true
+        self.pendingView.trailingAnchor.constraint(equalTo: self.buttonNode.view.trailingAnchor, constant: 0).isActive = true
+    }
+    
+    
+    func removeGestureRecognizers() {
+        // Remove gesture recognizers from header view elements
+        self.headerView.username.gestureRecognizers?.forEach(self.headerView.username.removeGestureRecognizer)
+        self.headerView.avatarImg.gestureRecognizers?.forEach(self.headerView.avatarImg.removeGestureRecognizer)
+        self.headerView.settingBtn.gestureRecognizers?.forEach(self.headerView.settingBtn.removeGestureRecognizer)
+        self.headerView.postTime.gestureRecognizers?.forEach(self.headerView.postTime.removeGestureRecognizer)
+        self.headerView.postDate.gestureRecognizers?.forEach(self.headerView.postDate.removeGestureRecognizer)
+
+        // Remove gesture recognizers from footer view elements
+        self.footerView.stitchBtn.gestureRecognizers?.forEach(self.footerView.stitchBtn.removeGestureRecognizer)
+        
+        self.pendingView.approveBtn.gestureRecognizers?.forEach(self.pendingView.approveBtn.removeGestureRecognizer)
+        self.pendingView.declineBtn.gestureRecognizers?.forEach(self.pendingView.declineBtn.removeGestureRecognizer)
+        
+        // Remove gesture recognizers from the view
+        self.view.gestureRecognizers?.forEach(self.view.removeGestureRecognizer)
+    }
+
+    /// Creates and returns a UITapGestureRecognizer with specified target, action, and number of taps
+    /// - Parameters:
+    ///   - target: The object that is the recipient of the action message.
+    ///   - action: The action to be called when the gesture is recognized.
+    ///   - taps: The number of taps required for the gesture to be recognized.
+    /// - Returns: Configured UITapGestureRecognizer.
+    func createTapGestureRecognizer(target: Any, action: Selector, taps: Int = 1) -> UITapGestureRecognizer {
+        let tap = UITapGestureRecognizer(target: target, action: action)
+        tap.numberOfTapsRequired = taps
+        return tap
+    }
+
+    // MARK: - Custom Tap Setup
+
+    /// Sets up a custom tap gesture for the footer view.
+    func setupCustomTap() {
+        // Configuring a custom tap handler for the label in the footer view.
+        // The handler is specifically for the type of custom interaction defined in footerView.customType.
+        footerView.label.handleCustomTap(for: footerView.customType) { [weak self] hashtag in
+            // The closure is called with the tapped hashtag.
+            // 'self' is captured weakly to prevent retain cycles.
+            self?.presentPostListWithHashtagVC(for: hashtag)
+        }
+    }
+
+    func cleanupCustomTap() {
+        footerView.label.handleCustomTap(for: footerView.customType) { _ in }
+    }
+
+    
+    /// Presents the `PostListWithHashtagVC` for the given hashtag.
+    /// - Parameter selectedHashtag: The hashtag selected by the user.
+    func presentPostListWithHashtagVC(for selectedHashtag: String) {
+        // Using guard for safe unwrapping and to handle potential errors.
+        guard let PLHVC = UIStoryboard(name: "Dashboard", bundle: nil)
+                .instantiateViewController(withIdentifier: "PostListWithHashtagVC") as? PostListWithHashtagVC,
+              let vc = UIViewController.currentViewController() else {
+            // Error handling if the view controller could not be instantiated.
+            //print("Error: Unable to instantiate PostListWithHashtagVC from storyboard.")
+            return
+        }
+        
+        // Configuring the view controller with the selected hashtag.
+        PLHVC.searchHashtag = selectedHashtag
+        PLHVC.onPresent = true
+
+        // Setting the modal presentation style and presenting the view controller.
+        let navController = UINavigationController(rootViewController: PLHVC)
+        navController.modalPresentationStyle = .fullScreen
+        vc.present(navController, animated: true, completion: nil)
+    }
+
+
+}
+
+
+// MARK: - Reaction Handling
+
+extension PendingNode {
+
+    /// Loads reaction data for the post.
+    /// This method fetches reaction data such as like and save statuses from the server.
+    func loadReaction() {
+        APIManager.shared.getReactionPost(postId: post.id) { [weak self] result in
+            guard let strongSelf = self else { return }
+
+            switch result {
+            case .success(let apiResponse):
+                // Parsing the API response to extract reaction data.
+                guard let message = apiResponse.body?["message"] as? String,
+                      message == "success",
+                      let data = apiResponse.body?["data"] as? [String: Any],
+                      let isFollower = data["isFollower"] as? Bool,
+                      let isFollowing = data["isFollowing"] as? Bool,
+                      let isLiked = data["isLike"] as? Bool,
+                      let isSaved = data["isSaved"] as? Bool else {
+                    //print("Error: Invalid or missing data in response")
+                    return
                 }
-            
-            default:
-                break
+                
+                // Handling the reaction data.
+                strongSelf.handleReaction(isFollower: isFollower, isFollowing: isFollowing, isLiked: isLiked, isSaved: isSaved)
+            case .failure(_):
+                return
+                //print("API Error: \(error)")
             }
         }
-        
     }
     
-    func playProcess() {
+    // MARK: - Reaction Handling
+
+    /// Handles updating the UI elements for reactions like follow, like, and save.
+    /// - Parameters:
+    ///   - isFollower: Indicates whether the current user is a follower.
+    ///   - isFollowing: Indicates whether the current user is following.
+    ///   - isLiked: Indicates whether the current post is liked.
+    ///   - isSaved: Indicates whether the current post is saved.
+    func handleReaction(isFollower: Bool, isFollowing: Bool, isLiked: Bool, isSaved: Bool) {
+        guard let finalPost = post else { return }
         
-        if cellVideoNode.isPlaying() {
-            cellVideoNode.pause()
-        } else {
-            cellVideoNode.play()
+        hideFollowBtn()
+        
+    }
+
+    // MARK: - Follow Button Management
+
+    /// Hides the follow button.
+    /// This method is called when the follow button should not be displayed.
+    func hideFollowBtn() {
+        DispatchQueue.main.async { [weak self] in
+            guard let strongSelf = self else { return }
+            strongSelf.headerView.followBtn.isUserInteractionEnabled = false
+            strongSelf.headerView.followBtn.setTitle("", for: .normal)
+            strongSelf.isFollowingUser = true
+        }
+    }
+
+}
+
+
+
+extension PendingNode {
+
+    // MARK: - User Profile Handling
+
+    /// Handles the user tap action.
+    @objc func userTapped() {
+        // Ensure valid user data before proceeding
+        guard let userId = post.owner?.id,
+              let username = post.owner?.username,
+              !userId.isEmpty,
+              !username.isEmpty,
+              userId != _AppCoreData.userDataSource.value?.userID else {
+            return
         }
         
+        // Show user profile if the data is valid
+        showUserProfile(for: userId, with: username)
     }
 
-  
-    func didTap(_ videoNode: ASVideoNode) {
-        tapProcess()
+    /// Displays the user profile.
+    private func showUserProfile(for userId: String, with username: String) {
+        // Instantiate UserProfileVC from storyboard
+        guard let userProfileVC = UIStoryboard(name: "Dashboard", bundle: nil).instantiateViewController(withIdentifier: "UserProfileVC") as? UserProfileVC,
+              let currentVC = UIViewController.currentViewController() else {
+            return
+        }
+
+        // Configure and present UserProfileVC
+        configureUserProfileVC(userProfileVC, with: userId, nickname: username)
+        let navigationController = UINavigationController(rootViewController: userProfileVC)
+        configureNavigationController(navigationController)
+        currentVC.present(navigationController, animated: true)
+    }
+
+    /// Configures UserProfileVC with user details.
+    private func configureUserProfileVC(_ userProfileVC: UserProfileVC, with userId: String, nickname: String) {
+        userProfileVC.userId = userId
+        userProfileVC.nickname = nickname
+        userProfileVC.onPresent = true
+    }
+
+    /// Configures the navigation controller for presenting UserProfileVC.
+    private func configureNavigationController(_ navigationController: UINavigationController) {
+        navigationController.modalPresentationStyle = .fullScreen
+    }
+
+    /// Presents the share controller with the provided username.
+    private func presentShareController(username: String) {
+        let shareURLString = "https://stitchbox.net/app/post/?uid=\(post.id)"
+        guard let shareURL = URL(string: shareURLString) else { return }
+        
+        let items: [Any] = ["Hi, I am \(username) from Stitchbox, let's check out this!", shareURL]
+        let activityController = UIActivityViewController(activityItems: items, applicationActivities: nil)
+        
+        if let currentVC = UIViewController.currentViewController() {
+            currentVC.present(activityController, animated: true)
+        }
+    }
+
+    /// Presents the comment view controller.
+    private func presentCommentViewController(from viewController: UIViewController) {
+        let commentVC = CommentVC()
+        commentVC.post = self.post
+        commentVC.modalPresentationStyle = .custom
+        commentVC.transitioningDelegate = viewController
+        global_presetingRate = 0.75
+        global_cornerRadius = 35
+
+        viewController.present(commentVC, animated: true)
+    }
+
+
+    /// Handles the settings button tap action.
+    @objc func settingTapped() {
+        // Ensure a view controller is currently available.
+        guard let vc = UIViewController.currentViewController() else { return }
+
+        // Update global corner radius.
+        global_cornerRadius = 45
+
+        // Check if the post owner is the current user.
+        if post.owner?.id == _AppCoreData.userDataSource.value?.userID {
+            // Present PostSettingVC for the post owner.
+            presentVC(vc, using: PostSettingVC())
+            // Update global presenting rate for the owner.
+            global_presetingRate = 0.35
+        } else {
+            // Update global presenting rate for non-owners.
+            global_presetingRate = 0.30
+
+            // Configure and present NewsFeedSettingVC for non-owners.
+            let newsFeedSettingVC = NewsFeedSettingVC()
+            newsFeedSettingVC.modalPresentationStyle = .custom
+            newsFeedSettingVC.transitioningDelegate = vc
+            newsFeedSettingVC.isInformationHidden = headerView.isHidden
+
+            // Check the type of the current view controller and present accordingly.
+            if let updateVC = vc as? FeedViewController {
+                updateVC.editeddPost = post
+                setOwnership(for: newsFeedSettingVC)
+                updateVC.present(newsFeedSettingVC, animated: true)
+            } else if let updateVC = vc as? SelectedRootPostVC {
+                newsFeedSettingVC.isSelected = true
+                updateVC.editeddPost = post
+                setOwnership(for: newsFeedSettingVC)
+                updateVC.present(newsFeedSettingVC, animated: true)
+            }
+        }
+    }
+
+    /// Sets the ownership status of a NewsFeedSettingVC based on the post owner.
+    /// - Parameter vc: The NewsFeedSettingVC to set ownership for.
+    func setOwnership(for vc: NewsFeedSettingVC) {
+        // Determine the ownership status based on the post's owner ID.
+        vc.isOwner = post.owner?.id == _AppCoreData.userDataSource.value?.userID
     }
 
     
-    
+    /// Presents a PostSettingVC on the specified view controller.
+    /// - Parameters:
+    ///   - viewController: The UIViewController on which to present.
+    ///   - postSettingVC: The PostSettingVC to be presented.
+    func presentVC(_ viewController: UIViewController, using postSettingVC: PostSettingVC) {
+        // Configure the presentation style and delegate for the PostSettingVC.
+        postSettingVC.modalPresentationStyle = .custom
+        postSettingVC.transitioningDelegate = viewController
+        postSettingVC.isInformationHidden = headerView.isHidden
+
+        // Present the PostSettingVC based on the type of the parent view controller.
+        if let updateVC = viewController as? FeedViewController {
+            // Assign the edited post based on the view controller's type.
+            updateVC.editeddPost = post
+            // Present the PostSettingVC.
+            updateVC.present(postSettingVC, animated: true)
+        } else if let updateVC = viewController as? SelectedRootPostVC {
+            // Mark the post setting as selected for SelectedParentVC.
+            postSettingVC.isSelected = true
+            // Assign the edited post based on the view controller's root status.
+            updateVC.editeddPost = post
+            // Present the PostSettingVC.
+            updateVC.present(postSettingVC, animated: true)
+        }
+    }
+
+}
+
+extension PendingNode {
     @objc func approveTapped() {
         
         approveBtn?(self)
@@ -576,263 +1104,4 @@ extension PendingNode {
         declineBtn?(self)
         
     }
-}
-
-extension PendingNode {
-
-    func playVideo() {
-        // Check if video is already playing
-        if cellVideoNode.isPlaying() {
-            return
-        }
-
-        // Determine if the video should be muted
-        if let muteStatus = shouldMute {
-            cellVideoNode.muted = muteStatus
-        } else {
-            cellVideoNode.muted = !globalIsSound
-        }
-        
-        // Remove existing observers
-        removeObservers()
-
-        // Check if currentItem is available
-        if let _ = cellVideoNode.currentItem {
-            addObservers()
-        } else {
-            // Delay to ensure currentItem becomes available
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) { [weak self] in
-                if let _ = self?.cellVideoNode.currentItem {
-                    self?.addObservers()
-                } else {
-                    // Handle or log error - still not ready
-                }
-            }
-        }
-    }
-
-    func addObservers() {
-        statusObservation = cellVideoNode.currentItem?.observe(\.status, options: [.new, .initial], changeHandler: { [weak self] (playerItem, change) in
-            print("statusObservation called for: \(self?.post.id) - \(playerItem.status.rawValue)")
-            self?.handleStatusChange()
-        })
-    }
-    
-    func handleStatusChange() {
-        guard let status = cellVideoNode.currentItem?.status else { return }
-
-        switch status {
-        case .readyToPlay:
-            startPlayback()
-        case .failed:
-            printStatusDetails(withPrefix: "FAILED TO play failed")
-        case .unknown:
-            printStatusDetails(withPrefix: "FAILED TO play unknown")
-        @unknown default:
-            printStatusDetails(withPrefix: "FAILED TO play default")
-        }
-    }
-
-
-    func printStatusDetails(withPrefix prefix: String) {
-        
-        let connectionStatus = ReachabilityManager.shared.reachability.connection
-
-        if connectionStatus == .unavailable {
-            showNote(text: "No Internet Connection")
-        } else {
-            let bufferFull = cellVideoNode.currentItem?.isPlaybackBufferFull ?? false
-            let bufferEmpty = cellVideoNode.currentItem?.isPlaybackBufferEmpty ?? false
-            let likelyToKeepUp = cellVideoNode.currentItem?.isPlaybackLikelyToKeepUp ?? false
-            let error = cellVideoNode.currentItem?.error?.localizedDescription ?? "Unknown error"
-            
-            print("\(prefix): \(bufferFull) - \(bufferEmpty) - \(likelyToKeepUp) - \(error)")
-            
-            cellVideoNode.currentItem?.preferredForwardBufferDuration = 5
-            
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.75) { [weak self] in
-                
-                guard let status = self?.cellVideoNode.currentItem?.status else {
-                    print("FAILED - status null")
-                    self?.resetAssets()
-                    return
-                }
-                
-                switch status {
-                case .readyToPlay:
-                    self?.startPlayback()
-                    print("FAILED - Ready to play")
-                case .failed:
-                    //self?.resetAssets()
-                    self?.addSpinner()
-                    print("FAILED TO play failed")
-                case .unknown:
-                    //self?.resetAssets()
-                    self?.addSpinner()
-                    print("FAILED TO play unknown")
-                @unknown default:
-                    //self?.resetAssets()
-                    self?.addSpinner()
-                    print("FAILED TO play default")
-                }
-                
-            }
-        }
-
-        
-    }
-    
-    func addSpinner() {
-        
-        if spinnerRemoved {
-            
-            spinner.center = view.center
-            view.addSubview(spinner)
-            spinner.startAnimating()
-            spinnerRemoved = false
-        }
-        
-        DispatchQueue.main.asyncAfter(deadline: .now() + 2) { [weak self] in
-            
-            if self?.cellVideoNode.isPlaying() == true {
-                self?.removeSpinner()
-                return
-            }
-            
-            guard let status = self?.cellVideoNode.currentItem?.status else {
-                print("FAILED - status null")
-                self?.resetAssets()
-                return
-            }
-            
-            switch status {
-            case .readyToPlay:
-                self?.startPlayback()
-                print("FAILED - Ready to play")
-            case .failed, .unknown:
-                if let likelyToKeepUp = self?.cellVideoNode.currentItem?.isPlaybackLikelyToKeepUp,
-                   !likelyToKeepUp,
-                   let loadedTimeRanges = self?.cellVideoNode.currentItem?.loadedTimeRanges,
-                   self?.bufferIsEmpty(loadedTimeRanges: loadedTimeRanges) == true {
-                    
-                    if self?.assetReset == false {
-                        self?.resetAssets()
-                    } else {
-                        self?.handleStatusChange()
-                    }
-            
-                } else {
-                    self?.handleStatusChange()
-                }
-                
-                print("FAILED TO play failed")
-            @unknown default:
-                
-                if let likelyToKeepUp = self?.cellVideoNode.currentItem?.isPlaybackLikelyToKeepUp,
-                   !likelyToKeepUp,
-                   let loadedTimeRanges = self?.cellVideoNode.currentItem?.loadedTimeRanges,
-                   self?.bufferIsEmpty(loadedTimeRanges: loadedTimeRanges) == true {
-                    
-                    if self?.assetReset == false {
-                        self?.resetAssets()
-                    } else {
-                        self?.handleStatusChange()
-                    }
-                    
-                } else {
-                    self?.handleStatusChange()
-                }
-                
-                print("FAILED TO play failed")
-                
-            }
-            
-        }
-        
-    }
-
-    func bufferIsEmpty(loadedTimeRanges: [NSValue]) -> Bool {
-        guard let lastTimeRange = loadedTimeRanges.last as? CMTimeRange else {
-            return true
-        }
-        let bufferEndTime = CMTimeAdd(lastTimeRange.start, lastTimeRange.duration)
-        let currentTime = self.cellVideoNode.player?.currentTime() ?? CMTime.zero
-        return bufferEndTime < currentTime
-    }
-
-
-    
-    func removeSpinner() {
-        spinnerRemoved = true
-        spinner.stopAnimating()
-        spinner.removeFromSuperview()
-    }
-    
-    
-    func resetAssets() {
-        // Pause player
-        cellVideoNode.player?.pause()
-        assetReset = true
-        // Fade out the video node
-        UIView.animate(withDuration: 0.2, animations: {
-            self.cellVideoNode.alpha = 0.0
-        }) { (completed) in
-            // Replace asset
-            self.cellVideoNode.asset = nil
-            self.cellVideoNode.asset = AVAsset(url: self.getVideoURL(post: self.post)!)
-
-            UIView.animate(withDuration: 0.2, animations: {
-                self.cellVideoNode.alpha = 1.0
-            }) { (completed) in
-                self.playVideo()
-            }
-
-        }
-        
-    }
-
-
-    func startPlayback() {
-        
-        removeSpinner()
-        
-        if isActive {
-            DispatchQueue.main.async() { [weak self] in
-                if self?.cellVideoNode.isPlaying() != true {
-                    self?.cellVideoNode.play()
-                }
-            }
-            
-        }
-        
-    }
-
-    func pauseVideo() {
-        
-        isActive = false
-        cellVideoNode.pause()
-        let time = CMTime(seconds: 0, preferredTimescale: 1)
-        cellVideoNode.player?.seek(to: time)
-        removeObservers()
-    }
-    
-    func unmuteVideo() {
-        
-        cellVideoNode.muted = false
-        shouldMute = false
-        
-    }
-    
-    func removeObservers() {
-        statusObservation?.invalidate()
-        statusObservation = nil
-    }
-
-    override func didExitVisibleState() {
-        super.didExitVisibleState()
-        pauseVideo()
-        removeObservers()
-    }
-
-
 }

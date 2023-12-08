@@ -757,7 +757,7 @@ extension PendingVC {
     /// - Parameter index: The index of the video to be paused.
     func pauseVideo(atIndex index: Int) {
         guard let cell = getPendingNodeCell(at: index) else { return }
-        cell.pauseVideo()
+        cell.pauseVideo(shouldSeekToStart: true)
     }
 
     /// Plays the video at the specified index.

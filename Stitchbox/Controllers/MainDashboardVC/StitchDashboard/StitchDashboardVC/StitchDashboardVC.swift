@@ -285,14 +285,25 @@ extension StitchDashboardVC {
     }
 
     private func manageVideoPlayback(playIn playingVC: UIViewController, pauseIn pausedVCs: [UIViewController]) {
-        if let playingVC = playingVC as? VideoPlayable, let currentIndex = playingVC.currentIndex {
-            playingVC.playVideo(atIndex: currentIndex)
+        
+        if let vc = playingVC as? PendingVC {
+            vc.playVideo(atIndex: vc.currentIndex!)
+        } else if let vc = playingVC as? ApprovedStitchVC {
+            vc.playVideo(atIndex: vc.currentIndex!)
+        } else if let vc = playingVC as? StitchToVC {
+            vc.playVideo(atIndex: vc.currentIndex!)
         }
-        pausedVCs.forEach {
-            if let pausedVC = $0 as? VideoPlayable, let currentIndex = pausedVC.currentIndex {
-                pausedVC.pauseVideo(atIndex: currentIndex)
+        
+        for pauseVC in pausedVCs {
+            if let vc = playingVC as? PendingVC {
+                vc.pauseVideo(atIndex: vc.currentIndex!)
+            } else if let vc = pauseVC as? ApprovedStitchVC {
+                vc.pauseVideo(atIndex: vc.currentIndex!)
+            } else if let vc = pauseVC as? StitchToVC {
+                vc.pauseVideo(atIndex: vc.currentIndex!)
             }
         }
+        
     }
 
     private func borderForButton(_ button: UIButton) -> CALayer {

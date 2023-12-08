@@ -130,10 +130,13 @@ class PostHeader: UIView {
         postDate.font = FontManager.shared.roboto(.Regular, size: 10)
         postTime.font = FontManager.shared.roboto(.Regular, size: 10)
         avatarImg.frame.size = CGSize(width: 30, height: 30)
-        avatarImg.cornerRadius = 15
+        avatarImg.layer.cornerRadius = self.avatarImg.frame.size.width / 2
+        avatarNode.frame.size = CGSize(width: 30, height: 30)
+        avatarNode.layer.cornerRadius = self.avatarImg.frame.size.width / 2
         avatarImg.clipsToBounds = true
         stackView.spacing = 5
 
     }
+
 
 }

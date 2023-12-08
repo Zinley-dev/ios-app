@@ -52,15 +52,8 @@ class StitchControlForRemoveNode: ASCellNode, ASVideoNodeDelegate {
     var firstItem = false
 
     
-    // Constants
-    private let maximumShowing = 100
-    fileprivate let FontSize: CGFloat = 13
-    
     // Observer for video playback status.
     var statusObservation: NSKeyValueObservation?
-
-    // Action
-    var indexPathSetup: Int?
     var stitchTo: Bool
     var infoNode: ASTextNode!
     var buttonNode: ASDisplayNode!
@@ -185,7 +178,7 @@ class StitchControlForRemoveNode: ASCellNode, ASVideoNodeDelegate {
             infoNode.attributedText = NSAttributedString(
                 string: statusText,
                 attributes: [
-                    .font: FontManager.shared.roboto(.Bold, size: fontSize),
+                    .font: FontManager.shared.roboto(.Bold, size: 10),
                     .foregroundColor: UIColor.white,
                     .paragraphStyle: paragraphStyle
                 ]
@@ -265,7 +258,7 @@ class StitchControlForRemoveNode: ASCellNode, ASVideoNodeDelegate {
         
         if stitchTo {
             infoNode.style.preferredSize = CGSize(width: 75, height: 15)
-            let stitchCountInsets = UIEdgeInsets(top: 8, left: 8 + padding, bottom: .infinity, right: .infinity)
+            let stitchCountInsets = UIEdgeInsets(top: .infinity, left: .infinity, bottom: 75, right: padding - 10)
             let stitchCountInsetSpec = ASInsetLayoutSpec(insets: stitchCountInsets, child: infoNode)
             let overlay2 = ASOverlayLayoutSpec(child: finalOverlay, overlay: stitchCountInsetSpec)
             return overlay2
