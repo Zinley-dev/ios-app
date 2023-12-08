@@ -103,7 +103,7 @@ class UploadContentManager {
                 //print("Posted successfully \(apiResponse)")
                 needReloadPost = true // Flag to indicate the need for reloading posts
 
-            case .failure(let error):
+            case .failure(_):
                 // Handle failure in post creation
                 //print(error)
                 return
