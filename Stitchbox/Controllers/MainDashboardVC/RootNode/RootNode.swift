@@ -48,13 +48,11 @@ class RootNode: ASCellNode, UICollectionViewDelegateFlowLayout, UIAdaptivePresen
     var newPlayingIndex: Int? = 0
     var isVideoPlaying = false
     var isDraggingEnded: Bool = false
-    var isfirstLoad = true
     var firstItem = false
     var isFirstGallerySelected = false
-    var firstPre = false
+    var loadChainAllow = true
     //var loadChainAllow = true
     var level = 0
-    var isCollectionLoad = false
     var hasEverFetch = false
     lazy var delayItem = workItem()
     lazy var delayItem2 = workItem()
@@ -155,18 +153,18 @@ class RootNode: ASCellNode, UICollectionViewDelegateFlowLayout, UIAdaptivePresen
     /// Called when the view controller’s view becomes visible.
     override func didEnterVisibleState() {
         super.didEnterVisibleState() // Always call the super implementation of lifecycle methods
-       
+        
         activateVideoNodeIfNeeded()
     }
     
     
     override func didEnterDisplayState() {
-        //loadChainAllow = true
+        loadChainAllow = true
         self.setupAnimatedLabel()
     }
 
     override func didExitDisplayState() {
-        //loadChainAllow = true
+        loadChainAllow = false
         self.animatedLabel.removeFromSuperview()
         self.container.removeFromSuperview()
         self.animatedLabel = nil
@@ -175,8 +173,6 @@ class RootNode: ASCellNode, UICollectionViewDelegateFlowLayout, UIAdaptivePresen
             node.cleanInfo()
         }, ignoreIndex: true)
     }
-
-
     
     // MARK: - Private Helpers
 
@@ -464,6 +460,10 @@ extension RootNode {
     func shouldBatchFetch(for collectionNode: ASCollectionNode) -> Bool {
         // Checking if loading is allowed; if not, batch fetching is disabled
         // Enabling batch fetching only for the main collection node and not for the gallery collection node
+        guard loadChainAllow else {
+            return false
+        }
+        
         return collectionNode != galleryCollectionNode
     }
 

@@ -144,6 +144,7 @@ class CommentNode: ASCellNode {
         cmtNode.attributedText = nil
         label.attributedText = nil
         avatarNode.url = nil
+        avatarNode.image = nil
     }
 
 

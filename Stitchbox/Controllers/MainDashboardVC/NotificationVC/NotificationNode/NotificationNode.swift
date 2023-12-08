@@ -48,7 +48,6 @@ class NotificationNode: ASCellNode {
         upperTextNode.isLayerBacked = true
         imageNode.isLayerBacked = true
         timeNode.isLayerBacked = true
-        
       
         imageNode.cornerRadius = OrganizerImageSize/2
         imageNode.clipsToBounds = true

@@ -71,6 +71,7 @@ class PostSearchNode: ASCellNode {
         // Reset imageNode properties
         imageNode.backgroundColor = nil
         imageNode.url = nil // Resetting the image
+        imageNode.image = nil
 
         // Clear attributed text in nameNode, infoNode, stitchCountNode, and countNode
         nameNode.attributedText = nil

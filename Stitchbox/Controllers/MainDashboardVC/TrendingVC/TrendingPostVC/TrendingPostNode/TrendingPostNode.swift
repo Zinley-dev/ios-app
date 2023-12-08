@@ -55,7 +55,6 @@ class TrendingPostNode: ASCellNode {
         countNode.isLayerBacked = true
         imageNode.isLayerBacked = true
         imageNode.shouldRenderProgressImages = true
-        imageNode.url = post.imageUrl
         automaticallyManagesSubnodes = true
         
         let paragraphStyle = NSMutableParagraphStyle()
@@ -77,6 +76,7 @@ class TrendingPostNode: ASCellNode {
 
     
     func setupLayout() {
+        imageNode.url = post.imageUrl
         // Basic setup
         self.backgroundColor = .clear
         self.imageNode.backgroundColor = .clear
@@ -274,7 +274,8 @@ class TrendingPostNode: ASCellNode {
         imageNode.cornerRadius = 0
         imageNode.contentMode = .scaleToFill // Or any default contentMode you prefer
         imageNode.image = nil // Resetting the image
-
+        imageNode.url = nil
+        
         // Clear attributed text in nodes
         infoNode.attributedText = nil
         nameNode.attributedText = nil

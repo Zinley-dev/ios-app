@@ -154,6 +154,7 @@ class OwnerPostSearchNode: ASCellNode {
         imageNode.contentMode = .scaleToFill // Or any default contentMode you prefer
         imageNode.cornerRadius = 0
         imageNode.url = nil // Resetting the image
+        imageNode.image = nil
 
         // Clear the attributed text in infoNode, nameNode, stitchCountNode, and countNode
         infoNode.attributedText = nil

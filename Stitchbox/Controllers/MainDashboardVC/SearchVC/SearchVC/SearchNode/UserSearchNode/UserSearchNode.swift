@@ -113,6 +113,7 @@ class UserSearchNode: ASCellNode {
     func cleanup() {
         // Reset imageNode
         imageNode.url = nil
+        imageNode.image = nil
         imageNode.cornerRadius = 0
         imageNode.clipsToBounds = false
         imageNode.shouldRenderProgressImages = false

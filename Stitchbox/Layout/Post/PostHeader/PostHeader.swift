@@ -98,6 +98,7 @@ class PostHeader: UIView {
     func cleanup() {
         // Resetting the image in avatarNode to release memory.
         avatarNode.url = nil
+        avatarNode.image = nil
 
         // Cancel any ongoing network requests for avatarNode.
         // If you're using a network image node with a networking library

@@ -72,6 +72,7 @@ class StitchGalleryNode: ASCellNode {
         imageNode.contentMode = .scaleToFill // Or any default contentMode you prefer
         imageNode.cornerRadius = 0
         imageNode.url = nil // Resetting the image if necessary
+        imageNode.image = nil
 
         // Reset properties set in setupnode()
         cleanupnode()
