@@ -88,9 +88,13 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
             // For FeedViewController, check if it's the first load and handle background time
             if feedVC.firstLoadDone {
                 if let lastBackground = lastInactiveTime, lastBackground < twoMinsAgo {
-                    feedVC.seekToZero(index: feedVC.currentIndex ?? 0)  // Safely unwrap currentIndex
+                    //feedVC.seekToZero(index: feedVC.currentIndex ?? 0)  // Safely unwrap currentIndex
                 }
-                feedVC.loadFeed()
+                //feedVC.loadFeed()
+            }
+        } else if let rootVC = currentVC as? SelectedRootPostVC {
+            if rootVC.completedLoading {
+                //rootVC.resumeVideo()
             }
         }
 

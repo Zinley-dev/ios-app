@@ -595,6 +595,7 @@ extension RootNode {
             }
         }
 
+        print("Playing video for \(level) \(index)")
         videoNode.playVideo()
     }
 
