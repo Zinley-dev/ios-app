@@ -930,7 +930,7 @@ extension VideoNode {
             cmtCount: post.totalComments,
             saveCount: post.totalSave,
             totalOnChain: post.totalOnChain,
-            positionOnChain: post.positionOnChain, 
+            positionOnChain: indexPathSetup ?? 0,
             postID: post.id
         )
     }

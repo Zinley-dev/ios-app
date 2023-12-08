@@ -364,7 +364,7 @@ extension RootNode: ASCollectionDelegate, ASCollectionDataSource {
         return { [weak self] in
             guard let strongSelf = self else { return ASCellNode() }
             let isFirstItem = strongSelf.firstItem && indexPath.row == 0
-            let node = VideoNode(with: post, isPreview: false, firstItem: isFirstItem, level: strongSelf.level, indexPath: indexPath.row)
+            let node = VideoNode(with: post, isPreview: false, firstItem: isFirstItem, level: strongSelf.level, indexPath: indexPath.row + 1)
             strongSelf.configureMainNode(node, for: post, at: indexPath, isFirstItem: isFirstItem)
             return node
         }
