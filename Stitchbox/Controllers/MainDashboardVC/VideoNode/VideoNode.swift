@@ -866,10 +866,10 @@ extension VideoNode {
     private func addButtonsConstraints(to childView: UIView, within parentView: UIView, constant: CGFloat = 0) {
         childView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            childView.bottomAnchor.constraint(equalTo: parentView.bottomAnchor, constant: -2),
+            childView.bottomAnchor.constraint(equalTo: parentView.bottomAnchor, constant: 8),
             childView.leadingAnchor.constraint(equalTo: parentView.leadingAnchor, constant: constant),
             childView.trailingAnchor.constraint(equalTo: parentView.trailingAnchor, constant: constant),
-            childView.heightAnchor.constraint(equalToConstant: 30) // Height of the button view.
+            childView.heightAnchor.constraint(equalToConstant: 50) // Height of the button view.
         ])
     }
 
