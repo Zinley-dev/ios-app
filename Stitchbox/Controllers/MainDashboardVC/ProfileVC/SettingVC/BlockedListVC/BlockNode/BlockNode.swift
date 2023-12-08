@@ -323,17 +323,21 @@ class BlockNode: ASCellNode {
         
     }
     
-    func loadInfo(uid: String ) {
-        userNameNode.attributedText = NSAttributedString(string: "@\(user.blockUser.userName)")
-        nameNode.attributedText = NSAttributedString(string: user.blockUser.name)
+    func loadInfo(uid: String) {
+        let textAttributes: [NSAttributedString.Key: Any] = [
+            .foregroundColor: UIColor.black
+        ]
+        
+        userNameNode.attributedText = NSAttributedString(string: "@\(user.blockUser.userName)", attributes: textAttributes)
+        nameNode.attributedText = NSAttributedString(string: user.blockUser.name, attributes: textAttributes)
         
         if user.blockUser.avatarURL != "" {
             avatarNode.url = URL(string: user.blockUser.avatarURL)
         } else {
-            avatarNode.image = UIImage.init(named: "defaultuser")
+            avatarNode.image = UIImage(named: "defaultuser")
         }
-        
     }
+
     
     /// Cleans up the nodes by resetting their states to defaults.
     func cleanupInfo() {
@@ -343,6 +347,7 @@ class BlockNode: ASCellNode {
 
         // Reset the avatarNode's image to a default image or nil.
         avatarNode.url = nil
+        avatarNode.image = nil
     }
 
     

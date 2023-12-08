@@ -1244,7 +1244,7 @@ extension UserProfileVC {
             if error != nil {
                 
                 SwiftLoader.hide()
-                self.showErrorAlert("Oops!", msg: "User can't be blocked now due to internal error from our SB chat system, please try again")
+                self.showErrorAlert("Oops!", msg: "User can't be blocked now due to internal error from our SB chat system, please try again \(error?.localizedDescription)")
                 
             } else {
                 
