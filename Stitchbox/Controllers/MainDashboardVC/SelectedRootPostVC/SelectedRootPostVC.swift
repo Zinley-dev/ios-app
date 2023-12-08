@@ -728,7 +728,9 @@ extension SelectedRootPostVC {
     /// - Parameter result: The result of the deletion request.
     private func handleDeletePostResult(_ result: Result) {
         
-        SwiftLoader.hide()
+        DispatchQueue.main.async {
+            SwiftLoader.hide()
+        }
         
         switch result {
         case .success:
