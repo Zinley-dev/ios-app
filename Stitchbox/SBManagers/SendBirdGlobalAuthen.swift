@@ -14,12 +14,12 @@ import UIKit
 func syncSendbirdAccount() {
     
     guard _AppCoreData.userSession.value != nil else {
-        print("Sendbird: Stitchbox authentication failed")
+        //print("Sendbird: Stitchbox authentication failed")
         return
     }
     
     guard let userDataSource = _AppCoreData.userDataSource.value, let userUID = userDataSource.userID, userUID != "" else {
-        print("Sendbird: Can't get userUID")
+        //print("Sendbird: Can't get userUID")
         return
     }
     
@@ -37,32 +37,32 @@ func syncSendbirdAccount() {
   
     SBUMain.connectIfNeeded { user, error in
         if let error = error {
-            print("SBUMain.connect:", error.localizedDescription)
+            //print("SBUMain.connect:", error.localizedDescription)
             return
         }
 
         guard let _ = user else {
-            print("SBUMain.connect: no user")
+           // print("SBUMain.connect: no user")
             return
         }
 
         SBDMain.setPushTriggerOption(.all) { error in
             if let error = error {
-                print("Senbird:", error.localizedDescription)
+                //print("Senbird:", error.localizedDescription)
             }
         }
 
         if let pushToken = SBDMain.getPendingPushToken() {
             SBDMain.registerDevicePushToken(pushToken, unique: false) { status, error in
                 guard error == nil else {
-                    print("APNS registration failed.")
+                    //print("APNS registration failed.")
                     return
                 }
 
                 if status == .pending {
-                    print("Push registration is pending.")
+                    //print("Push registration is pending.")
                 } else {
-                    print("APNS Token is registered.")
+                    //print("APNS Token is registered.")
                 }
             }
         } else {
@@ -71,7 +71,7 @@ func syncSendbirdAccount() {
 
         SBDMain.setChannelInvitationPreferenceAutoAccept(true) { error in
             guard error == nil else {
-                print("Senbird Invites:", error!.localizedDescription)
+                //print("Senbird Invites:", error!.localizedDescription)
                 return
             }
 
@@ -79,7 +79,7 @@ func syncSendbirdAccount() {
             SendBirdCall.authenticate(with: params) { cuser, err in
                 guard cuser != nil else {
                     // Failed
-                    print("Senbird call:", err!.localizedDescription)
+                    //print("Senbird call:", err!.localizedDescription)
                     return
                 }
 
@@ -94,41 +94,41 @@ func syncSendbirdAccount() {
 
 func sendbirdLogout() {
     guard _AppCoreData.userSession.value != nil else {
-        print("Sendbird: Stitchbox authentication failed")
+        //print("Sendbird: Stitchbox authentication failed")
         return
     }
     SBUMain.connect { user, error in
         if let error = error {
-            print("Sendbird: \(error.localizedDescription)")
+            //print("Sendbird: \(error.localizedDescription)")
             return
         }
 
         guard user != nil else {
-            print("Sendbird: Failed to get user")
+            //print("Sendbird: Failed to get user")
             return
         }
 
         if let pushToken = SBDMain.getPendingPushToken() {
             SBDMain.unregisterPushToken(pushToken, completionHandler: { (response, error) in
                 if let error = error {
-                    print("Sendbird: \(error.localizedDescription)")
+                    //print("Sendbird: \(error.localizedDescription)")
                 } else {
                     SBDMain.disconnect()
-                    print("SendBirdChat disconnect")
+                    //print("SendBirdChat disconnect")
                 }
             })
         }
 
         SendBirdCall.unregisterVoIPPush(token: UserDefaults.standard.voipPushToken) { error in
             if let error = error {
-                print(error.localizedDescription)
+                //print(error.localizedDescription)
             } else {
                 SendBirdCall.deauthenticate { error in
                     if let error = error {
-                        print(error.localizedDescription)
+                        //print(error.localizedDescription)
                     }
                 }
-                print("SendBirdCall disconnect")
+                //print("SendBirdCall disconnect")
             }
         }
 

@@ -12,7 +12,7 @@ import AVKit
 class ViewModel: ObservableObject {
     
     deinit {
-        print("ViewModel is being deallocated")
+        //print("ViewModel is being deallocated")
     }
 
     
@@ -71,7 +71,7 @@ class ViewModel: ObservableObject {
     @MainActor
     func helloMessages() {
         
-        print("helloMessages")
+        //print("helloMessages")
         
     }
     
@@ -282,8 +282,8 @@ class ViewModel: ObservableObject {
                     }
                 }
 
-            case .failure(let error):
-                print(error)
+            case .failure(_):
+                //print(error)
 
                 DispatchQueue.main.async {
                     self.displayWelcomeMessage(completion: completion)

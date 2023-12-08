@@ -80,11 +80,17 @@ class SuggestFollowNode: ASCellNode {
     
     override func didEnterDisplayState() {
         super.didEnterDisplayState()
+        guard shouldAllowAfterInactive else {
+            return
+        }
         setupUserInfo()
     }
     
     override func didExitDisplayState() {
         super.didExitDisplayState()
+        guard shouldAllowAfterInactive else {
+            return
+        }
         cleanupUserLayout()
     }
     

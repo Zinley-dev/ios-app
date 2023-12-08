@@ -56,6 +56,7 @@ var didChanged = false
 var reloadAddedGame = false
 var globalIsSound = false
 var globalRegulate = false
+var shouldAllowAfterInactive = true
 var shouldMute: Bool?
 var globalSetting: SettingModel!
 var navigationControllerHeight: CGFloat = 0.0
@@ -122,15 +123,15 @@ typealias DownloadComplete = () -> ()
 func activeSpeaker() {
     do {
         try AVAudioSession.sharedInstance().setCategory(AVAudioSession.Category.playback)
-        print("AVAudioSession Category Playback OK")
+        //print("AVAudioSession Category Playback OK")
         do {
             try AVAudioSession.sharedInstance().setActive(true)
-            print("AVAudioSession is Active")
+            //print("AVAudioSession is Active")
         } catch {
-            print(error.localizedDescription)
+            //print(error.localizedDescription)
         }
     } catch {
-        print(error.localizedDescription)
+        //print(error.localizedDescription)
     }
 }
 
@@ -276,14 +277,15 @@ func processUpdateAvatar(channel: SBDGroupChannel, image: UIImage) {
             
             channel.update(with: param) { _, error in
                 if let error = error {
-                    print(error.localizedDescription, error.code)
+                    //print(error.localizedDescription, error.code)
                     return
                 }
                 // Handle successful update, if needed
             }
 
-        case .failure(let error):
-            print(error.localizedDescription)
+        case .failure(_):
+            //print(error.localizedDescription)
+            return
         }
     }
 }
@@ -299,9 +301,9 @@ func createLocalNotificationForActiveSendbirdUsers(title: String, body: String, 
     // Request permission to display notifications
     UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .sound, .badge]) { granted, _ in
         if granted {
-            print("Notification permissions granted")
+            //print("Notification permissions granted")
         } else {
-            print("Notification permissions not granted")
+            //print("Notification permissions not granted")
         }
     }
 
@@ -316,9 +318,9 @@ func createLocalNotificationForActiveSendbirdUsers(title: String, body: String, 
     let request = UNNotificationRequest(identifier: "notification", content: content, trigger: trigger)
     UNUserNotificationCenter.current().add(request) { error in
         if let error = error {
-            print(error.localizedDescription)
+            //print(error.localizedDescription)
         } else {
-            print("Notification scheduled")
+            //print("Notification scheduled")
         }
     }
 }
@@ -463,8 +465,8 @@ private func handleUserInformationResult(_ result: Result) {
     switch result {
     case .success(let response):
         updateUserInformation(with: response)
-    case .failure(let error):
-        print("Error loading profile: \(error)")
+    case .failure(_):
+        return
     }
 }
 
@@ -472,14 +474,14 @@ private func handleUserInformationResult(_ result: Result) {
 /// - Parameter response: The response from the user information API call.
 private func updateUserInformation(with response: APIResponse) {
     guard let data = response.body, !data.isEmpty else {
-        print("No data available or data is empty in API response")
+        //print("No data available or data is empty in API response")
         return
     }
 
     if let newUserData = Mapper<UserDataSource>().map(JSON: data) {
         updateAppCoreData(with: newUserData)
     } else {
-        print("Failed to map API response to UserDataSource")
+        //print("Failed to map API response to UserDataSource")
     }
 }
 

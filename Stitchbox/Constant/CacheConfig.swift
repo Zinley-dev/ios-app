@@ -31,7 +31,7 @@ final class CacheManager {
             }
 
         } catch {
-            print("Failed to create storage: \(error)")
+            //print("Failed to create storage: \(error)")
         }
     }
 
@@ -40,9 +40,11 @@ final class CacheManager {
         dataStorage?.async.setObject(data, forKey: key, expiry: defaultExpiry, completion: { result in
             switch result {
             case .value:
-                print("Data cached successfully.")
+                //print("Data cached successfully.")
+                return
             case .error(let error):
-                print("Failed to cache data: \(error)")
+                //print("Failed to cache data: \(error)")
+                return
             }
         })
     }
@@ -62,9 +64,11 @@ final class CacheManager {
         imageStorage?.async.setObject(image, forKey: key, expiry: defaultExpiry, completion: { result in
             switch result {
             case .value:
-                print("Image cached successfully.")
+                //print("Image cached successfully.")
+                return
             case .error(let error):
-                print("Failed to cache image: \(error)")
+                //print("Failed to cache image: \(error)")
+                return
             }
         })
     }
@@ -95,18 +99,22 @@ final class CacheManager {
         dataStorage?.async.removeExpiredObjects() { result in
             switch result {
             case .value:
-                print("Expired data removal completes")
+                //print("Expired data removal completes")
+                return
             case .error(let error):
-                print("Data: \(error)")
+                //print("Data: \(error)")
+                return
             }
         }
 
         imageStorage?.async.removeExpiredObjects() { result in
             switch result {
             case .value:
-                print("Expired image removal completes")
+                //print("Expired image removal completes")
+                return
             case .error(let error):
-                print("Image: \(error)")
+                //print("Image: \(error)")
+                return
             }
         }
     }
@@ -116,9 +124,11 @@ final class CacheManager {
         dataStorage?.async.removeAll { result in
             switch result {
             case .value:
-                print("All data cache cleared.")
+                //print("All data cache cleared.")
+                return
             case .error(let error):
-                print("Failed to clear data cache: \(error)")
+                //print("Failed to clear data cache: \(error)")
+                return
                 
             }
             
@@ -127,9 +137,11 @@ final class CacheManager {
         imageStorage?.async.removeAll { [weak self] result in
             switch result {
             case .value:
-                print("All image cache cleared.")
+                //print("All image cache cleared.")
+                return
             case .error(let error):
-                print("Failed to clear image cache: \(error)")
+                //print("Failed to clear image cache: \(error)")
+                return
             }
             
         }

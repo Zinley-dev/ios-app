@@ -119,6 +119,10 @@ class VideoNode: ASCellNode, ASVideoNodeDelegate {
     /// Called when the view controller’s view is no longer visible.
     override func didExitVisibleState() {
         super.didExitVisibleState() // Always call the super implementation of lifecycle methods
+        
+        guard shouldAllowAfterInactive else {
+            return
+        }
 
         // Pausing the video playback when the view is not visible.
         pauseVideo(shouldSeekToStart: false)
@@ -132,6 +136,11 @@ class VideoNode: ASCellNode, ASVideoNodeDelegate {
     /// Called when the view controller’s view becomes visible.
     override func didEnterVisibleState() {
         super.didEnterVisibleState() // Always call the super implementation of lifecycle methods
+
+        guard shouldAllowAfterInactive else {
+            return
+        }
+        
         setupGesture()
         if !isPreview {
             setDelegate()
@@ -150,23 +159,14 @@ class VideoNode: ASCellNode, ASVideoNodeDelegate {
     func checkIfShouldClean() -> Bool {
         return cellVideoNode.asset != nil
     }
-
-    /// Called when the node enters the preload state.
-    /// This method handles the initial setup of the cellVideoNode if it's not already set.
-    override func didEnterPreloadState() {
-        super.didEnterPreloadState()
-        //fillInfo()
-    }
-
-    /// Called when the node exits the preload state.
-    /// This method cleans up the cellVideoNode's asset if it's not nil.
-    override func didExitPreloadState() {
-        super.didExitPreloadState()
-        //cleanInfo()
-    }
     
     override func didEnterDisplayState() {
         super.didEnterPreloadState()
+        
+        guard shouldAllowAfterInactive else {
+            return
+        }
+        
         if checkIfNeedToSetupAgain()  {
             presetup()
         }
@@ -176,6 +176,11 @@ class VideoNode: ASCellNode, ASVideoNodeDelegate {
     
     override func didExitDisplayState() {
         super.didExitDisplayState()
+        
+        guard shouldAllowAfterInactive else {
+            return
+        }
+        
         if checkIfShouldClean() {
             cleanVideoNode()
         }
@@ -185,6 +190,7 @@ class VideoNode: ASCellNode, ASVideoNodeDelegate {
     /// Cleans the video node by resetting its asset.
     /// This method sets the asset of cellVideoNode to nil, effectively cleaning up resources.
     func cleanVideoNode() {
+        print("cellVideoNode is cleaning for \(level) - \(indexPathSetup)")
         cellVideoNode.asset?.cancelLoading()
         cellVideoNode.asset = nil
     }
@@ -721,6 +727,7 @@ extension VideoNode {
             }
 
             self.cellVideoNode.asset = AVAsset(url: videoURL)
+            print("cellVideoNode is loading for \(level) - \(indexPathSetup)")
 
             self.cellVideoNode.asset?.loadValuesAsynchronously(forKeys: ["playable"]) {
                 DispatchQueue.main.async {
@@ -730,6 +737,7 @@ extension VideoNode {
                     if status == .loaded {
                         // The asset is playable, proceed with further actions
                         if self.firstItem {
+                            self.firstItem = false
                             self.playVideo()
                         }
 

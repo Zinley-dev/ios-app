@@ -85,11 +85,17 @@ class BlockNode: ASCellNode {
     
     override func didEnterDisplayState() {
         super.didEnterDisplayState()
+        guard shouldAllowAfterInactive else {
+            return
+        }
         loadInfo(uid: user.blockId)
     }
     
     override func didExitDisplayState() {
         super.didExitDisplayState()
+        guard shouldAllowAfterInactive else {
+            return
+        }
         cleanupInfo()
     }
     

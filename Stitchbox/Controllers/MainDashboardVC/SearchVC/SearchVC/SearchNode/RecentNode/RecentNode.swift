@@ -52,11 +52,17 @@ class RecentNode: ASCellNode {
     
     override func didEnterDisplayState() {
         super.didEnterDisplayState()
+        guard shouldAllowAfterInactive else {
+            return
+        }
         setupLayout()
     }
     
     override func didExitDisplayState() {
         super.didExitDisplayState()
+        guard shouldAllowAfterInactive else {
+            return
+        }
         cleanup()
     }
     
@@ -121,6 +127,7 @@ class RecentNode: ASCellNode {
     func cleanup() {
         // Reset imageNode
         imageNode.url = nil
+        imageNode.image = nil
         imageNode.cornerRadius = 0
         imageNode.clipsToBounds = false
         imageNode.shouldRenderProgressImages = false

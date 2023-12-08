@@ -56,8 +56,9 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         // Release any resources associated with this scene that can be re-created the next time the scene connects.
         // The scene may re-connect later, as its session was not necessarily discarded
         // (see `application:didDiscardSceneSessions` instead).
-
+        
         // Remove expired objects from cache
+        shouldAllowAfterInactive = false
         CacheManager.shared.asyncRemoveExpiredObjects()
         
         // Maintain the temporary directory size
@@ -88,19 +89,23 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
             // For FeedViewController, check if it's the first load and handle background time
             if feedVC.firstLoadDone {
                 if let lastBackground = lastInactiveTime, lastBackground < twoMinsAgo {
-                    //feedVC.seekToZero(index: feedVC.currentIndex ?? 0)  // Safely unwrap currentIndex
+                    feedVC.seekToZero(index: feedVC.currentIndex ?? 0)  // Safely unwrap currentIndex
                 }
-                //feedVC.loadFeed()
+                feedVC.loadFeed()
             }
         } else if let rootVC = currentVC as? SelectedRootPostVC {
             if rootVC.completedLoading {
-                //rootVC.resumeVideo()
+                rootVC.resumeVideo()
             }
         }
 
         // Reset the application's badge number and request an Apple review
         UIApplication.shared.applicationIconBadgeNumber = 0
         requestAppleReview()
+        
+        delay(0.5) {
+            shouldAllowAfterInactive = true
+        }
     }
 
 
@@ -132,6 +137,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     func sceneDidEnterBackground(_ scene: UIScene) {
         // Called as the scene transitions from the foreground to the background.
         // Save data, release shared resources, and store scene-specific state information.
+        shouldAllowAfterInactive = false
         cleanTemporaryDirectory()
     }
     
@@ -143,8 +149,6 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
             print("Failed to maintain tmp directory with error: \(error)")
         }
     }
-
-
 
 }
 

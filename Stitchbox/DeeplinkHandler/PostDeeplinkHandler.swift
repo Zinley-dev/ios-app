@@ -49,8 +49,8 @@ final class PostDeeplinkHandler: DeeplinkHandlerProtocol {
             switch result {
             case .success(let apiResponse):
                 self?.processPostData(apiResponse.body)
-            case .failure(let error):
-                print(error)
+            case .failure(_):
+                //print(error)
                 Dispatch.main.async {
                     SwiftLoader.hide()
                 }

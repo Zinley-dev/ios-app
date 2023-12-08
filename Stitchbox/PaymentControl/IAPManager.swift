@@ -17,7 +17,7 @@ class IAPManager {
     func configure() {
         
         guard let userDataSource = _AppCoreData.userDataSource.value, let userUID = userDataSource.userID, userUID != "" else {
-            print("Sendbird: Can't get userUID")
+            //print("Sendbird: Can't get userUID")
             return
         }
         
@@ -31,7 +31,7 @@ class IAPManager {
         Qonversion.shared().checkEntitlements { (entitlements, error) in
           if let error = error {
             // handle error
-            print(error.localizedDescription)
+            //print(error.localizedDescription)
             completion(false)
             return
           }
@@ -85,11 +85,11 @@ class IAPManager {
     
         Qonversion.shared().checkTrialIntroEligibility(["anually", "pro_6months", "pro_monthly"]) { (result, error) in
             if error != nil {
-                print(error?.localizedDescription)
+                //print(error?.localizedDescription)
             }
             
             for each in result {
-                print(each.key, each.value)
+                //print(each.key, each.value)
             }
             
         }

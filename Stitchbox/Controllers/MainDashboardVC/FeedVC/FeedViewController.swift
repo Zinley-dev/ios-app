@@ -802,6 +802,11 @@ extension FeedViewController {
     func playVideo(index: Int) {
         if let cell = self.collectionNode.nodeForItem(at: IndexPath(row: index, section: 0)) as? RootNode {
             cell.playVideo(index: cell.currentIndex!)
+            
+            guard cell.animatedLabel != nil else {
+                return
+            }
+            
             if cell.animatedLabel.text != "" {
                 cell.animatedLabel.restartLabel()
             }

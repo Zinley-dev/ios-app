@@ -28,12 +28,12 @@ class WebViewController: UIViewController {
     }
 
     func webView(webView: WKWebView, didFailProvisionalNavigation navigation: WKNavigation!, withError error: NSError) {
-        print(error.localizedDescription)
+        //print(error.localizedDescription)
     }
     func webView(webView: WKWebView, didStartProvisionalNavigation navigation: WKNavigation!) {
-        print("Strat to load")
+        //print("Strat to load")
     }
     func webView(webView: WKWebView, didFinishNavigation navigation: WKNavigation!) {
-        print("finish to load")
+       // print("finish to load")
     }
 }

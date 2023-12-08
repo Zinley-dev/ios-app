@@ -12,7 +12,7 @@ import GPTEncoder
 class ChatGPTAPI: @unchecked Sendable {
     
     deinit {
-        print("ChatGPTAPI instance is being deallocated")
+        //print("ChatGPTAPI instance is being deallocated")
     }
 
     
@@ -80,13 +80,14 @@ class ChatGPTAPI: @unchecked Sendable {
             APIManager.shared.createGptConversation(params: conversation) { result in
                 
                 switch result {
-                case .success(let apiResponse):
+                case .success(_):
                     
-                   print(apiResponse)
+                   //print(apiResponse)
+                    return
 
-
-                case .failure(let error):
-                    print(error)
+                case .failure(_):
+                    return
+                    //print(error)
                 }
                 
                 
@@ -97,13 +98,13 @@ class ChatGPTAPI: @unchecked Sendable {
             APIManager.shared.updateGptConversation(params: conversation) { result in
                 
                 switch result {
-                case .success(let apiResponse):
+                case .success(_):
                     
-                   print(apiResponse)
+                   return
 
 
-                case .failure(let error):
-                    print(error)
+                case .failure(_):
+                    return
                 }
                 
                 
@@ -181,13 +182,13 @@ class ChatGPTAPI: @unchecked Sendable {
         APIManager.shared.clearGptConversation(gameId: chatbot_id) {  result in
            
             switch result {
-            case .success(let apiResponse):
+            case .success(_):
                 
-               print(apiResponse)
+               return
 
 
-            case .failure(let error):
-                print(error)
+            case .failure(_):
+                return
             }
             
             

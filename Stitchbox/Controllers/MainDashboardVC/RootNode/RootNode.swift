@@ -153,19 +153,28 @@ class RootNode: ASCellNode, UICollectionViewDelegateFlowLayout, UIAdaptivePresen
     /// Called when the view controller’s view becomes visible.
     override func didEnterVisibleState() {
         super.didEnterVisibleState() // Always call the super implementation of lifecycle methods
+        guard shouldAllowAfterInactive else {
+            return
+        }
         
         activateVideoNodeIfNeeded()
     }
     
     
     override func didEnterDisplayState() {
+        guard shouldAllowAfterInactive else {
+            return
+        }
+        
         loadChainAllow = true
         self.setupAnimatedLabel()
     }
 
     override func didExitDisplayState() {
         loadChainAllow = false
-        self.animatedLabel.removeFromSuperview()
+        if self.animatedLabel != nil {
+            self.animatedLabel.removeFromSuperview()
+        }
         self.container.removeFromSuperview()
         self.animatedLabel = nil
         iterateThroughCollectionNodes(action: { node in
@@ -880,16 +889,6 @@ extension RootNode {
         galleryCollectionNode.reloadData()
     }
     
-    
-    /// Removes all observers from the video node.
-    func preSetup() {
-        if let cell = self.mainCollectionNode.nodeForItem(at: IndexPath(row: currentIndex!, section: 0)) as? VideoNode {
-            // Configure the node based on the presence of a muxPlaybackId.
-            // This approach avoids duplicate checks and makes the decision point clear.
-            cell.presetup()
-        }
-    }
-    
     /// Removes all observers from the video node.
     func removeObservers() {
         if let cell = self.mainCollectionNode.nodeForItem(at: IndexPath(row: currentIndex!, section: 0)) as? VideoNode {
@@ -1005,16 +1004,17 @@ extension RootNode {
     /// Sets up an animated label with specific properties and constraints.
     func setupAnimatedLabel() {
         // Initialize and configure the animated label
-        animatedLabel = MarqueeLabel(frame: CGRect.zero, rate: 30.0, fadeLength: 10.0)
-        animatedLabel.translatesAutoresizingMaskIntoConstraints = false
-        configureAnimatedLabelProperties()
-        
-        // Create a container for the label and add constraints
-        container.translatesAutoresizingMaskIntoConstraints = false
-        view.addSubview(container)
-        container.addSubview(animatedLabel)
-        setupContainerConstraints(container)
-        
+        if animatedLabel == nil {
+            animatedLabel = MarqueeLabel(frame: CGRect.zero, rate: 30.0, fadeLength: 10.0)
+            animatedLabel.translatesAutoresizingMaskIntoConstraints = false
+            configureAnimatedLabelProperties()
+            
+            // Create a container for the label and add constraints
+            container.translatesAutoresizingMaskIntoConstraints = false
+            view.addSubview(container)
+            container.addSubview(animatedLabel)
+            setupContainerConstraints(container)
+        }
     }
 
     // MARK: - Private Methods

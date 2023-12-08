@@ -63,11 +63,17 @@ class AccountActivityNode: ASCellNode {
     
     override func didEnterDisplayState() {
         super.didEnterDisplayState()
+        guard shouldAllowAfterInactive else {
+            return
+        }
         setupLayout()
     }
     
     override func didExitDisplayState() {
         super.didExitDisplayState()
+        guard shouldAllowAfterInactive else {
+            return
+        }
         cleanupLayout()
     }
     

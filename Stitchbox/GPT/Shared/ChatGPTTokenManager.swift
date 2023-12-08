@@ -15,7 +15,7 @@ class ChatGPTTokenManager {
     
     // Called when the instance is being deallocated.
     deinit {
-        print("ChatGPTTokenManager instance is being deallocated")
+        //print("ChatGPTTokenManager instance is being deallocated")
     }
 
     // The tokenizer used for encoding text into tokens.

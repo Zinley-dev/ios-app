@@ -71,6 +71,9 @@ class FindFriendsNode: ASCellNode {
     
     override func didEnterDisplayState() {
         super.didEnterDisplayState()
+        guard shouldAllowAfterInactive else {
+            return
+        }
         setupLayout()
     }
     

@@ -50,8 +50,9 @@ extension UIButton {
                     case let .success(value):
                         strongSelf.updateUI(with: value)
                         CacheManager.shared.storeImage(forKey: cacheKey, image: value)
-                    case let .failure(error):
-                        print("Error fetching image: \(error)")
+                    case .failure(_):
+                        //print("Error fetching image: \(error)")
+                        return
                     }
                 }
             }
@@ -104,7 +105,7 @@ extension UIImageView {
                         }
                         CacheManager.shared.storeImage(forKey: str, image: value)
                     case .failure(let error):
-                        print("Error fetching image: \(error)")
+                        //print("Error fetching image: \(error)")
                         DispatchQueue.main.async { [weak self] in
                             self?.image = UIImage(named: "defaultuser")
                         }
@@ -140,7 +141,7 @@ extension UIImageView {
                 
                 CacheManager.shared.storeImage(forKey: cacheKey, image: value)
             case .failure(let error):
-                print(error)
+                //print(error)
                 DispatchQueue.main.async { [weak self] in
                     self?.image = UIImage(named: "empty")
                 }
@@ -288,7 +289,7 @@ class ProfileImageView: UIView {
                         CacheManager.shared.storeImage(forKey: coverUrl, image: value)
                         
                     case .failure(let error):
-                        print("Error fetching image: \(error)")
+                        //print("Error fetching image: \(error)")
                         DispatchQueue.main.async {
                             imageView.image = UIImage(named: "defaultuser")
                         }

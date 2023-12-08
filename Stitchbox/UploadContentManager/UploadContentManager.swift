@@ -56,7 +56,7 @@ class UploadContentManager {
                 if !downloadedUrl.isEmpty {
                     self.writeContentVideoToDB(videoUrl: downloadedUrl, hashtagList: hashtagList, selectedDescTxtView: selectedDescTxtView, isAllowComment: isAllowComment, mediaType: mediaType, mode: mode, origin_width: origin_width, origin_height: origin_height, length: length, isAllowStitch: isAllowStitch, stitchId: stitchId)
                 } else {
-                    print("Couldn't get video url")
+                    //print("Couldn't get video url")
                 }
 
             case .failure(let error):
@@ -65,13 +65,13 @@ class UploadContentManager {
                 DispatchQueue.main.async {
                     showNote(text: "Couldn't upload this video, please try again! \(error.localizedDescription)")
                 }
-                print(error)
+                //print(error)
             }
         } process: { percent in
             // Update upload progress
             global_percentComplete = Double(percent)
             NotificationCenter.default.post(name: NSNotification.Name(rawValue: "updateProgressBar"), object: nil)
-            print("Uploading ... \(percent)%")
+            //print("Uploading ... \(percent)%")
         }
     }
     
@@ -80,7 +80,7 @@ class UploadContentManager {
     private func writeContentVideoToDB(videoUrl: String, hashtagList: [String], selectedDescTxtView: String, isAllowComment: Bool, mediaType: String, mode: Int, origin_width: CGFloat, origin_height: CGFloat, length: Double, isAllowStitch: Bool, stitchId: String) {
         // Verify user data availability
         guard let userDataSource = _AppCoreData.userDataSource.value, let userUID = userDataSource.userID, !userUID.isEmpty else {
-            print("Can't get userDataSource")
+            //print("Can't get userDataSource")
             return
         }
 
@@ -98,14 +98,15 @@ class UploadContentManager {
         // Perform the creation of the post
         APIManager.shared.createPost(params: contentPost) { result in
             switch result {
-            case .success(let apiResponse):
+            case .success(_):
                 // Handle successful post creation
-                print("Posted successfully \(apiResponse)")
+                //print("Posted successfully \(apiResponse)")
                 needReloadPost = true // Flag to indicate the need for reloading posts
 
             case .failure(let error):
                 // Handle failure in post creation
-                print(error)
+                //print(error)
+                return
             }
         }
     }

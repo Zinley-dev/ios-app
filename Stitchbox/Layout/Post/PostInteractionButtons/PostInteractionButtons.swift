@@ -117,10 +117,6 @@ extension PostInteractionButtons {
             strongSelf.commentCountLbl.text = "\(formatPoints(num: Double(cmtCount)))"
             strongSelf.playListCountLbl.text = "\(formatPoints(num: Double(positionOnChain)))/\(formatPoints(num: Double(totalOnChain)))"
         }
-        
-        if totalOnChain == 0, positionOnChain == 0 {
-            print("Wrong pos/total: \(postID)")
-        }
     }
     
     /// Sets the like button's image.

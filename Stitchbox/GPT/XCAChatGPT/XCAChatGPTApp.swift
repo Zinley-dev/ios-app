@@ -11,7 +11,7 @@ import SwiftUI
 // Observable object managing actions in the toolbar of the chat interface.
 class ToolbarActions: ObservableObject {
     deinit {
-        print("ToolbarActions is being deallocated")
+        //print("ToolbarActions is being deallocated")
         // Place for cleanup code if needed.
     }
 
