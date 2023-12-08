@@ -673,8 +673,10 @@ extension SelectedRootPostVC {
     func playVideo(index: Int) {
         if let cell = self.collectionNode.nodeForItem(at: IndexPath(row: index, section: 0)) as? RootNode {
             cell.playVideo(index: cell.currentIndex!)
-            if cell.animatedLabel.text != "" {
-                cell.animatedLabel.restartLabel()
+            if cell.animatedLabel != nil {
+                if cell.animatedLabel.text != "" {
+                    cell.animatedLabel.restartLabel()
+                }
             }
         }
     }

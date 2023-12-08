@@ -24,6 +24,7 @@
                 <outlet property="postDate" destination="0FZ-Va-Qyd" id="X6N-Lf-ddS"/>
                 <outlet property="postTime" destination="S2H-cQ-bC4" id="txm-gj-r9O"/>
                 <outlet property="settingBtn" destination="yjg-uC-4nR" id="yTm-Wk-gDX"/>
+                <outlet property="stackView" destination="bhA-qR-X4j" id="eOV-fS-Y9a"/>
                 <outlet property="username" destination="gzq-vK-qVb" id="7vz-0R-bBG"/>
             </connections>
         </placeholder>

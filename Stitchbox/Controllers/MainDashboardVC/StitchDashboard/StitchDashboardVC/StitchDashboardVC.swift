@@ -28,6 +28,7 @@ class StitchDashboardVC: UIViewController {
     var stitchToBorder = CALayer()
   
     var firstLoad = true
+    var firstAnimated = false
     
     
     lazy var PendingVC: PendingVC = {
@@ -126,11 +127,15 @@ extension StitchDashboardVC {
     }
 
     private func setupLoadingAnimation() {
-        DispatchQueue.global(qos: .background).async {
-            self.loadGIFAnimation()
+        if !firstAnimated {
+            firstAnimated = true
+            DispatchQueue.global(qos: .background).async { [weak self] in
+                self?.loadGIFAnimation()
+            }
+            loadingView.backgroundColor = view.backgroundColor
+            fadeOutLoadingView(after: 1.5)
         }
-        loadingView.backgroundColor = view.backgroundColor
-        fadeOutLoadingView(after: 1.5)
+        
     }
 
     private func loadGIFAnimation() {

@@ -14,6 +14,7 @@ import AsyncDisplayKit
 class PostHeader: UIView {
     
     // MARK: - Outlets
+    @IBOutlet weak var stackView: UIStackView!
     @IBOutlet weak var avatarImg: UIView!
     @IBOutlet weak var username: UILabel!
     @IBOutlet weak var postDate: UILabel!
@@ -121,6 +122,18 @@ class PostHeader: UIView {
         // Any additional cleanup specific to your view's implementation.
         // This could include resetting layout constraints, stopping animations,
         // or clearing any cached data that's specific to the content of this view.
+    }
+    
+    func setLayoutForDashboard() {
+        
+        username.font = FontManager.shared.roboto(.Bold, size: 10)
+        postDate.font = FontManager.shared.roboto(.Regular, size: 10)
+        postTime.font = FontManager.shared.roboto(.Regular, size: 10)
+        avatarImg.frame.size = CGSize(width: 30, height: 30)
+        avatarImg.cornerRadius = 15
+        avatarImg.clipsToBounds = true
+        stackView.spacing = 5
+
     }
 
 }

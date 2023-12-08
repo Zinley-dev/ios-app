@@ -615,7 +615,7 @@ extension StitchToVC {
     /// - Parameter index: The index of the video to pause.
     func pauseVideo(atIndex: Int) {
         if let cell = waitCollectionNode.nodeForItem(at: IndexPath(row: atIndex, section: 0)) as? StitchControlForRemoveNode {
-            cell.pauseVideo()
+            cell.pauseVideo(shouldSeekToStart: true)
         }
     }
 

@@ -347,7 +347,7 @@ extension ApprovedStitchVC {
 
     /// Sets up 'Wait Collection' node.
     private func setupWaitCollectionNode() {
-        let layout = createFlowLayout(horizontalScroll: false, lineSpacing: 0, interitemSpacing: 0)
+        let layout = createFlowLayout(horizontalScroll: true, lineSpacing: 0, interitemSpacing: 0)
         waitCollectionNode = ASCollectionNode(collectionViewLayout: layout)
         configureCollectionNode(waitCollectionNode, in: stitchedView)
     }
@@ -742,7 +742,7 @@ extension ApprovedStitchVC {
     /// - Parameter index: The index of the video to pause.
     func pauseVideo(atIndex: Int) {
         if let cell = waitCollectionNode.nodeForItem(at: IndexPath(row: atIndex, section: 0)) as? StitchControlForRemoveNode {
-            cell.pauseVideo()
+            cell.pauseVideo(shouldSeekToStart: true)
         }
     }
 

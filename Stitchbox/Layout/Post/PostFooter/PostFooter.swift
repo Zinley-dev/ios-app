@@ -132,6 +132,45 @@ class PostFooter: UIView {
         descriptionLbl.text = ""
     }
     
+    func setFooterInfoForDashboard(title: String, description: String) {
+        titleLbl.font = FontManager.shared.roboto(.Bold, size: 10)
+        let attributedString: NSAttributedString
+        let processedTitle: String
+
+        // Check if the title is longer than 100 characters
+        if title.count > 100 {
+            // Get the first 80 characters of the title
+            let index = title.index(title.startIndex, offsetBy: 100)
+            processedTitle = String(title[..<index])
+        } else {
+            // If the title is 80 characters or less, use it as is
+            processedTitle = title
+        }
+
+        // Create a paragraph style for trailing alignment and word wrapping
+        let paragraphStyle = NSMutableParagraphStyle()
+        paragraphStyle.alignment = .left
+        paragraphStyle.lineBreakMode = .byWordWrapping
+
+        // Create the attributes for the attributed string
+        let attributes: [NSAttributedString.Key: Any] = [
+            .font: FontManager.shared.roboto(.Bold, size: 10), // Using the Roboto Bold style
+            .foregroundColor: UIColor.white,
+            .paragraphStyle: paragraphStyle
+        ]
+
+        // Create the attributed string
+        attributedString = NSAttributedString(string: processedTitle, attributes: attributes)
+
+        // Assign the attributed text to the label
+        titleLbl.text = processedTitle
+        label.numberOfLines = titleLbl.numberOfLines
+        label.attributedText = attributedString
+
+        // Set the description label text
+        descriptionLbl.text = ""
+    }
+    
     // MARK: - Cleanup Function
     func cleanup() {
         // Clear the text in labels to release any retained strings.
@@ -152,6 +191,5 @@ class PostFooter: UIView {
         // This could include resetting layout constraints, stopping animations,
         // or clearing any cached data that's specific to the content of this view.
     }
-
 
 }

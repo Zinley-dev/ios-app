@@ -1,15 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="21701" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="22155" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21679"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="22131"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <customFonts key="customFonts">
         <array key="Roboto-Medium.ttf">
             <string>Roboto-Medium</string>
+        </array>
+        <array key="Roboto-Regular.ttf">
+            <string>Roboto-Regular</string>
         </array>
     </customFonts>
     <objects>
@@ -24,6 +27,10 @@
             <rect key="frame" x="0.0" y="0.0" width="784" height="247"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
+                <view alpha="0.59999999999999998" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="6Rc-pc-wQz">
+                    <rect key="frame" x="0.0" y="48" width="784" height="165"/>
+                    <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                </view>
                 <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" spacing="-1" translatesAutoresizingMaskIntoConstraints="NO" id="TYz-0A-DTP">
                     <rect key="frame" x="0.0" y="48" width="784" height="165"/>
                     <subviews>
@@ -48,8 +55,9 @@
                                         </label>
                                     </subviews>
                                 </stackView>
-                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="rhA-Fq-fjI">
+                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="rhA-Fq-fjI">
                                     <rect key="frame" x="0.0" y="0.0" width="784" height="165"/>
+                                    <fontDescription key="fontDescription" name="Roboto-Regular" family="Roboto" pointSize="13"/>
                                     <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
                                 </button>
                             </subviews>
@@ -78,9 +86,13 @@
             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
             <constraints>
                 <constraint firstItem="TYz-0A-DTP" firstAttribute="top" secondItem="vUN-kp-3ea" secondAttribute="top" id="4bc-nx-igC"/>
+                <constraint firstItem="6Rc-pc-wQz" firstAttribute="top" secondItem="vUN-kp-3ea" secondAttribute="top" id="M9P-pa-KMs"/>
+                <constraint firstItem="vUN-kp-3ea" firstAttribute="bottom" secondItem="6Rc-pc-wQz" secondAttribute="bottom" id="NaK-9C-Oql"/>
                 <constraint firstItem="vUN-kp-3ea" firstAttribute="bottom" secondItem="TYz-0A-DTP" secondAttribute="bottom" id="QKb-Aa-589"/>
+                <constraint firstItem="6Rc-pc-wQz" firstAttribute="leading" secondItem="vUN-kp-3ea" secondAttribute="leading" id="WgM-7m-fmR"/>
                 <constraint firstItem="vUN-kp-3ea" firstAttribute="trailing" secondItem="TYz-0A-DTP" secondAttribute="trailing" id="dQ9-xV-5KR"/>
                 <constraint firstItem="TYz-0A-DTP" firstAttribute="leading" secondItem="vUN-kp-3ea" secondAttribute="leading" id="qoZ-Ws-EIx"/>
+                <constraint firstItem="vUN-kp-3ea" firstAttribute="trailing" secondItem="6Rc-pc-wQz" secondAttribute="trailing" id="v85-hf-HbD"/>
             </constraints>
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
             <point key="canvasLocation" x="-395.6521739130435" y="-246.76339285714283"/>
