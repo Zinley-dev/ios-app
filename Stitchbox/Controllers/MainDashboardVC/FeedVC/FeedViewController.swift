@@ -79,6 +79,8 @@ class FeedViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
             object: nil
         )
         
+        requestTrackingAuthorization()
+        
     }
 
     override func didReceiveMemoryWarning() {
