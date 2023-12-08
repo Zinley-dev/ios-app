@@ -103,7 +103,6 @@ class VideoNode: ASCellNode, ASVideoNodeDelegate {
         backgroundColor = .black
         setupSpinner()
         setupChildView()
-        
     }
 
     
@@ -170,6 +169,7 @@ class VideoNode: ASCellNode, ASVideoNodeDelegate {
         if checkIfNeedToSetupAgain()  {
             presetup()
         }
+        
         fillInfo()
     }
     
@@ -184,15 +184,18 @@ class VideoNode: ASCellNode, ASVideoNodeDelegate {
         if checkIfShouldClean() {
             cleanVideoNode()
         }
+        
         cleanInfo()
     }
+    
 
     /// Cleans the video node by resetting its asset.
     /// This method sets the asset of cellVideoNode to nil, effectively cleaning up resources.
     func cleanVideoNode() {
-        print("cellVideoNode is cleaning for \(level) - \(indexPathSetup)")
         cellVideoNode.asset?.cancelLoading()
         cellVideoNode.asset = nil
+        cellVideoNode.url = nil
+        cellVideoNode.image = nil
     }
 
     

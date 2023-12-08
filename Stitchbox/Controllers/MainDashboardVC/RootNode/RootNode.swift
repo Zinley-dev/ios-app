@@ -50,8 +50,6 @@ class RootNode: ASCellNode, UICollectionViewDelegateFlowLayout, UIAdaptivePresen
     var isDraggingEnded: Bool = false
     var firstItem = false
     var isFirstGallerySelected = false
-    var loadChainAllow = true
-    //var loadChainAllow = true
     var level = 0
     var hasEverFetch = false
     lazy var delayItem = workItem()
@@ -90,17 +88,12 @@ class RootNode: ASCellNode, UICollectionViewDelegateFlowLayout, UIAdaptivePresen
         galleryCollectionNode = ASCollectionNode(collectionViewLayout: galleryFlowLayout)
 
         super.init() // Calling the superclass initializer after all properties are set up
+        setupDelegate()
     }
     
     /// Called just before the object is deallocated.
     deinit {
-        // Nil out the delegate and dataSource of mainCollectionNode to prevent retain cycles
-        mainCollectionNode.delegate = nil
-        mainCollectionNode.dataSource = nil
-
-        // Nil out the delegate and dataSource of galleryCollectionNode for the same reason
-        galleryCollectionNode.delegate = nil
-        galleryCollectionNode.dataSource = nil
+        cleanDelegate()
     }
     
     /// Called when the node has finished loading.
@@ -116,14 +109,6 @@ class RootNode: ASCellNode, UICollectionViewDelegateFlowLayout, UIAdaptivePresen
         DispatchQueue.main.async { [weak self] in
             self?.addSubCollection()
         }
-        
-        // Set up the main collection node's delegate and data source
-        mainCollectionNode.delegate = self
-        mainCollectionNode.dataSource = self
-        
-        // Set up the gallery collection node's delegate and data source
-        galleryCollectionNode.delegate = self
-        galleryCollectionNode.dataSource = self
         
     }
     
@@ -165,18 +150,18 @@ class RootNode: ASCellNode, UICollectionViewDelegateFlowLayout, UIAdaptivePresen
         guard shouldAllowAfterInactive else {
             return
         }
-        
-        loadChainAllow = true
-        self.setupAnimatedLabel()
+        setupAnimatedLabel()
+       
     }
 
     override func didExitDisplayState() {
-        loadChainAllow = false
-        if self.animatedLabel != nil {
-            self.animatedLabel.removeFromSuperview()
+       
+        if animatedLabel != nil {
+            animatedLabel.removeFromSuperview()
         }
-        self.container.removeFromSuperview()
-        self.animatedLabel = nil
+        container.removeFromSuperview()
+        animatedLabel = nil
+    
         iterateThroughCollectionNodes(action: { node in
             node.cleanVideoNode()
             node.cleanInfo()
@@ -195,6 +180,25 @@ class RootNode: ASCellNode, UICollectionViewDelegateFlowLayout, UIAdaptivePresen
         }
     }
     
+    func cleanDelegate() {
+        // Nil out the delegate and dataSource of mainCollectionNode to prevent retain cycles
+        mainCollectionNode.delegate = nil
+        mainCollectionNode.dataSource = nil
+
+        // Nil out the delegate and dataSource of galleryCollectionNode for the same reason
+        galleryCollectionNode.delegate = nil
+        galleryCollectionNode.dataSource = nil
+    }
+    
+    func setupDelegate() {
+        // Nil out the delegate and dataSource of mainCollectionNode to prevent retain cycles
+        mainCollectionNode.delegate = self
+        mainCollectionNode.dataSource = self
+
+        // Nil out the delegate and dataSource of galleryCollectionNode for the same reason
+        galleryCollectionNode.delegate = self
+        galleryCollectionNode.dataSource = self
+    }
 }
 
 // MARK: - Lifecycle and Layout
@@ -283,7 +287,7 @@ extension RootNode {
     func applyStyle() {
         // Setting the background color for the main collection node.
         // Both the node and its underlying view are given the same background color for consistency.
-        self.mainCollectionNode.backgroundColor = .yellow
+        self.mainCollectionNode.backgroundColor = .black
         self.mainCollectionNode.view.backgroundColor = .black
 
         // Controlling layout changes and preloading behavior.
@@ -309,7 +313,6 @@ extension RootNode {
         self.backgroundColor = .black
         self.mainCollectionNode.view.showsVerticalScrollIndicator = false
         self.mainCollectionNode.view.showsHorizontalScrollIndicator = false
-
     }
 }
 
@@ -392,7 +395,6 @@ extension RootNode: ASCollectionDelegate, ASCollectionDataSource {
         }
     }
 
-
     /// Configures properties of a cell node.
     /// - Parameters:
     ///   - node: The `ASCellNode` to configure.
@@ -469,10 +471,6 @@ extension RootNode {
     func shouldBatchFetch(for collectionNode: ASCollectionNode) -> Bool {
         // Checking if loading is allowed; if not, batch fetching is disabled
         // Enabling batch fetching only for the main collection node and not for the gallery collection node
-        guard loadChainAllow else {
-            return false
-        }
-        
         return collectionNode != galleryCollectionNode
     }
 
@@ -501,7 +499,7 @@ extension RootNode {
                 self.page += 1
                 DispatchQueue.main.async { block(data) }
 
-            case .failure(let error):
+            case .failure(_):
                 // Handling failure in API response.
                 DispatchQueue.main.async { block([]) }
             }
@@ -848,7 +846,7 @@ extension RootNode {
                 self.prevPage += 1
                 DispatchQueue.main.async { block(data) }
 
-            case .failure(let error):
+            case .failure(_):
                 // Handling failure in API response.
                 DispatchQueue.main.async { block([]) }
             }
