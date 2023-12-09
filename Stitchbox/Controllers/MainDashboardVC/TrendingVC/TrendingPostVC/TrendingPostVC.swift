@@ -140,7 +140,7 @@ extension TrendingPostVC: ASCollectionDataSource {
         
         if self.posts.count == 0 {
             
-            collectionNode.view.setEmptyMessage("Trending video will be shown here", color: .black)
+            collectionNode.view.setEmptyMessage("Trending video will be shown here!", color: .black)
             
         } else {
             collectionNode.view.restore()
@@ -349,7 +349,7 @@ extension TrendingPostVC {
                 self.posts.removeAll()
                 self.collectionNode.reloadData()
                 if self.posts.isEmpty {
-                    self.collectionNode.view.setEmptyMessage("No post found!", color: .white)
+                    self.collectionNode.view.setEmptyMessage("Trending video will be shown here!", color: .black)
                 } else {
                     self.collectionNode.view.restore()
                 }

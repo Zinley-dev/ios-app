@@ -157,7 +157,7 @@ extension TrendingHashtagVC: ASTableDataSource {
         
         if array.count == 0 {
             
-            tableNode.view.setEmptyMessage("Trending hashtags will be shown here")
+            tableNode.view.setEmptyMessage("Trending hashtags will be shown here!")
             
         } else {
             tableNode.view.restore()
