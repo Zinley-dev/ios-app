@@ -1269,8 +1269,8 @@ extension UserProfileVC {
     
     func NoticeBlockAndDismiss() {
         
-        let sheet = UIAlertController(title: "Oops!", message: "This user isn't available now.", preferredStyle: .alert)
-        
+        let sheet = UIAlertController(title: "User Blocked", message: "You cannot view this user's profile at this time.", preferredStyle: .alert)
+
         
         let ok = UIAlertAction(title: "Got it", style: .default) { (alert) in
             
