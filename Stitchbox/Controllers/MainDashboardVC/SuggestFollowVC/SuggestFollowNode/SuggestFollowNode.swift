@@ -77,22 +77,24 @@ class SuggestFollowNode: ASCellNode {
         setupLayout()
     }
     
-    
-    override func didEnterDisplayState() {
-        super.didEnterDisplayState()
+    override func didEnterPreloadState() {
+        super.didEnterPreloadState()
         guard shouldAllowAfterInactive else {
             return
         }
-        setupUserInfo()
+        setupLayout()
+        
     }
     
-    override func didExitDisplayState() {
-        super.didExitDisplayState()
+    
+    override func didExitPreloadState() {
+        super.didExitPreloadState()
         guard shouldAllowAfterInactive else {
             return
         }
         cleanupUserLayout()
     }
+    
     
     func cleanupUserLayout() {
         // Reset avatarNode properties

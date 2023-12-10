@@ -69,17 +69,20 @@ class FindFriendsNode: ASCellNode {
         
     }
     
-    override func didEnterDisplayState() {
-        super.didEnterDisplayState()
+    override func didEnterPreloadState() {
+        super.didEnterPreloadState()
         guard shouldAllowAfterInactive else {
             return
         }
         setupLayout()
     }
     
-    override func didExitDisplayState() {
-        super.didExitDisplayState()
-        
+    override func didExitPreloadState() {
+        super.didExitPreloadState()
+        guard shouldAllowAfterInactive else {
+            return
+        }
+        cleanup()
     }
     
     
@@ -201,17 +204,24 @@ class FindFriendsNode: ASCellNode {
     
     
     
-    func checkIfUserDidFollowMe(uid: String) {
-        
-        
+    func cleanup() {
+        // Reset AvatarNode
+        AvatarNode.url = nil
+        AvatarNode.image = nil
+
+        // Reset userNameNode and NameNode
+        userNameNode.attributedText = nil
+        NameNode.attributedText = nil
+
+        // Reset followBtnNode to its default state
+        followBtnNode.backgroundColor = nil
+        followBtnNode.layer.borderWidth = 0
+        followBtnNode.layer.borderColor = UIColor.clear.cgColor
+        followBtnNode.layer.cornerRadius = 0
+        followBtnNode.clipsToBounds = false
         
     }
-    
-    func checkIfFollowing(uid: String) {
-        
-        
-        
-    }
+
     
   
     @objc func followBtnPressed() {

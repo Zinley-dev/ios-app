@@ -1241,34 +1241,27 @@ extension UserProfileVC {
         
         SBDMain.blockUserId(uid) { blockedUser, error in
             
-            if error != nil {
+        
+            
+        }
+        
+        APIManager.shared.insertBlocks(params: ["blockId": uid]) { [weak self] result in
+            guard let self = self else { return }
+            
+            switch result {
+            case .success(_):
                 
-                SwiftLoader.hide()
-                self.showErrorAlert("Oops!", msg: "User can't be blocked now due to internal error from our SB chat system, please try again \(error?.localizedDescription)")
-                
-            } else {
-                
-                APIManager.shared.insertBlocks(params: ["blockId": uid]) { [weak self] result in
-                    guard let self = self else { return }
-                    
-                    switch result {
-                    case .success(_):
-                        
-                        Dispatch.main.async {
-                            SwiftLoader.hide()
-                            self.NoticeBlockAndDismiss()
-                        }
-                        
-                    case .failure(let error):
-                        Dispatch.main.async {
-                            SwiftLoader.hide()
-                            self.showErrorAlert("Oops!", msg: "\(error.localizedDescription)")
-                        }
-                    }
+                Dispatch.main.async {
+                    SwiftLoader.hide()
+                    self.NoticeBlockAndDismiss()
                 }
                 
+            case .failure(let error):
+                Dispatch.main.async {
+                    SwiftLoader.hide()
+                    self.showErrorAlert("Oops!", msg: "\(error.localizedDescription)")
+                }
             }
-            
         }
         
     }

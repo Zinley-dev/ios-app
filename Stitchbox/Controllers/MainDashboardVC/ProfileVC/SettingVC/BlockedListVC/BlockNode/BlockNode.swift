@@ -83,16 +83,16 @@ class BlockNode: ASCellNode {
         setupLayout()
     }
     
-    override func didEnterDisplayState() {
-        super.didEnterDisplayState()
+    override func didEnterPreloadState() {
+        super.didEnterPreloadState()
         guard shouldAllowAfterInactive else {
             return
         }
         loadInfo(uid: user.blockId)
     }
     
-    override func didExitDisplayState() {
-        super.didExitDisplayState()
+    override func didExitPreloadState() {
+        super.didExitPreloadState()
         guard shouldAllowAfterInactive else {
             return
         }

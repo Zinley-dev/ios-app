@@ -119,13 +119,19 @@ extension TrendingHashtagVC: ASTableDelegate {
     
     func tableNode(_ tableNode: ASTableNode, willBeginBatchFetchWith context: ASBatchContext) {
         
-        self.retrieveNextPageWithCompletion { [weak self] (newHashtags) in
-            guard let self = self else { return }
-            self.insertNewRowsInTableNode(newHashtags: newHashtags)
-            
+        if currPage <= 10 {
+            self.retrieveNextPageWithCompletion { [weak self] (newHashtags) in
+                guard let self = self else { return }
+                self.insertNewRowsInTableNode(newHashtags: newHashtags)
+                
+                context.completeBatchFetching(true)
+                
+            }
+        } else {
             context.completeBatchFetching(true)
-            
         }
+        
+        
     
     }
     

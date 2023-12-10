@@ -839,9 +839,7 @@ func requestTrackingAuthorization() {
     }
 }
 
-/// Handles the tracking authorization status.
-/// - Parameter status: The authorization status.
-private func handleTrackingAuthorization(status: ATTrackingManager.AuthorizationStatus) {
+func handleTrackingAuthorization(status: ATTrackingManager.AuthorizationStatus) {
     switch status {
     case .authorized:
         let idfa = ASIdentifierManager.shared().advertisingIdentifier.uuidString
@@ -852,10 +850,15 @@ private func handleTrackingAuthorization(status: ATTrackingManager.Authorization
         print("Tracking restricted")
     case .notDetermined:
         print("Tracking not determined")
+        // Prompt the user again for tracking permission
+        requestTrackingAuthorization()
     @unknown default:
         print("Unknown tracking status")
+        // Prompt the user again as the status is unknown
+        requestTrackingAuthorization()
     }
 }
+
 
 extension UIDevice {
     /// Returns `true` if the device has a notch

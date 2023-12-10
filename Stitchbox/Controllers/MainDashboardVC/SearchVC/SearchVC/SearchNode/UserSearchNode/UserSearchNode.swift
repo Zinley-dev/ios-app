@@ -53,16 +53,16 @@ class UserSearchNode: ASCellNode {
   
     }
     
-    override func didExitDisplayState() {
-        super.didExitDisplayState()
+    override func didEnterPreloadState() {
+        super.didEnterPreloadState()
         guard shouldAllowAfterInactive else {
             return
         }
         cleanup()
     }
     
-    override func didEnterDisplayState() {
-        super.didEnterDisplayState()
+    override func didExitPreloadState() {
+        super.didExitPreloadState()
         guard shouldAllowAfterInactive else {
             return
         }

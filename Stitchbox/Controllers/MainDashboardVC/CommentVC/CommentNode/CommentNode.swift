@@ -121,22 +121,24 @@ class CommentNode: ASCellNode {
           
     }
     
-    override func didEnterDisplayState() {
-        super.didEnterDisplayState()
+    override func didEnterPreloadState() {
+        super.didEnterPreloadState()
         guard shouldAllowAfterInactive else {
             return
         }
         setupLayout()
+        
     }
     
-    override func didExitDisplayState() {
-        super.didExitDisplayState()
+    
+    override func didExitPreloadState() {
+        super.didExitPreloadState()
         guard shouldAllowAfterInactive else {
             return
         }
         cleanupLayout()
     }
-    
+
     
     /// Resets the layout and configurations to their default states.
     func cleanupLayout() {
