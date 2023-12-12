@@ -72,7 +72,7 @@ class RecentNode: ASCellNode {
             imageNode.cornerRadius = OrganizerImageSize/2
             imageNode.clipsToBounds = true
             imageNode.shouldRenderProgressImages = true
-            imageNode.isLayerBacked = true
+           
             
             let paragraphStyles = NSMutableParagraphStyle()
             paragraphStyles.alignment = .left
@@ -131,7 +131,7 @@ class RecentNode: ASCellNode {
         imageNode.cornerRadius = 0
         imageNode.clipsToBounds = false
         imageNode.shouldRenderProgressImages = false
-        imageNode.isLayerBacked = false
+      
 
         // Clear attributed texts
         upperNameNode.attributedText = nil

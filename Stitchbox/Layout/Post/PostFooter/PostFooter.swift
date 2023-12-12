@@ -68,7 +68,7 @@ class PostFooter: UIView {
         label.enabledTypes = [customType]
 
         // Customization for hashtag appearance.
-        label.customColor[customType] = UIColor(red: 208/255, green: 223/255, blue: 252/255, alpha: 1)
+        label.customColor[customType] = hashtagColor
         label.customSelectedColor[customType] = UIColor.gray // Customize this color as needed
 
     }

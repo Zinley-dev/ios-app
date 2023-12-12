@@ -123,7 +123,6 @@ class UserSearchNode: ASCellNode {
         imageNode.cornerRadius = 0
         imageNode.clipsToBounds = false
         imageNode.shouldRenderProgressImages = false
-        imageNode.isLayerBacked = false
 
         // Clear attributed texts
         nameNode.attributedText = nil

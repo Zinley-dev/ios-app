@@ -22,6 +22,9 @@ import AsyncDisplayKit
 
 let incomingCallGreen = UIColor(red: 76.0/255.0, green: 217.0/255.0, blue: 100.0/255.0, alpha: 1.0)
 let hashtagPurple = UIColor(red: 88.0/255.0, green: 86.0/255.0, blue: 214.0/255.0, alpha: 1.0)
+// Define an ocean blue color, similar to teal or cyan
+let hashtagColor = UIColor(red: 173/255, green: 216/255, blue: 230/255, alpha: 1.0)
+
 let alertColor = UIColor(red: 0.8, green: 0.2, blue: 0.2, alpha: 1.0)
 let horizontalPadding: CGFloat = 12
 let bottomValue: CGFloat = 40
