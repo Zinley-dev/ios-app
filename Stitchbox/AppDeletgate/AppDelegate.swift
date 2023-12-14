@@ -134,38 +134,40 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         // Set a handler for when notifications are opened
         OneSignal.setNotificationOpenedHandler { result in
             let notification: OSNotification = result.notification
+            
+            // Ensure additional data is available
+            guard let additionalData = notification.additionalData,
+                  let text = additionalData["data"] as? String,
+                  let data = self.convertStringToDictionary(text: text),
+                  let metadata = data["metadata"] as? String,
+                  let metaDataDict = self.convertStringToDictionary(text: metadata) else {
+                print("Error: Essential notification data is missing")
+                return
+            }
+            
+            let metaDataOneSignal = OneSignalNotiModel(OneSignalNotiModel: metaDataDict)
 
-            // Process the notification's additional data
-            if let additionalData = notification.additionalData,
-               let text = additionalData["data"] as? String,
-               let data = self.convertStringToDictionary(text: text),
-               let metadata = data["metadata"] as? String,
-               let metaDataDict = self.convertStringToDictionary(text: metadata) {
-
-                let metaDataOneSignal = OneSignalNotiModel(OneSignalNotiModel: metaDataDict)
-                
-                // Handle different notification templates
-                switch metaDataOneSignal.template {
-                case "NEW_COMMENT", "REPLY_COMMENT", "NEW_TAG":
-                    if let post = metaDataOneSignal.post {
-                        self.openComment(commentId: metaDataOneSignal.commentId, rootComment: metaDataOneSignal.rootComment, replyToComment: metaDataOneSignal.replyToComment, type: metaDataOneSignal.template, post: post)
-                    }
-                case "NEW_FISTBUMP_1", "LIKE_COMMENT", "LIKE_POST":
-                    if let userId = metaDataOneSignal.userId, let username = metaDataOneSignal.username {
-                        self.openUser(userId: userId, username: username)
-                    }
-                case "NEW_FISTBUMP_2":
-                    // Placeholder for future implementation
-                    print("New Fistbump")
-                case "NEW_FOLLOW_1", "NEW_FOLLOW_2":
-                    self.openFollow()
-                case "NEW_POST":
-                    self.openPost(post: metaDataOneSignal.post)
-                case "NEW_STITCH", "APPROVED_STITCH", "DENIED_STITCH":
-                    self.moveToStichDashboard()
-                default:
-                    print("Unhandled notification template")
+            // Handle different notification templates
+            switch metaDataOneSignal.template {
+            case "NEW_COMMENT", "REPLY_COMMENT", "NEW_TAG":
+                if let post = metaDataOneSignal.post {
+                    self.openComment(commentId: metaDataOneSignal.commentId, rootComment: metaDataOneSignal.rootComment, replyToComment: metaDataOneSignal.replyToComment, type: metaDataOneSignal.template, post: post)
                 }
+            case "NEW_FISTBUMP_1", "LIKE_COMMENT", "LIKE_POST":
+                if let userId = metaDataOneSignal.userId, let username = metaDataOneSignal.username {
+                    self.openUser(userId: userId, username: username)
+                }
+            case "NEW_FISTBUMP_2":
+                // Placeholder for future implementation
+                print("New Fistbump")
+            case "NEW_FOLLOW_1", "NEW_FOLLOW_2":
+                self.openFollow()
+            case "NEW_POST":
+                self.openPost(post: metaDataOneSignal.post)
+            case "NEW_STITCH", "APPROVED_STITCH", "DENIED_STITCH":
+                self.moveToStichDashboard()
+            default:
+                print("Unhandled notification template")
             }
         }
     }

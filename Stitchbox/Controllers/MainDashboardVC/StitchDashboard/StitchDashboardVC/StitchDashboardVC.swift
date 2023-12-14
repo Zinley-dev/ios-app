@@ -287,20 +287,32 @@ extension StitchDashboardVC {
     private func manageVideoPlayback(playIn playingVC: UIViewController, pauseIn pausedVCs: [UIViewController]) {
         
         if let vc = playingVC as? PendingVC {
-            vc.playVideo(atIndex: vc.currentIndex!)
+            if vc.currentIndex != nil {
+                vc.playVideo(atIndex: vc.currentIndex!)
+            }
         } else if let vc = playingVC as? ApprovedStitchVC {
-            vc.playVideo(atIndex: vc.currentIndex!)
+            if vc.currentIndex != nil {
+                vc.playVideo(atIndex: vc.currentIndex!)
+            }
         } else if let vc = playingVC as? StitchToVC {
-            vc.playVideo(atIndex: vc.currentIndex!)
+            if vc.currentIndex != nil {
+                vc.playVideo(atIndex: vc.currentIndex!)
+            }
         }
         
         for pauseVC in pausedVCs {
             if let vc = playingVC as? PendingVC {
-                vc.pauseVideo(atIndex: vc.currentIndex!)
+                if vc.currentIndex != nil {
+                    vc.pauseVideo(atIndex: vc.currentIndex!)
+                }
             } else if let vc = pauseVC as? ApprovedStitchVC {
-                vc.pauseVideo(atIndex: vc.currentIndex!)
+                if vc.currentIndex != nil {
+                    vc.pauseVideo(atIndex: vc.currentIndex!)
+                }
             } else if let vc = pauseVC as? StitchToVC {
-                vc.pauseVideo(atIndex: vc.currentIndex!)
+                if vc.currentIndex != nil {
+                    vc.pauseVideo(atIndex: vc.currentIndex!)
+                }
             }
         }
         

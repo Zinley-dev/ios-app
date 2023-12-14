@@ -58,7 +58,7 @@ class UserSearchNode: ASCellNode {
         guard shouldAllowAfterInactive else {
             return
         }
-        cleanup()
+        setupLayout()
     }
     
     override func didExitPreloadState() {
@@ -66,7 +66,7 @@ class UserSearchNode: ASCellNode {
         guard shouldAllowAfterInactive else {
             return
         }
-        setupLayout()
+        cleanup()
     }
     
     func setupLayout() {

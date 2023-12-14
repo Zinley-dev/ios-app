@@ -28,6 +28,11 @@ class PostInteractionButtons: UIView {
     @IBOutlet weak var playListCountLbl: UILabel!
     @IBOutlet weak var saveBtn: UIButton!
     @IBOutlet weak var saveCountLbl: UILabel!
+    
+    @IBOutlet weak var likeView: UIView!
+    @IBOutlet weak var cmtView: UIView!
+    @IBOutlet weak var saveView: UIView!
+    @IBOutlet weak var playListView: UIView!
 
     // Constant for the XIB file name.
     let kCONTENT_XIB_NAME = "PostInteractionButtons"

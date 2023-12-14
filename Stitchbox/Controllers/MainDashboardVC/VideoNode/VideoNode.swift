@@ -866,10 +866,10 @@ extension VideoNode {
     private func addButtonsConstraints(to childView: UIView, within parentView: UIView, constant: CGFloat = 0) {
         childView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            childView.bottomAnchor.constraint(equalTo: parentView.bottomAnchor, constant: 8),
+            childView.bottomAnchor.constraint(equalTo: parentView.bottomAnchor, constant: 13),
             childView.leadingAnchor.constraint(equalTo: parentView.leadingAnchor, constant: constant),
             childView.trailingAnchor.constraint(equalTo: parentView.trailingAnchor, constant: constant),
-            childView.heightAnchor.constraint(equalToConstant: 50) // Height of the button view.
+            childView.heightAnchor.constraint(equalToConstant: 60) // Height of the button view.
         ])
     }
 
@@ -997,8 +997,8 @@ extension VideoNode {
 
         // Like Button Tap Gesture
         let likeTap1 = createTapGestureRecognizer(target: self, action: #selector(VideoNode.likeTapped))
-        self.buttonView.likeStackView.addGestureRecognizer(likeTap1)
-        self.buttonView.likeStackView.isUserInteractionEnabled = true
+        self.buttonView.likeView.addGestureRecognizer(likeTap1)
+        self.buttonView.likeView.isUserInteractionEnabled = true
 
         // Stitch Button Tap Gesture (Footer View)
         let stitchTap = createTapGestureRecognizer(target: self, action: #selector(VideoNode.stitchTapped))
@@ -1006,18 +1006,18 @@ extension VideoNode {
 
         // Save Button Tap Gesture
         let saveTap = createTapGestureRecognizer(target: self, action: #selector(VideoNode.onClickSave))
-        self.buttonView.saveStackView.addGestureRecognizer(saveTap)
-        self.buttonView.saveStackView.isUserInteractionEnabled = true
+        self.buttonView.saveView.addGestureRecognizer(saveTap)
+        self.buttonView.saveView.isUserInteractionEnabled = true
         
         // Comment Button Tap Gesture
         let commentTap = createTapGestureRecognizer(target: self, action: #selector(VideoNode.commentTapped))
-        self.buttonView.commentStackView.addGestureRecognizer(commentTap)
-        self.buttonView.commentStackView.isUserInteractionEnabled = true
+        self.buttonView.cmtView.addGestureRecognizer(commentTap)
+        self.buttonView.cmtView.isUserInteractionEnabled = true
         
         // Comment Button Tap Gesture
         let playListTap = createTapGestureRecognizer(target: self, action: #selector(VideoNode.playListTapped))
-        self.buttonView.playListStackView.addGestureRecognizer(playListTap)
-        self.buttonView.playListStackView.isUserInteractionEnabled = true
+        self.buttonView.playListView.addGestureRecognizer(playListTap)
+        self.buttonView.playListView.isUserInteractionEnabled = true
 
         // Double Tap Gesture (Like Handler)
         let doubleTap = createTapGestureRecognizer(target: self, action: #selector(VideoNode.likeHandle), taps: 2)
@@ -1559,8 +1559,6 @@ extension VideoNode {
     /// Handles the like action.
     @objc func likeHandle() {
         // Guard against already liked state.
-        guard !isLike else { return }
-        
         let imgView = createImageView()
         view.addSubview(imgView)
         
@@ -1570,6 +1568,9 @@ extension VideoNode {
         
         // Animate the image view and perform the like action.
         animateImageView(imgView)
+        
+        guard !isLike else { return }
+        
         performLike()
     }
 
